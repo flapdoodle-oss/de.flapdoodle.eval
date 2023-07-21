@@ -13,7 +13,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>de.flapdoodle.eval</groupId>
     <artifactId>de.flapdoodle.eval</artifactId>
-    <name>Flapdoodle Java8 Stuff</name>
+    <name>expression evaluator for java</name>
     <version>1.0.0-SNAPSHOT</version>
 
     <description>java8s</description>
