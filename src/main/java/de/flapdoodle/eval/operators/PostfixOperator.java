@@ -21,6 +21,7 @@ import de.flapdoodle.eval.Expression;
 import de.flapdoodle.eval.data.Value;
 import de.flapdoodle.eval.parser.Token;
 
+// Unary postfix operator,like x!
 public interface PostfixOperator extends Operator {
 	Value<?> evaluate(Expression expression, Token operatorToken, Value<?> operand) throws EvaluationException;
 }

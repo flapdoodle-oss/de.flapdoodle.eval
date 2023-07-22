@@ -22,27 +22,20 @@ import de.flapdoodle.eval.parser.Token;
 
 public abstract class AbstractBaseOperator implements Operator {
 
-	private final OperatorType type;
 	private final int precedence;
 	private final boolean leftAssociative;
 
-	protected AbstractBaseOperator(OperatorType type, int precedence, boolean leftAssociative) {
-		this.type = type;
+	protected AbstractBaseOperator(int precedence, boolean leftAssociative) {
 		this.precedence = precedence;
 		this.leftAssociative = leftAssociative;
 	}
 
-	protected AbstractBaseOperator(OperatorType type, Precedence precedence, boolean leftAssociative) {
-		this(type, precedence.value(), leftAssociative);
+	protected AbstractBaseOperator(Precedence precedence, boolean leftAssociative) {
+		this(precedence.value(), leftAssociative);
 	}
 
-	protected AbstractBaseOperator(OperatorType type, Precedence precedence) {
-		this(type, precedence, true);
-	}
-
-	@Override
-	public OperatorType type() {
-		return type;
+	protected AbstractBaseOperator(Precedence precedence) {
+		this(precedence, true);
 	}
 
 	@Override

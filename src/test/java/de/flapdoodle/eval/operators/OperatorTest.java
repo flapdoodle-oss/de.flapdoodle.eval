@@ -29,8 +29,6 @@ class OperatorTest {
 
     assertThat(operator.getPrecedence()).isEqualTo(Precedence.OPERATOR_PRECEDENCE_UNARY.value());
     assertThat(operator.isLeftAssociative()).isFalse();
-
-    assertThat(operator.type()).isEqualTo(OperatorType.PREFIX_OPERATOR);
   }
 
   @Test
@@ -39,8 +37,6 @@ class OperatorTest {
 
     assertThat(operator.getPrecedence()).isEqualTo(88);
     assertThat(operator.isLeftAssociative()).isTrue();
-
-    assertThat(operator.type()).isEqualTo(OperatorType.POSTFIX_OPERATOR);
   }
 
   @Test
@@ -49,36 +45,34 @@ class OperatorTest {
 
     assertThat(operator.getPrecedence()).isEqualTo(Precedence.OPERATOR_PRECEDENCE_MULTIPLICATIVE.value());
     assertThat(operator.isLeftAssociative()).isTrue();
-
-    assertThat(operator.type()).isEqualTo(OperatorType.INFIX_OPERATOR);
   }
 
   private static class CorrectPrefixOperator extends DummyAnnotationOperator {
     protected CorrectPrefixOperator() {
-      super(OperatorType.PREFIX_OPERATOR, Precedence.OPERATOR_PRECEDENCE_UNARY, false);
+      super(Precedence.OPERATOR_PRECEDENCE_UNARY, false);
     }
   }
 
   private static class CorrectPostfixOperator extends DummyAnnotationOperator {
     protected CorrectPostfixOperator() {
-      super(OperatorType.POSTFIX_OPERATOR, 88, true);
+      super(88, true);
     }
   }
 
   private static class CorrectInfixOperator extends DummyAnnotationOperator {
 
     protected CorrectInfixOperator() {
-      super(OperatorType.INFIX_OPERATOR, Precedence.OPERATOR_PRECEDENCE_MULTIPLICATIVE, true);
+      super(Precedence.OPERATOR_PRECEDENCE_MULTIPLICATIVE, true);
     }
   }
 
   private static class DummyAnnotationOperator extends AbstractBaseOperator {
-    protected DummyAnnotationOperator(OperatorType type, int precedence, boolean leftAssociative) {
-      super(type, precedence, leftAssociative);
+    protected DummyAnnotationOperator(int precedence, boolean leftAssociative) {
+      super(precedence, leftAssociative);
     }
 
-    protected DummyAnnotationOperator(OperatorType type, Precedence precedence, boolean leftAssociative) {
-      super(type, precedence, leftAssociative);
+    protected DummyAnnotationOperator(Precedence precedence, boolean leftAssociative) {
+      super(precedence, leftAssociative);
     }
   }
 }

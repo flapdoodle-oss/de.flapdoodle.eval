@@ -23,11 +23,11 @@ import de.flapdoodle.eval.parser.Token;
 
 public abstract class AbstractPrefixOperator extends AbstractBaseOperator implements PrefixOperator {
 	protected AbstractPrefixOperator(Precedence precedence, boolean leftAssociative) {
-		super(OperatorType.PREFIX_OPERATOR, precedence, leftAssociative);
+		super(precedence, leftAssociative);
 	}
 
 	protected AbstractPrefixOperator(Precedence precedence) {
-		super(OperatorType.PREFIX_OPERATOR, precedence);
+		super(precedence);
 	}
 
 	public static abstract class Typed<L extends Value<?>> extends AbstractPrefixOperator {

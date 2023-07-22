@@ -26,11 +26,11 @@ import java.util.function.BiFunction;
 
 public abstract class AbstractInfixOperator extends AbstractBaseOperator implements InfixOperator {
 	protected AbstractInfixOperator(Precedence precedence, boolean leftAssociative) {
-		super(OperatorType.INFIX_OPERATOR, precedence, leftAssociative);
+		super(precedence, leftAssociative);
 	}
 
 	protected AbstractInfixOperator(Precedence precedence) {
-		super(OperatorType.INFIX_OPERATOR, precedence);
+		super(precedence);
 	}
 
 	protected static <L extends Value<?>, R extends Value<?>> Optional<Value<?>> evaluate(Class<L> leftType, Class<R> rightType, Value<?> leftOperand, Value<?> rightOperand, BiFunction<L, R, Value<?>> function) {

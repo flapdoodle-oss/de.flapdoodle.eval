@@ -36,8 +36,6 @@ public interface Operator {
    */
   boolean isLeftAssociative();
 
-  OperatorType type();
-
 //  /**
 //   * Performs the operator logic and returns an evaluation result.
 //   *

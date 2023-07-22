@@ -21,6 +21,7 @@ import de.flapdoodle.eval.Expression;
 import de.flapdoodle.eval.data.Value;
 import de.flapdoodle.eval.parser.Token;
 
+// Binary infix operator, like x+y
 public interface InfixOperator extends Operator {
 	Value<?> evaluate(Expression expression, Token operatorToken, Value<?> leftOperand, Value<?> rightOperand) throws EvaluationException;
 }

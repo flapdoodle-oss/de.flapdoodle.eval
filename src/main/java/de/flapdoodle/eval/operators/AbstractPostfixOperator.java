@@ -23,15 +23,15 @@ import de.flapdoodle.eval.parser.Token;
 
 public abstract class AbstractPostfixOperator extends AbstractBaseOperator implements PostfixOperator {
 	protected AbstractPostfixOperator(Precedence precedence, boolean leftAssociative) {
-		super(OperatorType.POSTFIX_OPERATOR, precedence, leftAssociative);
+		super(precedence, leftAssociative);
 	}
 
 	protected AbstractPostfixOperator(Precedence precedence) {
-		super(OperatorType.POSTFIX_OPERATOR, precedence);
+		super(precedence);
 	}
 
 	protected AbstractPostfixOperator() {
-		super(OperatorType.POSTFIX_OPERATOR, Precedence.OPERATOR_PRECEDENCE_UNARY);
+		super(Precedence.OPERATOR_PRECEDENCE_UNARY);
 	}
 
 	public static abstract class Typed<L extends Value<?>> extends AbstractPostfixOperator {
