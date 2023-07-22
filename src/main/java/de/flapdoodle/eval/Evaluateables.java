@@ -10,21 +10,32 @@ public abstract class Evaluateables {
 	public abstract static class Base implements Evaluateable {
 		private final ImmutableParameters parameters;
 
-		protected Base(Parameter<?> parameter, Parameter<?>... parameters) {
-			this.parameters = Parameters.of(parameter, parameters);
+		protected Base(Parameter<?>... parameters) {
+			this.parameters = Parameters.of(parameters);
 		}
 
 		@Override
-		public Parameters parameters() {
+		public final Parameters parameters() {
 			return parameters;
 		}
+
+		@Override
+		public final Value<?> evaluate(ValueResolver valueResolver, Expression expression, Token token, List<Value<?>> arguments) throws EvaluationException {
+			parameters().validate(token, arguments);
+			return evaluateValidated(valueResolver, expression, token, arguments);
+		}
+
+		protected abstract Value<?> evaluateValidated(ValueResolver valueResolver, Expression expression, Token token, List<Value<?>> parameters)
+			throws EvaluationException;
 	}
 
-	public abstract static class Single<T extends Value<?>> implements Evaluateable {
+	public abstract static class Single<T extends Value<?>> extends Base {
 
 		private final Parameter<T> definition;
 
 		protected Single(Parameter<T> definition) {
+			super(definition);
+
 			if (definition.isVarArg()) throw new IllegalArgumentException("varArg is true");
 			this.definition = definition;
 		}
@@ -38,10 +49,8 @@ public abstract class Evaluateables {
 		}
 
 		@Override
-		public final Value<?> evaluate(ValueResolver variableResolver, Expression expression, Token functionToken, List<Value<?>> parameterValues)
-			throws EvaluationException {
-			if (parameterValues.size()!=1) throw EvaluationException.ofUnsupportedDataTypeInOperation(functionToken);
-			return evaluate(variableResolver, expression, functionToken, definition.type().cast(parameterValues.get(0)));
+		protected final Value<?> evaluateValidated(ValueResolver valueResolver, Expression expression, Token token, List<Value<?>> arguments) throws EvaluationException {
+			return evaluate(valueResolver, expression, token, definition.type().cast(arguments.get(0)));
 		}
 
 		public abstract Value<?> evaluate(ValueResolver variableResolver, Expression expression, Token functionToken, T parameterValue)

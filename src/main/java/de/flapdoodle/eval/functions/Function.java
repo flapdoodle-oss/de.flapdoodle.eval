@@ -17,14 +17,6 @@
 package de.flapdoodle.eval.functions;
 
 import de.flapdoodle.eval.Evaluateable;
-import de.flapdoodle.eval.EvaluationException;
-import de.flapdoodle.eval.Expression;
-import de.flapdoodle.eval.Parameter;
-import de.flapdoodle.eval.config.ValueResolver;
-import de.flapdoodle.eval.data.Value;
-import de.flapdoodle.eval.parser.Token;
-
-import java.util.List;
 
 /**
  * Interface that is required for all functions in a function dictionary for evaluation of
@@ -32,22 +24,4 @@ import java.util.List;
  */
 public interface Function extends Evaluateable {
 
-  default Value<?> evaluateUnvalidated(
-    ValueResolver variableResolver, Expression expression, Token functionToken, List<Value<?>> parameterValues)
-    throws EvaluationException {
-    validatePreEvaluation(functionToken, parameterValues);
-    return evaluate(variableResolver, expression, functionToken, parameterValues);
-  }
-
-  /**
-   * Validates the evaluation parameters, called before the actual evaluation.
-   *
-   * @param token The function token.
-   * @param parameterValues The parameter values
-   * @throws EvaluationException in case of any validation error
-   */
-  default void validatePreEvaluation(Token token, List<Value<?>> parameterValues)
-    throws EvaluationException {
-    parameters().validate(token, parameterValues);
-  }
 }

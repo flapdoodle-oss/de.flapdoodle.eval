@@ -38,6 +38,15 @@ public abstract class AbstractFunction implements Function {
 		return parameters;
 	}
 
+	@Override
+	public final Value<?> evaluate(ValueResolver valueResolver, Expression expression, Token token, List<Value<?>> arguments) throws EvaluationException {
+		parameters().validate(token, arguments);
+		return evaluateValidated(valueResolver, expression, token, arguments);
+	}
+
+	protected abstract Value<?> evaluateValidated(ValueResolver valueResolver, Expression expression, Token token, List<Value<?>> parameters)
+		throws EvaluationException;
+
 	public abstract static class Single<T extends Value<?>> extends AbstractFunction {
 
 		private final Parameter<T> definition;
@@ -57,10 +66,10 @@ public abstract class AbstractFunction implements Function {
 		}
 
 		@Override
-		public final Value<?> evaluate(ValueResolver variableResolver, Expression expression, Token functionToken, List<Value<?>> parameterValues)
+		public final Value<?> evaluateValidated(ValueResolver variableResolver, Expression expression, Token functionToken, List<Value<?>> arguments)
 			throws EvaluationException {
-			if (parameterValues.size()!=1) throw EvaluationException.ofUnsupportedDataTypeInOperation(functionToken);
-			return evaluate(variableResolver, expression, functionToken, definition.type().cast(parameterValues.get(0)));
+			if (arguments.size()!=1) throw EvaluationException.ofUnsupportedDataTypeInOperation(functionToken);
+			return evaluate(variableResolver, expression, functionToken, definition.type().cast(arguments.get(0)));
 		}
 
 		public abstract Value<?> evaluate(ValueResolver variableResolver, Expression expression, Token functionToken, T parameterValue)
@@ -86,9 +95,9 @@ public abstract class AbstractFunction implements Function {
 		}
 
 		@Override
-		public final Value<?> evaluate(ValueResolver variableResolver, Expression expression, Token functionToken, List<Value<?>> parameterValues)
+		public final Value<?> evaluateValidated(ValueResolver variableResolver, Expression expression, Token functionToken, List<Value<?>> arguments)
 			throws EvaluationException {
-			return evaluateVarArg(variableResolver, expression, functionToken, parameterValues.stream().map(it -> definition.type().cast(it)).collect(
+			return evaluateVarArg(variableResolver, expression, functionToken, arguments.stream().map(it -> definition.type().cast(it)).collect(
 				Collectors.toList()));
 		}
 
@@ -109,12 +118,12 @@ public abstract class AbstractFunction implements Function {
 		}
 
 		@Override
-		public final Value<?> evaluate(ValueResolver variableResolver, Expression expression, Token functionToken, List<Value<?>> parameterValues)
+		public final Value<?> evaluateValidated(ValueResolver variableResolver, Expression expression, Token functionToken, List<Value<?>> arguments)
 			throws EvaluationException {
-			if (parameterValues.size()!=2) throw EvaluationException.ofUnsupportedDataTypeInOperation(functionToken);
+			if (arguments.size()!=2) throw EvaluationException.ofUnsupportedDataTypeInOperation(functionToken);
 			return evaluate(variableResolver, expression, functionToken,
-				a.type().cast(parameterValues.get(0)),
-				b.type().cast(parameterValues.get(1))
+				a.type().cast(arguments.get(0)),
+				b.type().cast(arguments.get(1))
 			);
 		}
 
@@ -139,13 +148,13 @@ public abstract class AbstractFunction implements Function {
 		}
 
 		@Override
-		public final Value<?> evaluate(ValueResolver variableResolver, Expression expression, Token functionToken, List<Value<?>> parameterValues)
+		public final Value<?> evaluateValidated(ValueResolver variableResolver, Expression expression, Token functionToken, List<Value<?>> arguments)
 			throws EvaluationException {
-			if (parameterValues.size()!=3) throw EvaluationException.ofUnsupportedDataTypeInOperation(functionToken);
+			if (arguments.size()!=3) throw EvaluationException.ofUnsupportedDataTypeInOperation(functionToken);
 			return evaluate(variableResolver, expression, functionToken,
-				a.type().cast(parameterValues.get(0)),
-				b.type().cast(parameterValues.get(1)),
-				c.type().cast(parameterValues.get(2))
+				a.type().cast(arguments.get(0)),
+				b.type().cast(arguments.get(1)),
+				c.type().cast(arguments.get(2))
 			);
 		}
 

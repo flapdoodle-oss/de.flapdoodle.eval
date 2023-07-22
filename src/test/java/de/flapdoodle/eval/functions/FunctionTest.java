@@ -76,7 +76,7 @@ class FunctionTest {
       );
     }
 
-    @Override public Value<?> evaluate(ValueResolver variableResolver, Expression expression, Token functionToken, List<Value<?>> parameterValues)
+    @Override public Value<?> evaluateValidated(ValueResolver variableResolver, Expression expression, Token functionToken, List<Value<?>> arguments)
       throws EvaluationException {
       return Value.of("OK");
     }
@@ -90,7 +90,7 @@ class FunctionTest {
         Parameter.of(Value.class,"another")
       );
     }
-    @Override public Value<?> evaluate(ValueResolver variableResolver, Expression expression, Token functionToken, List<Value<?>> parameterValues)
+    @Override public Value<?> evaluateValidated(ValueResolver variableResolver, Expression expression, Token functionToken, List<Value<?>> arguments)
       throws EvaluationException {
       return Value.of("OK");
     }

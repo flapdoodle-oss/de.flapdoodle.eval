@@ -230,7 +230,7 @@ public abstract class Expression {
 
 //    function.validatePreEvaluation(token, parameterResults);
 
-		return function.evaluateUnvalidated(variableResolver, this, token, parameterResults);
+		return function.evaluate(variableResolver, this, token, parameterResults);
 	}
 
 	private Value<?> evaluateArrayIndex(ValueResolver variableResolver, ASTNode startNode) throws EvaluationException {

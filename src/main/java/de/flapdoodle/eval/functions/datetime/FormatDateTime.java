@@ -38,17 +38,17 @@ public class FormatDateTime extends AbstractFunction {
 		);
 	}
 
-	@Override public Value<?> evaluate(ValueResolver variableResolver, Expression expression, Token functionToken, List<Value<?>> parameterValues)
+	@Override public Value<?> evaluateValidated(ValueResolver variableResolver, Expression expression, Token functionToken, List<Value<?>> arguments)
 		throws EvaluationException {
 		ZoneId zoneId = expression.configuration().getDefaultZoneId();
 
-		LocalDateTime dateTimeValue = ((Value.DateTimeValue) (parameterValues.get(0))).wrapped().atZone(zoneId).toLocalDateTime();
+		LocalDateTime dateTimeValue = ((Value.DateTimeValue) (arguments.get(0))).wrapped().atZone(zoneId).toLocalDateTime();
 
 		String formatted;
-		if (parameterValues.size() < 2) {
+		if (arguments.size() < 2) {
 			formatted = dateTimeValue.toString();
 		} else {
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern(((Value.StringValue) parameterValues.get(1)).wrapped());
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern(((Value.StringValue) arguments.get(1)).wrapped());
 			formatted = dateTimeValue.format(formatter);
 		}
 		return Value.of(formatted);
