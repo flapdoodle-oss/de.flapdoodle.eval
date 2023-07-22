@@ -36,11 +36,11 @@ class TokenTest {
           type == TokenType.NUMBER_LITERAL ? Integer.toString(counter) : "token" + counter;
       Token token = Token.of(counter, tokenString, type);
 
-      assertThat(token.getType()).isEqualTo(type);
-      assertThat(token.getStartPosition()).isEqualTo(counter);
-      assertThat(token.getValue()).isEqualTo(tokenString);
-      assertThat(token.getFunctionDefinition()).isNull();
-      assertThat(token.getOperatorDefinition()).isNull();
+      assertThat(token.type()).isEqualTo(type);
+      assertThat(token.start()).isEqualTo(counter);
+      assertThat(token.value()).isEqualTo(tokenString);
+      assertThat(token.function()).isNull();
+      assertThat(token.operator()).isNull();
     }
   }
 
@@ -53,11 +53,11 @@ class TokenTest {
           TokenType.FUNCTION,
           expressionConfiguration.getFunctionResolver().get("MAX"));
 
-    assertThat(token.getStartPosition()).isEqualTo(3);
-    assertThat(token.getValue()).isEqualTo("MAX");
-    assertThat(token.getType()).isEqualTo(TokenType.FUNCTION);
-    assertThat(token.getFunctionDefinition()).isNotNull();
-    assertThat(token.getOperatorDefinition()).isNull();
+    assertThat(token.start()).isEqualTo(3);
+    assertThat(token.value()).isEqualTo("MAX");
+    assertThat(token.type()).isEqualTo(TokenType.FUNCTION);
+    assertThat(token.function()).isNotNull();
+    assertThat(token.operator()).isNull();
   }
 
   @Test
@@ -69,10 +69,10 @@ class TokenTest {
           TokenType.INFIX_OPERATOR,
 				expressionConfiguration.getOperatorResolver().get(InfixOperator.class, "+"));
 
-    assertThat(token.getStartPosition()).isEqualTo(1);
-    assertThat(token.getValue()).isEqualTo("+");
-    assertThat(token.getType()).isEqualTo(TokenType.INFIX_OPERATOR);
-    assertThat(token.getFunctionDefinition()).isNull();
-    assertThat(token.getOperatorDefinition()).isNotNull();
+    assertThat(token.start()).isEqualTo(1);
+    assertThat(token.value()).isEqualTo("+");
+    assertThat(token.type()).isEqualTo(TokenType.INFIX_OPERATOR);
+    assertThat(token.function()).isNull();
+    assertThat(token.operator()).isNotNull();
   }
 }

@@ -37,6 +37,6 @@ class ExpressionEvaluationExceptionsTest {
             })
         .isInstanceOf(EvaluationException.class)
         .hasMessage(
-            "Unexpected evaluation token: Token{startPosition=1, value=(, type=BRACE_OPEN}");
+            "Unexpected evaluation token: Token{start=1, value=(, type=BRACE_OPEN}");
   }
 }

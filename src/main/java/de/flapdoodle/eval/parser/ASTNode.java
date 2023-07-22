@@ -57,13 +57,13 @@ public abstract class ASTNode {
   public String toJSON() {
     if (getParameters().isEmpty()) {
       return String.format(
-        "{" + "\"type\":\"%s\",\"value\":\"%s\"}", getToken().getType(), getToken().getValue());
+        "{" + "\"type\":\"%s\",\"value\":\"%s\"}", getToken().type(), getToken().value());
     } else {
       String childrenJson =
         getParameters().stream().map(ASTNode::toJSON).collect(Collectors.joining(","));
       return String.format(
         "{" + "\"type\":\"%s\",\"value\":\"%s\",\"children\":[%s]}",
-        getToken().getType(), getToken().getValue(), childrenJson);
+        getToken().type(), getToken().value(), childrenJson);
     }
   }
 }

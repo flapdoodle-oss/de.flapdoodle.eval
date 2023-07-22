@@ -72,7 +72,7 @@ public class Tokenizer {
         if (configuration.isImplicitMultiplicationAllowed()) {
           Token multiplication =
             Token.of(
-                currentToken.getStartPosition(),
+                currentToken.start(),
                 "*",
                 TokenType.INFIX_OPERATOR,
               operatorDictionary.get(InfixOperator.class, "*"));
@@ -104,23 +104,23 @@ public class Tokenizer {
       return false;
     }
 
-    return ((previousToken.getType() == TokenType.BRACE_CLOSE && currentToken.getType() == TokenType.BRACE_OPEN)
-        || (previousToken.getType() == TokenType.NUMBER_LITERAL
-            && currentToken.getType() == TokenType.VARIABLE_OR_CONSTANT)
-        || (previousToken.getType() == TokenType.NUMBER_LITERAL && currentToken.getType() == TokenType.BRACE_OPEN));
+    return ((previousToken.type() == TokenType.BRACE_CLOSE && currentToken.type() == TokenType.BRACE_OPEN)
+        || (previousToken.type() == TokenType.NUMBER_LITERAL
+            && currentToken.type() == TokenType.VARIABLE_OR_CONSTANT)
+        || (previousToken.type() == TokenType.NUMBER_LITERAL && currentToken.type() == TokenType.BRACE_OPEN));
   }
 
   private void validateToken(Token currentToken) throws ParseException {
     Token previousToken = getPreviousToken();
     if (previousToken != null
-        && previousToken.getType() == TokenType.INFIX_OPERATOR
+        && previousToken.type() == TokenType.INFIX_OPERATOR
         && invalidTokenAfterInfixOperator(currentToken)) {
       throw new ParseException(currentToken, "Unexpected token after infix operator");
     }
   }
 
   private boolean invalidTokenAfterInfixOperator(Token token) {
-    switch (token.getType()) {
+    switch (token.type()) {
       case INFIX_OPERATOR:
       case BRACE_CLOSE:
       case COMMA:
@@ -266,7 +266,7 @@ public class Tokenizer {
       return true;
     }
 
-    switch (previousToken.getType()) {
+    switch (previousToken.type()) {
       case BRACE_CLOSE:
       case VARIABLE_OR_CONSTANT:
       case ARRAY_CLOSE:
@@ -284,7 +284,7 @@ public class Tokenizer {
       return false;
     }
 
-    switch (previousToken.getType()) {
+    switch (previousToken.type()) {
       case BRACE_OPEN:
       case INFIX_OPERATOR:
       case PREFIX_OPERATOR:
@@ -304,7 +304,7 @@ public class Tokenizer {
       return true;
     }
 
-    switch (previousToken.getType()) {
+    switch (previousToken.type()) {
       case BRACE_OPEN:
       case INFIX_OPERATOR:
       case COMMA:
@@ -322,7 +322,7 @@ public class Tokenizer {
       return false;
     }
 
-    switch (previousToken.getType()) {
+    switch (previousToken.type()) {
       case BRACE_CLOSE:
       case NUMBER_LITERAL:
       case VARIABLE_OR_CONSTANT:
@@ -340,7 +340,7 @@ public class Tokenizer {
       return false;
     }
 
-    switch (previousToken.getType()) {
+    switch (previousToken.type()) {
       case BRACE_CLOSE:
       case VARIABLE_OR_CONSTANT:
       case STRING_LITERAL:

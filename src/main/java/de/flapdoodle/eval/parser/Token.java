@@ -32,25 +32,25 @@ import org.immutables.value.Value;
 public interface Token {
 
   @Value.Parameter
-  int getStartPosition();
+  int start();
 
   @Value.Parameter
-  String getValue();
+  String value();
 
   @Value.Parameter
-  TokenType getType();
+  TokenType type();
 
   @Nullable
   @Value.Auxiliary
-  Function getFunctionDefinition();
+  Function function();
 
   @Nullable
   @Value.Auxiliary
-  Operator getOperatorDefinition();
+  Operator operator();
 
   @Value.Auxiliary
-  default <T extends Operator> T operatorDefinition(Class<T> operatorType) {
-    Operator def = getOperatorDefinition();
+  default <T extends Operator> T operator(Class<T> operatorType) {
+    Operator def = operator();
     if (operatorType.isInstance(def)) {
       return operatorType.cast(def);
     }
@@ -61,11 +61,11 @@ public interface Token {
     return ImmutableToken.of(startPosition, value, type);
   }
 
-  static Token of(int startPosition, String value, TokenType type, Function functionDefinition) {
-    return ImmutableToken.of(startPosition, value, type).withFunctionDefinition(functionDefinition);
+  static Token of(int startPosition, String value, TokenType type, Function function) {
+    return ImmutableToken.of(startPosition, value, type).withFunction(function);
   }
 
-  static Token of(int startPosition, String value, TokenType type, Operator operatorDefinition) {
-    return ImmutableToken.of(startPosition, value, type).withOperatorDefinition(operatorDefinition);
+  static Token of(int startPosition, String value, TokenType type, Operator operator) {
+    return ImmutableToken.of(startPosition, value, type).withOperator(operator);
   }
 }

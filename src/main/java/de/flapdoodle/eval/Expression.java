@@ -99,9 +99,9 @@ public abstract class Expression {
 		Set<String> variables = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
 
 		for (ASTNode node : getAllASTNodes()) {
-			if (node.getToken().getType() == TokenType.VARIABLE_OR_CONSTANT
-				&& !constants().has(node.getToken().getValue())) {
-				variables.add(node.getToken().getValue());
+			if (node.getToken().type() == TokenType.VARIABLE_OR_CONSTANT
+				&& !constants().has(node.getToken().value())) {
+				variables.add(node.getToken().value());
 			}
 		}
 
@@ -151,12 +151,12 @@ public abstract class Expression {
 	public Value<?> evaluateSubtree(ValueResolver variableResolver, ASTNode startNode) throws EvaluationException {
 		Token token = startNode.getToken();
 		Value<?> result;
-		switch (token.getType()) {
+		switch (token.type()) {
 			case NUMBER_LITERAL:
-				result = numberOfString(token.getValue(), configuration().getMathContext());
+				result = numberOfString(token.value(), configuration().getMathContext());
 				break;
 			case STRING_LITERAL:
-				result = Value.of(token.getValue());
+				result = Value.of(token.value());
 				break;
 			case VARIABLE_OR_CONSTANT:
 				result = getVariableOrConstant(variableResolver, token);
@@ -167,19 +167,19 @@ public abstract class Expression {
 			case PREFIX_OPERATOR:
 				result =
 					token
-						.operatorDefinition(PrefixOperator.class)
+						.operator(PrefixOperator.class)
 						.evaluate(this, token, evaluateSubtree(variableResolver, startNode.getParameters().get(0)));
 				break;
 			case POSTFIX_OPERATOR:
 				result =
 					token
-						.operatorDefinition(PostfixOperator.class)
+						.operator(PostfixOperator.class)
 						.evaluate(this, token, evaluateSubtree(variableResolver, startNode.getParameters().get(0)));
 				break;
 			case INFIX_OPERATOR:
 				result =
 					token
-						.operatorDefinition(InfixOperator.class)
+						.operator(InfixOperator.class)
 						.evaluate(
 							this,
 							token,
@@ -204,13 +204,13 @@ public abstract class Expression {
 	}
 
 	private Value<?> getVariableOrConstant(ValueResolver variableResolver, Token token) throws EvaluationException {
-		Value<?> result = constants().get(token.getValue());
+		Value<?> result = constants().get(token.value());
 		if (result == null) {
-			result = variableResolver.get(token.getValue());
+			result = variableResolver.get(token.value());
 		}
 		if (result == null) {
 			throw new EvaluationException(
-				token, String.format("Variable or constant value for '%s' not found", token.getValue()));
+				token, String.format("Variable or constant value for '%s' not found", token.value()));
 		}
 		return result;
 	}
@@ -219,14 +219,14 @@ public abstract class Expression {
 		throws EvaluationException {
 		List<Value<?>> parameterResults = new ArrayList<>();
 		for (int i = 0; i < startNode.getParameters().size(); i++) {
-			if (token.getFunctionDefinition().parameterIsLazy(i)) {
+			if (token.function().parameterIsLazy(i)) {
 				parameterResults.add(Value.of(startNode.getParameters().get(i)));
 			} else {
 				parameterResults.add(evaluateSubtree(variableResolver, startNode.getParameters().get(i)));
 			}
 		}
 
-		Function function = token.getFunctionDefinition();
+		Function function = token.function();
 
 //    function.validatePreEvaluation(token, parameterResults);
 
@@ -247,7 +247,7 @@ public abstract class Expression {
 	private Value<?> evaluateStructureSeparator(ValueResolver variableResolver, ASTNode startNode) throws EvaluationException {
 		Value<?> structure = evaluateSubtree(variableResolver, startNode.getParameters().get(0));
 		Token nameToken = startNode.getParameters().get(1).getToken();
-		String name = nameToken.getValue();
+		String name = nameToken.value();
 
 		if (structure instanceof Value.MapValue) {
 			Value.MapValue structure1 = (Value.MapValue) structure;

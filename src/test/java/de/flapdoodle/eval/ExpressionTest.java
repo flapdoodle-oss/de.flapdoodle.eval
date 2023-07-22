@@ -168,11 +168,11 @@ class ExpressionTest {
   void testGetAllASTNodes() throws ParseException {
     Expression expression = Expression.of("1+2/3");
     List<ASTNode> nodes = expression.getAllASTNodes();
-    assertThat(nodes.get(0).getToken().getValue()).isEqualTo("+");
-    assertThat(nodes.get(1).getToken().getValue()).isEqualTo("1");
-    assertThat(nodes.get(2).getToken().getValue()).isEqualTo("/");
-    assertThat(nodes.get(3).getToken().getValue()).isEqualTo("2");
-    assertThat(nodes.get(4).getToken().getValue()).isEqualTo("3");
+    assertThat(nodes.get(0).getToken().value()).isEqualTo("+");
+    assertThat(nodes.get(1).getToken().value()).isEqualTo("1");
+    assertThat(nodes.get(2).getToken().value()).isEqualTo("/");
+    assertThat(nodes.get(3).getToken().value()).isEqualTo("2");
+    assertThat(nodes.get(4).getToken().value()).isEqualTo("3");
   }
 
   @Test

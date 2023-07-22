@@ -53,7 +53,7 @@ public class ShuntingYardConverter {
 
     Token previousToken = null;
     for (Token currentToken : expressionTokens) {
-      switch (currentToken.getType()) {
+      switch (currentToken.type()) {
         case VARIABLE_OR_CONSTANT:
         case NUMBER_LITERAL:
         case STRING_LITERAL:
@@ -87,7 +87,7 @@ public class ShuntingYardConverter {
           break;
         default:
           throw new ParseException(
-              currentToken, "Unexpected token of type '" + currentToken.getType() + "'");
+              currentToken, "Unexpected token of type '" + currentToken.type() + "'");
       }
       previousToken = currentToken;
     }
@@ -110,7 +110,7 @@ public class ShuntingYardConverter {
 
   private void processStructureSeparator(Token currentToken) throws ParseException {
     Token nextToken = operatorStack.isEmpty() ? null : operatorStack.peek();
-    while (nextToken != null && nextToken.getType() == TokenType.STRUCTURE_SEPARATOR) {
+    while (nextToken != null && nextToken.type() == TokenType.STRUCTURE_SEPARATOR) {
       Token token = operatorStack.pop();
       createOperatorNode(token);
       nextToken = operatorStack.peek();
@@ -119,12 +119,12 @@ public class ShuntingYardConverter {
   }
 
   private void processBraceOpen(Token previousToken, Token currentToken) {
-    if (previousToken != null && previousToken.getType() == TokenType.FUNCTION) {
+    if (previousToken != null && previousToken.type() == TokenType.FUNCTION) {
       // start of parameter list, marker for variable number of arguments
       Token paramStart =
         Token.of(
-            currentToken.getStartPosition(),
-            currentToken.getValue(),
+            currentToken.start(),
+            currentToken.value(),
             TokenType.FUNCTION_PARAM_START);
       operandStack.push(ASTNode.of(paramStart));
     }
@@ -134,13 +134,13 @@ public class ShuntingYardConverter {
   private void processBraceClose() throws ParseException {
     processOperatorsFromStackUntilTokenType(TokenType.BRACE_OPEN);
     operatorStack.pop(); // throw away the marker
-    if (!operatorStack.isEmpty() && operatorStack.peek().getType() == TokenType.FUNCTION) {
+    if (!operatorStack.isEmpty() && operatorStack.peek().type() == TokenType.FUNCTION) {
       Token functionToken = operatorStack.pop();
       ArrayList<ASTNode> parameters = new ArrayList<>();
       while (true) {
         // add all parameters in reverse order from stack to the parameter array
         ASTNode node = operandStack.pop();
-        if (node.getToken().getType() == TokenType.FUNCTION_PARAM_START) {
+        if (node.getToken().type() == TokenType.FUNCTION_PARAM_START) {
           break;
         }
         parameters.add(0, node);
@@ -152,7 +152,7 @@ public class ShuntingYardConverter {
 
   private void validateFunctionParameters(Token functionToken, ArrayList<ASTNode> parameters)
       throws ParseException {
-    Function function = functionToken.getFunctionDefinition();
+    Function function = functionToken.function();
     if (parameters.size() < function.parameters().min()) {
       throw new ParseException(functionToken, "Not enough parameters for function");
     }
@@ -182,14 +182,14 @@ public class ShuntingYardConverter {
    */
   private void processArrayOpen(Token currentToken) throws ParseException {
     Token nextToken = operatorStack.isEmpty() ? null : operatorStack.peek();
-    while (nextToken != null && (nextToken.getType() == TokenType.STRUCTURE_SEPARATOR)) {
+    while (nextToken != null && (nextToken.type() == TokenType.STRUCTURE_SEPARATOR)) {
       Token token = operatorStack.pop();
       createOperatorNode(token);
       nextToken = operatorStack.isEmpty() ? null : operatorStack.peek();
     }
     // create ARRAY_INDEX operator (just like a function name) and push it to the operator stack
     Token arrayIndex =
-      Token.of(currentToken.getStartPosition(), currentToken.getValue(), TokenType.ARRAY_INDEX);
+      Token.of(currentToken.start(), currentToken.value(), TokenType.ARRAY_INDEX);
     operatorStack.push(arrayIndex);
 
     // push the ARRAY_OPEN to the operators, too (to later match the ARRAY_CLOSE)
@@ -221,7 +221,7 @@ public class ShuntingYardConverter {
 
   private void processOperatorsFromStackUntilTokenType(TokenType untilTokenType)
       throws ParseException {
-    while (!operatorStack.isEmpty() && operatorStack.peek().getType() != untilTokenType) {
+    while (!operatorStack.isEmpty() && operatorStack.peek().type() != untilTokenType) {
       Token token = operatorStack.pop();
       createOperatorNode(token);
     }
@@ -234,8 +234,8 @@ public class ShuntingYardConverter {
 
     ASTNode operand1 = operandStack.pop();
 
-    if (token.getType() == TokenType.PREFIX_OPERATOR
-        || token.getType() == TokenType.POSTFIX_OPERATOR) {
+    if (token.type() == TokenType.PREFIX_OPERATOR
+        || token.type() == TokenType.POSTFIX_OPERATOR) {
       operandStack.push(ASTNode.of(token, operand1));
     } else {
       if (operandStack.isEmpty()) {
@@ -250,7 +250,7 @@ public class ShuntingYardConverter {
     Token nextToken = operatorStack.isEmpty() ? null : operatorStack.peek();
     while (isOperator(nextToken)
         && isNextOperatorOfHigherPrecedence(
-            currentToken.getOperatorDefinition(), nextToken.getOperatorDefinition())) {
+            currentToken.operator(), nextToken.operator())) {
       Token token = operatorStack.pop();
       createOperatorNode(token);
       nextToken = operatorStack.isEmpty() ? null : operatorStack.peek();
@@ -278,7 +278,7 @@ public class ShuntingYardConverter {
     if (token == null) {
       return false;
     }
-    TokenType tokenType = token.getType();
+    TokenType tokenType = token.type();
     switch (tokenType) {
       case INFIX_OPERATOR:
       case PREFIX_OPERATOR:

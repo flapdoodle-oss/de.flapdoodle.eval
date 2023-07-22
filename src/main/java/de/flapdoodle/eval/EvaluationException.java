@@ -23,9 +23,9 @@ public class EvaluationException extends BaseException {
 
   public EvaluationException(Token token, String message) {
     super(
-      token.getStartPosition(),
-      token.getStartPosition() + token.getValue().length(),
-      token.getValue(),
+      token.start(),
+      token.start() + token.value().length(),
+      token.value(),
       message);
   }
 
