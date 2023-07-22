@@ -73,6 +73,7 @@ public abstract class Expression implements CanEvaluateNode {
 
 	@Deprecated
 	@org.immutables.value.Value.Auxiliary
+	// TODO mit @Check annotieren?
 	public void validate() throws ParseException {
 		if (!getAbstractSyntaxTree().isLeft()) throw getAbstractSyntaxTree().right();
 	}
