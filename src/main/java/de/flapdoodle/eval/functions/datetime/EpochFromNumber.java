@@ -16,16 +16,16 @@
  */
 package de.flapdoodle.eval.functions.datetime;
 
+import de.flapdoodle.eval.Evaluateables;
 import de.flapdoodle.eval.Expression;
 import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
-import de.flapdoodle.eval.functions.AbstractFunction;
 import de.flapdoodle.eval.parser.Token;
 
 import java.math.BigDecimal;
 import java.time.Instant;
 
-public class EpochFromNumber extends AbstractFunction.Single<Value.NumberValue> {
+public class EpochFromNumber extends Evaluateables.Single<Value.NumberValue> {
 
   public EpochFromNumber() {
     super(Value.NumberValue.class);

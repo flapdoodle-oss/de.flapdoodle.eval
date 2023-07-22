@@ -31,18 +31,18 @@
 */
 package de.flapdoodle.eval.functions.datetime;
 
+import de.flapdoodle.eval.Evaluateables;
 import de.flapdoodle.eval.Expression;
 import de.flapdoodle.eval.Parameter;
 import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
-import de.flapdoodle.eval.functions.AbstractFunction;
 import de.flapdoodle.eval.parser.Token;
 
 import java.time.Instant;
 import java.time.ZoneId;
 import java.util.List;
 
-public abstract class AbstractDateTimeParser extends AbstractFunction.SingleVararg<Value.StringValue> {
+public abstract class AbstractDateTimeParser extends Evaluateables.SingleVararg<Value.StringValue> {
   protected AbstractDateTimeParser() {
     super(Parameter.varArgWith(Value.StringValue.class, "value"));
   }

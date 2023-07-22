@@ -16,15 +16,15 @@
  */
 package de.flapdoodle.eval.functions.datetime;
 
+import de.flapdoodle.eval.Evaluateables;
 import de.flapdoodle.eval.Expression;
 import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
-import de.flapdoodle.eval.functions.AbstractFunction;
 import de.flapdoodle.eval.parser.Token;
 
 import java.time.Duration;
 
-public class DurationParser extends AbstractFunction.Single<Value.StringValue> {
+public class DurationParser extends Evaluateables.Single<Value.StringValue> {
 
   public DurationParser() {
     super(Value.StringValue.class);

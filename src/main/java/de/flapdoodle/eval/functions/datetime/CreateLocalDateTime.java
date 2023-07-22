@@ -16,11 +16,11 @@
  */
 package de.flapdoodle.eval.functions.datetime;
 
+import de.flapdoodle.eval.Evaluateables;
 import de.flapdoodle.eval.Expression;
 import de.flapdoodle.eval.Parameter;
 import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
-import de.flapdoodle.eval.functions.AbstractFunction;
 import de.flapdoodle.eval.functions.validations.NonNegativeNumber;
 import de.flapdoodle.eval.parser.Token;
 
@@ -29,7 +29,7 @@ import java.time.ZoneId;
 import java.util.List;
 
 // das ist eigentlich 3+vararg
-public class CreateLocalDateTime extends AbstractFunction.SingleVararg<Value.NumberValue> {
+public class CreateLocalDateTime extends Evaluateables.SingleVararg<Value.NumberValue> {
   public CreateLocalDateTime() {
     super(Parameter.varArgWith(Value.NumberValue.class,"values")
       .withValidators(new NonNegativeNumber()));

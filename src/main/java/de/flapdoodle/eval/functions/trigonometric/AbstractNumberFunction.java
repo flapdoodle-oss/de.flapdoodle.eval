@@ -16,10 +16,10 @@
  */
 package de.flapdoodle.eval.functions.trigonometric;
 
+import de.flapdoodle.eval.Evaluateables;
 import de.flapdoodle.eval.data.Value;
-import de.flapdoodle.eval.functions.AbstractFunction;
 
-public abstract class AbstractNumberFunction extends AbstractFunction.Single<Value.NumberValue> {
+public abstract class AbstractNumberFunction extends Evaluateables.Single<Value.NumberValue> {
 	public AbstractNumberFunction() {
 		super(Value.NumberValue.class);
 	}

@@ -16,13 +16,13 @@
  */
 package de.flapdoodle.eval.functions.basic;
 
+import de.flapdoodle.eval.Evaluateables;
 import de.flapdoodle.eval.Expression;
 import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
-import de.flapdoodle.eval.functions.AbstractFunction;
 import de.flapdoodle.eval.parser.Token;
 
-public class Not extends AbstractFunction.Single<Value.BooleanValue> {
+public class Not extends Evaluateables.Single<Value.BooleanValue> {
 
   public Not() {
     super(Value.BooleanValue.class);

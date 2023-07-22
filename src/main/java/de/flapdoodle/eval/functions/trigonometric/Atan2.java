@@ -16,15 +16,15 @@
  */
 package de.flapdoodle.eval.functions.trigonometric;
 
+import de.flapdoodle.eval.Evaluateables;
 import de.flapdoodle.eval.EvaluationException;
 import de.flapdoodle.eval.Expression;
 import de.flapdoodle.eval.Parameter;
 import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
-import de.flapdoodle.eval.functions.AbstractFunction;
 import de.flapdoodle.eval.parser.Token;
 
-public class Atan2 extends AbstractFunction.Tuple<Value.NumberValue, Value.NumberValue> {
+public class Atan2 extends Evaluateables.Tuple<Value.NumberValue, Value.NumberValue> {
 
 	public Atan2() {
 		super(Parameter.of(Value.NumberValue.class, "y"), Parameter.of(Value.NumberValue.class, "x"));

@@ -16,15 +16,15 @@
  */
 package de.flapdoodle.eval.functions.basic;
 
+import de.flapdoodle.eval.Evaluateables;
 import de.flapdoodle.eval.Expression;
 import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
-import de.flapdoodle.eval.functions.AbstractFunction;
 import de.flapdoodle.eval.parser.Token;
 
 import java.math.BigDecimal;
 
-public class Factorial extends AbstractFunction.Single<Value.NumberValue> {
+public class Factorial extends Evaluateables.Single<Value.NumberValue> {
 
   public Factorial() {
     super(Value.NumberValue.class, "base");

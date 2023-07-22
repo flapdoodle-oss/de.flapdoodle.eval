@@ -16,12 +16,12 @@
  */
 package de.flapdoodle.eval.functions.trigonometric;
 
+import de.flapdoodle.eval.Evaluateables;
 import de.flapdoodle.eval.Parameter;
 import de.flapdoodle.eval.data.Value;
-import de.flapdoodle.eval.functions.AbstractFunction;
 import de.flapdoodle.eval.functions.validations.NonZeroNumber;
 
-public abstract class NonZeroFunction extends AbstractFunction.Single<Value.NumberValue> {
+public abstract class NonZeroFunction extends Evaluateables.Single<Value.NumberValue> {
 	public NonZeroFunction() {
 		super(Parameter.of(Value.NumberValue.class, "value").withValidators(new NonZeroNumber()));
 	}

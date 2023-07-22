@@ -16,17 +16,17 @@
  */
 package de.flapdoodle.eval.functions.basic;
 
+import de.flapdoodle.eval.Evaluateables;
 import de.flapdoodle.eval.Expression;
 import de.flapdoodle.eval.Parameter;
 import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
-import de.flapdoodle.eval.functions.AbstractFunction;
 import de.flapdoodle.eval.parser.Token;
 
 import java.math.BigDecimal;
 import java.util.List;
 
-public class Sum extends AbstractFunction.SingleVararg<Value.NumberValue> {
+public class Sum extends Evaluateables.SingleVararg<Value.NumberValue> {
 
   public Sum() {
     super(Parameter.varArgWith(Value.NumberValue.class, "value"));

@@ -16,11 +16,11 @@
  */
 package de.flapdoodle.eval.config;
 
+import de.flapdoodle.eval.Evaluateables;
 import de.flapdoodle.eval.EvaluationException;
 import de.flapdoodle.eval.Expression;
 import de.flapdoodle.eval.Parameter;
 import de.flapdoodle.eval.data.Value;
-import de.flapdoodle.eval.functions.AbstractFunction;
 import de.flapdoodle.eval.operators.AbstractPostfixOperator;
 import de.flapdoodle.eval.operators.AbstractPrefixOperator;
 import de.flapdoodle.eval.operators.Precedence;
@@ -45,7 +45,7 @@ public class TestConfigurationProvider {
 			.withFunctions(Pair.of("TEST", new DummyFunction()));
 	}
 
-	public static class DummyFunction extends AbstractFunction.SingleVararg<Value.StringValue> {
+	public static class DummyFunction extends Evaluateables.SingleVararg<Value.StringValue> {
 
 		public DummyFunction() {
 			super(Parameter.varArgWith(Value.StringValue.class, "input"));

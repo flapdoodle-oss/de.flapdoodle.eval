@@ -16,15 +16,15 @@
  */
 package de.flapdoodle.eval.functions.string;
 
+import de.flapdoodle.eval.Evaluateables;
 import de.flapdoodle.eval.EvaluationException;
 import de.flapdoodle.eval.Expression;
 import de.flapdoodle.eval.Parameter;
 import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
-import de.flapdoodle.eval.functions.AbstractFunction;
 import de.flapdoodle.eval.parser.Token;
 
-public class CaseInsensitiveContains extends AbstractFunction.Tuple<Value.StringValue, Value.StringValue> {
+public class CaseInsensitiveContains extends Evaluateables.Tuple<Value.StringValue, Value.StringValue> {
   public CaseInsensitiveContains() {
     super(
       Parameter.of(Value.StringValue.class, "string"),

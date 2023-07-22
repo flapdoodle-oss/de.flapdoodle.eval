@@ -16,14 +16,14 @@
  */
 package de.flapdoodle.eval.functions.trigonometric;
 
+import de.flapdoodle.eval.Evaluateables;
 import de.flapdoodle.eval.EvaluationException;
 import de.flapdoodle.eval.Expression;
 import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
-import de.flapdoodle.eval.functions.AbstractFunction;
 import de.flapdoodle.eval.parser.Token;
 
-public class Rad extends AbstractFunction.Single<Value.NumberValue> {
+public class Rad extends Evaluateables.Single<Value.NumberValue> {
   public Rad() {
     super(Value.NumberValue.class, "degrees");
   }

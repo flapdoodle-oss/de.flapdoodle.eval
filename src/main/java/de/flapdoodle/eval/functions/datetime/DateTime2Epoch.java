@@ -16,13 +16,13 @@
  */
 package de.flapdoodle.eval.functions.datetime;
 
+import de.flapdoodle.eval.Evaluateables;
 import de.flapdoodle.eval.Expression;
 import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
-import de.flapdoodle.eval.functions.AbstractFunction;
 import de.flapdoodle.eval.parser.Token;
 
-public class DateTime2Epoch extends AbstractFunction.Single<Value.DateTimeValue> {
+public class DateTime2Epoch extends Evaluateables.Single<Value.DateTimeValue> {
 
 	public DateTime2Epoch() {
 		super(Value.DateTimeValue.class);

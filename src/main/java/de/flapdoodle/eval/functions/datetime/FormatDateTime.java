@@ -16,12 +16,12 @@
  */
 package de.flapdoodle.eval.functions.datetime;
 
+import de.flapdoodle.eval.Evaluateables;
 import de.flapdoodle.eval.EvaluationException;
 import de.flapdoodle.eval.Expression;
 import de.flapdoodle.eval.Parameter;
 import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
-import de.flapdoodle.eval.functions.AbstractFunction;
 import de.flapdoodle.eval.parser.Token;
 
 import java.time.LocalDateTime;
@@ -29,7 +29,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-public class FormatDateTime extends AbstractFunction {
+public class FormatDateTime extends Evaluateables.Base {
 
 	public FormatDateTime() {
 		super(
@@ -38,7 +38,8 @@ public class FormatDateTime extends AbstractFunction {
 		);
 	}
 
-	@Override public Value<?> evaluateValidated(ValueResolver variableResolver, Expression expression, Token functionToken, List<Value<?>> arguments)
+	@Override
+	public Value<?> evaluateValidated(ValueResolver variableResolver, Expression expression, Token functionToken, List<Value<?>> arguments)
 		throws EvaluationException {
 		ZoneId zoneId = expression.configuration().getDefaultZoneId();
 

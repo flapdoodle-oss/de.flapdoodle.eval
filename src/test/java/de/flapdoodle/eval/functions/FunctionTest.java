@@ -16,10 +16,7 @@
  */
 package de.flapdoodle.eval.functions;
 
-import de.flapdoodle.eval.Evaluateable;
-import de.flapdoodle.eval.EvaluationException;
-import de.flapdoodle.eval.Expression;
-import de.flapdoodle.eval.Parameter;
+import de.flapdoodle.eval.*;
 import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
 import de.flapdoodle.eval.parser.Token;
@@ -67,7 +64,7 @@ class FunctionTest {
         .hasMessage("Only last parameter may be defined as variable argument");
   }
 
-  private static class CorrectFunctionDefinitionFunction extends AbstractFunction {
+  private static class CorrectFunctionDefinitionFunction extends Evaluateables.Base {
 
     protected CorrectFunctionDefinitionFunction() {
       super(
@@ -83,7 +80,7 @@ class FunctionTest {
     }
   }
 
-  private static class WrongVarargFunctionDefinitionFunction extends AbstractFunction {
+  private static class WrongVarargFunctionDefinitionFunction extends Evaluateables.Base {
     public WrongVarargFunctionDefinitionFunction() {
       super(
         Parameter.of(Value.class,"default"),

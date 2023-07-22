@@ -16,12 +16,12 @@
  */
 package de.flapdoodle.eval.functions.basic;
 
+import de.flapdoodle.eval.Evaluateables;
 import de.flapdoodle.eval.EvaluationException;
 import de.flapdoodle.eval.Expression;
 import de.flapdoodle.eval.Parameter;
 import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
-import de.flapdoodle.eval.functions.AbstractFunction;
 import de.flapdoodle.eval.parser.Token;
 
 /**
@@ -30,7 +30,7 @@ import de.flapdoodle.eval.parser.Token;
  * resultIfTrue</code> and <code>resultIfFalse</code> are only evaluated (lazily evaluated),
  * <b>after</b> the condition was evaluated.
  */
-public class Conditional extends AbstractFunction.Triple<Value.BooleanValue, Value.ExpressionValue, Value.ExpressionValue> {
+public class Conditional extends Evaluateables.Triple<Value.BooleanValue, Value.ExpressionValue, Value.ExpressionValue> {
 
   public Conditional() {
     super(
