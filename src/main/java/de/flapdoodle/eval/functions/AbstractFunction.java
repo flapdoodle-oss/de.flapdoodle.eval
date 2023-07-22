@@ -16,8 +16,7 @@
  */
 package de.flapdoodle.eval.functions;
 
-import de.flapdoodle.eval.EvaluationException;
-import de.flapdoodle.eval.Expression;
+import de.flapdoodle.eval.*;
 import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
 import de.flapdoodle.eval.parser.Token;
@@ -28,27 +27,15 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public abstract class AbstractFunction implements Function {
-	private final List<Parameter<?>> parameterDefinitions;
+	private final ImmutableParameters parameters;
 
 	protected AbstractFunction(Parameter<?> definition, Parameter<?>... definitions) {
-		this.parameterDefinitions = Collections.unmodifiableList(Stream.concat(Stream.of(definition), Stream.of(definitions)).collect(Collectors.toList()));
-
-		for (int i = 0; i < this.parameterDefinitions.size() -1; i++) {
-			Parameter<?> it = this.parameterDefinitions.get(i);
-			if (it.isVarArg()) {
-				throw new IllegalArgumentException(
-					"Only last parameter may be defined as variable argument");
-			}
-			if (it.isOptional()) {
-				throw new IllegalArgumentException(
-					"Only last parameter may be defined as optional argument");
-			}
-		}
+		this.parameters = Parameters.of(definition, definitions);
 	}
 
 	@Override
-	public List<Parameter<?>> parameterDefinitions() {
-		return parameterDefinitions;
+	public Parameters parameters() {
+		return parameters;
 	}
 
 	public abstract static class Single<T extends Value<?>> extends AbstractFunction {

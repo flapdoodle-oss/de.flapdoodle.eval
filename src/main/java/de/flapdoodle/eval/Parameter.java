@@ -14,9 +14,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.flapdoodle.eval.functions;
+package de.flapdoodle.eval;
 
-import de.flapdoodle.eval.EvaluationException;
 import de.flapdoodle.eval.functions.basic.Conditional;
 import de.flapdoodle.eval.functions.basic.Min;
 import de.flapdoodle.eval.functions.validations.ParameterValidator;
@@ -61,30 +60,30 @@ public interface Parameter<T extends de.flapdoodle.eval.data.Value<?>> {
     return false;
   }
 
-  List<ParameterValidator<T>> validators();
+  public abstract List<ParameterValidator<T>> validators();
 
-  static <T extends de.flapdoodle.eval.data.Value<?>> ImmutableParameter.Builder<T> builder(Class<T> type) {
+  public static <T extends de.flapdoodle.eval.data.Value<?>> ImmutableParameter.Builder<T> builder(Class<T> type) {
     return ImmutableParameter.builder(type);
   }
 
-  static <T extends de.flapdoodle.eval.data.Value<?>> ImmutableParameter<T> of(Class<T> type, String name) {
+  public static <T extends de.flapdoodle.eval.data.Value<?>> ImmutableParameter<T> of(Class<T> type, String name) {
     return builder(type).name(name).build();
   }
 
-  static <T extends de.flapdoodle.eval.data.Value<?>> ImmutableParameter<T> varArgWith(Class<T> type, String name) {
+  public static <T extends de.flapdoodle.eval.data.Value<?>> ImmutableParameter<T> varArgWith(Class<T> type, String name) {
     return builder(type).name(name).isVarArg(true).build();
   }
 
-  static <T extends de.flapdoodle.eval.data.Value<?>> ImmutableParameter<T> optionalWith(Class<T> type, String name) {
+  public static <T extends de.flapdoodle.eval.data.Value<?>> ImmutableParameter<T> optionalWith(Class<T> type, String name) {
     return builder(type).name(name).isOptional(true).build();
   }
 
-  static <T extends de.flapdoodle.eval.data.Value<?>> ImmutableParameter<T> lazyWith(Class<T> type, String name) {
+  public static <T extends de.flapdoodle.eval.data.Value<?>> ImmutableParameter<T> lazyWith(Class<T> type, String name) {
     return builder(type).name(name).isLazy(true).build();
   }
 
   @Value.Auxiliary
-  default void validatePreEvaluation(Token token, de.flapdoodle.eval.data.Value<?> parameterValue) throws EvaluationException {
+  default void validate(Token token, de.flapdoodle.eval.data.Value<?> parameterValue) throws EvaluationException {
     if (type().isInstance(parameterValue)) {
       T value = type().cast(parameterValue);
       for (ParameterValidator<T> validator : validators()) {

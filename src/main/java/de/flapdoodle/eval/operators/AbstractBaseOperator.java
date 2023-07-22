@@ -55,7 +55,4 @@ public abstract class AbstractBaseOperator implements Operator {
 		throw new EvaluationException(operatorToken, "type missmatch: "+value+" is not a "+type);
 	}
 
-	protected static Value.NumberValue numberValue(Token operatorToken, Value<?> value) throws EvaluationException {
-		return requireValueType(operatorToken, value, Value.NumberValue.class);
-	}
 }

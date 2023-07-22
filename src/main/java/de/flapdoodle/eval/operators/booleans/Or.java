@@ -19,7 +19,6 @@ package de.flapdoodle.eval.operators.booleans;
 import de.flapdoodle.eval.EvaluationException;
 import de.flapdoodle.eval.Expression;
 import de.flapdoodle.eval.data.Value;
-import de.flapdoodle.eval.operators.AbstractInfixOperator;
 import de.flapdoodle.eval.operators.Precedence;
 import de.flapdoodle.eval.parser.Token;
 

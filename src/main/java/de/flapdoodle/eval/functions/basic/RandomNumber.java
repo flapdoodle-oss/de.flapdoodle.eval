@@ -18,10 +18,11 @@ package de.flapdoodle.eval.functions.basic;
 
 import de.flapdoodle.eval.EvaluationException;
 import de.flapdoodle.eval.Expression;
-import de.flapdoodle.eval.data.Value;
+import de.flapdoodle.eval.Parameter;
+import de.flapdoodle.eval.Parameters;
 import de.flapdoodle.eval.config.ValueResolver;
+import de.flapdoodle.eval.data.Value;
 import de.flapdoodle.eval.functions.Function;
-import de.flapdoodle.eval.functions.Parameter;
 import de.flapdoodle.eval.parser.Token;
 
 import java.security.SecureRandom;
@@ -31,8 +32,8 @@ import java.util.List;
 public class RandomNumber implements Function {
 
   @Override
-  public List<Parameter<?>> parameterDefinitions() {
-    return Collections.emptyList();
+  public Parameters parameters() {
+    return Parameters.of();
   }
 
   @Override public Value<?> evaluate(ValueResolver variableResolver, Expression expression, Token functionToken, List<Value<?>> parameterValues)

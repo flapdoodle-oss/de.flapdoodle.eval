@@ -18,6 +18,7 @@ package de.flapdoodle.eval.functions;
 
 import de.flapdoodle.eval.EvaluationException;
 import de.flapdoodle.eval.Expression;
+import de.flapdoodle.eval.Parameter;
 import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
 import de.flapdoodle.eval.parser.Token;
@@ -34,17 +35,17 @@ class FunctionTest {
   void testParameterDefinition() {
     Function function = new CorrectFunctionDefinitionFunction();
 
-    assertThat(function.parameterDefinitions().get(0).name()).isEqualTo("default");
-    assertThat(function.parameterDefinitions().get(0).isLazy()).isFalse();
-    assertThat(function.parameterDefinitions().get(0).isVarArg()).isFalse();
+    assertThat(function.parameters().get(0).name()).isEqualTo("default");
+    assertThat(function.parameters().get(0).isLazy()).isFalse();
+    assertThat(function.parameters().get(0).isVarArg()).isFalse();
 
-    assertThat(function.parameterDefinitions().get(1).name()).isEqualTo("lazy");
-    assertThat(function.parameterDefinitions().get(1).isLazy()).isTrue();
-    assertThat(function.parameterDefinitions().get(1).isVarArg()).isFalse();
+    assertThat(function.parameters().get(1).name()).isEqualTo("lazy");
+    assertThat(function.parameters().get(1).isLazy()).isTrue();
+    assertThat(function.parameters().get(1).isVarArg()).isFalse();
 
-    assertThat(function.parameterDefinitions().get(2).name()).isEqualTo("vararg");
-    assertThat(function.parameterDefinitions().get(2).isLazy()).isFalse();
-    assertThat(function.parameterDefinitions().get(2).isVarArg()).isTrue();
+    assertThat(function.parameters().get(2).name()).isEqualTo("vararg");
+    assertThat(function.parameters().get(2).isLazy()).isFalse();
+    assertThat(function.parameters().get(2).isVarArg()).isTrue();
   }
 
   @Test

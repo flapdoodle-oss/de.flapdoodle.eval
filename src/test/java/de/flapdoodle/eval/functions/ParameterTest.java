@@ -16,6 +16,7 @@
  */
 package de.flapdoodle.eval.functions;
 
+import de.flapdoodle.eval.Parameter;
 import de.flapdoodle.eval.data.Value;
 import org.junit.jupiter.api.Test;
 

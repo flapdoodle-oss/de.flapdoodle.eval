@@ -16,9 +16,9 @@
  */
 package de.flapdoodle.eval.functions.trigonometric;
 
+import de.flapdoodle.eval.Parameter;
 import de.flapdoodle.eval.data.Value;
 import de.flapdoodle.eval.functions.AbstractFunction;
-import de.flapdoodle.eval.functions.Parameter;
 import de.flapdoodle.eval.functions.validations.NonZeroNumber;
 
 public abstract class NonZeroFunction extends AbstractFunction.Single<Value.NumberValue> {

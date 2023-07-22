@@ -17,8 +17,8 @@
 package de.flapdoodle.eval.functions.trigonometric;
 
 import de.flapdoodle.eval.Expression;
-import de.flapdoodle.eval.data.Value;
 import de.flapdoodle.eval.config.ValueResolver;
+import de.flapdoodle.eval.data.Value;
 import de.flapdoodle.eval.parser.Token;
 
 public class Acos extends AbstractNumberFunction {
