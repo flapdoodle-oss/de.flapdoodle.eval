@@ -131,7 +131,7 @@ public abstract class Expression {
 	 *
 	 * @return The evaluation result value.
 	 * @throws EvaluationException If there were problems while evaluating the expression.
-	 * @throws ParseException If there were problems while parsing the expression.
+	 * @throws ParseException      If there were problems while parsing the expression.
 	 */
 	public Value<?> evaluate(ValueResolver variableResolver) throws EvaluationException, ParseException {
 		Either<ASTNode, ParseException> ast = getAbstractSyntaxTree();

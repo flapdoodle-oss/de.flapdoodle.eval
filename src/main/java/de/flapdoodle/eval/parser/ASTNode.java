@@ -1,12 +1,12 @@
 /**
  * Copyright (C) 2023
- *   Michael Mosmann <michael@mosmann.de>
+ * Michael Mosmann <michael@mosmann.de>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *         http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -38,32 +38,32 @@ import java.util.stream.Collectors;
 @Value.Immutable
 public abstract class ASTNode {
 
-  public abstract List<ASTNode> getParameters();
+	public abstract List<ASTNode> getParameters();
 
-  public abstract Token getToken();
+	public abstract Token getToken();
 
-  public static ASTNode of(Token token, ASTNode... parameters) {
-    return ImmutableASTNode.builder()
-      .token(token)
-      .addParameters(parameters)
-      .build();
-  }
+	public static ASTNode of(Token token, ASTNode... parameters) {
+		return ImmutableASTNode.builder()
+			.token(token)
+			.addParameters(parameters)
+			.build();
+	}
 
-  /**
-   * Produces a JSON string representation of this node ad all its children.
-   *
-   * @return A JSON string of the tree structure starting at this node.
-   */
-  public String toJSON() {
-    if (getParameters().isEmpty()) {
-      return String.format(
-        "{" + "\"type\":\"%s\",\"value\":\"%s\"}", getToken().type(), getToken().value());
-    } else {
-      String childrenJson =
-        getParameters().stream().map(ASTNode::toJSON).collect(Collectors.joining(","));
-      return String.format(
-        "{" + "\"type\":\"%s\",\"value\":\"%s\",\"children\":[%s]}",
-        getToken().type(), getToken().value(), childrenJson);
-    }
-  }
+	/**
+	 * Produces a JSON string representation of this node ad all its children.
+	 *
+	 * @return A JSON string of the tree structure starting at this node.
+	 */
+	public String toJSON() {
+		if (getParameters().isEmpty()) {
+			return String.format(
+				"{" + "\"type\":\"%s\",\"value\":\"%s\"}", getToken().type(), getToken().value());
+		} else {
+			String childrenJson =
+				getParameters().stream().map(ASTNode::toJSON).collect(Collectors.joining(","));
+			return String.format(
+				"{" + "\"type\":\"%s\",\"value\":\"%s\",\"children\":[%s]}",
+				getToken().type(), getToken().value(), childrenJson);
+		}
+	}
 }

@@ -1,12 +1,12 @@
 /**
  * Copyright (C) 2023
- *   Michael Mosmann <michael@mosmann.de>
+ * Michael Mosmann <michael@mosmann.de>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *         http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -30,12 +30,13 @@ public class Atan2 extends Evaluateables.Tuple<Value.NumberValue, Value.NumberVa
 		super(Parameter.of(Value.NumberValue.class, "y"), Parameter.of(Value.NumberValue.class, "x"));
 	}
 
-	@Override public Value<?> evaluate(ValueResolver variableResolver, Expression expression, Token functionToken, Value.NumberValue y,
+	@Override
+	protected Value<?> evaluate(ValueResolver variableResolver, Expression expression, Token functionToken, Value.NumberValue y,
 		Value.NumberValue x) throws EvaluationException {
-    return Value.of(
-        Math.toDegrees(
-            Math.atan2(
-                y.wrapped().doubleValue(),
-                x.wrapped().doubleValue())));
-  }
+		return Value.of(
+			Math.toDegrees(
+				Math.atan2(
+					y.wrapped().doubleValue(),
+					x.wrapped().doubleValue())));
+	}
 }

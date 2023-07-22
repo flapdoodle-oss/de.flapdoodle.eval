@@ -32,6 +32,7 @@ public abstract class Evaluateables {
 
 	/**
 	 * Single Argument
+	 *
 	 * @param <T>
 	 */
 	public abstract static class Single<T extends Value<?>> extends Base {
@@ -54,16 +55,18 @@ public abstract class Evaluateables {
 		}
 
 		@Override
-		protected final Value<?> evaluateValidated(ValueResolver valueResolver, Expression expression, Token token, List<Value<?>> arguments) throws EvaluationException {
+		protected final Value<?> evaluateValidated(ValueResolver valueResolver, Expression expression, Token token, List<Value<?>> arguments)
+			throws EvaluationException {
 			return evaluate(valueResolver, expression, token, definition.type().cast(arguments.get(0)));
 		}
 
-		public abstract Value<?> evaluate(ValueResolver variableResolver, Expression expression, Token functionToken, T parameterValue)
+		protected abstract Value<?> evaluate(ValueResolver variableResolver, Expression expression, Token functionToken, T parameterValue)
 			throws EvaluationException;
 	}
 
 	/**
 	 * Single VarArg
+	 *
 	 * @param <T>
 	 */
 	public abstract static class SingleVararg<T extends Value<?>> extends Base {
@@ -86,13 +89,13 @@ public abstract class Evaluateables {
 		}
 
 		@Override
-		public final Value<?> evaluateValidated(ValueResolver variableResolver, Expression expression, Token functionToken, List<Value<?>> arguments)
+		protected final Value<?> evaluateValidated(ValueResolver variableResolver, Expression expression, Token functionToken, List<Value<?>> arguments)
 			throws EvaluationException {
 			return evaluateVarArg(variableResolver, expression, functionToken, arguments.stream().map(it -> definition.type().cast(it)).collect(
 				Collectors.toList()));
 		}
 
-		public abstract Value<?> evaluateVarArg(ValueResolver variableResolver, Expression expression, Token functionToken, List<T> parameterValues);
+		protected abstract Value<?> evaluateVarArg(ValueResolver variableResolver, Expression expression, Token functionToken, List<T> parameterValues);
 	}
 
 	/**
@@ -112,16 +115,16 @@ public abstract class Evaluateables {
 		}
 
 		@Override
-		public final Value<?> evaluateValidated(ValueResolver variableResolver, Expression expression, Token functionToken, List<Value<?>> arguments)
+		protected final Value<?> evaluateValidated(ValueResolver variableResolver, Expression expression, Token functionToken, List<Value<?>> arguments)
 			throws EvaluationException {
-			if (arguments.size()!=2) throw EvaluationException.ofUnsupportedDataTypeInOperation(functionToken);
+			if (arguments.size() != 2) throw EvaluationException.ofUnsupportedDataTypeInOperation(functionToken);
 			return evaluate(variableResolver, expression, functionToken,
 				a.type().cast(arguments.get(0)),
 				b.type().cast(arguments.get(1))
 			);
 		}
 
-		public abstract Value<?> evaluate(ValueResolver variableResolver, Expression expression, Token functionToken, A a, B b)
+		protected abstract Value<?> evaluate(ValueResolver variableResolver, Expression expression, Token functionToken, A a, B b)
 			throws EvaluationException;
 	}
 
@@ -145,9 +148,9 @@ public abstract class Evaluateables {
 		}
 
 		@Override
-		public final Value<?> evaluateValidated(ValueResolver variableResolver, Expression expression, Token functionToken, List<Value<?>> arguments)
+		protected final Value<?> evaluateValidated(ValueResolver variableResolver, Expression expression, Token functionToken, List<Value<?>> arguments)
 			throws EvaluationException {
-			if (arguments.size()!=3) throw EvaluationException.ofUnsupportedDataTypeInOperation(functionToken);
+			if (arguments.size() != 3) throw EvaluationException.ofUnsupportedDataTypeInOperation(functionToken);
 			return evaluate(variableResolver, expression, functionToken,
 				a.type().cast(arguments.get(0)),
 				b.type().cast(arguments.get(1)),
@@ -155,7 +158,7 @@ public abstract class Evaluateables {
 			);
 		}
 
-		public abstract Value<?> evaluate(ValueResolver variableResolver, Expression expression, Token functionToken, A a, B b, C c)
+		protected abstract Value<?> evaluate(ValueResolver variableResolver, Expression expression, Token functionToken, A a, B b, C c)
 			throws EvaluationException;
 	}
 

@@ -1,12 +1,12 @@
 /**
  * Copyright (C) 2023
- *   Michael Mosmann <michael@mosmann.de>
+ * Michael Mosmann <michael@mosmann.de>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *         http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -38,7 +38,9 @@ public abstract class Configuration {
 	}
 
 	@Value.Default
-	public EvaluateableResolver functions() { return Defaults.functions(); }
+	public EvaluateableResolver functions() {
+		return Defaults.functions();
+	}
 
 	@Value.Default
 	public ValueResolver getConstantResolver() {
@@ -70,7 +72,8 @@ public abstract class Configuration {
 		return true;
 	}
 
-	@SafeVarargs @Value.Auxiliary
+	@SafeVarargs
+	@Value.Auxiliary
 	public final ImmutableConfiguration withOperators(Pair<String, Operator>... operators) {
 		return ImmutableConfiguration.copyOf(this)
 			.withOperatorResolver(MapBasedOperatorResolver.of(operators)

@@ -1,12 +1,12 @@
 /**
  * Copyright (C) 2023
- *   Michael Mosmann <michael@mosmann.de>
+ * Michael Mosmann <michael@mosmann.de>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *         http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -23,41 +23,44 @@ import java.util.Optional;
 
 public class DateTimeParser extends AbstractDateTimeParser {
 
-  protected Instant parse(String value, String format, ZoneId zoneId) {
-    return parseInstant(value)
-        .orElseGet(() -> parseLocalDateTime(value, format, zoneId)
-        .orElseGet(() -> parseDate(value, format)
-        .orElseThrow(() -> new IllegalArgumentException("Unable to parse date/time: " + value))));
-  }
+	protected Instant parse(String value, String format, ZoneId zoneId) {
+		return parseInstant(value)
+			.orElseGet(() -> parseLocalDateTime(value, format, zoneId)
+				.orElseGet(() -> parseDate(value, format)
+					.orElseThrow(() -> new IllegalArgumentException("Unable to parse date/time: " + value))));
+	}
 
-  private Optional<Instant> parseLocalDateTime(String value, String format, ZoneId zoneId) {
-    try {
-      DateTimeFormatter formatter =
-          (format == null
-              ? DateTimeFormatter.ISO_LOCAL_DATE_TIME
-              : DateTimeFormatter.ofPattern(format));
-      return Optional.of(LocalDateTime.parse(value, formatter).atZone(zoneId).toInstant());
-    } catch (DateTimeParseException ex) {
-      return Optional.empty();
-    }
-  }
+	private Optional<Instant> parseLocalDateTime(String value, String format, ZoneId zoneId) {
+		try {
+			DateTimeFormatter formatter =
+				(format == null
+					? DateTimeFormatter.ISO_LOCAL_DATE_TIME
+					: DateTimeFormatter.ofPattern(format));
+			return Optional.of(LocalDateTime.parse(value, formatter).atZone(zoneId).toInstant());
+		}
+		catch (DateTimeParseException ex) {
+			return Optional.empty();
+		}
+	}
 
-  private Optional<Instant> parseDate(String value, String format) {
-    try {
-      DateTimeFormatter formatter =
-          (format == null ? DateTimeFormatter.ISO_LOCAL_DATE : DateTimeFormatter.ofPattern(format));
-      LocalDate localDate = LocalDate.parse(value, formatter);
-      return Optional.of(localDate.atStartOfDay().atOffset(ZoneOffset.UTC).toInstant());
-    } catch (DateTimeParseException ex) {
-      return Optional.empty();
-    }
-  }
+	private Optional<Instant> parseDate(String value, String format) {
+		try {
+			DateTimeFormatter formatter =
+				(format == null ? DateTimeFormatter.ISO_LOCAL_DATE : DateTimeFormatter.ofPattern(format));
+			LocalDate localDate = LocalDate.parse(value, formatter);
+			return Optional.of(localDate.atStartOfDay().atOffset(ZoneOffset.UTC).toInstant());
+		}
+		catch (DateTimeParseException ex) {
+			return Optional.empty();
+		}
+	}
 
-  private Optional<Instant> parseInstant(String value) {
-    try {
-      return Optional.of(Instant.parse(value));
-    } catch (DateTimeParseException ex) {
-      return Optional.empty();
-    }
-  }
+	private Optional<Instant> parseInstant(String value) {
+		try {
+			return Optional.of(Instant.parse(value));
+		}
+		catch (DateTimeParseException ex) {
+			return Optional.empty();
+		}
+	}
 }

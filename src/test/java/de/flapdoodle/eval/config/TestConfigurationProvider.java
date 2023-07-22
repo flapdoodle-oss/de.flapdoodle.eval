@@ -40,7 +40,7 @@ public class TestConfigurationProvider {
 				Pair.of("++", new PrefixPlusPlusOperator()),
 				Pair.of("++", new PostfixPlusPlusOperator()),
 				Pair.of("?", new PostfixQuestionOperator())
-				);
+			);
 		StandardConfigurationWithAdditionalTestOperators = ImmutableConfiguration.copyOf(configuration)
 			.withFunctions(Pair.of("TEST", new DummyFunction()));
 	}
@@ -51,7 +51,8 @@ public class TestConfigurationProvider {
 			super(Parameter.varArgWith(Value.StringValue.class, "input"));
 		}
 
-		@Override public Value<?> evaluateVarArg(ValueResolver variableResolver, Expression expression, Token functionToken,
+		@Override
+		protected Value<?> evaluateVarArg(ValueResolver variableResolver, Expression expression, Token functionToken,
 			List<Value.StringValue> parameterValues) {
 			// dummy implementation
 			return Value.of("OK");
@@ -64,7 +65,8 @@ public class TestConfigurationProvider {
 			super(Precedence.OPERATOR_PRECEDENCE_UNARY, false, Value.NumberValue.class);
 		}
 
-		@Override protected Value<?> evaluateTyped(Expression expression, Token operatorToken, Value.NumberValue operand) throws EvaluationException {
+		@Override
+		protected Value<?> evaluateTyped(Expression expression, Token operatorToken, Value.NumberValue operand) throws EvaluationException {
 			return Value.of(operand.wrapped().add(BigDecimal.ONE));
 		}
 	}
@@ -75,7 +77,8 @@ public class TestConfigurationProvider {
 			super(Value.NumberValue.class);
 		}
 
-		@Override protected Value<?> evaluateTyped(Expression expression, Token operatorToken, Value.NumberValue operand) throws EvaluationException {
+		@Override
+		protected Value<?> evaluateTyped(Expression expression, Token operatorToken, Value.NumberValue operand) throws EvaluationException {
 			return Value.of(operand.wrapped().add(BigDecimal.ONE));
 		}
 	}
@@ -86,7 +89,8 @@ public class TestConfigurationProvider {
 			super(Precedence.OPERATOR_PRECEDENCE_UNARY, false, Value.NullValue.class);
 		}
 
-		@Override protected Value<?> evaluateTyped(Expression expression, Token operatorToken, Value.NullValue operand) throws EvaluationException {
+		@Override
+		protected Value<?> evaluateTyped(Expression expression, Token operatorToken, Value.NullValue operand) throws EvaluationException {
 			return Value.of("?");
 		}
 	}

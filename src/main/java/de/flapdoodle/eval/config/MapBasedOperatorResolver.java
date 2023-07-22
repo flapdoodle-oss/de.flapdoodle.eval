@@ -1,12 +1,12 @@
 /**
  * Copyright (C) 2023
- *   Michael Mosmann <michael@mosmann.de>
+ * Michael Mosmann <michael@mosmann.de>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *         http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -29,7 +29,9 @@ import java.util.Map;
 public abstract class MapBasedOperatorResolver implements OperatorResolver {
 
 	protected abstract Map<String, AbstractInfixOperator> infixOperators();
+
 	protected abstract Map<String, AbstractPrefixOperator> prefixOperators();
+
 	protected abstract Map<String, AbstractPostfixOperator> postfixOperators();
 
 	@Override
@@ -43,7 +45,7 @@ public abstract class MapBasedOperatorResolver implements OperatorResolver {
 		if (type.isAssignableFrom(AbstractPostfixOperator.class)) {
 			return type.cast(postfixOperators().get(operatorString));
 		}
-		throw new IllegalArgumentException("operator type unknown: "+type+"("+operatorString+")");
+		throw new IllegalArgumentException("operator type unknown: " + type + "(" + operatorString + ")");
 	}
 
 	public static ImmutableMapBasedOperatorResolver.Builder builder() {
@@ -54,21 +56,21 @@ public abstract class MapBasedOperatorResolver implements OperatorResolver {
 		ImmutableMapBasedOperatorResolver.Builder builder = ImmutableMapBasedOperatorResolver.builder();
 		for (Pair<String, Operator> entry : operators) {
 			Operator value = entry.second();
-			boolean foundType=false;
+			boolean foundType = false;
 			if (value instanceof AbstractInfixOperator) {
 				builder.putInfixOperators(entry.first(), (AbstractInfixOperator) value);
-				foundType=true;
+				foundType = true;
 			}
 			if (value instanceof AbstractPrefixOperator) {
 				builder.putPrefixOperators(entry.first(), (AbstractPrefixOperator) value);
-				foundType=true;
+				foundType = true;
 			}
 			if (value instanceof AbstractPostfixOperator) {
 				builder.putPostfixOperators(entry.first(), (AbstractPostfixOperator) value);
-				foundType=true;
+				foundType = true;
 			}
 			if (!foundType) {
-				throw new IllegalArgumentException("unknown type: "+value);
+				throw new IllegalArgumentException("unknown type: " + value);
 			}
 		}
 		return builder.build();

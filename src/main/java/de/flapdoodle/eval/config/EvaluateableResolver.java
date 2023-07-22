@@ -10,11 +10,11 @@ public interface EvaluateableResolver {
 	}
 
 	default EvaluateableResolver andThen(EvaluateableResolver fallback) {
-		EvaluateableResolver that=this;
+		EvaluateableResolver that = this;
 
 		return name -> {
 			Evaluateable function = that.get(name);
-			if (function==null) {
+			if (function == null) {
 				return fallback.get(name);
 			}
 			return function;

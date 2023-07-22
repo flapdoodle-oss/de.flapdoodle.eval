@@ -1,12 +1,12 @@
 /**
  * Copyright (C) 2023
- *   Michael Mosmann <michael@mosmann.de>
+ * Michael Mosmann <michael@mosmann.de>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *         http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -31,41 +31,41 @@ import org.immutables.value.Value;
 @Value.Immutable
 public interface Token {
 
-  @Value.Parameter
-  int start();
+	@Value.Parameter
+	int start();
 
-  @Value.Parameter
-  String value();
+	@Value.Parameter
+	String value();
 
-  @Value.Parameter
-  TokenType type();
+	@Value.Parameter
+	TokenType type();
 
-  @Nullable
-  @Value.Auxiliary
-  Evaluateable function();
+	@Nullable
+	@Value.Auxiliary
+	Evaluateable function();
 
-  @Nullable
-  @Value.Auxiliary
-  Operator operator();
+	@Nullable
+	@Value.Auxiliary
+	Operator operator();
 
-  @Value.Auxiliary
-  default <T extends Operator> T operator(Class<T> operatorType) {
-    Operator def = operator();
-    if (operatorType.isInstance(def)) {
-      return operatorType.cast(def);
-    }
-    throw new IllegalArgumentException("operator definition does not match: "+operatorType+" -> "+def);
-  }
+	@Value.Auxiliary
+	default <T extends Operator> T operator(Class<T> operatorType) {
+		Operator def = operator();
+		if (operatorType.isInstance(def)) {
+			return operatorType.cast(def);
+		}
+		throw new IllegalArgumentException("operator definition does not match: " + operatorType + " -> " + def);
+	}
 
-  static Token of(int startPosition, String value, TokenType type) {
-    return ImmutableToken.of(startPosition, value, type);
-  }
+	static Token of(int startPosition, String value, TokenType type) {
+		return ImmutableToken.of(startPosition, value, type);
+	}
 
-  static Token of(int startPosition, String value, TokenType type, Evaluateable function) {
-    return ImmutableToken.of(startPosition, value, type).withFunction(function);
-  }
+	static Token of(int startPosition, String value, TokenType type, Evaluateable function) {
+		return ImmutableToken.of(startPosition, value, type).withFunction(function);
+	}
 
-  static Token of(int startPosition, String value, TokenType type, Operator operator) {
-    return ImmutableToken.of(startPosition, value, type).withOperator(operator);
-  }
+	static Token of(int startPosition, String value, TokenType type, Operator operator) {
+		return ImmutableToken.of(startPosition, value, type).withOperator(operator);
+	}
 }

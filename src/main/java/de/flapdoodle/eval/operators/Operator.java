@@ -1,12 +1,12 @@
 /**
  * Copyright (C) 2023
- *   Michael Mosmann <michael@mosmann.de>
+ * Michael Mosmann <michael@mosmann.de>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *         http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -24,17 +24,17 @@ package de.flapdoodle.eval.operators;
  * parentheses.
  */
 public interface Operator {
-  /**
-   * @return The operator's precedence.
-   */
-  int getPrecedence();
+	/**
+	 * @return The operator's precedence.
+	 */
+	int getPrecedence();
 
-  /**
-   * If operators with same precedence are evaluated from left to right.
-   *
-   * @return The associativity.
-   */
-  boolean isLeftAssociative();
+	/**
+	 * If operators with same precedence are evaluated from left to right.
+	 *
+	 * @return The associativity.
+	 */
+	boolean isLeftAssociative();
 
 //  /**
 //   * Performs the operator logic and returns an evaluation result.

@@ -1,12 +1,12 @@
 /**
  * Copyright (C) 2023
- *   Michael Mosmann <michael@mosmann.de>
+ * Michael Mosmann <michael@mosmann.de>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *         http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -29,68 +29,70 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class FunctionTest {
 
-  @Test
-  void testParameterDefinition() {
-    Evaluateable function = new CorrectFunctionDefinitionFunction();
+	@Test
+	void testParameterDefinition() {
+		Evaluateable function = new CorrectFunctionDefinitionFunction();
 
-    assertThat(function.parameters().get(0).name()).isEqualTo("default");
-    assertThat(function.parameters().get(0).isLazy()).isFalse();
-    assertThat(function.parameters().get(0).isVarArg()).isFalse();
+		assertThat(function.parameters().get(0).name()).isEqualTo("default");
+		assertThat(function.parameters().get(0).isLazy()).isFalse();
+		assertThat(function.parameters().get(0).isVarArg()).isFalse();
 
-    assertThat(function.parameters().get(1).name()).isEqualTo("lazy");
-    assertThat(function.parameters().get(1).isLazy()).isTrue();
-    assertThat(function.parameters().get(1).isVarArg()).isFalse();
+		assertThat(function.parameters().get(1).name()).isEqualTo("lazy");
+		assertThat(function.parameters().get(1).isLazy()).isTrue();
+		assertThat(function.parameters().get(1).isVarArg()).isFalse();
 
-    assertThat(function.parameters().get(2).name()).isEqualTo("vararg");
-    assertThat(function.parameters().get(2).isLazy()).isFalse();
-    assertThat(function.parameters().get(2).isVarArg()).isTrue();
-  }
+		assertThat(function.parameters().get(2).name()).isEqualTo("vararg");
+		assertThat(function.parameters().get(2).isLazy()).isFalse();
+		assertThat(function.parameters().get(2).isVarArg()).isTrue();
+	}
 
-  @Test
-  void testParameterIsLazy() {
-    Evaluateable function = new CorrectFunctionDefinitionFunction();
+	@Test
+	void testParameterIsLazy() {
+		Evaluateable function = new CorrectFunctionDefinitionFunction();
 
-    assertThat(function.parameterIsLazy(0)).isFalse();
-    assertThat(function.parameterIsLazy(1)).isTrue();
-    assertThat(function.parameterIsLazy(2)).isFalse();
-    assertThat(function.parameterIsLazy(3)).isFalse();
-    assertThat(function.parameterIsLazy(4)).isFalse();
-  }
+		assertThat(function.parameterIsLazy(0)).isFalse();
+		assertThat(function.parameterIsLazy(1)).isTrue();
+		assertThat(function.parameterIsLazy(2)).isFalse();
+		assertThat(function.parameterIsLazy(3)).isFalse();
+		assertThat(function.parameterIsLazy(4)).isFalse();
+	}
 
-  @Test
-  void testVarargNotAllowed() {
-    assertThatThrownBy(WrongVarargFunctionDefinitionFunction::new)
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("Only last parameter may be defined as variable argument");
-  }
+	@Test
+	void testVarargNotAllowed() {
+		assertThatThrownBy(WrongVarargFunctionDefinitionFunction::new)
+			.isInstanceOf(IllegalArgumentException.class)
+			.hasMessage("Only last parameter may be defined as variable argument");
+	}
 
-  private static class CorrectFunctionDefinitionFunction extends Evaluateables.Base {
+	private static class CorrectFunctionDefinitionFunction extends Evaluateables.Base {
 
-    protected CorrectFunctionDefinitionFunction() {
-      super(
-        Parameter.of(Value.class,"default"),
-        Parameter.lazyWith(Value.class,"lazy"),
-        Parameter.varArgWith(Value.class,"vararg")
-      );
-    }
+		protected CorrectFunctionDefinitionFunction() {
+			super(
+				Parameter.of(Value.class, "default"),
+				Parameter.lazyWith(Value.class, "lazy"),
+				Parameter.varArgWith(Value.class, "vararg")
+			);
+		}
 
-    @Override public Value<?> evaluateValidated(ValueResolver variableResolver, Expression expression, Token functionToken, List<Value<?>> arguments)
-      throws EvaluationException {
-      return Value.of("OK");
-    }
-  }
+		@Override
+		protected Value<?> evaluateValidated(ValueResolver variableResolver, Expression expression, Token functionToken, List<Value<?>> arguments)
+			throws EvaluationException {
+			return Value.of("OK");
+		}
+	}
 
-  private static class WrongVarargFunctionDefinitionFunction extends Evaluateables.Base {
-    public WrongVarargFunctionDefinitionFunction() {
-      super(
-        Parameter.of(Value.class,"default"),
-        Parameter.varArgWith(Value.class, "vararg"),
-        Parameter.of(Value.class,"another")
-      );
-    }
-    @Override public Value<?> evaluateValidated(ValueResolver variableResolver, Expression expression, Token functionToken, List<Value<?>> arguments)
-      throws EvaluationException {
-      return Value.of("OK");
-    }
-  }
+	private static class WrongVarargFunctionDefinitionFunction extends Evaluateables.Base {
+		public WrongVarargFunctionDefinitionFunction() {
+			super(
+				Parameter.of(Value.class, "default"),
+				Parameter.varArgWith(Value.class, "vararg"),
+				Parameter.of(Value.class, "another")
+			);
+		}
+		@Override
+		protected Value<?> evaluateValidated(ValueResolver variableResolver, Expression expression, Token functionToken, List<Value<?>> arguments)
+			throws EvaluationException {
+			return Value.of("OK");
+		}
+	}
 }

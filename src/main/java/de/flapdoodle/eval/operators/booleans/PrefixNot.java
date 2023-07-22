@@ -1,12 +1,12 @@
 /**
  * Copyright (C) 2023
- *   Michael Mosmann <michael@mosmann.de>
+ * Michael Mosmann <michael@mosmann.de>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *         http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -25,11 +25,12 @@ import de.flapdoodle.eval.parser.Token;
 
 public class PrefixNot extends AbstractPrefixOperator.Typed<Value.BooleanValue> {
 
-  public PrefixNot() {
-    super(Precedence.OPERATOR_PRECEDENCE_UNARY, Value.BooleanValue.class);
-  }
+	public PrefixNot() {
+		super(Precedence.OPERATOR_PRECEDENCE_UNARY, Value.BooleanValue.class);
+	}
 
-  @Override protected Value<?> evaluateTyped(Expression expression, Token operatorToken, Value.BooleanValue operand) throws EvaluationException {
-    return Value.of(!operand.wrapped());
-  }
+	@Override
+	protected Value<?> evaluateTyped(Expression expression, Token operatorToken, Value.BooleanValue operand) throws EvaluationException {
+		return Value.of(!operand.wrapped());
+	}
 }

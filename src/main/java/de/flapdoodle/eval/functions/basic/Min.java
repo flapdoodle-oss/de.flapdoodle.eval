@@ -1,12 +1,12 @@
 /**
  * Copyright (C) 2023
- *   Michael Mosmann <michael@mosmann.de>
+ * Michael Mosmann <michael@mosmann.de>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *         http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -28,18 +28,19 @@ import java.util.List;
 
 public class Min extends Evaluateables.SingleVararg<Value.NumberValue> {
 
-  public Min() {
-    super(Parameter.varArgWith(Value.NumberValue.class, "value"));
-  }
+	public Min() {
+		super(Parameter.varArgWith(Value.NumberValue.class, "value"));
+	}
 
-  @Override public Value<?> evaluateVarArg(ValueResolver variableResolver, Expression expression, Token functionToken,
-    List<Value.NumberValue> parameterValues) {
-    BigDecimal min = null;
-    for (Value.NumberValue parameter : parameterValues) {
-      if (min == null || parameter.wrapped().compareTo(min) < 0) {
-        min = parameter.wrapped();
-      }
-    }
-    return Value.of(min);
-  }
+	@Override
+	protected Value<?> evaluateVarArg(ValueResolver variableResolver, Expression expression, Token functionToken,
+		List<Value.NumberValue> parameterValues) {
+		BigDecimal min = null;
+		for (Value.NumberValue parameter : parameterValues) {
+			if (min == null || parameter.wrapped().compareTo(min) < 0) {
+				min = parameter.wrapped();
+			}
+		}
+		return Value.of(min);
+	}
 }

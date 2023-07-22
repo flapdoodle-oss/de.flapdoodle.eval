@@ -1,12 +1,12 @@
 /**
  * Copyright (C) 2023
- *   Michael Mosmann <michael@mosmann.de>
+ * Michael Mosmann <michael@mosmann.de>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *         http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -23,7 +23,8 @@ import de.flapdoodle.eval.parser.Token;
 import java.math.BigDecimal;
 
 public class NonZeroNumber implements ParameterValidator<Value.NumberValue> {
-	@Override public void validate(Token token, Value.NumberValue parameterValue) throws EvaluationException {
+	@Override
+	public void validate(Token token, Value.NumberValue parameterValue) throws EvaluationException {
 		if (parameterValue.wrapped().equals(BigDecimal.ZERO)) {
 			throw new EvaluationException(token, "Parameter must not be zero");
 		}

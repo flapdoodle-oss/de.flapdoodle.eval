@@ -1,12 +1,12 @@
 /**
  * Copyright (C) 2023
- *   Michael Mosmann <michael@mosmann.de>
+ * Michael Mosmann <michael@mosmann.de>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *         http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -24,10 +24,10 @@ import org.junit.jupiter.params.provider.CsvSource;
 
 class AndTest extends BaseEvaluationTest {
 
-  @ParameterizedTest
-  @CsvSource(
-      delimiter = ':',
-      value = {
+	@ParameterizedTest
+	@CsvSource(
+		delimiter = ':',
+		value = {
 //        "1&&1 : true",
 //        "1&&2 : true",
 //        "0&&1 : false",
@@ -35,14 +35,14 @@ class AndTest extends BaseEvaluationTest {
 //        "\"true\"&&\"true\" : true",
 //        "\"true\"&&\"false\" : false",
 //        "\"false\"&&\"false\" : false",
-        "true&&true : true",
-        "true&&false : false",
-        "false&&false : false",
-        "(1==1)&&(2==2) : true",
-        "(5>4)&&(4<6) :true"
-      })
-  void testInfixLessLiterals(String expression, String expectedResult)
-      throws EvaluationException, ParseException {
-    assertExpressionHasExpectedResult(expression, expectedResult);
-  }
+			"true&&true : true",
+			"true&&false : false",
+			"false&&false : false",
+			"(1==1)&&(2==2) : true",
+			"(5>4)&&(4<6) :true"
+		})
+	void testInfixLessLiterals(String expression, String expectedResult)
+		throws EvaluationException, ParseException {
+		assertExpressionHasExpectedResult(expression, expectedResult);
+	}
 }

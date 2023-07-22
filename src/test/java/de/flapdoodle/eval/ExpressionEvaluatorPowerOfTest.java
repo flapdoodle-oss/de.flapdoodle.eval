@@ -1,12 +1,12 @@
 /**
  * Copyright (C) 2023
- *   Michael Mosmann <michael@mosmann.de>
+ * Michael Mosmann <michael@mosmann.de>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *         http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -27,23 +27,24 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class ExpressionEvaluatorPowerOfTest extends BaseExpressionEvaluatorTest {
 
-  @Test
-  void testPrecedenceDefault() throws ParseException, EvaluationException {
-    assertThat(evaluate("-2^2")).isEqualTo("4.0");
-  }
+	@Test
+	void testPrecedenceDefault() throws ParseException, EvaluationException {
+		assertThat(evaluate("-2^2")).isEqualTo("4.0");
+	}
 
-  @Test
-  void testPrecedenceHigher() throws ParseException, EvaluationException {
-    Configuration config =
-        Configuration.defaultConfiguration()
-          .withOperators(Pair.of("^", new PowerOf() {
-            @Override public int getPrecedence() {
-              return 100;
-            }
-          }));
+	@Test
+	void testPrecedenceHigher() throws ParseException, EvaluationException {
+		Configuration config =
+			Configuration.defaultConfiguration()
+				.withOperators(Pair.of("^", new PowerOf() {
+					@Override
+					public int getPrecedence() {
+						return 100;
+					}
+				}));
 
-    Expression expression = Expression.of("-2^2", config);
+		Expression expression = Expression.of("-2^2", config);
 
-    assertThat(expression.evaluate(ValueResolver.empty()).wrapped().toString()).isEqualTo("-4.0");
-  }
+		assertThat(expression.evaluate(ValueResolver.empty()).wrapped().toString()).isEqualTo("-4.0");
+	}
 }

@@ -1,12 +1,12 @@
 /**
  * Copyright (C) 2023
- *   Michael Mosmann <michael@mosmann.de>
+ * Michael Mosmann <michael@mosmann.de>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *         http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -33,7 +33,8 @@ public abstract class AbstractInfixOperator extends AbstractBaseOperator impleme
 		super(precedence);
 	}
 
-	protected static <L extends Value<?>, R extends Value<?>> Optional<Value<?>> evaluate(Class<L> leftType, Class<R> rightType, Value<?> leftOperand, Value<?> rightOperand, BiFunction<L, R, Value<?>> function) {
+	protected static <L extends Value<?>, R extends Value<?>> Optional<Value<?>> evaluate(Class<L> leftType, Class<R> rightType, Value<?> leftOperand,
+		Value<?> rightOperand, BiFunction<L, R, Value<?>> function) {
 		if (leftType.isInstance(leftOperand) && rightType.isInstance(rightOperand)) {
 			return Optional.of(function.apply(leftType.cast(leftOperand), rightType.cast(rightOperand)));
 		}
@@ -63,7 +64,8 @@ public abstract class AbstractInfixOperator extends AbstractBaseOperator impleme
 
 		@Override
 		public final Value<?> evaluate(Expression expression, Token operatorToken, Value<?> leftOperand, Value<?> rightOperand) throws EvaluationException {
-			return evaluateTyped(expression, operatorToken, requireValueType(operatorToken, leftOperand, leftType), requireValueType(operatorToken, rightOperand, rightType));
+			return evaluateTyped(expression, operatorToken, requireValueType(operatorToken, leftOperand, leftType),
+				requireValueType(operatorToken, rightOperand, rightType));
 		}
 
 		protected abstract Value<?> evaluateTyped(Expression expression, Token operatorToken, L leftOperand, R rightOperand) throws EvaluationException;

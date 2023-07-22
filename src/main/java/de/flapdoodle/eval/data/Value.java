@@ -1,12 +1,12 @@
 /**
  * Copyright (C) 2023
- *   Michael Mosmann <michael@mosmann.de>
+ * Michael Mosmann <michael@mosmann.de>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *         http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -95,7 +95,7 @@ public abstract class Value<T> {
 		return Value.of(BigDecimal.valueOf(value));
 	}
 
-	private static NullValue NULL=ImmutableNullValue.builder().build();
+	private static NullValue NULL = ImmutableNullValue.builder().build();
 
 	public static NullValue ofNull() {
 		return NULL;
@@ -138,11 +138,11 @@ public abstract class Value<T> {
 		return of(array.stream().map(mapper).collect(Collectors.toList()));
 	}
 
-	public static <T> ArrayValue of(Function<T, Value<?>> mapper, T ... array) {
+	public static <T> ArrayValue of(Function<T, Value<?>> mapper, T... array) {
 		return of(Stream.of(array).map(mapper).collect(Collectors.toList()));
 	}
 
-	public static ArrayValue of(Value<?> ... array) {
+	public static ArrayValue of(Value<?>... array) {
 		return of(ValueArray.of(Arrays.asList(array)));
 	}
 }

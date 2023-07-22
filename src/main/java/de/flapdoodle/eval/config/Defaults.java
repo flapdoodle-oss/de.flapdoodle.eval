@@ -39,11 +39,11 @@ public abstract class Defaults {
 		return Collections.unmodifiableMap(constants);
 	}
 
-	private static final MathContext MATH_CONTEXT=new MathContext(68, RoundingMode.HALF_EVEN);
-	private static final ValueResolver CONSTANTS=ValueResolver.empty().withValues(standardConstants());
-	
-	private static final EvaluateableResolver FUNCTIONS =defaultFunctions();
-	private static final OperatorResolver OPERATORS=OperatorResolver.defaults();
+	private static final MathContext MATH_CONTEXT = new MathContext(68, RoundingMode.HALF_EVEN);
+	private static final ValueResolver CONSTANTS = ValueResolver.empty().withValues(standardConstants());
+
+	private static final EvaluateableResolver FUNCTIONS = defaultFunctions();
+	private static final OperatorResolver OPERATORS = OperatorResolver.defaults();
 
 	public static MathContext mathContext() {
 		return MATH_CONTEXT;

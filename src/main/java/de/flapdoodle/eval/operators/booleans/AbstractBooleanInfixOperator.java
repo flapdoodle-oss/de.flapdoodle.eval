@@ -8,7 +8,7 @@ public abstract class AbstractBooleanInfixOperator extends AbstractInfixOperator
 	protected AbstractBooleanInfixOperator(Precedence precedence, boolean leftAssociative) {
 		super(precedence, leftAssociative, Value.BooleanValue.class, Value.BooleanValue.class);
 	}
-	
+
 	protected AbstractBooleanInfixOperator(Precedence precedence) {
 		super(precedence, Value.BooleanValue.class, Value.BooleanValue.class);
 	}

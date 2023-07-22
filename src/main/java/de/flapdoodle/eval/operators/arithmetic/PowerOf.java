@@ -32,7 +32,8 @@ public class PowerOf extends AbstractNumberInfixOperator {
 		super(Precedence.OPERATOR_PRECEDENCE_POWER, false);
 	}
 
-	@Override protected Value<?> evaluateTyped(Expression expression, Token operatorToken, Value.NumberValue leftOperand, Value.NumberValue rightOperand)
+	@Override
+	protected Value<?> evaluateTyped(Expression expression, Token operatorToken, Value.NumberValue leftOperand, Value.NumberValue rightOperand)
 		throws EvaluationException {
 		/*-
 		 * Thanks to Gene Marin:

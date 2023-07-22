@@ -1,12 +1,12 @@
 /**
  * Copyright (C) 2023
- *   Michael Mosmann <michael@mosmann.de>
+ * Michael Mosmann <michael@mosmann.de>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *         http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -27,27 +27,27 @@ import java.time.Duration;
 
 public class Minus extends AbstractInfixOperator {
 
-  public Minus() {
-    super(Precedence.OPERATOR_PRECEDENCE_ADDITIVE);
-  }
+	public Minus() {
+		super(Precedence.OPERATOR_PRECEDENCE_ADDITIVE);
+	}
 
-  @Override
-  public Value<?> evaluate(
-      Expression expression, Token operatorToken, Value<?> leftOperand, Value<?> rightOperand)
-      throws EvaluationException {
+	@Override
+	public Value<?> evaluate(
+		Expression expression, Token operatorToken, Value<?> leftOperand, Value<?> rightOperand)
+		throws EvaluationException {
 
-    return evaluate(operatorToken, leftOperand, rightOperand)
-      .using(Value.NumberValue.class, Value.NumberValue.class,
-        (l, r) -> Value.of(l.wrapped().subtract(r.wrapped(), expression.configuration().getMathContext())))
-      .using(Value.DateTimeValue.class, Value.DateTimeValue.class,
-        (l, r) -> Value.of(Duration.ofMillis(l.wrapped().toEpochMilli() - r.wrapped().toEpochMilli())))
-      .using(Value.DateTimeValue.class, Value.DurationValue.class,
-        (l, r) -> Value.of(l.wrapped().minus(r.wrapped())))
-      .using(Value.DurationValue.class, Value.DurationValue.class,
-        (l, r) -> Value.of(l.wrapped().minus(r.wrapped())))
-      // TODO remove this
-      .using(Value.DateTimeValue.class, Value.NumberValue.class,
-        (l, r) -> Value.of(l.wrapped().minus(Duration.ofMillis(r.wrapped().longValue()))))
-      .get();
-  }
+		return evaluate(operatorToken, leftOperand, rightOperand)
+			.using(Value.NumberValue.class, Value.NumberValue.class,
+				(l, r) -> Value.of(l.wrapped().subtract(r.wrapped(), expression.configuration().getMathContext())))
+			.using(Value.DateTimeValue.class, Value.DateTimeValue.class,
+				(l, r) -> Value.of(Duration.ofMillis(l.wrapped().toEpochMilli() - r.wrapped().toEpochMilli())))
+			.using(Value.DateTimeValue.class, Value.DurationValue.class,
+				(l, r) -> Value.of(l.wrapped().minus(r.wrapped())))
+			.using(Value.DurationValue.class, Value.DurationValue.class,
+				(l, r) -> Value.of(l.wrapped().minus(r.wrapped())))
+			// TODO remove this
+			.using(Value.DateTimeValue.class, Value.NumberValue.class,
+				(l, r) -> Value.of(l.wrapped().minus(Duration.ofMillis(r.wrapped().longValue()))))
+			.get();
+	}
 }

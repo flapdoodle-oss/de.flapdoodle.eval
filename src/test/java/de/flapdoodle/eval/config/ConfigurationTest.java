@@ -52,7 +52,8 @@ class ConfigurationTest {
 		assertThat(configuration.isAllowOverwriteConstants()).isTrue();
 	}
 
-	@SuppressWarnings("unchecked") @Test
+	@SuppressWarnings("unchecked")
+	@Test
 	void testWithAdditionalOperators() {
 		Configuration configuration =
 			Configuration.defaultConfiguration()
@@ -66,9 +67,9 @@ class ConfigurationTest {
 
 	@Test
 	void testWithAdditionalFunctions() {
-		Configuration configuration =			ImmutableConfiguration.copyOf(Configuration.defaultConfiguration())
-				.withFunctions(Pair.of("ADDED1", new TestConfigurationProvider.DummyFunction()),
-					Pair.of("ADDED2", new TestConfigurationProvider.DummyFunction()));
+		Configuration configuration = ImmutableConfiguration.copyOf(Configuration.defaultConfiguration())
+			.withFunctions(Pair.of("ADDED1", new TestConfigurationProvider.DummyFunction()),
+				Pair.of("ADDED2", new TestConfigurationProvider.DummyFunction()));
 
 		assertThat(configuration.functions().has("ADDED1")).isTrue();
 		assertThat(configuration.functions().has("ADDED2")).isTrue();
