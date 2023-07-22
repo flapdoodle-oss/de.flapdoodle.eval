@@ -25,19 +25,19 @@ import de.flapdoodle.eval.functions.string.ToUpperCase;
 import de.flapdoodle.eval.functions.trigonometric.*;
 
 public interface FunctionResolver {
-	Function getFunction(String functionName);
+	Function get(String functionName);
 
 	default boolean hasFunction(String functionName) {
-		return getFunction(functionName) != null;
+		return get(functionName) != null;
 	}
 
 	default FunctionResolver andThen(FunctionResolver fallback) {
 		FunctionResolver that=this;
 
 		return functionName -> {
-			Function function = that.getFunction(functionName);
+			Function function = that.get(functionName);
 			if (function==null) {
-				return fallback.getFunction(functionName);
+				return fallback.get(functionName);
 			}
 			return function;
 		};

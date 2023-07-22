@@ -57,7 +57,7 @@ class ConfigurationTest {
   void testWithAdditionalOperators() {
     Configuration configuration =
         Configuration.defaultConfiguration()
-            .withAdditionalOperators(
+            .withOperators(
                 Pair.of("ADDED1", new Plus()),
                 Pair.of("ADDED2", new Plus()));
 
@@ -90,7 +90,7 @@ class ConfigurationTest {
   void testCustomOperatorDictionary() {
     OperatorResolver mockedOperatorDictionary = new OperatorResolver() {
       @Override
-      public <T extends Operator> T getOperator(Class<T> type, String operatorString) {
+      public <T extends Operator> T get(Class<T> type, String operatorString) {
         throw new IllegalStateException("dont call this");
       }
     };
@@ -127,6 +127,6 @@ class ConfigurationTest {
     Configuration configuration =
         Configuration.builder().constantResolver(mapBasedVariableResolver).build();
 
-    assertThat(configuration.getConstantResolver().getData("a")).isEqualTo(Value.of("a"));
+    assertThat(configuration.getConstantResolver().get("a")).isEqualTo(Value.of("a"));
   }
 }

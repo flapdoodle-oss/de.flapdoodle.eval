@@ -22,7 +22,6 @@ import de.flapdoodle.types.Pair;
 import org.immutables.value.Value;
 
 import java.math.MathContext;
-import java.math.RoundingMode;
 import java.time.ZoneId;
 
 @Value.Immutable
@@ -73,24 +72,22 @@ public abstract class Configuration {
 		return true;
 	}
 
-	// TODO its override, not addition
 	@SafeVarargs @Value.Auxiliary
-	public final ImmutableConfiguration withAdditionalOperators(Pair<String, Operator>... operators) {
+	public final ImmutableConfiguration withOperators(Pair<String, Operator>... operators) {
 		return ImmutableConfiguration.copyOf(this)
 			.withOperatorResolver(MapBasedOperatorResolver.of(operators)
 				.andThen(getOperatorResolver()));
 	}
 
-	// TODO its override, not addition
 	@SafeVarargs @Value.Auxiliary
-	public final ImmutableConfiguration withAdditionalFunctions(Pair<String, Function>... functions) {
+	public final ImmutableConfiguration witFunctions(Pair<String, Function>... functions) {
 		return ImmutableConfiguration.copyOf(this)
 			.withFunctionResolver(MapBasedFunctionResolver.of(functions)
 				.andThen(getFunctionResolver()));
 	}
 
-	public ImmutableConfiguration withAdditionalFunctions(String name, Function function) {
-		return withAdditionalFunctions(Pair.of(name, function));
+	public ImmutableConfiguration witFunction(String name, Function function) {
+		return witFunctions(Pair.of(name, function));
 	}
 
 	public static ImmutableConfiguration defaultConfiguration() {

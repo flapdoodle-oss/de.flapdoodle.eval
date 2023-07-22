@@ -37,8 +37,8 @@ class MapBasedFunctionResolverTest {
     assertThat(dictionary.hasFunction("min")).isTrue();
     assertThat(dictionary.hasFunction("max")).isTrue();
 
-    assertThat(dictionary.getFunction("min")).isEqualTo(min);
-    assertThat(dictionary.getFunction("max")).isEqualTo(max);
+    assertThat(dictionary.get("min")).isEqualTo(min);
+    assertThat(dictionary.get("max")).isEqualTo(max);
 
     assertThat(dictionary.hasFunction("medium")).isFalse();
   }

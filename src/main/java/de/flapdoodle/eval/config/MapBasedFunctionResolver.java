@@ -34,7 +34,7 @@ public abstract class MapBasedFunctionResolver implements FunctionResolver {
 
 	@Value.Auxiliary
 	@Override
-	public de.flapdoodle.eval.functions.Function getFunction(String functionName) {
+	public de.flapdoodle.eval.functions.Function get(String functionName) {
 		return functions().get(lowerCaseToKey().get(functionName.toLowerCase()));
 	}
 

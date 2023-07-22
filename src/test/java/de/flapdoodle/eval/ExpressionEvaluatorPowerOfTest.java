@@ -36,7 +36,7 @@ class ExpressionEvaluatorPowerOfTest extends BaseExpressionEvaluatorTest {
   void testPrecedenceHigher() throws ParseException, EvaluationException {
     Configuration config =
         Configuration.defaultConfiguration()
-          .withAdditionalOperators(Pair.of("^", new PowerOf() {
+          .withOperators(Pair.of("^", new PowerOf() {
             @Override public int getPrecedence() {
               return 100;
             }

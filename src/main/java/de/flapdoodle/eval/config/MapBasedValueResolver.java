@@ -24,7 +24,7 @@ public abstract class MapBasedValueResolver implements ValueResolver {
 
 	@Auxiliary
 	@Override
-	public Value<?> getData(String variable) {
+	public Value<?> get(String variable) {
 		return variables().get(lowerCaseToKey().get(variable.toLowerCase()));
 	}
 

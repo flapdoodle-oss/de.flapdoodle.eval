@@ -75,7 +75,7 @@ public class Tokenizer {
                 currentToken.getStartPosition(),
                 "*",
                 TokenType.INFIX_OPERATOR,
-              operatorDictionary.getOperator(InfixOperator.class, "*"));
+              operatorDictionary.get(InfixOperator.class, "*"));
           tokens.add(multiplication);
         } else {
           throw new ParseException(currentToken, "Missing operator");
@@ -241,13 +241,13 @@ public class Tokenizer {
     }
     String tokenString = tokenValue.toString();
     if (prefixOperatorAllowed() && operatorDictionary.hasOperator(PrefixOperator.class, tokenString)) {
-      Operator operator = operatorDictionary.getOperator(PrefixOperator.class, tokenString);
+      Operator operator = operatorDictionary.get(PrefixOperator.class, tokenString);
       return Token.of(tokenStartIndex, tokenString, TokenType.PREFIX_OPERATOR, operator);
     } else if (postfixOperatorAllowed() && operatorDictionary.hasOperator(PostfixOperator.class, tokenString)) {
-      Operator operator = operatorDictionary.getOperator(PostfixOperator.class, tokenString);
+      Operator operator = operatorDictionary.get(PostfixOperator.class, tokenString);
       return Token.of(tokenStartIndex, tokenString, TokenType.POSTFIX_OPERATOR, operator);
     } else if (operatorDictionary.hasOperator(InfixOperator.class, tokenString)) {
-      Operator operator = operatorDictionary.getOperator(InfixOperator.class, tokenString);
+      Operator operator = operatorDictionary.get(InfixOperator.class, tokenString);
       return Token.of(tokenStartIndex, tokenString, TokenType.INFIX_OPERATOR, operator);
     } else if (tokenString.equals(".") && configuration.isStructuresAllowed()) {
       return Token.of(tokenStartIndex, tokenString, TokenType.STRUCTURE_SEPARATOR);
@@ -419,19 +419,19 @@ public class Tokenizer {
           tokenStartIndex,
           tokenName,
           TokenType.PREFIX_OPERATOR,
-        operatorDictionary.getOperator(PrefixOperator.class, tokenName));
+        operatorDictionary.get(PrefixOperator.class, tokenName));
     } else if (postfixOperatorAllowed() && operatorDictionary.hasOperator(PostfixOperator.class, tokenName)) {
       return Token.of(
           tokenStartIndex,
           tokenName,
           TokenType.POSTFIX_OPERATOR,
-        operatorDictionary.getOperator(PostfixOperator.class, tokenName));
+        operatorDictionary.get(PostfixOperator.class, tokenName));
     } else if (operatorDictionary.hasOperator(InfixOperator.class, tokenName)) {
       return Token.of(
           tokenStartIndex,
           tokenName,
           TokenType.INFIX_OPERATOR,
-        operatorDictionary.getOperator(InfixOperator.class, tokenName));
+        operatorDictionary.get(InfixOperator.class, tokenName));
     }
 
     skipBlanks();
@@ -443,7 +443,7 @@ public class Tokenizer {
             tokenName,
             "Undefined function '" + tokenName + "'");
       }
-      Function function = functionDictionary.getFunction(tokenName);
+      Function function = functionDictionary.get(tokenName);
       return Token.of(tokenStartIndex, tokenName, TokenType.FUNCTION, function);
     } else {
       return Token.of(tokenStartIndex, tokenName, TokenType.VARIABLE_OR_CONSTANT);

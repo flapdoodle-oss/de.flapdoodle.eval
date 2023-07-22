@@ -48,7 +48,7 @@ public abstract class Expression {
 
 	@org.immutables.value.Value.Auxiliary
 	public Expression withConstant(String variable, Value<?> value) {
-		if (getConstantResolver().getData(variable)==null || getConfiguration().isAllowOverwriteConstants()) {
+		if (getConstantResolver().get(variable)==null || getConfiguration().isAllowOverwriteConstants()) {
 			MapBasedValueResolver mapBasedVariableResolver = ValueResolver.empty()
 					.with(variable, value);
 			return ImmutableExpression.builder().from(this)
@@ -110,7 +110,7 @@ public abstract class Expression {
 	public Set<String> getUndefinedVariables(ValueResolver variableResolver) throws ParseException {
 		Set<String> variables = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
 		for (String variable : getUsedVariables()) {
-			if (variableResolver.getData(variable) == null) {
+			if (variableResolver.get(variable) == null) {
 				variables.add(variable);
 			}
 		}
@@ -205,9 +205,9 @@ public abstract class Expression {
 	}
 
 	private Value<?> getVariableOrConstant(ValueResolver variableResolver, Token token) throws EvaluationException {
-		Value<?> result = getConstantResolver().getData(token.getValue());
+		Value<?> result = getConstantResolver().get(token.getValue());
 		if (result == null) {
-			result = variableResolver.getData(token.getValue());
+			result = variableResolver.get(token.getValue());
 		}
 		if (result == null) {
 			throw new EvaluationException(
@@ -250,8 +250,8 @@ public abstract class Expression {
 		Token nameToken = startNode.getParameters().get(1).getToken();
 		String name = nameToken.getValue();
 
-		if (structure instanceof Value.StructureValue) {
-			Value.StructureValue structure1 = (Value.StructureValue) structure;
+		if (structure instanceof Value.MapValue) {
+			Value.MapValue structure1 = (Value.MapValue) structure;
 			if (!structure1.wrapped().containsKey(name)) {
 				throw new EvaluationException(
 					nameToken, String.format("Field '%s' not found in structure", name));

@@ -22,20 +22,20 @@ import de.flapdoodle.eval.operators.booleans.*;
 
 public interface OperatorResolver {
 	default <T extends Operator> boolean hasOperator(Class<T> type, String operatorString) {
-		return getOperator(type, operatorString) != null;
+		return get(type, operatorString) != null;
 	}
 
-	<T extends Operator> T getOperator(Class<T> type, String operatorString);
+	<T extends Operator> T get(Class<T> type, String operatorString);
 
 	default OperatorResolver andThen(OperatorResolver fallback) {
 		OperatorResolver that = this;
 
 		return new OperatorResolver() {
 			@Override
-			public <T extends Operator> T getOperator(Class<T> type, String operatorString) {
-				T operator = that.getOperator(type, operatorString);
+			public <T extends Operator> T get(Class<T> type, String operatorString) {
+				T operator = that.get(type, operatorString);
 				if (operator==null) {
-					return fallback.getOperator(type, operatorString);
+					return fallback.get(type, operatorString);
 				}
 				return operator;
 			}

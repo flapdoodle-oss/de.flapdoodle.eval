@@ -37,7 +37,7 @@ public class TestConfigurationProvider {
 
     static {
         Configuration configuration = Configuration.defaultConfiguration()
-                .withAdditionalOperators(
+                .withOperators(
                     Pair.of("++", new PrefixPlusPlusOperator()),
                     Pair.of("++", new PostfixPlusPlusOperator()),
                     Pair.of("?", new PostfixQuestionOperator()));

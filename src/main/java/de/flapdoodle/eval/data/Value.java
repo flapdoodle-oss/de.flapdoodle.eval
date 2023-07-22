@@ -33,9 +33,6 @@ public abstract class Value<T> {
 	@org.immutables.value.Value.Parameter
 	public abstract T wrapped();
 
-	@org.immutables.value.Value.Derived
-	public abstract DataType dataType();
-
 	@org.immutables.value.Value.Immutable
 	public static abstract class NullValue extends Value<Void> {
 
@@ -43,10 +40,6 @@ public abstract class Value<T> {
 		@Nullable
 		public abstract Void wrapped();
 
-		@Override
-		public DataType dataType() {
-			return DataType.NULL;
-		}
 	}
 
 	public static abstract class ComparableValue<T extends Comparable<T>> extends Value<T> implements Comparable<Value<T>> {
@@ -59,66 +52,34 @@ public abstract class Value<T> {
 
 	@org.immutables.value.Value.Immutable
 	public static abstract class StringValue extends ComparableValue<String> {
-		@Override
-		public DataType dataType() {
-			return DataType.STRING;
-		}
 	}
 
 	@org.immutables.value.Value.Immutable
 	public static abstract class NumberValue extends ComparableValue<BigDecimal> {
-		@Override
-		public DataType dataType() {
-			return DataType.NUMBER;
-		}
 	}
 
 	@org.immutables.value.Value.Immutable
 	public static abstract class BooleanValue extends ComparableValue<Boolean> {
-		@Override
-		public DataType dataType() {
-			return DataType.BOOLEAN;
-		}
 	}
 
 	@org.immutables.value.Value.Immutable
 	public static abstract class DateTimeValue extends ComparableValue<Instant> {
-		@Override
-		public DataType dataType() {
-			return DataType.DATE_TIME;
-		}
 	}
 
 	@org.immutables.value.Value.Immutable
 	public static abstract class DurationValue extends ComparableValue<Duration> {
-		@Override
-		public DataType dataType() {
-			return DataType.DURATION;
-		}
 	}
 
 	@org.immutables.value.Value.Immutable
 	public static abstract class ArrayValue extends Value<ValueArray> {
-		@Override
-		public DataType dataType() {
-			return DataType.ARRAY;
-		}
 	}
 
 	@org.immutables.value.Value.Immutable
-	public static abstract class StructureValue extends Value<ValueMap> {
-		@Override
-		public DataType dataType() {
-			return DataType.STRUCTURE;
-		}
+	public static abstract class MapValue extends Value<ValueMap> {
 	}
 
 	@org.immutables.value.Value.Immutable
 	public static abstract class ExpressionValue extends Value<ASTNode> {
-		@Override
-		public DataType dataType() {
-			return DataType.EXPRESSION;
-		}
 	}
 
 	public static StringValue of(String value) {
@@ -156,11 +117,11 @@ public abstract class Value<T> {
 		return ImmutableArrayValue.of(value);
 	}
 
-	public static StructureValue of(ValueMap value) {
-		return ImmutableStructureValue.of(value);
+	public static MapValue of(ValueMap value) {
+		return ImmutableMapValue.of(value);
 	}
 
-	public static <T> StructureValue of(Function<T, Value<?>> mapper, Map<String, T> map) {
+	public static <T> MapValue of(Function<T, Value<?>> mapper, Map<String, T> map) {
 		return of(ValueMap.of(map.entrySet().stream()
 			.collect(Collectors.toMap(Map.Entry::getKey, entry -> mapper.apply(entry.getValue())))));
 	}

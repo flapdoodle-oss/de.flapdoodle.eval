@@ -33,7 +33,7 @@ public abstract class MapBasedOperatorResolver implements OperatorResolver {
 	protected abstract Map<String, AbstractPostfixOperator> postfixOperators();
 
 	@Override
-	public <T extends Operator> T getOperator(Class<T> type, String operatorString) {
+	public <T extends Operator> T get(Class<T> type, String operatorString) {
 		if (type.isAssignableFrom(AbstractInfixOperator.class)) {
 			return type.cast(infixOperators().get(operatorString));
 		}

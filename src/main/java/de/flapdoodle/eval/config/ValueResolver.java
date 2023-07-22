@@ -19,18 +19,18 @@ package de.flapdoodle.eval.config;
 import de.flapdoodle.eval.data.Value;
 
 public interface ValueResolver {
-	Value<?> getData(String variable);
+	Value<?> get(String variable);
 
 	default ValueResolver andThen(ValueResolver fallback) {
 		ValueResolver that = this;
 		return variable -> {
-			Value<?> ret = that.getData(variable);
-			return ret!=null ? ret : fallback.getData(variable);
+			Value<?> ret = that.get(variable);
+			return ret!=null ? ret : fallback.get(variable);
 		};
 	}
 
 	default boolean has(String name) {
-		return getData(name) != null;
+		return get(name) != null;
 	}
 
 	static ImmutableMapBasedValueResolver empty() {
