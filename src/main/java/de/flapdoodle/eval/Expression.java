@@ -34,7 +34,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 @org.immutables.value.Value.Immutable
-public abstract class Expression {
+public abstract class Expression implements CanEvaluateNode {
 	public abstract Configuration configuration();
 
 	public abstract String raw();
@@ -77,20 +77,12 @@ public abstract class Expression {
 		if (!getAbstractSyntaxTree().isLeft()) throw getAbstractSyntaxTree().right();
 	}
 
+	@org.immutables.value.Value.Auxiliary
 	public List<ASTNode> getAllASTNodes() throws ParseException {
 		Either<ASTNode, ParseException> tree = getAbstractSyntaxTree();
 		if (tree.isLeft())
 			return getAllASTNodesForNode(tree.left());
 		else throw tree.right();
-	}
-
-	private static List<ASTNode> getAllASTNodesForNode(ASTNode node) {
-		List<ASTNode> nodes = new ArrayList<>();
-		nodes.add(node);
-		for (ASTNode child : node.getParameters()) {
-			nodes.addAll(getAllASTNodesForNode(child));
-		}
-		return nodes;
 	}
 
 	@org.immutables.value.Value.Auxiliary
@@ -118,14 +110,6 @@ public abstract class Expression {
 		return variables;
 	}
 
-	@org.immutables.value.Value.Auxiliary
-	public ASTNode createExpressionNode(String expression) throws ParseException {
-		Tokenizer tokenizer = new Tokenizer(expression, configuration());
-		ShuntingYardConverter converter =
-			new ShuntingYardConverter(expression, tokenizer.parse(), configuration());
-		return converter.toAbstractSyntaxTree();
-	}
-
 	/**
 	 * Evaluates the expression by parsing it (if not done before) and the evaluating it.
 	 *
@@ -147,6 +131,8 @@ public abstract class Expression {
 	 * @return The evaluation result value.
 	 * @throws EvaluationException If there were problems while evaluating the expression.
 	 */
+	@Override
+	@org.immutables.value.Value.Auxiliary
 	public Value<?> evaluateSubtree(ValueResolver variableResolver, ASTNode startNode) throws EvaluationException {
 		Token token = startNode.getToken();
 		Value<?> result;
@@ -263,6 +249,14 @@ public abstract class Expression {
 	/**
 	 * moved from somewhere
 	 */
+	private static List<ASTNode> getAllASTNodesForNode(ASTNode node) {
+		List<ASTNode> nodes = new ArrayList<>();
+		nodes.add(node);
+		for (ASTNode child : node.getParameters()) {
+			nodes.addAll(getAllASTNodesForNode(child));
+		}
+		return nodes;
+	}
 
 	private static Value.NumberValue numberOfString(String value, MathContext mathContext) {
 		if (value.startsWith("0x") || value.startsWith("0X")) {

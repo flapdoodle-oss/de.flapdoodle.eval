@@ -65,20 +65,6 @@ class ExpressionTest {
 	}
 
 	@Test
-	void testExpressionNode() throws ParseException, EvaluationException {
-		Expression expression = Expression.of("a*b");
-		ASTNode subExpression = expression.createExpressionNode("4+3");
-
-		Expression expression1 = expression;
-		MapBasedValueResolver mapBasedVariableResolver = ValueResolver.empty()
-			.with("a", Value.of(2)).and("b", Value.of(subExpression));
-		ValueResolver variableResolver = mapBasedVariableResolver;
-		Value<?> result = expression1.evaluate(variableResolver);
-
-		assertThat(result).isEqualTo(Value.of(14));
-	}
-
-	@Test
 	void testWithValues() throws ParseException, EvaluationException {
 		Expression expression = Expression.of("(a + b) * (a - b)");
 
