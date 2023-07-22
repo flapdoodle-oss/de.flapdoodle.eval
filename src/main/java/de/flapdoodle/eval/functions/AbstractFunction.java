@@ -18,8 +18,8 @@ package de.flapdoodle.eval.functions;
 
 import de.flapdoodle.eval.EvaluationException;
 import de.flapdoodle.eval.Expression;
+import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
-import de.flapdoodle.eval.config.VariableResolver;
 import de.flapdoodle.eval.parser.Token;
 
 import java.util.Collections;
@@ -70,13 +70,13 @@ public abstract class AbstractFunction implements Function {
 		}
 
 		@Override
-		public final Value<?> evaluate(VariableResolver variableResolver, Expression expression, Token functionToken, List<Value<?>> parameterValues)
+		public final Value<?> evaluate(ValueResolver variableResolver, Expression expression, Token functionToken, List<Value<?>> parameterValues)
 			throws EvaluationException {
 			if (parameterValues.size()!=1) throw EvaluationException.ofUnsupportedDataTypeInOperation(functionToken);
 			return evaluate(variableResolver, expression, functionToken, definition.parameterType().cast(parameterValues.get(0)));
 		}
 
-		public abstract Value<?> evaluate(VariableResolver variableResolver, Expression expression, Token functionToken, T parameterValue)
+		public abstract Value<?> evaluate(ValueResolver variableResolver, Expression expression, Token functionToken, T parameterValue)
 			throws EvaluationException;
 	}
 
@@ -99,13 +99,13 @@ public abstract class AbstractFunction implements Function {
 		}
 
 		@Override
-		public final Value<?> evaluate(VariableResolver variableResolver, Expression expression, Token functionToken, List<Value<?>> parameterValues)
+		public final Value<?> evaluate(ValueResolver variableResolver, Expression expression, Token functionToken, List<Value<?>> parameterValues)
 			throws EvaluationException {
 			return evaluateVarArg(variableResolver, expression, functionToken, parameterValues.stream().map(it -> definition.parameterType().cast(it)).collect(
 				Collectors.toList()));
 		}
 
-		public abstract Value<?> evaluateVarArg(VariableResolver variableResolver, Expression expression, Token functionToken, List<T> parameterValues);
+		public abstract Value<?> evaluateVarArg(ValueResolver variableResolver, Expression expression, Token functionToken, List<T> parameterValues);
 	}
 
 	public abstract static class Tuple<A extends Value<?>, B extends Value<?>> extends AbstractFunction {
@@ -122,7 +122,7 @@ public abstract class AbstractFunction implements Function {
 		}
 
 		@Override
-		public final Value<?> evaluate(VariableResolver variableResolver, Expression expression, Token functionToken, List<Value<?>> parameterValues)
+		public final Value<?> evaluate(ValueResolver variableResolver, Expression expression, Token functionToken, List<Value<?>> parameterValues)
 			throws EvaluationException {
 			if (parameterValues.size()!=2) throw EvaluationException.ofUnsupportedDataTypeInOperation(functionToken);
 			return evaluate(variableResolver, expression, functionToken,
@@ -131,7 +131,7 @@ public abstract class AbstractFunction implements Function {
 			);
 		}
 
-		public abstract Value<?> evaluate(VariableResolver variableResolver, Expression expression, Token functionToken, A a, B b)
+		public abstract Value<?> evaluate(ValueResolver variableResolver, Expression expression, Token functionToken, A a, B b)
 			throws EvaluationException;
 	}
 
@@ -152,7 +152,7 @@ public abstract class AbstractFunction implements Function {
 		}
 
 		@Override
-		public final Value<?> evaluate(VariableResolver variableResolver, Expression expression, Token functionToken, List<Value<?>> parameterValues)
+		public final Value<?> evaluate(ValueResolver variableResolver, Expression expression, Token functionToken, List<Value<?>> parameterValues)
 			throws EvaluationException {
 			if (parameterValues.size()!=3) throw EvaluationException.ofUnsupportedDataTypeInOperation(functionToken);
 			return evaluate(variableResolver, expression, functionToken,
@@ -162,7 +162,7 @@ public abstract class AbstractFunction implements Function {
 			);
 		}
 
-		public abstract Value<?> evaluate(VariableResolver variableResolver, Expression expression, Token functionToken, A a, B b, C c)
+		public abstract Value<?> evaluate(ValueResolver variableResolver, Expression expression, Token functionToken, A a, B b, C c)
 			throws EvaluationException;
 	}
 }

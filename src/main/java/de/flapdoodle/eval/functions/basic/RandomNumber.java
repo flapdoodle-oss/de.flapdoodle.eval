@@ -19,7 +19,7 @@ package de.flapdoodle.eval.functions.basic;
 import de.flapdoodle.eval.EvaluationException;
 import de.flapdoodle.eval.Expression;
 import de.flapdoodle.eval.data.Value;
-import de.flapdoodle.eval.config.VariableResolver;
+import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.functions.Function;
 import de.flapdoodle.eval.functions.FunctionParameterDefinition;
 import de.flapdoodle.eval.parser.Token;
@@ -35,7 +35,7 @@ public class RandomNumber implements Function {
     return Collections.emptyList();
   }
 
-  @Override public Value<?> evaluate(VariableResolver variableResolver, Expression expression, Token functionToken, List<Value<?>> parameterValues)
+  @Override public Value<?> evaluate(ValueResolver variableResolver, Expression expression, Token functionToken, List<Value<?>> parameterValues)
     throws EvaluationException {
     SecureRandom secureRandom = new SecureRandom();
 

@@ -17,9 +17,9 @@
 package de.flapdoodle.eval;
 
 import de.flapdoodle.eval.config.Configuration;
-import de.flapdoodle.eval.config.MapBasedVariableResolver;
+import de.flapdoodle.eval.config.MapBasedValueResolver;
 import de.flapdoodle.eval.data.Value;
-import de.flapdoodle.eval.config.VariableResolver;
+import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.functions.Function;
 import de.flapdoodle.eval.operators.InfixOperator;
 import de.flapdoodle.eval.operators.PostfixOperator;
@@ -42,14 +42,14 @@ public abstract class Expression {
 	public abstract String expressionString();
 
 	@org.immutables.value.Value.Default
-	public VariableResolver getConstantResolver() {
+	public ValueResolver getConstantResolver() {
 		return getConfiguration().getConstantResolver();
 	}
 
 	@org.immutables.value.Value.Auxiliary
 	public Expression withConstant(String variable, Value<?> value) {
 		if (getConstantResolver().getData(variable)==null || getConfiguration().isAllowOverwriteConstants()) {
-			MapBasedVariableResolver mapBasedVariableResolver = VariableResolver.empty()
+			MapBasedValueResolver mapBasedVariableResolver = ValueResolver.empty()
 					.with(variable, value);
 			return ImmutableExpression.builder().from(this)
 					.constantResolver(mapBasedVariableResolver.andThen(getConstantResolver()))
@@ -107,7 +107,7 @@ public abstract class Expression {
 		return variables;
 	}
 
-	public Set<String> getUndefinedVariables(VariableResolver variableResolver) throws ParseException {
+	public Set<String> getUndefinedVariables(ValueResolver variableResolver) throws ParseException {
 		Set<String> variables = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
 		for (String variable : getUsedVariables()) {
 			if (variableResolver.getData(variable) == null) {
@@ -135,7 +135,7 @@ public abstract class Expression {
 	 * @throws EvaluationException If there were problems while evaluating the expression.
 	 * @throws ParseException If there were problems while parsing the expression.
 	 */
-	public Value<?> evaluate(VariableResolver variableResolver) throws EvaluationException, ParseException {
+	public Value<?> evaluate(ValueResolver variableResolver) throws EvaluationException, ParseException {
 		Either<ASTNode, ParseException> ast = getAbstractSyntaxTree();
 		if (ast.isLeft()) {
 			return evaluateSubtree(variableResolver, ast.left());
@@ -149,7 +149,7 @@ public abstract class Expression {
 	 * @return The evaluation result value.
 	 * @throws EvaluationException If there were problems while evaluating the expression.
 	 */
-	public Value<?> evaluateSubtree(VariableResolver variableResolver, ASTNode startNode) throws EvaluationException {
+	public Value<?> evaluateSubtree(ValueResolver variableResolver, ASTNode startNode) throws EvaluationException {
 		Token token = startNode.getToken();
 		Value<?> result;
 		switch (token.getType()) {
@@ -204,7 +204,7 @@ public abstract class Expression {
 		return result;
 	}
 
-	private Value<?> getVariableOrConstant(VariableResolver variableResolver, Token token) throws EvaluationException {
+	private Value<?> getVariableOrConstant(ValueResolver variableResolver, Token token) throws EvaluationException {
 		Value<?> result = getConstantResolver().getData(token.getValue());
 		if (result == null) {
 			result = variableResolver.getData(token.getValue());
@@ -216,7 +216,7 @@ public abstract class Expression {
 		return result;
 	}
 
-	private Value<?> evaluateFunction(VariableResolver variableResolver, ASTNode startNode, Token token)
+	private Value<?> evaluateFunction(ValueResolver variableResolver, ASTNode startNode, Token token)
 		throws EvaluationException {
 		List<Value<?>> parameterResults = new ArrayList<>();
 		for (int i = 0; i < startNode.getParameters().size(); i++) {
@@ -234,7 +234,7 @@ public abstract class Expression {
 		return function.evaluateUnvalidated(variableResolver,this, token, parameterResults);
 	}
 
-	private Value<?> evaluateArrayIndex(VariableResolver variableResolver, ASTNode startNode) throws EvaluationException {
+	private Value<?> evaluateArrayIndex(ValueResolver variableResolver, ASTNode startNode) throws EvaluationException {
 		Value<?> array = evaluateSubtree(variableResolver, startNode.getParameters().get(0));
 		Value<?> index = evaluateSubtree(variableResolver, startNode.getParameters().get(1));
 
@@ -245,7 +245,7 @@ public abstract class Expression {
 		}
 	}
 
-	private Value<?> evaluateStructureSeparator(VariableResolver variableResolver, ASTNode startNode) throws EvaluationException {
+	private Value<?> evaluateStructureSeparator(ValueResolver variableResolver, ASTNode startNode) throws EvaluationException {
 		Value<?> structure = evaluateSubtree(variableResolver, startNode.getParameters().get(0));
 		Token nameToken = startNode.getParameters().get(1).getToken();
 		String name = nameToken.getValue();

@@ -21,57 +21,31 @@ import de.flapdoodle.eval.operators.Operator;
 import de.flapdoodle.types.Pair;
 import org.immutables.value.Value;
 
-import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
 import java.time.ZoneId;
-import java.util.Collections;
-import java.util.Map;
-import java.util.TreeMap;
 
 @Value.Immutable
 public abstract class Configuration {
 
-	public static final Map<String, de.flapdoodle.eval.data.Value<?>> StandardConstants = Collections.unmodifiableMap(standardConstants());
-
 	@Value.Default
 	public MathContext getMathContext() {
-		return new MathContext(68, RoundingMode.HALF_EVEN);
+		return Defaults.mathContext();
 	}
 
 	@Value.Default
 	public OperatorResolver getOperatorResolver() {
-		return OperatorResolver.defaults();
+		return Defaults.operators();
 	}
 
 	@Value.Default
 	public FunctionResolver getFunctionResolver() {
-		return FunctionResolver.defaults();
+		return Defaults.functions();
 	}
 
 	@Value.Default
-	public VariableResolver getConstantResolver() {
-		return VariableResolver.empty()
-				.withValues(standardConstants());
-	}
-
-	private static Map<String, de.flapdoodle.eval.data.Value<?>> standardConstants() {
-		Map<String, de.flapdoodle.eval.data.Value<?>> constants = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
-
-		constants.put("TRUE", de.flapdoodle.eval.data.Value.of(true));
-		constants.put("FALSE", de.flapdoodle.eval.data.Value.of(false));
-		constants.put(
-			"PI",
-			de.flapdoodle.eval.data.Value.of(
-				new BigDecimal(
-					"3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679")));
-		constants.put(
-			"E",
-			de.flapdoodle.eval.data.Value.of(
-				new BigDecimal(
-					"2.71828182845904523536028747135266249775724709369995957496696762772407663")));
-		constants.put("NULL", de.flapdoodle.eval.data.Value.ofNull());
-		return constants;
+	public ValueResolver getConstantResolver() {
+		return Defaults.constants();
 	}
 
 	@Value.Default

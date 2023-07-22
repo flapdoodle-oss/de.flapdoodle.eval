@@ -14,7 +14,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Immutable
-public abstract class MapBasedVariableResolver implements VariableResolver {
+public abstract class MapBasedValueResolver implements ValueResolver {
 	protected abstract Map<String, Value<?>> variables();
 
 	@Lazy
@@ -29,84 +29,84 @@ public abstract class MapBasedVariableResolver implements VariableResolver {
 	}
 
 	@Auxiliary
-	public ImmutableMapBasedVariableResolver with(String variable, Value<?> value) {
+	public ImmutableMapBasedValueResolver with(String variable, Value<?> value) {
 		return builder().from(this)
 			.putVariables(variable, value)
 			.build();
 	}
 
 	@Auxiliary
-	public ImmutableMapBasedVariableResolver withNull(String variable) {
+	public ImmutableMapBasedValueResolver withNull(String variable) {
 		return with(variable, Value.ofNull());
 	}
 
 	@Auxiliary
 	@Deprecated
-	public ImmutableMapBasedVariableResolver with(String variable, ValueMap value) {
+	public ImmutableMapBasedValueResolver with(String variable, ValueMap value) {
 		return with(variable, Value.of(value));
 	}
 
 	@Auxiliary
 	@Deprecated
-	public ImmutableMapBasedVariableResolver with(String variable, ValueArray value) {
+	public ImmutableMapBasedValueResolver with(String variable, ValueArray value) {
 		return with(variable, Value.of(value));
 	}
 
 	@Auxiliary
 	@Deprecated
-	public ImmutableMapBasedVariableResolver with(String variable, BigDecimal value) {
+	public ImmutableMapBasedValueResolver with(String variable, BigDecimal value) {
 		return with(variable, Value.of(value));
 	}
 
 	@Auxiliary
 	@Deprecated
-	public ImmutableMapBasedVariableResolver with(String variable, boolean value) {
+	public ImmutableMapBasedValueResolver with(String variable, boolean value) {
 		return with(variable, Value.of(value));
 	}
 
 	@Auxiliary
 	@Deprecated
-	public ImmutableMapBasedVariableResolver with(String variable, double value) {
+	public ImmutableMapBasedValueResolver with(String variable, double value) {
 		return with(variable, Value.of(value));
 	}
 
 	@Auxiliary
 	@Deprecated
-	public ImmutableMapBasedVariableResolver with(String variable, String value) {
+	public ImmutableMapBasedValueResolver with(String variable, String value) {
 		return with(variable, Value.of(value));
 	}
 
 	@Auxiliary
 	@Deprecated
-	public <T> ImmutableMapBasedVariableResolver with(String variable, Function<T, Value<?>> mapper, Collection<T> collection) {
+	public <T> ImmutableMapBasedValueResolver with(String variable, Function<T, Value<?>> mapper, Collection<T> collection) {
 		return with(variable, Value.of(mapper, collection));
 	}
 
 	@Auxiliary
 	@Deprecated
-	public <T> ImmutableMapBasedVariableResolver with(String variable, Function<T, Value<?>> mapper, Map<String, T> collection) {
+	public <T> ImmutableMapBasedValueResolver with(String variable, Function<T, Value<?>> mapper, Map<String, T> collection) {
 		return with(variable, Value.of(mapper, collection));
 	}
 
 	@Auxiliary
-	public ImmutableMapBasedVariableResolver and(String variable, Value<?> value) {
+	public ImmutableMapBasedValueResolver and(String variable, Value<?> value) {
 		return with(variable, value);
 	}
 
 	@Auxiliary
-	public ImmutableMapBasedVariableResolver withValues(Map<String, ? extends Value<?>> values) {
-		ImmutableMapBasedVariableResolver.Builder builder = builder().from(this);
+	public ImmutableMapBasedValueResolver withValues(Map<String, ? extends Value<?>> values) {
+		ImmutableMapBasedValueResolver.Builder builder = builder().from(this);
 		for (Map.Entry<String, ? extends Value<?>> entry : values.entrySet()) {
 			builder.putVariables(entry.getKey(), entry.getValue());
 		}
 		return builder.build();
 	}
 
-	public static ImmutableMapBasedVariableResolver.Builder builder() {
-		return ImmutableMapBasedVariableResolver.builder();
+	public static ImmutableMapBasedValueResolver.Builder builder() {
+		return ImmutableMapBasedValueResolver.builder();
 	}
 
-	public static ImmutableMapBasedVariableResolver empty() {
+	public static ImmutableMapBasedValueResolver empty() {
 		return builder().build();
 	}
 }

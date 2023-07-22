@@ -18,8 +18,8 @@ package de.flapdoodle.eval.functions.string;
 
 import de.flapdoodle.eval.EvaluationException;
 import de.flapdoodle.eval.Expression;
+import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
-import de.flapdoodle.eval.config.VariableResolver;
 import de.flapdoodle.eval.functions.AbstractFunction;
 import de.flapdoodle.eval.parser.Token;
 
@@ -29,7 +29,7 @@ public class ToLowerCase extends AbstractFunction.Single<Value.StringValue> {
 		super(Value.StringValue.class);
 	}
 	
-	@Override public Value<?> evaluate(VariableResolver variableResolver, Expression expression, Token functionToken,
+	@Override public Value<?> evaluate(ValueResolver variableResolver, Expression expression, Token functionToken,
 		Value.StringValue parameterValue) throws EvaluationException {
     return Value.of(parameterValue.wrapped().toLowerCase());
   }

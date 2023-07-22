@@ -16,9 +16,9 @@
  */
 package de.flapdoodle.eval;
 
-import de.flapdoodle.eval.config.MapBasedVariableResolver;
+import de.flapdoodle.eval.config.MapBasedValueResolver;
+import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
-import de.flapdoodle.eval.config.VariableResolver;
 import de.flapdoodle.eval.parser.ParseException;
 import org.junit.jupiter.api.Test;
 
@@ -43,9 +43,9 @@ class ExpressionEvaluatorDecimalPlacesTest extends BaseExpressionEvaluatorTest {
     new BigDecimal("2.12345");
     Expression expression = expression1;
 
-    MapBasedVariableResolver mapBasedVariableResolver = VariableResolver.empty()
+    MapBasedValueResolver mapBasedVariableResolver = ValueResolver.empty()
       .with("a", Value.of(new BigDecimal("2.12345")));
-    VariableResolver variableResolver = mapBasedVariableResolver;
+    ValueResolver variableResolver = mapBasedVariableResolver;
     assertThat(evaluate("a", variableResolver)).isEqualTo("2.12345");
   }
 
@@ -67,9 +67,9 @@ class ExpressionEvaluatorDecimalPlacesTest extends BaseExpressionEvaluatorTest {
   @Test
   void testDefaultNoRoundingArray() throws ParseException, EvaluationException {
     List<BigDecimal> array = Arrays.asList(new BigDecimal("1.12345"));
-    MapBasedVariableResolver mapBasedVariableResolver = VariableResolver.empty()
+    MapBasedValueResolver mapBasedVariableResolver = ValueResolver.empty()
       .with("a", Value::of, array);
-    VariableResolver variableResolver = mapBasedVariableResolver;
+    ValueResolver variableResolver = mapBasedVariableResolver;
     assertThat(evaluate("a[0]", variableResolver)).isEqualTo("1.12345");
   }
 
@@ -82,9 +82,9 @@ class ExpressionEvaluatorDecimalPlacesTest extends BaseExpressionEvaluatorTest {
           }
         };
 
-    MapBasedVariableResolver mapBasedVariableResolver = VariableResolver.empty()
+    MapBasedValueResolver mapBasedVariableResolver = ValueResolver.empty()
       .with("a", Value::of, structure);
-    VariableResolver variableResolver = mapBasedVariableResolver;
+    ValueResolver variableResolver = mapBasedVariableResolver;
     assertThat(evaluate("a.b", variableResolver)).isEqualTo("1.12345");
   }
 
@@ -94,7 +94,7 @@ class ExpressionEvaluatorDecimalPlacesTest extends BaseExpressionEvaluatorTest {
 //        Configuration.builder().decimalPlacesRounding(2).build();
 //    Expression expression = Expression.of("2.12345", config);
 //
-//    assertThat(expression.evaluate(VariableResolver.empty()).getStringValue()).isEqualTo("2.12");
+//    assertThat(expression.evaluate(ValueResolver.empty()).getStringValue()).isEqualTo("2.12");
 //  }
 //
 //  @Test
@@ -105,7 +105,7 @@ class ExpressionEvaluatorDecimalPlacesTest extends BaseExpressionEvaluatorTest {
 //    new BigDecimal("2.126");
 //    Expression expression = expression1;
 //
-//    VariableResolver variableResolver = VariableResolver.builder()
+//    ValueResolver variableResolver = ValueResolver.builder()
 //      .with("a", new BigDecimal("2.126"))
 //      .build();
 //    assertThat(expression.evaluate(variableResolver).getStringValue()).isEqualTo("2.13");
@@ -118,7 +118,7 @@ class ExpressionEvaluatorDecimalPlacesTest extends BaseExpressionEvaluatorTest {
 //    Expression expression = Expression.of("2.12345+1.54321", config);
 //
 //    // literals are rounded first, the added and rounded again.
-//    assertThat(expression.evaluate(VariableResolver.empty()).getStringValue()).isEqualTo("3.666");
+//    assertThat(expression.evaluate(ValueResolver.empty()).getStringValue()).isEqualTo("3.666");
 //  }
 //
 //  @Test
@@ -127,7 +127,7 @@ class ExpressionEvaluatorDecimalPlacesTest extends BaseExpressionEvaluatorTest {
 //        Configuration.builder().decimalPlacesRounding(3).build();
 //    Expression expression = Expression.of("-2.12345", config);
 //
-//    assertThat(expression.evaluate(VariableResolver.empty()).getStringValue()).isEqualTo("-2.123");
+//    assertThat(expression.evaluate(ValueResolver.empty()).getStringValue()).isEqualTo("-2.123");
 //  }
 
 //  @Test
@@ -137,7 +137,7 @@ class ExpressionEvaluatorDecimalPlacesTest extends BaseExpressionEvaluatorTest {
 //    Expression expression = Expression.of("SUM(2.12345,1.54321)", config);
 //
 //    // literals are rounded first, the added and rounded again.
-//    assertThat(expression.evaluate(VariableResolver.empty()).getStringValue()).isEqualTo("3.666");
+//    assertThat(expression.evaluate(ValueResolver.empty()).getStringValue()).isEqualTo("3.666");
 //  }
 //
 //  @Test
@@ -148,7 +148,7 @@ class ExpressionEvaluatorDecimalPlacesTest extends BaseExpressionEvaluatorTest {
 //    Expression expression1 = Expression.of("a[0]", config);
 //    Expression expression = expression1;
 //
-//    VariableResolver variableResolver = VariableResolver.builder()
+//    ValueResolver variableResolver = ValueResolver.builder()
 //      .with("a", array)
 //      .build();
 //    assertThat(expression.evaluate(variableResolver).getStringValue()).isEqualTo("1.123");
@@ -168,7 +168,7 @@ class ExpressionEvaluatorDecimalPlacesTest extends BaseExpressionEvaluatorTest {
 //    Expression expression1 = Expression.of("a.b", config);
 //    Expression expression = expression1;
 //
-//    VariableResolver variableResolver = VariableResolver.builder()
+//    ValueResolver variableResolver = ValueResolver.builder()
 //      .with("a", structure)
 //      .build();
 //    assertThat(expression.evaluate(variableResolver).getStringValue()).isEqualTo("1.123");
@@ -177,7 +177,7 @@ class ExpressionEvaluatorDecimalPlacesTest extends BaseExpressionEvaluatorTest {
 //  @Test
 //  void testDefaultStripZeros() throws EvaluationException, ParseException {
 //    Expression expression = Expression.of("9.000");
-//    assertThat(expression.evaluate(VariableResolver.empty()).getNumberValue()).isEqualTo("9");
+//    assertThat(expression.evaluate(ValueResolver.empty()).getNumberValue()).isEqualTo("9");
 //  }
 //
 //  @Test
@@ -186,6 +186,6 @@ class ExpressionEvaluatorDecimalPlacesTest extends BaseExpressionEvaluatorTest {
 //        Configuration.builder().stripTrailingZeros(false).build();
 //
 //    Expression expression = Expression.of("9.000", config);
-//    assertThat(expression.evaluate(VariableResolver.empty()).getNumberValue()).isEqualTo("9.000");
+//    assertThat(expression.evaluate(ValueResolver.empty()).getNumberValue()).isEqualTo("9.000");
 //  }
 }

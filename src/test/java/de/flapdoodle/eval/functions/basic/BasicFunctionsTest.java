@@ -20,8 +20,8 @@ import de.flapdoodle.eval.BaseEvaluationTest;
 import de.flapdoodle.eval.EvaluationException;
 import de.flapdoodle.eval.Expression;
 import de.flapdoodle.eval.config.Configuration;
+import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
-import de.flapdoodle.eval.config.VariableResolver;
 import de.flapdoodle.eval.parser.ParseException;
 import de.flapdoodle.eval.parser.Token;
 import de.flapdoodle.eval.parser.TokenType;
@@ -165,7 +165,7 @@ class BasicFunctionsTest extends BaseEvaluationTest {
 
   @Test
   void testSqrtNegative() {
-    assertThatThrownBy(() -> Expression.of("SQRT(-1)").evaluate(VariableResolver.empty()))
+    assertThatThrownBy(() -> Expression.of("SQRT(-1)").evaluate(ValueResolver.empty()))
         .isInstanceOf(EvaluationException.class)
         .hasMessage("Parameter must not be negative");
   }
@@ -194,7 +194,7 @@ class BasicFunctionsTest extends BaseEvaluationTest {
     Expression expressionMock = Expression.of("ignore");
     Token token = Token.of(1, "NOT", TokenType.FUNCTION, not);
 
-    VariableResolver variableResolver = VariableResolver.empty();
+    ValueResolver variableResolver = ValueResolver.empty();
     
     assertThat(
             not
@@ -213,9 +213,9 @@ class BasicFunctionsTest extends BaseEvaluationTest {
   @Test
   void testRandom() throws EvaluationException, ParseException {
     Expression expression1 = Expression.of("RANDOM()");
-    Value<?> r1 = expression1.evaluate(VariableResolver.empty());
+    Value<?> r1 = expression1.evaluate(ValueResolver.empty());
     Expression expression = Expression.of("RANDOM()");
-    Value<?> r2 = expression.evaluate(VariableResolver.empty());
+    Value<?> r2 = expression.evaluate(ValueResolver.empty());
 
     assertThat(r1.wrapped()).isNotEqualTo(r2.wrapped());
   }
@@ -289,14 +289,14 @@ class BasicFunctionsTest extends BaseEvaluationTest {
 
   @Test
   void testLogNegative() {
-    assertThatThrownBy(() -> Expression.of("LOG(-1)").evaluate(VariableResolver.empty()))
+    assertThatThrownBy(() -> Expression.of("LOG(-1)").evaluate(ValueResolver.empty()))
         .isInstanceOf(EvaluationException.class)
         .hasMessage("Parameter must not be negative");
   }
 
   @Test
   void testLogZero() {
-    assertThatThrownBy(() -> Expression.of("LOG(0)").evaluate(VariableResolver.empty()))
+    assertThatThrownBy(() -> Expression.of("LOG(0)").evaluate(ValueResolver.empty()))
         .isInstanceOf(EvaluationException.class)
         .hasMessage("Parameter must not be zero");
   }
@@ -317,14 +317,14 @@ class BasicFunctionsTest extends BaseEvaluationTest {
 
   @Test
   void testLog10Negative() {
-    assertThatThrownBy(() -> Expression.of("LOG10(-1)").evaluate(VariableResolver.empty()))
+    assertThatThrownBy(() -> Expression.of("LOG10(-1)").evaluate(ValueResolver.empty()))
         .isInstanceOf(EvaluationException.class)
         .hasMessage("Parameter must not be negative");
   }
 
   @Test
   void testLog10Zero() {
-    assertThatThrownBy(() -> Expression.of("LOG10(0)").evaluate(VariableResolver.empty()))
+    assertThatThrownBy(() -> Expression.of("LOG10(0)").evaluate(ValueResolver.empty()))
         .isInstanceOf(EvaluationException.class)
         .hasMessage("Parameter must not be zero");
   }

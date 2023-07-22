@@ -19,7 +19,7 @@ package de.flapdoodle.eval.functions.datetime;
 import de.flapdoodle.eval.EvaluationException;
 import de.flapdoodle.eval.Expression;
 import de.flapdoodle.eval.data.Value;
-import de.flapdoodle.eval.config.VariableResolver;
+import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.functions.AbstractFunction;
 import de.flapdoodle.eval.functions.FunctionParameterDefinition;
 import de.flapdoodle.eval.parser.Token;
@@ -38,7 +38,7 @@ public class FormatDateTime extends AbstractFunction {
 		);
 	}
 
-	@Override public Value<?> evaluate(VariableResolver variableResolver, Expression expression, Token functionToken, List<Value<?>> parameterValues)
+	@Override public Value<?> evaluate(ValueResolver variableResolver, Expression expression, Token functionToken, List<Value<?>> parameterValues)
 		throws EvaluationException {
 		ZoneId zoneId = expression.getConfiguration().getDefaultZoneId();
 

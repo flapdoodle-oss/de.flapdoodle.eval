@@ -17,8 +17,8 @@
 package de.flapdoodle.eval.functions.basic;
 
 import de.flapdoodle.eval.Expression;
+import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
-import de.flapdoodle.eval.config.VariableResolver;
 import de.flapdoodle.eval.functions.AbstractFunction;
 import de.flapdoodle.eval.parser.Token;
 
@@ -32,7 +32,7 @@ public class RoundCeiling extends AbstractFunction.Single<Value.NumberValue> {
   
   @Override
   public Value<?> evaluate(
-		VariableResolver variableResolver, Expression expression, Token functionToken, Value.NumberValue value) {
+		ValueResolver variableResolver, Expression expression, Token functionToken, Value.NumberValue value) {
 
     return Value.of(value.wrapped().setScale(0, RoundingMode.CEILING));
   }

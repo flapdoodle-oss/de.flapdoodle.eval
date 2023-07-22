@@ -32,8 +32,8 @@
 package de.flapdoodle.eval.functions.datetime;
 
 import de.flapdoodle.eval.Expression;
+import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
-import de.flapdoodle.eval.config.VariableResolver;
 import de.flapdoodle.eval.functions.AbstractFunction;
 import de.flapdoodle.eval.functions.FunctionParameterDefinition;
 import de.flapdoodle.eval.parser.Token;
@@ -47,7 +47,7 @@ public abstract class AbstractDateTimeParser extends AbstractFunction.SingleVara
     super(FunctionParameterDefinition.varArgWith(Value.StringValue.class, "value"));
   }
 
-  @Override public Value<?> evaluateVarArg(VariableResolver variableResolver, Expression expression, Token functionToken,
+  @Override public Value<?> evaluateVarArg(ValueResolver variableResolver, Expression expression, Token functionToken,
     List<Value.StringValue> parameterValues) {
     ZoneId zoneId = expression.getConfiguration().getDefaultZoneId();
     Instant instant;

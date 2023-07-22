@@ -19,7 +19,7 @@ package de.flapdoodle.eval.functions.trigonometric;
 import de.flapdoodle.eval.EvaluationException;
 import de.flapdoodle.eval.Expression;
 import de.flapdoodle.eval.data.Value;
-import de.flapdoodle.eval.config.VariableResolver;
+import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.parser.Token;
 
 import java.math.BigDecimal;
@@ -31,7 +31,7 @@ public class AsinRadians extends AbstractNumberFunction {
 
   private static final BigDecimal MINUS_ONE = valueOf(-1);
 
-  @Override public Value<?> evaluate(VariableResolver variableResolver, Expression expression, Token functionToken,
+  @Override public Value<?> evaluate(ValueResolver variableResolver, Expression expression, Token functionToken,
     Value.NumberValue parameterValueX) throws EvaluationException {
     BigDecimal parameterValue = parameterValueX.wrapped();
 

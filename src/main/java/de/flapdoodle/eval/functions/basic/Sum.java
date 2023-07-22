@@ -17,8 +17,8 @@
 package de.flapdoodle.eval.functions.basic;
 
 import de.flapdoodle.eval.Expression;
+import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
-import de.flapdoodle.eval.config.VariableResolver;
 import de.flapdoodle.eval.functions.AbstractFunction;
 import de.flapdoodle.eval.functions.FunctionParameterDefinition;
 import de.flapdoodle.eval.parser.Token;
@@ -32,7 +32,7 @@ public class Sum extends AbstractFunction.SingleVararg<Value.NumberValue> {
     super(FunctionParameterDefinition.varArgWith(Value.NumberValue.class, "value"));
   }
 
-  @Override public Value<?> evaluateVarArg(VariableResolver variableResolver, Expression expression, Token functionToken,
+  @Override public Value<?> evaluateVarArg(ValueResolver variableResolver, Expression expression, Token functionToken,
     List<Value.NumberValue> parameterValues) {
     BigDecimal sum = BigDecimal.ZERO;
     for (Value.NumberValue parameter : parameterValues) {

@@ -19,7 +19,7 @@ package de.flapdoodle.eval.functions.basic;
 import de.flapdoodle.eval.EvaluationException;
 import de.flapdoodle.eval.Expression;
 import de.flapdoodle.eval.data.Value;
-import de.flapdoodle.eval.config.VariableResolver;
+import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.functions.AbstractFunction;
 import de.flapdoodle.eval.functions.FunctionParameterDefinition;
 import de.flapdoodle.eval.parser.Token;
@@ -31,7 +31,7 @@ public class Round extends AbstractFunction.Tuple<Value.NumberValue, Value.Numbe
       FunctionParameterDefinition.of(Value.NumberValue.class, "scale"));
   }
 
-  @Override public Value<?> evaluate(VariableResolver variableResolver, Expression expression, Token functionToken, Value.NumberValue value,
+  @Override public Value<?> evaluate(ValueResolver variableResolver, Expression expression, Token functionToken, Value.NumberValue value,
     Value.NumberValue precision) throws EvaluationException {
     return Value.of(
         value

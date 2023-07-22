@@ -17,8 +17,8 @@
 package de.flapdoodle.eval.functions.datetime;
 
 import de.flapdoodle.eval.Expression;
+import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
-import de.flapdoodle.eval.config.VariableResolver;
 import de.flapdoodle.eval.functions.AbstractFunction;
 import de.flapdoodle.eval.functions.FunctionParameterDefinition;
 import de.flapdoodle.eval.functions.validations.NonNegativeNumber;
@@ -34,7 +34,7 @@ public class CreateLocalDateTime extends AbstractFunction.SingleVararg<Value.Num
     super(FunctionParameterDefinition.varArgWith(Value.NumberValue.class,"values")
       .withValidators(new NonNegativeNumber()));
   }
-  @Override public Value<?> evaluateVarArg(VariableResolver variableResolver, Expression expression, Token functionToken,
+  @Override public Value<?> evaluateVarArg(ValueResolver variableResolver, Expression expression, Token functionToken,
     List<Value.NumberValue> parameterValues) {
     int year = parameterValues.get(0).wrapped().intValue();
     int month = parameterValues.get(1).wrapped().intValue();

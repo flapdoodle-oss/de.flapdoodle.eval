@@ -17,8 +17,8 @@
 package de.flapdoodle.eval.parser;
 
 import de.flapdoodle.eval.Expression;
-import de.flapdoodle.eval.config.MapBasedVariableResolver;
-import de.flapdoodle.eval.config.VariableResolver;
+import de.flapdoodle.eval.config.MapBasedValueResolver;
+import de.flapdoodle.eval.config.ValueResolver;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -70,7 +70,7 @@ class TokenizerStringLiteralTest extends BaseParserTest {
   @Test
   void testUnknownEscapeCharacter() {
     assertThatThrownBy(() -> {
-      MapBasedVariableResolver mapBasedVariableResolver = VariableResolver.empty();
+      MapBasedValueResolver mapBasedVariableResolver = ValueResolver.empty();
       Expression.of("\" \\y \"").evaluate(mapBasedVariableResolver);
     })
         .isInstanceOf(ParseException.class)

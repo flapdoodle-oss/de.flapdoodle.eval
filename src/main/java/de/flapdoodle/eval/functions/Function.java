@@ -18,8 +18,8 @@ package de.flapdoodle.eval.functions;
 
 import de.flapdoodle.eval.EvaluationException;
 import de.flapdoodle.eval.Expression;
+import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
-import de.flapdoodle.eval.config.VariableResolver;
 import de.flapdoodle.eval.parser.Token;
 
 import java.util.List;
@@ -63,11 +63,11 @@ public interface Function {
    * @throws EvaluationException In case there were problems during evaluation.
    */
   Value<?> evaluate(
-    VariableResolver variableResolver, Expression expression, Token functionToken, List<Value<?>> parameterValues)
+    ValueResolver variableResolver, Expression expression, Token functionToken, List<Value<?>> parameterValues)
       throws EvaluationException;
 
   default Value<?> evaluateUnvalidated(
-    VariableResolver variableResolver, Expression expression, Token functionToken, List<Value<?>> parameterValues)
+    ValueResolver variableResolver, Expression expression, Token functionToken, List<Value<?>> parameterValues)
     throws EvaluationException {
     validatePreEvaluation(functionToken, parameterValues);
     return evaluate(variableResolver, expression, functionToken, parameterValues);

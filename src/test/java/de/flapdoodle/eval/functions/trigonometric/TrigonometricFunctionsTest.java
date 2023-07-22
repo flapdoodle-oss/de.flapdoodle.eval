@@ -19,8 +19,8 @@ package de.flapdoodle.eval.functions.trigonometric;
 import de.flapdoodle.eval.BaseEvaluationTest;
 import de.flapdoodle.eval.EvaluationException;
 import de.flapdoodle.eval.Expression;
-import de.flapdoodle.eval.config.MapBasedVariableResolver;
-import de.flapdoodle.eval.config.VariableResolver;
+import de.flapdoodle.eval.config.MapBasedValueResolver;
+import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.parser.ParseException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -62,7 +62,7 @@ class TrigonometricFunctionsTest extends BaseEvaluationTest {
   void testAcosHThrowsException(double d) {
     assertThatThrownBy(() -> {
 			Expression expression = Expression.of("ACOSH(x)");
-      MapBasedVariableResolver mapBasedVariableResolver = VariableResolver.empty().with("x", d);
+      MapBasedValueResolver mapBasedVariableResolver = ValueResolver.empty().with("x", d);
       expression.evaluate(mapBasedVariableResolver);
 		})
         .isInstanceOf(EvaluationException.class)
@@ -117,14 +117,14 @@ class TrigonometricFunctionsTest extends BaseEvaluationTest {
 
   @Test
   void testAcotRThrowsException() {
-    assertThatThrownBy(() -> Expression.of("ACOTR(0)").evaluate(VariableResolver.empty()))
+    assertThatThrownBy(() -> Expression.of("ACOTR(0)").evaluate(ValueResolver.empty()))
         .isInstanceOf(EvaluationException.class)
         .hasMessage("Parameter must not be zero");
   }
 
   @Test
   void testAcotThrowsException() {
-    assertThatThrownBy(() -> Expression.of("ACOT(0)").evaluate(VariableResolver.empty()))
+    assertThatThrownBy(() -> Expression.of("ACOT(0)").evaluate(ValueResolver.empty()))
         .isInstanceOf(EvaluationException.class)
         .hasMessage("Parameter must not be zero");
   }
@@ -144,14 +144,14 @@ class TrigonometricFunctionsTest extends BaseEvaluationTest {
 
   @Test
   void testAsinThrowsExceptionPositive() {
-    assertThatThrownBy(() -> Expression.of("ASIN(1.5)").evaluate(VariableResolver.empty()))
+    assertThatThrownBy(() -> Expression.of("ASIN(1.5)").evaluate(ValueResolver.empty()))
         .isInstanceOf(EvaluationException.class)
         .hasMessage("Illegal asin(x) for x > 1: x = 1.5");
   }
 
   @Test
   void testAsinThrowsExceptionNegative() {
-    assertThatThrownBy(() -> Expression.of("ASIN(-1.5)").evaluate(VariableResolver.empty()))
+    assertThatThrownBy(() -> Expression.of("ASIN(-1.5)").evaluate(ValueResolver.empty()))
         .isInstanceOf(EvaluationException.class)
         .hasMessage("Illegal asin(x) for x < -1: x = -1.5");
   }
@@ -184,14 +184,14 @@ class TrigonometricFunctionsTest extends BaseEvaluationTest {
 
   @Test
   void testAsinRThrowsExceptionPositive() {
-    assertThatThrownBy(() -> Expression.of("ASINR(1.5)").evaluate(VariableResolver.empty()))
+    assertThatThrownBy(() -> Expression.of("ASINR(1.5)").evaluate(ValueResolver.empty()))
         .isInstanceOf(EvaluationException.class)
         .hasMessage("Illegal asinr(x) for x > 1: x = 1.5");
   }
 
   @Test
   void testAsinRThrowsExceptionNegative() {
-    assertThatThrownBy(() -> Expression.of("ASINR(-1.5)").evaluate(VariableResolver.empty()))
+    assertThatThrownBy(() -> Expression.of("ASINR(-1.5)").evaluate(ValueResolver.empty()))
         .isInstanceOf(EvaluationException.class)
         .hasMessage("Illegal asinr(x) for x < -1: x = -1.5");
   }
@@ -265,7 +265,7 @@ class TrigonometricFunctionsTest extends BaseEvaluationTest {
   void testAtanHThrowsException(double d) {
     assertThatThrownBy(() -> {
 			Expression expression = Expression.of("ATANH(x)");
-      MapBasedVariableResolver mapBasedVariableResolver = VariableResolver.empty().with("x", d);
+      MapBasedValueResolver mapBasedVariableResolver = ValueResolver.empty().with("x", d);
       expression.evaluate(mapBasedVariableResolver);
 		})
         .isInstanceOf(EvaluationException.class)
@@ -352,14 +352,14 @@ class TrigonometricFunctionsTest extends BaseEvaluationTest {
 
   @Test
   void testCoTanRThrowsException() {
-    assertThatThrownBy(() -> Expression.of("COTR(0)").evaluate(VariableResolver.empty()))
+    assertThatThrownBy(() -> Expression.of("COTR(0)").evaluate(ValueResolver.empty()))
         .isInstanceOf(EvaluationException.class)
         .hasMessage("Parameter must not be zero");
   }
 
   @Test
   void testCoTanThrowsException() {
-    assertThatThrownBy(() -> Expression.of("COT(0)").evaluate(VariableResolver.empty()))
+    assertThatThrownBy(() -> Expression.of("COT(0)").evaluate(ValueResolver.empty()))
         .isInstanceOf(EvaluationException.class)
         .hasMessage("Parameter must not be zero");
   }
@@ -420,28 +420,28 @@ class TrigonometricFunctionsTest extends BaseEvaluationTest {
 
   @Test
   void testCotHThrowsException() {
-    assertThatThrownBy(() -> Expression.of("COTH(0)").evaluate(VariableResolver.empty()))
+    assertThatThrownBy(() -> Expression.of("COTH(0)").evaluate(ValueResolver.empty()))
         .isInstanceOf(EvaluationException.class)
         .hasMessage("Parameter must not be zero");
   }
 
   @Test
   void testCscHThrowsException() {
-    assertThatThrownBy(() -> Expression.of("CSCH(0)").evaluate(VariableResolver.empty()))
+    assertThatThrownBy(() -> Expression.of("CSCH(0)").evaluate(ValueResolver.empty()))
         .isInstanceOf(EvaluationException.class)
         .hasMessage("Parameter must not be zero");
   }
 
   @Test
   void testCscRThrowsException() {
-    assertThatThrownBy(() -> Expression.of("CSCR(0)").evaluate(VariableResolver.empty()))
+    assertThatThrownBy(() -> Expression.of("CSCR(0)").evaluate(ValueResolver.empty()))
         .isInstanceOf(EvaluationException.class)
         .hasMessage("Parameter must not be zero");
   }
 
   @Test
   void testCscThrowsException() {
-    assertThatThrownBy(() -> Expression.of("CSC(0)").evaluate(VariableResolver.empty()))
+    assertThatThrownBy(() -> Expression.of("CSC(0)").evaluate(ValueResolver.empty()))
         .isInstanceOf(EvaluationException.class)
         .hasMessage("Parameter must not be zero");
   }
@@ -504,7 +504,7 @@ class TrigonometricFunctionsTest extends BaseEvaluationTest {
 
   @Test
   void testSecHThrowsException() {
-    assertThatThrownBy(() -> Expression.of("SECH(0)").evaluate(VariableResolver.empty()))
+    assertThatThrownBy(() -> Expression.of("SECH(0)").evaluate(ValueResolver.empty()))
         .isInstanceOf(EvaluationException.class)
         .hasMessage("Parameter must not be zero");
   }
@@ -524,14 +524,14 @@ class TrigonometricFunctionsTest extends BaseEvaluationTest {
 
   @Test
   void testSecRThrowsException() {
-    assertThatThrownBy(() -> Expression.of("SECR(0)").evaluate(VariableResolver.empty()))
+    assertThatThrownBy(() -> Expression.of("SECR(0)").evaluate(ValueResolver.empty()))
         .isInstanceOf(EvaluationException.class)
         .hasMessage("Parameter must not be zero");
   }
 
   @Test
   void testSecThrowsException() {
-    assertThatThrownBy(() -> Expression.of("SEC(0)").evaluate(VariableResolver.empty()))
+    assertThatThrownBy(() -> Expression.of("SEC(0)").evaluate(ValueResolver.empty()))
         .isInstanceOf(EvaluationException.class)
         .hasMessage("Parameter must not be zero");
   }

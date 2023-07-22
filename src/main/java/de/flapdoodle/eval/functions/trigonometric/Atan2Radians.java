@@ -19,7 +19,7 @@ package de.flapdoodle.eval.functions.trigonometric;
 import de.flapdoodle.eval.EvaluationException;
 import de.flapdoodle.eval.Expression;
 import de.flapdoodle.eval.data.Value;
-import de.flapdoodle.eval.config.VariableResolver;
+import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.functions.AbstractFunction;
 import de.flapdoodle.eval.functions.FunctionParameterDefinition;
 import de.flapdoodle.eval.parser.Token;
@@ -31,7 +31,7 @@ public class Atan2Radians extends  AbstractFunction.Tuple<Value.NumberValue, Val
 			FunctionParameterDefinition.of(Value.NumberValue.class, "y"), FunctionParameterDefinition.of(Value.NumberValue.class, "x"));
 	}
 
-	@Override public Value<?> evaluate(VariableResolver variableResolver, Expression expression, Token functionToken,
+	@Override public Value<?> evaluate(ValueResolver variableResolver, Expression expression, Token functionToken,
 		Value.NumberValue y, Value.NumberValue x) throws EvaluationException {
     return Value.of(
         Math.atan2(

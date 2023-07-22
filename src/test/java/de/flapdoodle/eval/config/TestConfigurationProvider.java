@@ -52,7 +52,7 @@ public class TestConfigurationProvider {
 			super(FunctionParameterDefinition.varArgWith(Value.StringValue.class, "input"));
 		}
 
-		@Override public Value<?> evaluateVarArg(VariableResolver variableResolver, Expression expression, Token functionToken,
+		@Override public Value<?> evaluateVarArg(ValueResolver variableResolver, Expression expression, Token functionToken,
 			List<Value.StringValue> parameterValues) {
 			// dummy implementation
 			return Value.of("OK");

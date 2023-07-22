@@ -19,7 +19,7 @@ package de.flapdoodle.eval.functions.basic;
 import de.flapdoodle.eval.EvaluationException;
 import de.flapdoodle.eval.Expression;
 import de.flapdoodle.eval.data.Value;
-import de.flapdoodle.eval.config.VariableResolver;
+import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.functions.AbstractFunction;
 import de.flapdoodle.eval.functions.FunctionParameterDefinition;
 import de.flapdoodle.eval.parser.Token;
@@ -40,12 +40,12 @@ public class Conditional extends AbstractFunction.Triple<Value.BooleanValue, Val
     );
   }
 
-  @Override public Value<?> evaluate(VariableResolver variableResolver, Expression expression, Token functionToken, Value.BooleanValue condition,
+  @Override public Value<?> evaluate(ValueResolver valueResolver, Expression expression, Token functionToken, Value.BooleanValue condition,
     Value.ExpressionValue ifTrue, Value.ExpressionValue ifFalse) throws EvaluationException {
     if (condition.wrapped()) {
-      return expression.evaluateSubtree(variableResolver, ifTrue.wrapped());
+      return expression.evaluateSubtree(valueResolver, ifTrue.wrapped());
     } else {
-      return expression.evaluateSubtree(variableResolver, ifFalse.wrapped());
+      return expression.evaluateSubtree(valueResolver, ifFalse.wrapped());
     }
   }
 }

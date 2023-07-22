@@ -16,9 +16,9 @@
  */
 package de.flapdoodle.eval;
 
-import de.flapdoodle.eval.config.MapBasedVariableResolver;
+import de.flapdoodle.eval.config.MapBasedValueResolver;
+import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
-import de.flapdoodle.eval.config.VariableResolver;
 import de.flapdoodle.eval.operators.InfixOperator;
 import de.flapdoodle.eval.operators.PostfixOperator;
 import de.flapdoodle.eval.operators.PrefixOperator;
@@ -70,9 +70,9 @@ class ExpressionTest {
     ASTNode subExpression = expression.createExpressionNode("4+3");
 
     Expression expression1 = expression;
-    MapBasedVariableResolver mapBasedVariableResolver = VariableResolver.empty()
+    MapBasedValueResolver mapBasedVariableResolver = ValueResolver.empty()
       .with("a", Value.of(2)).and("b", Value.of(subExpression));
-    VariableResolver variableResolver = mapBasedVariableResolver;
+    ValueResolver variableResolver = mapBasedVariableResolver;
     Value<?> result = expression1.evaluate(variableResolver);
 
     assertThat(result).isEqualTo(Value.of(14));
@@ -87,9 +87,9 @@ class ExpressionTest {
     values.put("b", Value.of(2.5));
 
     Expression expression1 = expression;
-    MapBasedVariableResolver mapBasedVariableResolver = VariableResolver.empty()
+    MapBasedValueResolver mapBasedVariableResolver = ValueResolver.empty()
       .withValues(values);
-    VariableResolver variableResolver = mapBasedVariableResolver;
+    ValueResolver variableResolver = mapBasedVariableResolver;
     Value.NumberValue result = (Value.NumberValue) expression1.evaluate(variableResolver);
 
     assertThat(result.wrapped()).isCloseTo(Value.of(6).wrapped(), Percentage.withPercentage(0.9999));
@@ -104,9 +104,9 @@ class ExpressionTest {
     values.put("b", Value.of(3.1));
 
 		Expression expression1 = expression;
-    MapBasedVariableResolver mapBasedVariableResolver = VariableResolver.empty()
+    MapBasedValueResolver mapBasedVariableResolver = ValueResolver.empty()
       .withValues(values);
-    VariableResolver variableResolver = mapBasedVariableResolver;
+    ValueResolver variableResolver = mapBasedVariableResolver;
     Value<?> result = expression1.evaluate(variableResolver);
 
     assertThat(result).isEqualTo(Value.of(7));
@@ -122,9 +122,9 @@ class ExpressionTest {
     values.put("c", Value.of("world"));
 
     Expression expression1 = expression;
-    MapBasedVariableResolver mapBasedVariableResolver = VariableResolver.empty()
+    MapBasedValueResolver mapBasedVariableResolver = ValueResolver.empty()
       .withValues(values);
-    VariableResolver variableResolver = mapBasedVariableResolver;
+    ValueResolver variableResolver = mapBasedVariableResolver;
     Value<?> result = expression1.evaluate(variableResolver);
 
     assertThat(result.wrapped()).isEqualTo("Hello world");
@@ -140,25 +140,12 @@ class ExpressionTest {
     values.put("c", Value.of(24.7));
 
     Expression expression1 = expression;
-    MapBasedVariableResolver mapBasedVariableResolver = VariableResolver.empty()
+    MapBasedValueResolver mapBasedVariableResolver = ValueResolver.empty()
       .withValues(values);
-    VariableResolver variableResolver = mapBasedVariableResolver;
+    ValueResolver variableResolver = mapBasedVariableResolver;
 		Value<?> result = expression1.evaluate(variableResolver);
 
     assertThat(result.wrapped()).isEqualTo("true 24.7");
-  }
-
-  @Test
-  void testDefaultExpressionOwnsOwnConfigurationEntries() {
-    Expression expression1 = Expression.of("1+1");
-    Expression expression2 = Expression.of("1+1");
-
-    assertThat(expression1.getConfiguration().getOperatorResolver())
-        .isNotSameAs(expression2.getConfiguration().getOperatorResolver());
-    assertThat(expression1.getConfiguration().getFunctionResolver())
-        .isNotSameAs(expression2.getConfiguration().getFunctionResolver());
-//    assertThat(expression1.getConfiguration().getConstantResolver())
-//        .isNotSameAs(expression2.getConfiguration().getDefaultConstants());
   }
 
   @Test
@@ -216,9 +203,9 @@ class ExpressionTest {
   void testGetUndefinedVariables() throws ParseException {
     Expression expression1 = Expression.of("a+A+b+B+c+C+E+e+PI+x");
     Expression expression = expression1;
-    MapBasedVariableResolver mapBasedVariableResolver = VariableResolver.empty()
+    MapBasedValueResolver mapBasedVariableResolver = ValueResolver.empty()
       .with("x", Value.of(1));
-    VariableResolver variableResolver = mapBasedVariableResolver;
+    ValueResolver variableResolver = mapBasedVariableResolver;
     assertThat(expression.getUndefinedVariables(variableResolver)).containsExactlyInAnyOrder("a", "b", "c");
   }
 }

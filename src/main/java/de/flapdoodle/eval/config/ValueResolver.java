@@ -18,11 +18,11 @@ package de.flapdoodle.eval.config;
 
 import de.flapdoodle.eval.data.Value;
 
-public interface VariableResolver {
+public interface ValueResolver {
 	Value<?> getData(String variable);
 
-	default VariableResolver andThen(VariableResolver fallback) {
-		VariableResolver that = this;
+	default ValueResolver andThen(ValueResolver fallback) {
+		ValueResolver that = this;
 		return variable -> {
 			Value<?> ret = that.getData(variable);
 			return ret!=null ? ret : fallback.getData(variable);
@@ -33,7 +33,7 @@ public interface VariableResolver {
 		return getData(name) != null;
 	}
 
-	static ImmutableMapBasedVariableResolver empty() {
-		return MapBasedVariableResolver.empty();
+	static ImmutableMapBasedValueResolver empty() {
+		return MapBasedValueResolver.empty();
 	}
 }

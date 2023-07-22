@@ -17,7 +17,7 @@
 package de.flapdoodle.eval.parser;
 
 import de.flapdoodle.eval.Expression;
-import de.flapdoodle.eval.config.VariableResolver;
+import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.operators.arithmetic.Multiply;
 import de.flapdoodle.eval.operators.arithmetic.PrefixMinus;
 import org.assertj.core.api.Assertions;
@@ -69,7 +69,7 @@ class ShuntingYardExceptionsTest extends BaseParserTest {
   void testEmptyExpression() {
     Expression expression = Expression.of("");
 
-    assertThatThrownBy(() -> expression.evaluate(VariableResolver.empty()))
+    assertThatThrownBy(() -> expression.evaluate(ValueResolver.empty()))
         .isInstanceOf(ParseException.class)
         .hasMessage("Empty expression");
   }
@@ -78,7 +78,7 @@ class ShuntingYardExceptionsTest extends BaseParserTest {
   void testEmptyExpressionBraces() {
     Expression expression = Expression.of("()");
 
-    assertThatThrownBy(() -> expression.evaluate(VariableResolver.empty()))
+    assertThatThrownBy(() -> expression.evaluate(ValueResolver.empty()))
         .isInstanceOf(ParseException.class)
         .hasMessage("Empty expression");
   }
@@ -87,7 +87,7 @@ class ShuntingYardExceptionsTest extends BaseParserTest {
   void testComma() {
     Expression expression = Expression.of(",");
 
-    assertThatThrownBy(() -> expression.evaluate(VariableResolver.empty()))
+    assertThatThrownBy(() -> expression.evaluate(ValueResolver.empty()))
         .isInstanceOf(ParseException.class)
         .hasMessage("Empty expression");
   }
@@ -126,7 +126,7 @@ class ShuntingYardExceptionsTest extends BaseParserTest {
   void testFunctionNotEnoughParameters() {
     Expression expression = Expression.of("ROUND(2)");
 
-    assertThatThrownBy(() -> expression.evaluate(VariableResolver.empty()))
+    assertThatThrownBy(() -> expression.evaluate(ValueResolver.empty()))
         .isInstanceOf(ParseException.class)
         .hasMessage("Not enough parameters for function");
   }
@@ -135,7 +135,7 @@ class ShuntingYardExceptionsTest extends BaseParserTest {
   void testFunctionNotEnoughParametersForVarArgs() {
     Expression expression = Expression.of("MIN()");
 
-    assertThatThrownBy(() -> expression.evaluate(VariableResolver.empty()))
+    assertThatThrownBy(() -> expression.evaluate(ValueResolver.empty()))
         .isInstanceOf(ParseException.class)
         .hasMessage("Not enough parameters for function");
   }
@@ -144,7 +144,7 @@ class ShuntingYardExceptionsTest extends BaseParserTest {
   void testFunctionTooManyParameters() {
     Expression expression = Expression.of("ROUND(1,2,3)");
 
-    assertThatThrownBy(() -> expression.evaluate(VariableResolver.empty()))
+    assertThatThrownBy(() -> expression.evaluate(ValueResolver.empty()))
         .isInstanceOf(ParseException.class)
         .hasMessage("Too many parameters for function");
   }
@@ -166,7 +166,7 @@ class ShuntingYardExceptionsTest extends BaseParserTest {
   void testTooManyOperands(String expressionString) {
     Expression expression = Expression.of(expressionString);
 
-    assertThatThrownBy(() -> expression.evaluate(VariableResolver.empty()))
+    assertThatThrownBy(() -> expression.evaluate(ValueResolver.empty()))
         .isInstanceOf(ParseException.class)
         .hasMessage("Too many operands");
   }
@@ -178,7 +178,7 @@ class ShuntingYardExceptionsTest extends BaseParserTest {
   void testInvalidTokenAfterInfixOperator(String expressionString, int position) {
     Expression expression = Expression.of(expressionString);
 
-    assertThatThrownBy(() -> expression.evaluate(VariableResolver.empty()))
+    assertThatThrownBy(() -> expression.evaluate(ValueResolver.empty()))
         .isInstanceOf(ParseException.class)
         .hasMessage("Unexpected token after infix operator")
         .extracting("startPosition")

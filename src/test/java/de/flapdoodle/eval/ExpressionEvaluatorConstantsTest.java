@@ -17,9 +17,9 @@
 package de.flapdoodle.eval;
 
 import de.flapdoodle.eval.config.Configuration;
-import de.flapdoodle.eval.config.MapBasedVariableResolver;
+import de.flapdoodle.eval.config.MapBasedValueResolver;
 import de.flapdoodle.eval.data.Value;
-import de.flapdoodle.eval.config.VariableResolver;
+import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.parser.ParseException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -60,27 +60,27 @@ class ExpressionEvaluatorConstantsTest extends BaseExpressionEvaluatorTest {
           }
         };
 
-    MapBasedVariableResolver mapBasedVariableResolver = VariableResolver.empty().withValues(constants);
+    MapBasedValueResolver mapBasedVariableResolver = ValueResolver.empty().withValues(constants);
     Configuration configuration =
         Configuration.builder().constantResolver(mapBasedVariableResolver).build();
 
     Expression expression = Expression.of("a+B", configuration);
 
-		assertThat(expression.evaluate(VariableResolver.empty()).wrapped().toString()).isEqualTo("6.4");
+		assertThat(expression.evaluate(ValueResolver.empty()).wrapped().toString()).isEqualTo("6.4");
   }
 
   @Test
   void testOverwriteConstantsWith() throws EvaluationException, ParseException {
     Expression expression = Expression.of("e");
 		Expression expression1 = expression.withConstant("e", Value.of(9));
-		assertThat(expression1.evaluate(VariableResolver.empty()).wrapped().toString()).isEqualTo("9.0");
+		assertThat(expression1.evaluate(ValueResolver.empty()).wrapped().toString()).isEqualTo("9.0");
   }
 
   @Test
   void testOverwriteConstantsWithValues() throws EvaluationException, ParseException {
     Expression expression = Expression.of("e");
 		Expression expression1 = expression.withConstant("E", Value.of(6));
-    MapBasedVariableResolver mapBasedVariableResolver = VariableResolver.empty().with("e", Value.of(3));
+    MapBasedValueResolver mapBasedVariableResolver = ValueResolver.empty().with("e", Value.of(3));
     assertThat(expression1.evaluate(mapBasedVariableResolver).wrapped().toString()).isEqualTo("6.0");
   }
 

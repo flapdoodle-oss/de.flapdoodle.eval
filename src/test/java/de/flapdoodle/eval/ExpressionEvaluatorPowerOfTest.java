@@ -17,7 +17,7 @@
 package de.flapdoodle.eval;
 
 import de.flapdoodle.eval.config.Configuration;
-import de.flapdoodle.eval.config.VariableResolver;
+import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.operators.arithmetic.PowerOf;
 import de.flapdoodle.eval.parser.ParseException;
 import de.flapdoodle.types.Pair;
@@ -44,6 +44,6 @@ class ExpressionEvaluatorPowerOfTest extends BaseExpressionEvaluatorTest {
 
     Expression expression = Expression.of("-2^2", config);
 
-    assertThat(expression.evaluate(VariableResolver.empty()).wrapped().toString()).isEqualTo("-4.0");
+    assertThat(expression.evaluate(ValueResolver.empty()).wrapped().toString()).isEqualTo("-4.0");
   }
 }

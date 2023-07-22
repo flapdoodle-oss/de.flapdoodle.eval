@@ -36,17 +36,17 @@ class ConfigurationTest {
   void testDefaultSetup() {
     Configuration configuration = Configuration.defaultConfiguration();
 
-//    assertThat(configuration.getMathContext())
-//        .isEqualTo(Configuration.DEFAULT_MATH_CONTEXT);
+    assertThat(configuration.getMathContext())
+        .isSameAs(Defaults.mathContext());
     assertThat(configuration.getOperatorResolver())
-        .isInstanceOf(OperatorResolver.class);
+        .isSameAs(Defaults.operators());
     assertThat(configuration.getFunctionResolver())
-        .isInstanceOf(FunctionResolver.class);
+        .isSameAs(Defaults.functions());
     assertThat(configuration.isArraysAllowed()).isTrue();
     assertThat(configuration.isStructuresAllowed()).isTrue();
     assertThat(configuration.isImplicitMultiplicationAllowed()).isTrue();
-//    assertThat(configuration.getDefaultConstants())
-//        .containsAllEntriesOf(Configuration.StandardConstants);
+    assertThat(configuration.getConstantResolver())
+        .isSameAs(Defaults.constants());
 //    assertThat(configuration.getDecimalPlacesRounding())
 //        .isEqualTo(Configuration.DECIMAL_PLACES_ROUNDING_UNLIMITED);
 //    assertThat(configuration.isStripTrailingZeros()).isTrue();
@@ -122,7 +122,7 @@ class ConfigurationTest {
             put("B", Value.of("b"));
           }
         };
-    MapBasedVariableResolver mapBasedVariableResolver = VariableResolver.empty()
+    MapBasedValueResolver mapBasedVariableResolver = ValueResolver.empty()
       .withValues(constants);
     Configuration configuration =
         Configuration.builder().constantResolver(mapBasedVariableResolver).build();

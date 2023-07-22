@@ -17,8 +17,8 @@
 package de.flapdoodle.eval.functions.datetime;
 
 import de.flapdoodle.eval.Expression;
+import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
-import de.flapdoodle.eval.config.VariableResolver;
 import de.flapdoodle.eval.functions.AbstractFunction;
 import de.flapdoodle.eval.parser.Token;
 
@@ -31,7 +31,7 @@ public class DurationDaysFromNumber extends AbstractFunction.Single<Value.Number
     super(Value.NumberValue.class);
   }
   
-  @Override public Value<?> evaluate(VariableResolver variableResolver, Expression expression, Token functionToken,
+  @Override public Value<?> evaluate(ValueResolver variableResolver, Expression expression, Token functionToken,
     Value.NumberValue parameterValue) {
     BigDecimal days = parameterValue.wrapped();
     return Value.of(Duration.ofDays(days.longValue()));

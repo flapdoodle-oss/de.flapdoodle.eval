@@ -18,13 +18,13 @@ package de.flapdoodle.eval.functions.trigonometric;
 
 import de.flapdoodle.eval.EvaluationException;
 import de.flapdoodle.eval.Expression;
+import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
-import de.flapdoodle.eval.config.VariableResolver;
 import de.flapdoodle.eval.parser.Token;
 
 public class SinH extends AbstractNumberFunction {
 
-	@Override public Value<?> evaluate(VariableResolver variableResolver, Expression expression, Token functionToken,
+	@Override public Value<?> evaluate(ValueResolver variableResolver, Expression expression, Token functionToken,
 		Value.NumberValue parameterValue) throws EvaluationException {
     return Value.of(
         Math.sinh(parameterValue.wrapped().doubleValue()));

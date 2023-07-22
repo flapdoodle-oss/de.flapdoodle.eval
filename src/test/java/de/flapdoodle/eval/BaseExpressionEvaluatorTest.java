@@ -18,8 +18,8 @@ package de.flapdoodle.eval;
 
 import de.flapdoodle.eval.config.Configuration;
 import de.flapdoodle.eval.config.TestConfigurationProvider;
+import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
-import de.flapdoodle.eval.config.VariableResolver;
 import de.flapdoodle.eval.parser.ParseException;
 
 import java.math.BigDecimal;
@@ -31,10 +31,10 @@ public abstract class BaseExpressionEvaluatorTest {
 
   protected String evaluate(String expressionString) throws ParseException, EvaluationException {
     Expression expression = createExpression(expressionString);
-    return expression.evaluate(VariableResolver.empty()).wrapped().toString();
+    return expression.evaluate(ValueResolver.empty()).wrapped().toString();
   }
 
-  protected String evaluate(String expressionString, VariableResolver variableResolver) throws ParseException, EvaluationException {
+  protected String evaluate(String expressionString, ValueResolver variableResolver) throws ParseException, EvaluationException {
     Expression expression = createExpression(expressionString);
     return expression.evaluate(variableResolver).wrapped().toString();
   }

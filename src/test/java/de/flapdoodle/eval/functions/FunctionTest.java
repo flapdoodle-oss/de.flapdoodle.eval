@@ -18,8 +18,8 @@ package de.flapdoodle.eval.functions;
 
 import de.flapdoodle.eval.EvaluationException;
 import de.flapdoodle.eval.Expression;
+import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
-import de.flapdoodle.eval.config.VariableResolver;
 import de.flapdoodle.eval.parser.Token;
 import org.junit.jupiter.api.Test;
 
@@ -75,7 +75,7 @@ class FunctionTest {
       );
     }
 
-    @Override public Value<?> evaluate(VariableResolver variableResolver, Expression expression, Token functionToken, List<Value<?>> parameterValues)
+    @Override public Value<?> evaluate(ValueResolver variableResolver, Expression expression, Token functionToken, List<Value<?>> parameterValues)
       throws EvaluationException {
       return Value.of("OK");
     }
@@ -89,7 +89,7 @@ class FunctionTest {
         FunctionParameterDefinition.of(Value.class,"another")
       );
     }
-    @Override public Value<?> evaluate(VariableResolver variableResolver, Expression expression, Token functionToken, List<Value<?>> parameterValues)
+    @Override public Value<?> evaluate(ValueResolver variableResolver, Expression expression, Token functionToken, List<Value<?>> parameterValues)
       throws EvaluationException {
       return Value.of("OK");
     }
