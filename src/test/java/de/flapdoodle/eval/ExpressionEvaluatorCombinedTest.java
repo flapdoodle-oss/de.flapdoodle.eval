@@ -16,10 +16,11 @@
  */
 package de.flapdoodle.eval;
 
+import de.flapdoodle.eval.config.MapBasedVariableResolver;
 import de.flapdoodle.eval.data.ImmutableValueMap;
 import de.flapdoodle.eval.data.Value;
 import de.flapdoodle.eval.data.ValueMap;
-import de.flapdoodle.eval.data.VariableResolver;
+import de.flapdoodle.eval.config.VariableResolver;
 import de.flapdoodle.eval.parser.ParseException;
 import org.junit.jupiter.api.Test;
 
@@ -43,10 +44,10 @@ class ExpressionEvaluatorCombinedTest extends BaseExpressionEvaluatorTest {
       .putValues("positions", Value.of(Value::of, position))
       .build();
 
-    VariableResolver variableResolver = VariableResolver.builder()
+    MapBasedVariableResolver mapBasedVariableResolver = VariableResolver.empty()
       .with("order", Value.of(order))
-      .and("x", Value.of(0))
-      .build();
+      .and("x", Value.of(0));
+    VariableResolver variableResolver = mapBasedVariableResolver;
     assertThat(evaluate("order.positions[x].amount * order.positions[x].price", variableResolver)).isEqualTo("44.850");
   }
 }

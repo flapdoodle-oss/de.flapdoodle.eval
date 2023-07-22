@@ -16,7 +16,6 @@
  */
 package de.flapdoodle.eval.config;
 
-import de.flapdoodle.eval.data.VariableResolver;
 import de.flapdoodle.eval.functions.Function;
 import de.flapdoodle.eval.operators.Operator;
 import de.flapdoodle.types.Pair;
@@ -52,9 +51,8 @@ public abstract class Configuration {
 
 	@Value.Default
 	public VariableResolver getConstantResolver() {
-		return VariableResolver.builder()
-				.withValues(standardConstants())
-				.build();
+		return VariableResolver.empty()
+				.withValues(standardConstants());
 	}
 
 	private static Map<String, de.flapdoodle.eval.data.Value<?>> standardConstants() {

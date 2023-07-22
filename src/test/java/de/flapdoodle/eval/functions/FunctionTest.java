@@ -19,7 +19,7 @@ package de.flapdoodle.eval.functions;
 import de.flapdoodle.eval.EvaluationException;
 import de.flapdoodle.eval.Expression;
 import de.flapdoodle.eval.data.Value;
-import de.flapdoodle.eval.data.VariableResolver;
+import de.flapdoodle.eval.config.VariableResolver;
 import de.flapdoodle.eval.parser.Token;
 import org.junit.jupiter.api.Test;
 

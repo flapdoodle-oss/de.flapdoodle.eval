@@ -19,7 +19,8 @@ package de.flapdoodle.eval.functions.trigonometric;
 import de.flapdoodle.eval.BaseEvaluationTest;
 import de.flapdoodle.eval.EvaluationException;
 import de.flapdoodle.eval.Expression;
-import de.flapdoodle.eval.data.VariableResolver;
+import de.flapdoodle.eval.config.MapBasedVariableResolver;
+import de.flapdoodle.eval.config.VariableResolver;
 import de.flapdoodle.eval.parser.ParseException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -61,7 +62,8 @@ class TrigonometricFunctionsTest extends BaseEvaluationTest {
   void testAcosHThrowsException(double d) {
     assertThatThrownBy(() -> {
 			Expression expression = Expression.of("ACOSH(x)");
-			expression.evaluate(VariableResolver.builder().with("x", d).build());
+      MapBasedVariableResolver mapBasedVariableResolver = VariableResolver.empty().with("x", d);
+      expression.evaluate(mapBasedVariableResolver);
 		})
         .isInstanceOf(EvaluationException.class)
         .hasMessage("Value must be greater or equal to one");
@@ -263,7 +265,8 @@ class TrigonometricFunctionsTest extends BaseEvaluationTest {
   void testAtanHThrowsException(double d) {
     assertThatThrownBy(() -> {
 			Expression expression = Expression.of("ATANH(x)");
-			expression.evaluate(VariableResolver.builder().with("x", d).build());
+      MapBasedVariableResolver mapBasedVariableResolver = VariableResolver.empty().with("x", d);
+      expression.evaluate(mapBasedVariableResolver);
 		})
         .isInstanceOf(EvaluationException.class)
         .hasMessage("Absolute value must be less than 1");

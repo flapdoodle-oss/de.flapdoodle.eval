@@ -16,8 +16,9 @@
  */
 package de.flapdoodle.eval;
 
+import de.flapdoodle.eval.config.MapBasedVariableResolver;
 import de.flapdoodle.eval.data.Value;
-import de.flapdoodle.eval.data.VariableResolver;
+import de.flapdoodle.eval.config.VariableResolver;
 import de.flapdoodle.eval.parser.ParseException;
 import org.junit.jupiter.api.Test;
 
@@ -30,50 +31,50 @@ class ExpressionEvaluatorSimpleVariablesTest extends BaseExpressionEvaluatorTest
 
   @Test
   void testSingleStringVariable() throws ParseException, EvaluationException {
-    VariableResolver variableResolver = VariableResolver.builder()
-      .with("a", "hello")
-      .build();
+    MapBasedVariableResolver mapBasedVariableResolver = VariableResolver.empty()
+.with("a", "hello");
+    VariableResolver variableResolver = mapBasedVariableResolver;
     Value<?> result = createExpression("a").evaluate(variableResolver);
     assertThat(result.wrapped()).isEqualTo("hello");
   }
 
   @Test
   void testSingleNumberVariable() throws ParseException, EvaluationException {
-    VariableResolver variableResolver = VariableResolver.builder()
-      .with("a", BigDecimal.valueOf(9))
-      .build();
+    MapBasedVariableResolver mapBasedVariableResolver = VariableResolver.empty()
+.with("a", BigDecimal.valueOf(9));
+    VariableResolver variableResolver = mapBasedVariableResolver;
     Value<?> result = createExpression("a").evaluate(variableResolver);
     assertThat(result.wrapped()).isEqualTo(BigDecimal.valueOf(9));
   }
 
   @Test
   void testNumbers() throws ParseException, EvaluationException {
-    VariableResolver variableResolver = VariableResolver.builder()
-      .with("a", BigDecimal.valueOf(9))
-      .with("b", BigDecimal.valueOf(5))
-      .build();
+    MapBasedVariableResolver mapBasedVariableResolver = VariableResolver.empty()
+.with("a", BigDecimal.valueOf(9))
+.with("b", BigDecimal.valueOf(5));
+    VariableResolver variableResolver = mapBasedVariableResolver;
     Value<?> result = createExpression("(a+b)*(a-b)").evaluate(variableResolver);
     assertThat(result.wrapped()).isEqualTo(BigDecimal.valueOf(56));
   }
 
   @Test
   void testStrings() throws ParseException, EvaluationException {
-    VariableResolver variableResolver = VariableResolver.builder()
-      .with("prefix", "Hello")
-      .with("infix", " ")
-      .with("postfix", "world")
-      .build();
+    MapBasedVariableResolver mapBasedVariableResolver = VariableResolver.empty()
+.with("prefix", "Hello")
+.with("infix", " ")
+.with("postfix", "world");
+    VariableResolver variableResolver = mapBasedVariableResolver;
     Value<?> result = createExpression("prefix+infix+postfix").evaluate(variableResolver);
     assertThat(result.wrapped()).isEqualTo("Hello world");
   }
 
   @Test
   void testStringNumberCombined() throws ParseException, EvaluationException {
-    VariableResolver variableResolver = VariableResolver.builder()
-      .with("prefix", "Hello")
-      .with("infix", BigDecimal.valueOf(2))
-      .with("postfix", "world")
-      .build();
+    MapBasedVariableResolver mapBasedVariableResolver = VariableResolver.empty()
+.with("prefix", "Hello")
+.with("infix", BigDecimal.valueOf(2))
+.with("postfix", "world");
+    VariableResolver variableResolver = mapBasedVariableResolver;
     Value<?> result = createExpression("prefix+infix+postfix").evaluate(variableResolver);
     assertThat(result.wrapped()).isEqualTo("Hello2world");
   }

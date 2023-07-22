@@ -17,8 +17,9 @@
 package de.flapdoodle.eval;
 
 import de.flapdoodle.eval.config.Configuration;
+import de.flapdoodle.eval.config.MapBasedVariableResolver;
 import de.flapdoodle.eval.data.Value;
-import de.flapdoodle.eval.data.VariableResolver;
+import de.flapdoodle.eval.config.VariableResolver;
 import de.flapdoodle.eval.functions.Function;
 import de.flapdoodle.eval.operators.InfixOperator;
 import de.flapdoodle.eval.operators.PostfixOperator;
@@ -48,10 +49,10 @@ public abstract class Expression {
 	@org.immutables.value.Value.Auxiliary
 	public Expression withConstant(String variable, Value<?> value) {
 		if (getConstantResolver().getData(variable)==null || getConfiguration().isAllowOverwriteConstants()) {
+			MapBasedVariableResolver mapBasedVariableResolver = VariableResolver.empty()
+					.with(variable, value);
 			return ImmutableExpression.builder().from(this)
-					.constantResolver(VariableResolver.builder()
-							.with(variable, value)
-							.build().andThen(getConstantResolver()))
+					.constantResolver(mapBasedVariableResolver.andThen(getConstantResolver()))
 					.build();
 		} else {
 			throw new UnsupportedOperationException(

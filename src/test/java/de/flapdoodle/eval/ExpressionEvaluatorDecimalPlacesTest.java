@@ -16,8 +16,9 @@
  */
 package de.flapdoodle.eval;
 
+import de.flapdoodle.eval.config.MapBasedVariableResolver;
 import de.flapdoodle.eval.data.Value;
-import de.flapdoodle.eval.data.VariableResolver;
+import de.flapdoodle.eval.config.VariableResolver;
 import de.flapdoodle.eval.parser.ParseException;
 import org.junit.jupiter.api.Test;
 
@@ -42,9 +43,9 @@ class ExpressionEvaluatorDecimalPlacesTest extends BaseExpressionEvaluatorTest {
     new BigDecimal("2.12345");
     Expression expression = expression1;
 
-    VariableResolver variableResolver = VariableResolver.builder()
-      .with("a", Value.of(new BigDecimal("2.12345")))
-      .build();
+    MapBasedVariableResolver mapBasedVariableResolver = VariableResolver.empty()
+      .with("a", Value.of(new BigDecimal("2.12345")));
+    VariableResolver variableResolver = mapBasedVariableResolver;
     assertThat(evaluate("a", variableResolver)).isEqualTo("2.12345");
   }
 
@@ -66,9 +67,9 @@ class ExpressionEvaluatorDecimalPlacesTest extends BaseExpressionEvaluatorTest {
   @Test
   void testDefaultNoRoundingArray() throws ParseException, EvaluationException {
     List<BigDecimal> array = Arrays.asList(new BigDecimal("1.12345"));
-    VariableResolver variableResolver = VariableResolver.builder()
-      .with("a", Value::of, array)
-      .build();
+    MapBasedVariableResolver mapBasedVariableResolver = VariableResolver.empty()
+      .with("a", Value::of, array);
+    VariableResolver variableResolver = mapBasedVariableResolver;
     assertThat(evaluate("a[0]", variableResolver)).isEqualTo("1.12345");
   }
 
@@ -81,9 +82,9 @@ class ExpressionEvaluatorDecimalPlacesTest extends BaseExpressionEvaluatorTest {
           }
         };
 
-    VariableResolver variableResolver = VariableResolver.builder()
-      .with("a", Value::of, structure)
-      .build();
+    MapBasedVariableResolver mapBasedVariableResolver = VariableResolver.empty()
+      .with("a", Value::of, structure);
+    VariableResolver variableResolver = mapBasedVariableResolver;
     assertThat(evaluate("a.b", variableResolver)).isEqualTo("1.12345");
   }
 

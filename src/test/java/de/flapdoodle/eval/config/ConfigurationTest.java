@@ -17,7 +17,6 @@
 package de.flapdoodle.eval.config;
 
 import de.flapdoodle.eval.data.Value;
-import de.flapdoodle.eval.data.VariableResolver;
 import de.flapdoodle.eval.functions.Function;
 import de.flapdoodle.eval.operators.InfixOperator;
 import de.flapdoodle.eval.operators.Operator;
@@ -123,10 +122,10 @@ class ConfigurationTest {
             put("B", Value.of("b"));
           }
         };
+    MapBasedVariableResolver mapBasedVariableResolver = VariableResolver.empty()
+      .withValues(constants);
     Configuration configuration =
-        Configuration.builder().constantResolver(VariableResolver.builder()
-          .withValues(constants)
-          .build()).build();
+        Configuration.builder().constantResolver(mapBasedVariableResolver).build();
 
     assertThat(configuration.getConstantResolver().getData("a")).isEqualTo(Value.of("a"));
   }

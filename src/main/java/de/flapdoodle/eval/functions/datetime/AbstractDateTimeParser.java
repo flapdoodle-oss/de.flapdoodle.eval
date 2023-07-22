@@ -33,7 +33,7 @@ package de.flapdoodle.eval.functions.datetime;
 
 import de.flapdoodle.eval.Expression;
 import de.flapdoodle.eval.data.Value;
-import de.flapdoodle.eval.data.VariableResolver;
+import de.flapdoodle.eval.config.VariableResolver;
 import de.flapdoodle.eval.functions.AbstractFunction;
 import de.flapdoodle.eval.functions.FunctionParameterDefinition;
 import de.flapdoodle.eval.parser.Token;

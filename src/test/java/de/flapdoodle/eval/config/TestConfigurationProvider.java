@@ -19,7 +19,6 @@ package de.flapdoodle.eval.config;
 import de.flapdoodle.eval.EvaluationException;
 import de.flapdoodle.eval.Expression;
 import de.flapdoodle.eval.data.Value;
-import de.flapdoodle.eval.data.VariableResolver;
 import de.flapdoodle.eval.functions.AbstractFunction;
 import de.flapdoodle.eval.functions.Function;
 import de.flapdoodle.eval.functions.FunctionParameterDefinition;

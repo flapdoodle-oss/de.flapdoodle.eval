@@ -19,7 +19,7 @@ package de.flapdoodle.eval.functions.basic;
 import de.flapdoodle.eval.EvaluationException;
 import de.flapdoodle.eval.Expression;
 import de.flapdoodle.eval.data.Value;
-import de.flapdoodle.eval.data.VariableResolver;
+import de.flapdoodle.eval.config.VariableResolver;
 import de.flapdoodle.eval.functions.Function;
 import de.flapdoodle.eval.functions.FunctionParameterDefinition;
 import de.flapdoodle.eval.parser.Token;

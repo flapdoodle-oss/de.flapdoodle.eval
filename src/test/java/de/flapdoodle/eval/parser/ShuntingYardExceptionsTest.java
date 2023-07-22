@@ -17,7 +17,7 @@
 package de.flapdoodle.eval.parser;
 
 import de.flapdoodle.eval.Expression;
-import de.flapdoodle.eval.data.VariableResolver;
+import de.flapdoodle.eval.config.VariableResolver;
 import de.flapdoodle.eval.operators.arithmetic.Multiply;
 import de.flapdoodle.eval.operators.arithmetic.PrefixMinus;
 import org.assertj.core.api.Assertions;

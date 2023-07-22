@@ -17,8 +17,9 @@
 package de.flapdoodle.eval;
 
 import de.flapdoodle.eval.config.Configuration;
+import de.flapdoodle.eval.config.MapBasedVariableResolver;
 import de.flapdoodle.eval.data.Value;
-import de.flapdoodle.eval.data.VariableResolver;
+import de.flapdoodle.eval.config.VariableResolver;
 import de.flapdoodle.eval.parser.ParseException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -59,8 +60,9 @@ class ExpressionEvaluatorConstantsTest extends BaseExpressionEvaluatorTest {
           }
         };
 
+    MapBasedVariableResolver mapBasedVariableResolver = VariableResolver.empty().withValues(constants);
     Configuration configuration =
-        Configuration.builder().constantResolver(VariableResolver.builder().withValues(constants).build()).build();
+        Configuration.builder().constantResolver(mapBasedVariableResolver).build();
 
     Expression expression = Expression.of("a+B", configuration);
 
@@ -78,7 +80,8 @@ class ExpressionEvaluatorConstantsTest extends BaseExpressionEvaluatorTest {
   void testOverwriteConstantsWithValues() throws EvaluationException, ParseException {
     Expression expression = Expression.of("e");
 		Expression expression1 = expression.withConstant("E", Value.of(6));
-		assertThat(expression1.evaluate(VariableResolver.builder().with("e", Value.of(3)).build()).wrapped().toString()).isEqualTo("6.0");
+    MapBasedVariableResolver mapBasedVariableResolver = VariableResolver.empty().with("e", Value.of(3));
+    assertThat(expression1.evaluate(mapBasedVariableResolver).wrapped().toString()).isEqualTo("6.0");
   }
 
   @Test
