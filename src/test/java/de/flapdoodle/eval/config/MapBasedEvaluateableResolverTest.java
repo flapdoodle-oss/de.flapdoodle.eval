@@ -16,7 +16,7 @@
  */
 package de.flapdoodle.eval.config;
 
-import de.flapdoodle.eval.functions.Function;
+import de.flapdoodle.eval.Evaluateable;
 import de.flapdoodle.eval.functions.basic.Max;
 import de.flapdoodle.eval.functions.basic.Min;
 import org.junit.jupiter.api.Test;
@@ -27,8 +27,8 @@ class MapBasedEvaluateableResolverTest {
 
   @Test
   void testCreationOfFunctions() {
-    Function min = new Min();
-    Function max = new Max();
+    Evaluateable min = new Min();
+    Evaluateable max = new Max();
 
     @SuppressWarnings({"unchecked", "varargs"})
 		EvaluateableResolver dictionary =
@@ -45,8 +45,8 @@ class MapBasedEvaluateableResolverTest {
 
   @Test
   void testCaseInsensitivity() {
-    Function min = new Min();
-    Function max = new Max();
+    Evaluateable min = new Min();
+    Evaluateable max = new Max();
 
     @SuppressWarnings({"unchecked", "varargs"})
     EvaluateableResolver dictionary =

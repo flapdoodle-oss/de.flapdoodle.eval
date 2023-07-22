@@ -16,17 +16,17 @@
  */
 package de.flapdoodle.eval.functions.basic;
 
-import de.flapdoodle.eval.*;
+import de.flapdoodle.eval.Evaluateables;
+import de.flapdoodle.eval.EvaluationException;
+import de.flapdoodle.eval.Expression;
 import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
-import de.flapdoodle.eval.functions.Function;
 import de.flapdoodle.eval.parser.Token;
 
 import java.security.SecureRandom;
-import java.util.Collections;
 import java.util.List;
 
-public class RandomNumber extends Evaluateables.Base implements Function {
+public class RandomNumber extends Evaluateables.Base {
 
   public RandomNumber() {
     super();

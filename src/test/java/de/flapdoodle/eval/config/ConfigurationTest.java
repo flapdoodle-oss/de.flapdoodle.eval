@@ -17,7 +17,6 @@
 package de.flapdoodle.eval.config;
 
 import de.flapdoodle.eval.data.Value;
-import de.flapdoodle.eval.functions.Function;
 import de.flapdoodle.eval.operators.InfixOperator;
 import de.flapdoodle.eval.operators.Operator;
 import de.flapdoodle.eval.operators.arithmetic.Plus;

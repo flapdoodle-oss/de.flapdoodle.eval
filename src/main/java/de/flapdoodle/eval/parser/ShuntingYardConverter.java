@@ -18,7 +18,6 @@ package de.flapdoodle.eval.parser;
 
 import de.flapdoodle.eval.Evaluateable;
 import de.flapdoodle.eval.config.Configuration;
-import de.flapdoodle.eval.functions.Function;
 import de.flapdoodle.eval.operators.Operator;
 
 import java.util.ArrayDeque;

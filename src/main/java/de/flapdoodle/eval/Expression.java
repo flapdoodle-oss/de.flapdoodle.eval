@@ -19,7 +19,6 @@ package de.flapdoodle.eval;
 import de.flapdoodle.eval.config.Configuration;
 import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
-import de.flapdoodle.eval.functions.Function;
 import de.flapdoodle.eval.operators.InfixOperator;
 import de.flapdoodle.eval.operators.PostfixOperator;
 import de.flapdoodle.eval.operators.PrefixOperator;

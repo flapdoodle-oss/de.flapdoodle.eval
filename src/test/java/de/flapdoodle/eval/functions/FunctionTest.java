@@ -16,6 +16,7 @@
  */
 package de.flapdoodle.eval.functions;
 
+import de.flapdoodle.eval.Evaluateable;
 import de.flapdoodle.eval.EvaluationException;
 import de.flapdoodle.eval.Expression;
 import de.flapdoodle.eval.Parameter;
@@ -33,7 +34,7 @@ class FunctionTest {
 
   @Test
   void testParameterDefinition() {
-    Function function = new CorrectFunctionDefinitionFunction();
+    Evaluateable function = new CorrectFunctionDefinitionFunction();
 
     assertThat(function.parameters().get(0).name()).isEqualTo("default");
     assertThat(function.parameters().get(0).isLazy()).isFalse();
@@ -50,7 +51,7 @@ class FunctionTest {
 
   @Test
   void testParameterIsLazy() {
-    Function function = new CorrectFunctionDefinitionFunction();
+    Evaluateable function = new CorrectFunctionDefinitionFunction();
 
     assertThat(function.parameterIsLazy(0)).isFalse();
     assertThat(function.parameterIsLazy(1)).isTrue();

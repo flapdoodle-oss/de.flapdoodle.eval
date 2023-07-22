@@ -18,10 +18,9 @@ package de.flapdoodle.eval.config;
 
 import de.flapdoodle.eval.EvaluationException;
 import de.flapdoodle.eval.Expression;
+import de.flapdoodle.eval.Parameter;
 import de.flapdoodle.eval.data.Value;
 import de.flapdoodle.eval.functions.AbstractFunction;
-import de.flapdoodle.eval.functions.Function;
-import de.flapdoodle.eval.Parameter;
 import de.flapdoodle.eval.operators.AbstractPostfixOperator;
 import de.flapdoodle.eval.operators.AbstractPrefixOperator;
 import de.flapdoodle.eval.operators.Precedence;

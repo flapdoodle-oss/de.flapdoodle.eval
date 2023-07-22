@@ -17,7 +17,6 @@
 package de.flapdoodle.eval.config;
 
 import de.flapdoodle.eval.Evaluateable;
-import de.flapdoodle.eval.functions.Function;
 import de.flapdoodle.eval.operators.Operator;
 import de.flapdoodle.types.Pair;
 import org.immutables.value.Value;
@@ -85,7 +84,7 @@ public abstract class Configuration {
 				.andThen(functions()));
 	}
 
-	public ImmutableConfiguration withFunction(String name, Function function) {
+	public ImmutableConfiguration withFunction(String name, Evaluateable function) {
 		return withFunctions(Pair.of(name, function));
 	}
 

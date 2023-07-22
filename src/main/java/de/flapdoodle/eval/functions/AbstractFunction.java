@@ -21,12 +21,10 @@ import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
 import de.flapdoodle.eval.parser.Token;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-public abstract class AbstractFunction implements Function {
+public abstract class AbstractFunction implements Evaluateable {
 	private final ImmutableParameters parameters;
 
 	protected AbstractFunction(Parameter<?> definition, Parameter<?>... definitions) {

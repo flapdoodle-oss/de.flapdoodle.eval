@@ -18,8 +18,8 @@ package de.flapdoodle.eval;
 
 import de.flapdoodle.eval.config.Configuration;
 import de.flapdoodle.eval.config.TestConfigurationProvider;
-import de.flapdoodle.eval.data.Value;
 import de.flapdoodle.eval.config.ValueResolver;
+import de.flapdoodle.eval.data.Value;
 import de.flapdoodle.eval.parser.ParseException;
 import org.assertj.core.api.InstanceOfAssertFactories;
 import org.assertj.core.data.Percentage;
