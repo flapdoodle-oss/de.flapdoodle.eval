@@ -17,7 +17,7 @@
 package de.flapdoodle.eval.functions.basic;
 
 import de.flapdoodle.eval.Evaluateables;
-import de.flapdoodle.eval.Expression;
+import de.flapdoodle.eval.EvaluationContext;
 import de.flapdoodle.eval.Parameter;
 import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
@@ -32,7 +32,7 @@ public class Log extends Evaluateables.Single<Value.NumberValue> {
 			.withValidators(new NonNegativeNumber(), new NonZeroNumber()));
 	}
 	@Override
-	protected Value<?> evaluate(ValueResolver variableResolver, Expression expression, Token functionToken, Value.NumberValue parameterValue) {
+	protected Value<?> evaluate(ValueResolver variableResolver, EvaluationContext evaluationContext, Token functionToken, Value.NumberValue parameterValue) {
 		double d = parameterValue.wrapped().doubleValue();
 
 		return Value.of(Math.log(d));

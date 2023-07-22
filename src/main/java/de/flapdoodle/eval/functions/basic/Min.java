@@ -17,7 +17,7 @@
 package de.flapdoodle.eval.functions.basic;
 
 import de.flapdoodle.eval.Evaluateables;
-import de.flapdoodle.eval.Expression;
+import de.flapdoodle.eval.EvaluationContext;
 import de.flapdoodle.eval.Parameter;
 import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
@@ -33,7 +33,7 @@ public class Min extends Evaluateables.SingleVararg<Value.NumberValue> {
 	}
 
 	@Override
-	protected Value<?> evaluateVarArg(ValueResolver variableResolver, Expression expression, Token functionToken,
+	protected Value<?> evaluateVarArg(ValueResolver variableResolver, EvaluationContext evaluationContext, Token functionToken,
 		List<Value.NumberValue> parameterValues) {
 		BigDecimal min = null;
 		for (Value.NumberValue parameter : parameterValues) {

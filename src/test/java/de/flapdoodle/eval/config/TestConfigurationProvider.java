@@ -16,10 +16,7 @@
  */
 package de.flapdoodle.eval.config;
 
-import de.flapdoodle.eval.Evaluateables;
-import de.flapdoodle.eval.EvaluationException;
-import de.flapdoodle.eval.Expression;
-import de.flapdoodle.eval.Parameter;
+import de.flapdoodle.eval.*;
 import de.flapdoodle.eval.data.Value;
 import de.flapdoodle.eval.operators.AbstractPostfixOperator;
 import de.flapdoodle.eval.operators.AbstractPrefixOperator;
@@ -52,7 +49,7 @@ public class TestConfigurationProvider {
 		}
 
 		@Override
-		protected Value<?> evaluateVarArg(ValueResolver variableResolver, Expression expression, Token functionToken,
+		protected Value<?> evaluateVarArg(ValueResolver variableResolver, EvaluationContext evaluationContext, Token functionToken,
 			List<Value.StringValue> parameterValues) {
 			// dummy implementation
 			return Value.of("OK");
@@ -66,7 +63,7 @@ public class TestConfigurationProvider {
 		}
 
 		@Override
-		protected Value<?> evaluateTyped(Expression expression, Token operatorToken, Value.NumberValue operand) throws EvaluationException {
+		protected Value<?> evaluateTyped(EvaluationContext evaluationContext, Token operatorToken, Value.NumberValue operand) throws EvaluationException {
 			return Value.of(operand.wrapped().add(BigDecimal.ONE));
 		}
 	}
@@ -78,7 +75,7 @@ public class TestConfigurationProvider {
 		}
 
 		@Override
-		protected Value<?> evaluateTyped(Expression expression, Token operatorToken, Value.NumberValue operand) throws EvaluationException {
+		protected Value<?> evaluateTyped(EvaluationContext evaluationContext, Token operatorToken, Value.NumberValue operand) throws EvaluationException {
 			return Value.of(operand.wrapped().add(BigDecimal.ONE));
 		}
 	}
@@ -90,7 +87,7 @@ public class TestConfigurationProvider {
 		}
 
 		@Override
-		protected Value<?> evaluateTyped(Expression expression, Token operatorToken, Value.NullValue operand) throws EvaluationException {
+		protected Value<?> evaluateTyped(EvaluationContext evaluationContext, Token operatorToken, Value.NullValue operand) throws EvaluationException {
 			return Value.of("?");
 		}
 	}

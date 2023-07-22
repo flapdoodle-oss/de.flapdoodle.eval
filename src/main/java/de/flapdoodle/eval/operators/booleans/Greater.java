@@ -16,7 +16,7 @@
  */
 package de.flapdoodle.eval.operators.booleans;
 
-import de.flapdoodle.eval.Expression;
+import de.flapdoodle.eval.EvaluationContext;
 import de.flapdoodle.eval.data.Value;
 import de.flapdoodle.eval.operators.Precedence;
 import de.flapdoodle.eval.parser.Token;
@@ -28,7 +28,7 @@ public class Greater extends AbstractComparableOperator {
 	}
 
 	@Override
-	protected <T extends Comparable<T>, V extends Value.ComparableValue<T>> Value<?> evaluateComparable(Expression expression, Token operatorToken,
+	protected <T extends Comparable<T>, V extends Value.ComparableValue<T>> Value<?> evaluateComparable(EvaluationContext evaluationContext, Token operatorToken,
 		V leftOperand, V rightOperand) {
 		return Value.of(leftOperand.compareTo(rightOperand) > 0);
 	}

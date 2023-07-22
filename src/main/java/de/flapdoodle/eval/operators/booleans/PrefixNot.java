@@ -16,8 +16,8 @@
  */
 package de.flapdoodle.eval.operators.booleans;
 
+import de.flapdoodle.eval.EvaluationContext;
 import de.flapdoodle.eval.EvaluationException;
-import de.flapdoodle.eval.Expression;
 import de.flapdoodle.eval.data.Value;
 import de.flapdoodle.eval.operators.AbstractPrefixOperator;
 import de.flapdoodle.eval.operators.Precedence;
@@ -30,7 +30,7 @@ public class PrefixNot extends AbstractPrefixOperator.Typed<Value.BooleanValue> 
 	}
 
 	@Override
-	protected Value<?> evaluateTyped(Expression expression, Token operatorToken, Value.BooleanValue operand) throws EvaluationException {
+	protected Value<?> evaluateTyped(EvaluationContext evaluationContext, Token operatorToken, Value.BooleanValue operand) throws EvaluationException {
 		return Value.of(!operand.wrapped());
 	}
 }

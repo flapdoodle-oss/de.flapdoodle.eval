@@ -16,8 +16,8 @@
  */
 package de.flapdoodle.eval.operators.arithmetic;
 
+import de.flapdoodle.eval.EvaluationContext;
 import de.flapdoodle.eval.EvaluationException;
-import de.flapdoodle.eval.Expression;
 import de.flapdoodle.eval.data.Value;
 import de.flapdoodle.eval.operators.AbstractPrefixOperator;
 import de.flapdoodle.eval.operators.Precedence;
@@ -30,7 +30,7 @@ public class PrefixPlus extends AbstractPrefixOperator.Typed<Value.NumberValue> 
 	}
 
 	@Override
-	protected Value<?> evaluateTyped(Expression expression, Token operatorToken, Value.NumberValue operand) throws EvaluationException {
-		return Value.of(operand.wrapped().plus(expression.configuration().getMathContext()));
+	protected Value<?> evaluateTyped(EvaluationContext evaluationContext, Token operatorToken, Value.NumberValue operand) throws EvaluationException {
+		return Value.of(operand.wrapped().plus(evaluationContext.mathContext()));
 	}
 }

@@ -9,7 +9,7 @@ import java.util.List;
 public interface Evaluateable {
 	Parameters parameters();
 
-	Value<?> evaluate(ValueResolver valueResolver, Expression expression, Token token, List<Value<?>> arguments) throws EvaluationException;
+	Value<?> evaluate(ValueResolver valueResolver, EvaluationContext evaluationContext, Token token, List<Value<?>> arguments) throws EvaluationException;
 
 	default boolean parameterIsLazy(int parameterIndex) {
 		return parameters().isLazy(parameterIndex);

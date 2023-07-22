@@ -16,8 +16,8 @@
  */
 package de.flapdoodle.eval.functions.trigonometric;
 
+import de.flapdoodle.eval.EvaluationContext;
 import de.flapdoodle.eval.EvaluationException;
-import de.flapdoodle.eval.Expression;
 import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
 import de.flapdoodle.eval.parser.Token;
@@ -25,7 +25,7 @@ import de.flapdoodle.eval.parser.Token;
 /** Returns the co-secant (in radians). */
 public class CscRadians extends NonZeroFunction {
 	@Override
-	protected Value<?> evaluate(ValueResolver variableResolver, Expression expression, Token functionToken,
+	protected Value<?> evaluate(ValueResolver variableResolver, EvaluationContext evaluationContext, Token functionToken,
 		Value.NumberValue parameterValue) throws EvaluationException {
 		/* Formula: csc(x) = 1 / sin(x) */
 		return Value.of(1 / Math.sin(parameterValue.wrapped().doubleValue()));

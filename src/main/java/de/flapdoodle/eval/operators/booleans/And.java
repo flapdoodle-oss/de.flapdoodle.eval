@@ -16,7 +16,7 @@
  */
 package de.flapdoodle.eval.operators.booleans;
 
-import de.flapdoodle.eval.Expression;
+import de.flapdoodle.eval.EvaluationContext;
 import de.flapdoodle.eval.data.Value;
 import de.flapdoodle.eval.operators.Precedence;
 import de.flapdoodle.eval.parser.Token;
@@ -28,7 +28,7 @@ public class And extends AbstractBooleanInfixOperator {
 	}
 
 	@Override
-	protected Value<?> evaluateTyped(Expression expression, Token operatorToken, Value.BooleanValue leftOperand, Value.BooleanValue rightOperand) {
+	protected Value<?> evaluateTyped(EvaluationContext evaluationContext, Token operatorToken, Value.BooleanValue leftOperand, Value.BooleanValue rightOperand) {
 		return Value.of(leftOperand.wrapped() && rightOperand.wrapped());
 	}
 }

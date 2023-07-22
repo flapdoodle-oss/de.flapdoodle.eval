@@ -75,7 +75,7 @@ class FunctionTest {
 		}
 
 		@Override
-		protected Value<?> evaluateValidated(ValueResolver variableResolver, Expression expression, Token functionToken, List<Value<?>> arguments)
+		protected Value<?> evaluateValidated(ValueResolver variableResolver, EvaluationContext evaluationContext, Token functionToken, List<Value<?>> arguments)
 			throws EvaluationException {
 			return Value.of("OK");
 		}
@@ -90,7 +90,7 @@ class FunctionTest {
 			);
 		}
 		@Override
-		protected Value<?> evaluateValidated(ValueResolver variableResolver, Expression expression, Token functionToken, List<Value<?>> arguments)
+		protected Value<?> evaluateValidated(ValueResolver variableResolver, EvaluationContext evaluationContext, Token functionToken, List<Value<?>> arguments)
 			throws EvaluationException {
 			return Value.of("OK");
 		}

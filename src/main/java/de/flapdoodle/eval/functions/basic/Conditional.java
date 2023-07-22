@@ -16,10 +16,7 @@
  */
 package de.flapdoodle.eval.functions.basic;
 
-import de.flapdoodle.eval.Evaluateables;
-import de.flapdoodle.eval.EvaluationException;
-import de.flapdoodle.eval.Expression;
-import de.flapdoodle.eval.Parameter;
+import de.flapdoodle.eval.*;
 import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
 import de.flapdoodle.eval.parser.Token;
@@ -41,12 +38,12 @@ public class Conditional extends Evaluateables.Triple<Value.BooleanValue, Value.
 	}
 
 	@Override
-	protected Value<?> evaluate(ValueResolver valueResolver, Expression expression, Token functionToken, Value.BooleanValue condition,
+	protected Value<?> evaluate(ValueResolver valueResolver, EvaluationContext evaluationContext, Token functionToken, Value.BooleanValue condition,
 		Value.ExpressionValue ifTrue, Value.ExpressionValue ifFalse) throws EvaluationException {
 		if (condition.wrapped()) {
-			return expression.evaluateSubtree(valueResolver, ifTrue.wrapped());
+			return evaluationContext.evaluateSubtree(valueResolver, ifTrue.wrapped());
 		} else {
-			return expression.evaluateSubtree(valueResolver, ifFalse.wrapped());
+			return evaluationContext.evaluateSubtree(valueResolver, ifFalse.wrapped());
 		}
 	}
 }

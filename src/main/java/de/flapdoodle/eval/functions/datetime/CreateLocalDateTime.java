@@ -17,7 +17,7 @@
 package de.flapdoodle.eval.functions.datetime;
 
 import de.flapdoodle.eval.Evaluateables;
-import de.flapdoodle.eval.Expression;
+import de.flapdoodle.eval.EvaluationContext;
 import de.flapdoodle.eval.Parameter;
 import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
@@ -35,7 +35,7 @@ public class CreateLocalDateTime extends Evaluateables.SingleVararg<Value.Number
 			.withValidators(new NonNegativeNumber()));
 	}
 	@Override
-	protected Value<?> evaluateVarArg(ValueResolver variableResolver, Expression expression, Token functionToken,
+	protected Value<?> evaluateVarArg(ValueResolver variableResolver, EvaluationContext evaluationContext, Token functionToken,
 		List<Value.NumberValue> parameterValues) {
 		int year = parameterValues.get(0).wrapped().intValue();
 		int month = parameterValues.get(1).wrapped().intValue();
@@ -45,7 +45,7 @@ public class CreateLocalDateTime extends Evaluateables.SingleVararg<Value.Number
 		int second = parameterValues.size() >= 6 ? parameterValues.get(5).wrapped().intValue() : 0;
 		int nanoOfs = parameterValues.size() >= 7 ? parameterValues.get(6).wrapped().intValue() : 0;
 
-		ZoneId zoneId = expression.configuration().getDefaultZoneId();
+		ZoneId zoneId = evaluationContext.zoneId();
 		return Value.of(
 			LocalDateTime.of(year, month, day, hour, minute, second, nanoOfs)
 				.atZone(zoneId)

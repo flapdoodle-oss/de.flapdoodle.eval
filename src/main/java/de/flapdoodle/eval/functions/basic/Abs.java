@@ -17,7 +17,7 @@
 package de.flapdoodle.eval.functions.basic;
 
 import de.flapdoodle.eval.Evaluateables;
-import de.flapdoodle.eval.Expression;
+import de.flapdoodle.eval.EvaluationContext;
 import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
 import de.flapdoodle.eval.parser.Token;
@@ -30,8 +30,8 @@ public class Abs extends Evaluateables.Single<Value.NumberValue> {
 
 	@Override
 	protected Value<?> evaluate(
-		ValueResolver variableResolver, Expression expression, Token functionToken, Value.NumberValue parameterValue) {
+		ValueResolver variableResolver, EvaluationContext evaluationContext, Token functionToken, Value.NumberValue parameterValue) {
 
-		return Value.of(parameterValue.wrapped().abs(expression.configuration().getMathContext()));
+		return Value.of(parameterValue.wrapped().abs(evaluationContext.mathContext()));
 	}
 }

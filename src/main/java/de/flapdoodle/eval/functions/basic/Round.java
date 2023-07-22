@@ -16,10 +16,7 @@
  */
 package de.flapdoodle.eval.functions.basic;
 
-import de.flapdoodle.eval.Evaluateables;
-import de.flapdoodle.eval.EvaluationException;
-import de.flapdoodle.eval.Expression;
-import de.flapdoodle.eval.Parameter;
+import de.flapdoodle.eval.*;
 import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
 import de.flapdoodle.eval.parser.Token;
@@ -32,13 +29,13 @@ public class Round extends Evaluateables.Tuple<Value.NumberValue, Value.NumberVa
 	}
 
 	@Override
-	protected Value<?> evaluate(ValueResolver variableResolver, Expression expression, Token functionToken, Value.NumberValue value,
+	protected Value<?> evaluate(ValueResolver variableResolver, EvaluationContext evaluationContext, Token functionToken, Value.NumberValue value,
 		Value.NumberValue precision) throws EvaluationException {
 		return Value.of(
 			value
 				.wrapped()
 				.setScale(
 					precision.wrapped().intValue(),
-					expression.configuration().getMathContext().getRoundingMode()));
+					evaluationContext.mathContext().getRoundingMode()));
 	}
 }

@@ -16,15 +16,15 @@
  */
 package de.flapdoodle.eval.operators;
 
+import de.flapdoodle.eval.EvaluationContext;
 import de.flapdoodle.eval.EvaluationException;
-import de.flapdoodle.eval.Expression;
 import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
 import de.flapdoodle.eval.parser.Token;
 
 // Binary infix operator, like x+y
 public interface InfixOperator extends Operator {
-	Value<?> evaluate(ValueResolver valueResolver, Expression expression, Token operatorToken, Value<?> leftOperand, Value<?> rightOperand) throws EvaluationException;
+	Value<?> evaluate(ValueResolver valueResolver, EvaluationContext evaluationContext, Token operatorToken, Value<?> leftOperand, Value<?> rightOperand) throws EvaluationException;
 
 //	static <L extends Value<?>, R extends Value<?>> InfixOperator asOperator(Evaluateables.Tuple<L, R> evaluatable) {
 //		return new AbstractInfixOperator(Precedence.OPERATOR_PRECEDENCE_OR, true) {

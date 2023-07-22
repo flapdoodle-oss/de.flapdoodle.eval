@@ -28,14 +28,15 @@ import de.flapdoodle.types.Either;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.MathContext;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
 @org.immutables.value.Value.Immutable
-public abstract class Expression implements CanEvaluateNode {
-	public abstract Configuration configuration();
+public abstract class Expression implements EvaluationContext {
+	protected abstract Configuration configuration();
 
 	public abstract String raw();
 
@@ -48,7 +49,7 @@ public abstract class Expression implements CanEvaluateNode {
 	public Expression withConstant(String variable, Value<?> value) {
 		if (constants().get(variable) == null || configuration().isAllowOverwriteConstants()) {
 			return ImmutableExpression.builder().from(this)
-				.constants(ValueResolver.empty()
+				.constants(ValueResolver.empty()                      
 					.with(variable, value)
 					.andThen(constants()))
 				.build();
@@ -56,6 +57,18 @@ public abstract class Expression implements CanEvaluateNode {
 			throw new UnsupportedOperationException(
 				String.format("Can't set value for constant '%s'", variable));
 		}
+	}
+
+	@org.immutables.value.Value.Default
+	@Override
+	public MathContext mathContext() {
+		return configuration().getMathContext();
+	}
+
+	@org.immutables.value.Value.Default
+	@Override
+	public ZoneId zoneId() {
+		return configuration().getDefaultZoneId();
 	}
 
 	@org.immutables.value.Value.Derived

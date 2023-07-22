@@ -17,6 +17,7 @@
 package de.flapdoodle.eval.functions.basic;
 
 import de.flapdoodle.eval.BaseEvaluationTest;
+import de.flapdoodle.eval.EvaluationContext;
 import de.flapdoodle.eval.EvaluationException;
 import de.flapdoodle.eval.Expression;
 import de.flapdoodle.eval.config.Configuration;
@@ -191,20 +192,20 @@ class BasicFunctionsTest extends BaseEvaluationTest {
 	@Test
 	void testNotFunctionDirectly() throws EvaluationException {
 		Not not = new Not();
-		Expression expressionMock = Expression.of("ignore");
+		EvaluationContext evaluationContextMock = Expression.of("ignore");
 		Token token = Token.of(1, "NOT", TokenType.FUNCTION, not);
 
 		ValueResolver variableResolver = ValueResolver.empty();
 
 		assertThat(
 			not
-				.evaluate(variableResolver, expressionMock, token, Arrays.asList(Value.of(true)))
+				.evaluate(variableResolver, evaluationContextMock, token, Arrays.asList(Value.of(true)))
 				.wrapped())
 			.asInstanceOf(InstanceOfAssertFactories.BOOLEAN)
 			.isFalse();
 		assertThat(
 			not
-				.evaluate(variableResolver, expressionMock, token, Arrays.asList(Value.of(false)))
+				.evaluate(variableResolver, evaluationContextMock, token, Arrays.asList(Value.of(false)))
 				.wrapped())
 			.asInstanceOf(InstanceOfAssertFactories.BOOLEAN)
 			.isTrue();

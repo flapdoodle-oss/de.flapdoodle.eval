@@ -17,8 +17,8 @@
 package de.flapdoodle.eval.operators;
 
 import de.flapdoodle.eval.Evaluateables;
+import de.flapdoodle.eval.EvaluationContext;
 import de.flapdoodle.eval.EvaluationException;
-import de.flapdoodle.eval.Expression;
 import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
 import de.flapdoodle.eval.parser.Token;
@@ -54,8 +54,8 @@ public abstract class AbstractInfixOperator extends AbstractBaseOperator impleme
 		}
 
 		@Override
-		public final Value<?> evaluate(ValueResolver valueResolver, Expression expression, Token operatorToken, Value<?> leftOperand, Value<?> rightOperand) throws EvaluationException {
-			return evaluatable.evaluate(valueResolver, expression, operatorToken, Arrays.asList(leftOperand, rightOperand));
+		public final Value<?> evaluate(ValueResolver valueResolver, EvaluationContext evaluationContext, Token operatorToken, Value<?> leftOperand, Value<?> rightOperand) throws EvaluationException {
+			return evaluatable.evaluate(valueResolver, evaluationContext, operatorToken, Arrays.asList(leftOperand, rightOperand));
 		}
 	}
 
@@ -77,11 +77,11 @@ public abstract class AbstractInfixOperator extends AbstractBaseOperator impleme
 		}
 
 		@Override
-		public final Value<?> evaluate(ValueResolver valueResolver, Expression expression, Token operatorToken, Value<?> leftOperand, Value<?> rightOperand) throws EvaluationException {
-			return evaluateTyped(expression, operatorToken, requireValueType(operatorToken, leftOperand, leftType),
+		public final Value<?> evaluate(ValueResolver valueResolver, EvaluationContext evaluationContext, Token operatorToken, Value<?> leftOperand, Value<?> rightOperand) throws EvaluationException {
+			return evaluateTyped(evaluationContext, operatorToken, requireValueType(operatorToken, leftOperand, leftType),
 				requireValueType(operatorToken, rightOperand, rightType));
 		}
 
-		protected abstract Value<?> evaluateTyped(Expression expression, Token operatorToken, L leftOperand, R rightOperand) throws EvaluationException;
+		protected abstract Value<?> evaluateTyped(EvaluationContext evaluationContext, Token operatorToken, L leftOperand, R rightOperand) throws EvaluationException;
 	}
 }

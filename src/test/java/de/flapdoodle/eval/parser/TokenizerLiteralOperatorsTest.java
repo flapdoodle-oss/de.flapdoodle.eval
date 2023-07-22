@@ -16,8 +16,8 @@
  */
 package de.flapdoodle.eval.parser;
 
+import de.flapdoodle.eval.EvaluationContext;
 import de.flapdoodle.eval.EvaluationException;
-import de.flapdoodle.eval.Expression;
 import de.flapdoodle.eval.data.Value;
 import de.flapdoodle.eval.operators.AbstractInfixOperator;
 import de.flapdoodle.eval.operators.AbstractPostfixOperator;
@@ -61,7 +61,7 @@ class TokenizerLiteralOperatorsTest extends BaseParserTest {
 		}
 
 		@Override
-		protected Value<?> evaluateTyped(Expression expression, Token operatorToken, Value.BooleanValue leftOperand, Value.BooleanValue rightOperand)
+		protected Value<?> evaluateTyped(EvaluationContext evaluationContext, Token operatorToken, Value.BooleanValue leftOperand, Value.BooleanValue rightOperand)
 			throws EvaluationException {
 			return Value.of(leftOperand.wrapped() && rightOperand.wrapped());
 		}
@@ -73,7 +73,7 @@ class TokenizerLiteralOperatorsTest extends BaseParserTest {
 		}
 
 		@Override
-		protected Value<?> evaluateTyped(Expression expression, Token operatorToken, Value.BooleanValue leftOperand, Value.BooleanValue rightOperand)
+		protected Value<?> evaluateTyped(EvaluationContext evaluationContext, Token operatorToken, Value.BooleanValue leftOperand, Value.BooleanValue rightOperand)
 			throws EvaluationException {
 			return Value.of(leftOperand.wrapped() || rightOperand.wrapped());
 		}
@@ -85,7 +85,7 @@ class TokenizerLiteralOperatorsTest extends BaseParserTest {
 		}
 
 		@Override
-		protected Value<?> evaluateTyped(Expression expression, Token operatorToken, Value.BooleanValue operand) throws EvaluationException {
+		protected Value<?> evaluateTyped(EvaluationContext evaluationContext, Token operatorToken, Value.BooleanValue operand) throws EvaluationException {
 			return Value.of(!operand.wrapped());
 		}
 	}
@@ -96,7 +96,7 @@ class TokenizerLiteralOperatorsTest extends BaseParserTest {
 		}
 
 		@Override
-		protected Value<?> evaluateTyped(Expression expression, Token operatorToken, Value.BooleanValue operand) throws EvaluationException {
+		protected Value<?> evaluateTyped(EvaluationContext evaluationContext, Token operatorToken, Value.BooleanValue operand) throws EvaluationException {
 			return Value.of(!operand.wrapped());
 		}
 	}

@@ -39,9 +39,9 @@ class ExpressionEvaluatorDecimalPlacesTest extends BaseExpressionEvaluatorTest {
 
 	@Test
 	void testDefaultNoRoundingVariable() throws ParseException, EvaluationException {
-		Expression expression1 = Expression.of("a");
+		EvaluationContext evaluationContext1 = Expression.of("a");
 		new BigDecimal("2.12345");
-		Expression expression = expression1;
+		EvaluationContext evaluationContext = evaluationContext1;
 
 		MapBasedValueResolver mapBasedVariableResolver = ValueResolver.empty()
 			.with("a", Value.of(new BigDecimal("2.12345")));
