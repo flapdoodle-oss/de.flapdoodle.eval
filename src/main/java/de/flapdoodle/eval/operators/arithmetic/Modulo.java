@@ -25,20 +25,17 @@ import de.flapdoodle.eval.parser.Token;
 
 import java.math.BigDecimal;
 
-public class Modulo extends AbstractInfixOperator {
+public class Modulo extends AbstractNumberInfixOperator {
 
   public Modulo() {
     super(Precedence.OPERATOR_PRECEDENCE_MULTIPLICATIVE);
   }
 
-  @Override public Value<?> evaluate(Expression expression, Token operatorToken, Value<?> leftOperand, Value<?> rightOperand) throws EvaluationException {
-    return evaluate(operatorToken, leftOperand, rightOperand)
-      .using(Value.NumberValue.class, Value.NumberValue.class, (l, r) -> {
-        if (r.wrapped().equals(BigDecimal.ZERO)) {
-          throw new EvaluationException(operatorToken, "Division by zero");
-        }
-        return Value.of(l.wrapped().remainder(r.wrapped(), expression.getConfiguration().getMathContext()));
-      })
-      .get();
+  @Override protected Value<?> evaluateTyped(Expression expression, Token operatorToken, Value.NumberValue leftOperand, Value.NumberValue rightOperand)
+    throws EvaluationException {
+    if (rightOperand.wrapped().equals(BigDecimal.ZERO)) {
+      throw new EvaluationException(operatorToken, "Division by zero");
+    }
+    return Value.of(leftOperand.wrapped().remainder(rightOperand.wrapped(), expression.getConfiguration().getMathContext()));
   }
 }

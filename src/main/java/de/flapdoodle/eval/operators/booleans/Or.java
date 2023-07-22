@@ -23,18 +23,14 @@ import de.flapdoodle.eval.operators.AbstractInfixOperator;
 import de.flapdoodle.eval.operators.Precedence;
 import de.flapdoodle.eval.parser.Token;
 
-public class Or extends AbstractInfixOperator {
+public class Or extends AbstractBooleanInfixOperator {
 
   public Or() {
     super(Precedence.OPERATOR_PRECEDENCE_OR);
   }
 
-  @Override
-  public Value<?> evaluate(
-      Expression expression, Token operatorToken, Value<?> leftExpression, Value<?> rightExpression) throws EvaluationException {
-    Value.BooleanValue left = requireValueType(operatorToken, leftExpression, Value.BooleanValue.class);
-    Value.BooleanValue right = requireValueType(operatorToken, rightExpression, Value.BooleanValue.class);
-
-    return Value.of(left.wrapped() || right.wrapped());
+  @Override protected Value<?> evaluateTyped(Expression expression, Token operatorToken, Value.BooleanValue leftOperand, Value.BooleanValue rightOperand)
+    throws EvaluationException {
+    return Value.of(leftOperand.wrapped() || rightOperand.wrapped());
   }
 }

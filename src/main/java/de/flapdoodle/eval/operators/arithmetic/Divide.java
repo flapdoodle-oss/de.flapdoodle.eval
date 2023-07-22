@@ -25,24 +25,19 @@ import de.flapdoodle.eval.parser.Token;
 
 import java.math.BigDecimal;
 
-public class Divide extends
-  AbstractInfixOperator {
+public class Divide extends AbstractNumberInfixOperator {
 
   public Divide() {
     super(Precedence.OPERATOR_PRECEDENCE_MULTIPLICATIVE);
   }
 
-  @Override
-  public Value<?> evaluate(
-      Expression expression, Token operatorToken, Value<?> leftOperand, Value<?> rightOperand)
-      throws EvaluationException {
-    Value.NumberValue left = requireValueType(operatorToken, leftOperand, Value.NumberValue.class);
-    Value.NumberValue right = requireValueType(operatorToken, rightOperand, Value.NumberValue.class);
+  @Override protected Value<?> evaluateTyped(Expression expression, Token operatorToken, Value.NumberValue leftOperand, Value.NumberValue rightOperand)
+    throws EvaluationException {
 
-    if (right.wrapped().equals(BigDecimal.ZERO)) {
+    if (rightOperand.wrapped().equals(BigDecimal.ZERO)) {
       throw new EvaluationException(operatorToken, "Division by zero");
     }
 
-    return Value.of(left.wrapped().divide(right.wrapped(), expression.getConfiguration().getMathContext()));
+    return Value.of(leftOperand.wrapped().divide(rightOperand.wrapped(), expression.getConfiguration().getMathContext()));
   }
 }

@@ -97,7 +97,7 @@ class ExpressionEvaluatorNullTest extends BaseExpressionEvaluatorTest {
       evaluate("a * 5", mapBasedVariableResolver);
     })
         .isInstanceOf(EvaluationException.class)
-        .hasMessageContaining("could not evaluate");
+        .hasMessageContaining("type missmatch");
 
     assertThatThrownBy(() -> {
       MapBasedValueResolver mapBasedVariableResolver = ValueResolver.empty().withNull("a");

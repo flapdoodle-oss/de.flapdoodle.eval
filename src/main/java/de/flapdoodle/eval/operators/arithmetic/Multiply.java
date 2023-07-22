@@ -23,15 +23,15 @@ import de.flapdoodle.eval.operators.AbstractInfixOperator;
 import de.flapdoodle.eval.operators.Precedence;
 import de.flapdoodle.eval.parser.Token;
 
-public class Multiply extends AbstractInfixOperator {
+public class Multiply extends AbstractNumberInfixOperator {
 
   public Multiply() {
     super(Precedence.OPERATOR_PRECEDENCE_MULTIPLICATIVE);
   }
 
-  @Override public Value<?> evaluate(Expression expression, Token operatorToken, Value<?> leftOperand, Value<?> rightOperand) throws EvaluationException {
-    return evaluate(operatorToken, leftOperand, rightOperand)
-      .using(Value.NumberValue.class, Value.NumberValue.class, (l, r) -> Value.of(l.wrapped().multiply(r.wrapped(), expression.getConfiguration().getMathContext())))
-      .get();
+  @Override protected Value<?> evaluateTyped(Expression expression, Token operatorToken, Value.NumberValue leftOperand, Value.NumberValue rightOperand)
+    throws EvaluationException {
+    return Value.of(leftOperand.wrapped()
+      .multiply(rightOperand.wrapped(), expression.getConfiguration().getMathContext()));
   }
 }
