@@ -23,15 +23,13 @@ import de.flapdoodle.eval.operators.AbstractPrefixOperator;
 import de.flapdoodle.eval.operators.Precedence;
 import de.flapdoodle.eval.parser.Token;
 
-public class PrefixNot extends AbstractPrefixOperator {
+public class PrefixNot extends AbstractPrefixOperator.Typed<Value.BooleanValue> {
 
   public PrefixNot() {
-    super(Precedence.OPERATOR_PRECEDENCE_UNARY);
+    super(Precedence.OPERATOR_PRECEDENCE_UNARY, Value.BooleanValue.class);
   }
-  
-  @Override
-  public Value<?> evaluate(
-      Expression expression, Token operatorToken, Value<?> operand) throws EvaluationException {
-    return Value.of(!requireValueType(operatorToken, operand, Value.BooleanValue.class).wrapped());
+
+  @Override protected Value<?> evaluateTyped(Expression expression, Token operatorToken, Value.BooleanValue operand) throws EvaluationException {
+    return Value.of(!operand.wrapped());
   }
 }

@@ -23,13 +23,13 @@ import de.flapdoodle.eval.operators.AbstractPrefixOperator;
 import de.flapdoodle.eval.operators.Precedence;
 import de.flapdoodle.eval.parser.Token;
 
-public class PrefixPlus extends AbstractPrefixOperator {
+public class PrefixPlus extends AbstractPrefixOperator.Typed<Value.NumberValue> {
 
   public PrefixPlus() {
-    super(Precedence.OPERATOR_PRECEDENCE_UNARY, false);
+    super(Precedence.OPERATOR_PRECEDENCE_UNARY, false, Value.NumberValue.class);
   }
 
-  @Override public Value<?> evaluate(Expression expression, Token operatorToken, Value<?> operand) throws EvaluationException {
-    return Value.of(requireValueType(operatorToken, operand, Value.NumberValue.class).wrapped().plus(expression.getConfiguration().getMathContext()));
+  @Override protected Value<?> evaluateTyped(Expression expression, Token operatorToken, Value.NumberValue operand) throws EvaluationException {
+    return Value.of(operand.wrapped().plus(expression.getConfiguration().getMathContext()));
   }
 }

@@ -44,38 +44,6 @@ public abstract class AbstractInfixOperator extends AbstractBaseOperator impleme
 		return new Evaluator(operatorToken, leftOperand, rightOperand);
 	}
 
-	public static class Evaluator {
-		private final Token operatorToken;
-		private final Value<?> leftOperand;
-		private final Value<?> rightOperand;
-		private Optional<Value<?>> result=Optional.empty();
-
-		public Evaluator(Token operatorToken, Value<?> leftOperand, Value<?> rightOperand) {
-			this.operatorToken = operatorToken;
-			this.leftOperand = leftOperand;
-			this.rightOperand = rightOperand;
-		}
-
-		public interface Evaluation<L,R> {
-			Value<?> evaluate(L left, R right) throws EvaluationException;
-		}
-
-		public <L extends Value<?>, R extends Value<?>> Evaluator using(Class<L> leftType, Class<R> rightType, Evaluation<L, R> function)
-			throws EvaluationException {
-			if (!result.isPresent() && leftType.isInstance(leftOperand) && rightType.isInstance(rightOperand)) {
-				result = Optional.of(function.evaluate(leftType.cast(leftOperand), rightType.cast(rightOperand)));
-			}
-			return this;
-		}
-
-		public Value<?> get() throws EvaluationException {
-			if (!result.isPresent()) {
-				throw new EvaluationException(operatorToken, "could not evaluate "+leftOperand+", "+rightOperand);
-			}
-			return result.get();
-		}
-	}
-
 	public static abstract class Typed<L extends Value<?>, R extends Value<?>> extends AbstractInfixOperator {
 
 		private final Class<L> leftType;

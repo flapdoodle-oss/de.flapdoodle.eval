@@ -47,6 +47,11 @@ public abstract class AbstractPostfixOperator extends AbstractBaseOperator imple
 			this.type = type;
 		}
 
+		protected Typed(Class<L> type) {
+			super();
+			this.type = type;
+		}
+
 		@Override
 		public final Value<?> evaluate(Expression expression, Token operatorToken, Value<?> operand) throws EvaluationException {
 			return evaluateTyped(expression, operatorToken, requireValueType(operatorToken, operand, type));

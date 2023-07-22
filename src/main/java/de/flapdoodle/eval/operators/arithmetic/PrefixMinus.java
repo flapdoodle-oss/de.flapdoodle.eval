@@ -23,14 +23,13 @@ import de.flapdoodle.eval.operators.AbstractPrefixOperator;
 import de.flapdoodle.eval.operators.Precedence;
 import de.flapdoodle.eval.parser.Token;
 
-public class PrefixMinus extends AbstractPrefixOperator {
+public class PrefixMinus extends AbstractPrefixOperator.Typed<Value.NumberValue> {
 
   public PrefixMinus() {
-    super(Precedence.OPERATOR_PRECEDENCE_UNARY, false);
+    super(Precedence.OPERATOR_PRECEDENCE_UNARY, false, Value.NumberValue.class);
   }
 
-  @Override public Value<?> evaluate(Expression expression, Token operatorToken, Value<?> operand) throws EvaluationException {
-    return Value.of(requireValueType(operatorToken, operand, Value.NumberValue.class)
-      .wrapped().negate(expression.getConfiguration().getMathContext()));
+  @Override protected Value<?> evaluateTyped(Expression expression, Token operatorToken, Value.NumberValue operand) throws EvaluationException {
+    return Value.of(operand.wrapped().negate(expression.getConfiguration().getMathContext()));
   }
 }
