@@ -20,7 +20,7 @@ import de.flapdoodle.eval.Expression;
 import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
 import de.flapdoodle.eval.functions.AbstractFunction;
-import de.flapdoodle.eval.functions.FunctionParameterDefinition;
+import de.flapdoodle.eval.functions.Parameter;
 import de.flapdoodle.eval.parser.Token;
 
 import java.math.BigDecimal;
@@ -29,7 +29,7 @@ import java.util.List;
 public class Sum extends AbstractFunction.SingleVararg<Value.NumberValue> {
 
   public Sum() {
-    super(FunctionParameterDefinition.varArgWith(Value.NumberValue.class, "value"));
+    super(Parameter.varArgWith(Value.NumberValue.class, "value"));
   }
 
   @Override public Value<?> evaluateVarArg(ValueResolver variableResolver, Expression expression, Token functionToken,

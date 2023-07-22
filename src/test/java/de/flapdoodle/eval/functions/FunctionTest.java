@@ -34,15 +34,15 @@ class FunctionTest {
   void testParameterDefinition() {
     Function function = new CorrectFunctionDefinitionFunction();
 
-    assertThat(function.parameterDefinitions().get(0).getName()).isEqualTo("default");
+    assertThat(function.parameterDefinitions().get(0).name()).isEqualTo("default");
     assertThat(function.parameterDefinitions().get(0).isLazy()).isFalse();
     assertThat(function.parameterDefinitions().get(0).isVarArg()).isFalse();
 
-    assertThat(function.parameterDefinitions().get(1).getName()).isEqualTo("lazy");
+    assertThat(function.parameterDefinitions().get(1).name()).isEqualTo("lazy");
     assertThat(function.parameterDefinitions().get(1).isLazy()).isTrue();
     assertThat(function.parameterDefinitions().get(1).isVarArg()).isFalse();
 
-    assertThat(function.parameterDefinitions().get(2).getName()).isEqualTo("vararg");
+    assertThat(function.parameterDefinitions().get(2).name()).isEqualTo("vararg");
     assertThat(function.parameterDefinitions().get(2).isLazy()).isFalse();
     assertThat(function.parameterDefinitions().get(2).isVarArg()).isTrue();
   }
@@ -69,9 +69,9 @@ class FunctionTest {
 
     protected CorrectFunctionDefinitionFunction() {
       super(
-        FunctionParameterDefinition.of(Value.class,"default"),
-        FunctionParameterDefinition.lazyWith(Value.class,"lazy"),
-        FunctionParameterDefinition.varArgWith(Value.class,"vararg")
+        Parameter.of(Value.class,"default"),
+        Parameter.lazyWith(Value.class,"lazy"),
+        Parameter.varArgWith(Value.class,"vararg")
       );
     }
 
@@ -84,9 +84,9 @@ class FunctionTest {
   private static class WrongVarargFunctionDefinitionFunction extends AbstractFunction {
     public WrongVarargFunctionDefinitionFunction() {
       super(
-        FunctionParameterDefinition.of(Value.class,"default"),
-        FunctionParameterDefinition.varArgWith(Value.class, "vararg"),
-        FunctionParameterDefinition.of(Value.class,"another")
+        Parameter.of(Value.class,"default"),
+        Parameter.varArgWith(Value.class, "vararg"),
+        Parameter.of(Value.class,"another")
       );
     }
     @Override public Value<?> evaluate(ValueResolver variableResolver, Expression expression, Token functionToken, List<Value<?>> parameterValues)

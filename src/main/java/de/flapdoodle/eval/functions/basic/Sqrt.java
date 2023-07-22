@@ -20,7 +20,7 @@ import de.flapdoodle.eval.Expression;
 import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
 import de.flapdoodle.eval.functions.AbstractFunction;
-import de.flapdoodle.eval.functions.FunctionParameterDefinition;
+import de.flapdoodle.eval.functions.Parameter;
 import de.flapdoodle.eval.functions.validations.NonNegativeNumber;
 import de.flapdoodle.eval.parser.Token;
 
@@ -42,7 +42,7 @@ public class Sqrt extends AbstractFunction.Single<Value.NumberValue> {
   private static final BigDecimal ONE_HALF = BigDecimal.valueOf(5L, 1);
 
   public Sqrt() {
-    super(FunctionParameterDefinition.of(Value.NumberValue.class, "value")
+    super(Parameter.of(Value.NumberValue.class, "value")
             .withValidators(new NonNegativeNumber()));
   }
 

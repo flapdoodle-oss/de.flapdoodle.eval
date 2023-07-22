@@ -21,7 +21,7 @@ import de.flapdoodle.eval.Expression;
 import de.flapdoodle.eval.data.Value;
 import de.flapdoodle.eval.functions.AbstractFunction;
 import de.flapdoodle.eval.functions.Function;
-import de.flapdoodle.eval.functions.FunctionParameterDefinition;
+import de.flapdoodle.eval.functions.Parameter;
 import de.flapdoodle.eval.operators.AbstractPostfixOperator;
 import de.flapdoodle.eval.operators.AbstractPrefixOperator;
 import de.flapdoodle.eval.operators.Precedence;
@@ -49,7 +49,7 @@ public class TestConfigurationProvider {
 
     public static class DummyFunction extends AbstractFunction.SingleVararg<Value.StringValue> {
 		public DummyFunction() {
-			super(FunctionParameterDefinition.varArgWith(Value.StringValue.class, "input"));
+			super(Parameter.varArgWith(Value.StringValue.class, "input"));
 		}
 
 		@Override public Value<?> evaluateVarArg(ValueResolver variableResolver, Expression expression, Token functionToken,

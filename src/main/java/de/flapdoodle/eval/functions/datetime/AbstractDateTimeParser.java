@@ -35,7 +35,7 @@ import de.flapdoodle.eval.Expression;
 import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
 import de.flapdoodle.eval.functions.AbstractFunction;
-import de.flapdoodle.eval.functions.FunctionParameterDefinition;
+import de.flapdoodle.eval.functions.Parameter;
 import de.flapdoodle.eval.parser.Token;
 
 import java.time.Instant;
@@ -44,7 +44,7 @@ import java.util.List;
 
 public abstract class AbstractDateTimeParser extends AbstractFunction.SingleVararg<Value.StringValue> {
   protected AbstractDateTimeParser() {
-    super(FunctionParameterDefinition.varArgWith(Value.StringValue.class, "value"));
+    super(Parameter.varArgWith(Value.StringValue.class, "value"));
   }
 
   @Override public Value<?> evaluateVarArg(ValueResolver variableResolver, Expression expression, Token functionToken,

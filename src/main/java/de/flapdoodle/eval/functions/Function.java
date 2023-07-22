@@ -35,17 +35,17 @@ public interface Function {
    *
    * @return The parameter definition list.
    */
-  List<FunctionParameterDefinition<?>> parameterDefinitions();
+  List<Parameter<?>> parameterDefinitions();
 
   default int minArgs() {
     if (parameterDefinitions().isEmpty()) return 0;
-    FunctionParameterDefinition<?> last = parameterDefinitions().get(parameterDefinitions().size() - 1);
+    Parameter<?> last = parameterDefinitions().get(parameterDefinitions().size() - 1);
     return parameterDefinitions().size() - (last.isOptional() ? 1 : 0);
   }
 
   default int maxArgs() {
     if (parameterDefinitions().isEmpty()) return 0;
-    FunctionParameterDefinition<?> last = parameterDefinitions().get(parameterDefinitions().size() - 1);
+    Parameter<?> last = parameterDefinitions().get(parameterDefinitions().size() - 1);
     return last.isVarArg()
       ? Integer.MAX_VALUE
       : parameterDefinitions().size();
@@ -84,7 +84,7 @@ public interface Function {
     throws EvaluationException {
 
     for (int i = 0; i < parameterValues.size(); i++) {
-      FunctionParameterDefinition<?> definition = parameterDefinition(i);
+      Parameter<?> definition = parameterDefinition(i);
       definition.validatePreEvaluation(token, parameterValues.get(i));
 //      for (ParameterValidator validator : definition.validators()) {
 //        validator.validate(token, parameterValues[i]);
@@ -118,7 +118,7 @@ public interface Function {
     return parameterDefinition(parameterIndex).isLazy();
   }
 
-  default FunctionParameterDefinition<?> parameterDefinition(int index) {
+  default Parameter<?> parameterDefinition(int index) {
     if (hasVarArgs() && index >= parameterDefinitions().size()) {
       index = parameterDefinitions().size() - 1;
     }

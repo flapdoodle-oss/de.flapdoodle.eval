@@ -21,14 +21,14 @@ import de.flapdoodle.eval.Expression;
 import de.flapdoodle.eval.data.Value;
 import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.functions.AbstractFunction;
-import de.flapdoodle.eval.functions.FunctionParameterDefinition;
+import de.flapdoodle.eval.functions.Parameter;
 import de.flapdoodle.eval.parser.Token;
 
 public class Atan2Radians extends  AbstractFunction.Tuple<Value.NumberValue, Value.NumberValue> {
 
 	public Atan2Radians() {
 		super(
-			FunctionParameterDefinition.of(Value.NumberValue.class, "y"), FunctionParameterDefinition.of(Value.NumberValue.class, "x"));
+			Parameter.of(Value.NumberValue.class, "y"), Parameter.of(Value.NumberValue.class, "x"));
 	}
 
 	@Override public Value<?> evaluate(ValueResolver variableResolver, Expression expression, Token functionToken,

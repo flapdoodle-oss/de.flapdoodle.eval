@@ -21,7 +21,7 @@ import de.flapdoodle.eval.Expression;
 import de.flapdoodle.eval.data.Value;
 import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.functions.AbstractFunction;
-import de.flapdoodle.eval.functions.FunctionParameterDefinition;
+import de.flapdoodle.eval.functions.Parameter;
 import de.flapdoodle.eval.parser.Token;
 
 /**
@@ -34,9 +34,9 @@ public class Conditional extends AbstractFunction.Triple<Value.BooleanValue, Val
 
   public Conditional() {
     super(
-      FunctionParameterDefinition.of(Value.BooleanValue.class, "condition"),
-      FunctionParameterDefinition.lazyWith(Value.ExpressionValue.class, "resultIfTrue"),
-      FunctionParameterDefinition.lazyWith(Value.ExpressionValue.class, "resultIfFalse")
+      Parameter.of(Value.BooleanValue.class, "condition"),
+      Parameter.lazyWith(Value.ExpressionValue.class, "resultIfTrue"),
+      Parameter.lazyWith(Value.ExpressionValue.class, "resultIfFalse")
     );
   }
 

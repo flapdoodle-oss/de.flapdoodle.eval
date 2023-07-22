@@ -20,7 +20,7 @@ import de.flapdoodle.eval.Expression;
 import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
 import de.flapdoodle.eval.functions.AbstractFunction;
-import de.flapdoodle.eval.functions.FunctionParameterDefinition;
+import de.flapdoodle.eval.functions.Parameter;
 import de.flapdoodle.eval.functions.validations.NonNegativeNumber;
 import de.flapdoodle.eval.functions.validations.NonZeroNumber;
 import de.flapdoodle.eval.parser.Token;
@@ -28,7 +28,7 @@ import de.flapdoodle.eval.parser.Token;
 public class Log10 extends AbstractFunction.Single<Value.NumberValue> {
 
   public Log10() {
-    super(FunctionParameterDefinition.of(Value.NumberValue.class, "value")
+    super(Parameter.of(Value.NumberValue.class, "value")
       .withValidators(new NonZeroNumber(), new NonNegativeNumber()));
   }
 

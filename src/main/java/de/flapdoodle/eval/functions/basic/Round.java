@@ -21,14 +21,14 @@ import de.flapdoodle.eval.Expression;
 import de.flapdoodle.eval.data.Value;
 import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.functions.AbstractFunction;
-import de.flapdoodle.eval.functions.FunctionParameterDefinition;
+import de.flapdoodle.eval.functions.Parameter;
 import de.flapdoodle.eval.parser.Token;
 
 public class Round extends AbstractFunction.Tuple<Value.NumberValue, Value.NumberValue> {
 
   public Round() {
-    super(FunctionParameterDefinition.of(Value.NumberValue.class, "value"),
-      FunctionParameterDefinition.of(Value.NumberValue.class, "scale"));
+    super(Parameter.of(Value.NumberValue.class, "value"),
+      Parameter.of(Value.NumberValue.class, "scale"));
   }
 
   @Override public Value<?> evaluate(ValueResolver variableResolver, Expression expression, Token functionToken, Value.NumberValue value,

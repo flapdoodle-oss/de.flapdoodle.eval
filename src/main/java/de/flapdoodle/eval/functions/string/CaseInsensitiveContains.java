@@ -21,14 +21,14 @@ import de.flapdoodle.eval.Expression;
 import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
 import de.flapdoodle.eval.functions.AbstractFunction;
-import de.flapdoodle.eval.functions.FunctionParameterDefinition;
+import de.flapdoodle.eval.functions.Parameter;
 import de.flapdoodle.eval.parser.Token;
 
 public class CaseInsensitiveContains extends AbstractFunction.Tuple<Value.StringValue, Value.StringValue> {
   public CaseInsensitiveContains() {
     super(
-      FunctionParameterDefinition.of(Value.StringValue.class, "string"),
-      FunctionParameterDefinition.of(Value.StringValue.class, "substring")
+      Parameter.of(Value.StringValue.class, "string"),
+      Parameter.of(Value.StringValue.class, "substring")
     );
   }
 

@@ -18,11 +18,11 @@ package de.flapdoodle.eval.functions.trigonometric;
 
 import de.flapdoodle.eval.data.Value;
 import de.flapdoodle.eval.functions.AbstractFunction;
-import de.flapdoodle.eval.functions.FunctionParameterDefinition;
+import de.flapdoodle.eval.functions.Parameter;
 import de.flapdoodle.eval.functions.validations.NonZeroNumber;
 
 public abstract class NonZeroFunction extends AbstractFunction.Single<Value.NumberValue> {
 	public NonZeroFunction() {
-		super(FunctionParameterDefinition.of(Value.NumberValue.class, "value").withValidators(new NonZeroNumber()));
+		super(Parameter.of(Value.NumberValue.class, "value").withValidators(new NonZeroNumber()));
 	}
 }

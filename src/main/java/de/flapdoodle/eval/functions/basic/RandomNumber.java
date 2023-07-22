@@ -21,7 +21,7 @@ import de.flapdoodle.eval.Expression;
 import de.flapdoodle.eval.data.Value;
 import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.functions.Function;
-import de.flapdoodle.eval.functions.FunctionParameterDefinition;
+import de.flapdoodle.eval.functions.Parameter;
 import de.flapdoodle.eval.parser.Token;
 
 import java.security.SecureRandom;
@@ -31,7 +31,7 @@ import java.util.List;
 public class RandomNumber implements Function {
 
   @Override
-  public List<FunctionParameterDefinition<?>> parameterDefinitions() {
+  public List<Parameter<?>> parameterDefinitions() {
     return Collections.emptyList();
   }
 

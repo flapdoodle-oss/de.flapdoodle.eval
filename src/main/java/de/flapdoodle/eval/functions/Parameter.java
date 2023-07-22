@@ -29,13 +29,13 @@ import java.util.List;
 
 /** Definition of a function parameter. */
 @Value.Immutable
-public interface FunctionParameterDefinition<T extends de.flapdoodle.eval.data.Value<?>> {
+public interface Parameter<T extends de.flapdoodle.eval.data.Value<?>> {
 
   @Builder.Parameter
-  Class<T> parameterType();
+  Class<T> type();
 
   /** Name of the parameter, useful for error messages etc. */
-  String getName();
+  String name();
 
   /**
    * Whether this parameter is a variable argument parameter (can be repeated).
@@ -63,30 +63,30 @@ public interface FunctionParameterDefinition<T extends de.flapdoodle.eval.data.V
 
   List<ParameterValidator<T>> validators();
 
-  static <T extends de.flapdoodle.eval.data.Value<?>> ImmutableFunctionParameterDefinition.Builder<T> builder(Class<T> type) {
-    return ImmutableFunctionParameterDefinition.builder(type);
+  static <T extends de.flapdoodle.eval.data.Value<?>> ImmutableParameter.Builder<T> builder(Class<T> type) {
+    return ImmutableParameter.builder(type);
   }
 
-  static <T extends de.flapdoodle.eval.data.Value<?>> ImmutableFunctionParameterDefinition<T> of(Class<T> type, String name) {
+  static <T extends de.flapdoodle.eval.data.Value<?>> ImmutableParameter<T> of(Class<T> type, String name) {
     return builder(type).name(name).build();
   }
 
-  static <T extends de.flapdoodle.eval.data.Value<?>> ImmutableFunctionParameterDefinition<T> varArgWith(Class<T> type, String name) {
+  static <T extends de.flapdoodle.eval.data.Value<?>> ImmutableParameter<T> varArgWith(Class<T> type, String name) {
     return builder(type).name(name).isVarArg(true).build();
   }
 
-  static <T extends de.flapdoodle.eval.data.Value<?>> ImmutableFunctionParameterDefinition<T> optionalWith(Class<T> type, String name) {
+  static <T extends de.flapdoodle.eval.data.Value<?>> ImmutableParameter<T> optionalWith(Class<T> type, String name) {
     return builder(type).name(name).isOptional(true).build();
   }
 
-  static <T extends de.flapdoodle.eval.data.Value<?>> ImmutableFunctionParameterDefinition<T> lazyWith(Class<T> type, String name) {
+  static <T extends de.flapdoodle.eval.data.Value<?>> ImmutableParameter<T> lazyWith(Class<T> type, String name) {
     return builder(type).name(name).isLazy(true).build();
   }
 
   @Value.Auxiliary
   default void validatePreEvaluation(Token token, de.flapdoodle.eval.data.Value<?> parameterValue) throws EvaluationException {
-    if (parameterType().isInstance(parameterValue)) {
-      T value = parameterType().cast(parameterValue);
+    if (type().isInstance(parameterValue)) {
+      T value = type().cast(parameterValue);
       for (ParameterValidator<T> validator : validators()) {
         validator.validate(token, value);
       }
