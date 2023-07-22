@@ -18,6 +18,7 @@ package de.flapdoodle.eval.operators;
 
 import de.flapdoodle.eval.EvaluationException;
 import de.flapdoodle.eval.Expression;
+import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
 import de.flapdoodle.eval.parser.Token;
 
@@ -44,7 +45,7 @@ public abstract class AbstractPrefixOperator extends AbstractBaseOperator implem
 		}
 
 		@Override
-		public final Value<?> evaluate(Expression expression, Token operatorToken, Value<?> operand) throws EvaluationException {
+		public final Value<?> evaluate(ValueResolver valueResolver, Expression expression, Token operatorToken, Value<?> operand) throws EvaluationException {
 			return evaluateTyped(expression, operatorToken, requireValueType(operatorToken, operand, type));
 		}
 

@@ -16,10 +16,7 @@
  */
 package de.flapdoodle.eval.config;
 
-import de.flapdoodle.eval.operators.AbstractInfixOperator;
-import de.flapdoodle.eval.operators.AbstractPostfixOperator;
-import de.flapdoodle.eval.operators.AbstractPrefixOperator;
-import de.flapdoodle.eval.operators.Operator;
+import de.flapdoodle.eval.operators.*;
 import de.flapdoodle.types.Pair;
 import org.immutables.value.Value;
 
@@ -28,21 +25,21 @@ import java.util.Map;
 @Value.Immutable
 public abstract class MapBasedOperatorResolver implements OperatorResolver {
 
-	protected abstract Map<String, AbstractInfixOperator> infixOperators();
+	protected abstract Map<String, InfixOperator> infixOperators();
 
-	protected abstract Map<String, AbstractPrefixOperator> prefixOperators();
+	protected abstract Map<String, PrefixOperator> prefixOperators();
 
-	protected abstract Map<String, AbstractPostfixOperator> postfixOperators();
+	protected abstract Map<String, PostfixOperator> postfixOperators();
 
 	@Override
 	public <T extends Operator> T get(Class<T> type, String operatorString) {
-		if (type.isAssignableFrom(AbstractInfixOperator.class)) {
+		if (type.isAssignableFrom(InfixOperator.class)) {
 			return type.cast(infixOperators().get(operatorString));
 		}
-		if (type.isAssignableFrom(AbstractPrefixOperator.class)) {
+		if (type.isAssignableFrom(PrefixOperator.class)) {
 			return type.cast(prefixOperators().get(operatorString));
 		}
-		if (type.isAssignableFrom(AbstractPostfixOperator.class)) {
+		if (type.isAssignableFrom(PostfixOperator.class)) {
 			return type.cast(postfixOperators().get(operatorString));
 		}
 		throw new IllegalArgumentException("operator type unknown: " + type + "(" + operatorString + ")");
@@ -57,16 +54,16 @@ public abstract class MapBasedOperatorResolver implements OperatorResolver {
 		for (Pair<String, Operator> entry : operators) {
 			Operator value = entry.second();
 			boolean foundType = false;
-			if (value instanceof AbstractInfixOperator) {
-				builder.putInfixOperators(entry.first(), (AbstractInfixOperator) value);
+			if (value instanceof InfixOperator) {
+				builder.putInfixOperators(entry.first(), (InfixOperator) value);
 				foundType = true;
 			}
-			if (value instanceof AbstractPrefixOperator) {
-				builder.putPrefixOperators(entry.first(), (AbstractPrefixOperator) value);
+			if (value instanceof PrefixOperator) {
+				builder.putPrefixOperators(entry.first(), (PrefixOperator) value);
 				foundType = true;
 			}
-			if (value instanceof AbstractPostfixOperator) {
-				builder.putPostfixOperators(entry.first(), (AbstractPostfixOperator) value);
+			if (value instanceof PostfixOperator) {
+				builder.putPostfixOperators(entry.first(), (PostfixOperator) value);
 				foundType = true;
 			}
 			if (!foundType) {

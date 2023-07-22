@@ -17,6 +17,7 @@
 package de.flapdoodle.eval.operators.booleans;
 
 import de.flapdoodle.eval.Expression;
+import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
 import de.flapdoodle.eval.operators.AbstractInfixOperator;
 import de.flapdoodle.eval.operators.Precedence;
@@ -32,7 +33,7 @@ public class Equals extends AbstractInfixOperator {
 
 	@Override
 	public Value<?> evaluate(
-		Expression expression, Token operatorToken, Value<?> a, Value<?> b) {
+		ValueResolver valueResolver, Expression expression, Token operatorToken, Value<?> a, Value<?> b) {
 		return Value.of(Objects.equals(a.wrapped(), b.wrapped()));
 	}
 }

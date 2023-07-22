@@ -16,13 +16,14 @@
  */
 package de.flapdoodle.eval.operators;
 
+import de.flapdoodle.eval.Evaluateables;
 import de.flapdoodle.eval.EvaluationException;
 import de.flapdoodle.eval.Expression;
+import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
 import de.flapdoodle.eval.parser.Token;
 
-import java.util.Optional;
-import java.util.function.BiFunction;
+import java.util.Arrays;
 
 public abstract class AbstractInfixOperator extends AbstractBaseOperator implements InfixOperator {
 	protected AbstractInfixOperator(Precedence precedence, boolean leftAssociative) {
@@ -33,16 +34,28 @@ public abstract class AbstractInfixOperator extends AbstractBaseOperator impleme
 		super(precedence);
 	}
 
-	protected static <L extends Value<?>, R extends Value<?>> Optional<Value<?>> evaluate(Class<L> leftType, Class<R> rightType, Value<?> leftOperand,
-		Value<?> rightOperand, BiFunction<L, R, Value<?>> function) {
-		if (leftType.isInstance(leftOperand) && rightType.isInstance(rightOperand)) {
-			return Optional.of(function.apply(leftType.cast(leftOperand), rightType.cast(rightOperand)));
-		}
-		return Optional.empty();
-	}
-
 	protected static Evaluator evaluate(Token operatorToken, Value<?> leftOperand, Value<?> rightOperand) {
 		return new Evaluator(operatorToken, leftOperand, rightOperand);
+	}
+
+	public static abstract class Evaluatable<L extends Value<?>, R extends Value<?>> extends AbstractInfixOperator {
+
+		private final Evaluateables.Tuple<L, R> evaluatable;
+
+		protected Evaluatable(Precedence precedence, boolean leftAssociative, Evaluateables.Tuple<L, R> evaluatable) {
+			super(precedence, leftAssociative);
+			this.evaluatable = evaluatable;
+		}
+
+		protected Evaluatable(Precedence precedence, Evaluateables.Tuple<L, R> evaluatable) {
+			super(precedence);
+			this.evaluatable = evaluatable;
+		}
+
+		@Override
+		public final Value<?> evaluate(ValueResolver valueResolver, Expression expression, Token operatorToken, Value<?> leftOperand, Value<?> rightOperand) throws EvaluationException {
+			return evaluatable.evaluate(null, expression, operatorToken, Arrays.asList(leftOperand, rightOperand));
+		}
 	}
 
 	public static abstract class Typed<L extends Value<?>, R extends Value<?>> extends AbstractInfixOperator {
@@ -63,7 +76,7 @@ public abstract class AbstractInfixOperator extends AbstractBaseOperator impleme
 		}
 
 		@Override
-		public final Value<?> evaluate(Expression expression, Token operatorToken, Value<?> leftOperand, Value<?> rightOperand) throws EvaluationException {
+		public final Value<?> evaluate(ValueResolver valueResolver, Expression expression, Token operatorToken, Value<?> leftOperand, Value<?> rightOperand) throws EvaluationException {
 			return evaluateTyped(expression, operatorToken, requireValueType(operatorToken, leftOperand, leftType),
 				requireValueType(operatorToken, rightOperand, rightType));
 		}

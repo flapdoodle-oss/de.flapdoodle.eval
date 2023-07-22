@@ -167,20 +167,20 @@ public abstract class Expression {
 				result =
 					token
 						.operator(PrefixOperator.class)
-						.evaluate(this, token, evaluateSubtree(variableResolver, startNode.getParameters().get(0)));
+						.evaluate(variableResolver, this, token, evaluateSubtree(variableResolver, startNode.getParameters().get(0)));
 				break;
 			case POSTFIX_OPERATOR:
 				result =
 					token
 						.operator(PostfixOperator.class)
-						.evaluate(this, token, evaluateSubtree(variableResolver, startNode.getParameters().get(0)));
+						.evaluate(variableResolver, this, token, evaluateSubtree(variableResolver, startNode.getParameters().get(0)));
 				break;
 			case INFIX_OPERATOR:
 				result =
 					token
 						.operator(InfixOperator.class)
 						.evaluate(
-							this,
+							variableResolver, this,
 							token,
 							evaluateSubtree(variableResolver, startNode.getParameters().get(0)),
 							evaluateSubtree(variableResolver, startNode.getParameters().get(1)));

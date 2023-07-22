@@ -18,6 +18,7 @@ package de.flapdoodle.eval.operators.booleans;
 
 import de.flapdoodle.eval.EvaluationException;
 import de.flapdoodle.eval.Expression;
+import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
 import de.flapdoodle.eval.operators.AbstractInfixOperator;
 import de.flapdoodle.eval.operators.Precedence;
@@ -34,7 +35,7 @@ public abstract class AbstractComparableOperator extends AbstractInfixOperator {
 	}
 
 	@Override
-	public Value<?> evaluate(Expression expression, Token operatorToken, Value<?> leftOperand, Value<?> rightOperand) throws EvaluationException {
+	public Value<?> evaluate(ValueResolver valueResolver, Expression expression, Token operatorToken, Value<?> leftOperand, Value<?> rightOperand) throws EvaluationException {
 		if (leftOperand.getClass() == rightOperand.getClass()) {
 			if (leftOperand instanceof Value.ComparableValue) {
 				return evaluateComparable(expression, operatorToken, (Value.ComparableValue) leftOperand, (Value.ComparableValue) rightOperand);

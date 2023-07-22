@@ -18,10 +18,11 @@ package de.flapdoodle.eval.operators;
 
 import de.flapdoodle.eval.EvaluationException;
 import de.flapdoodle.eval.Expression;
+import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
 import de.flapdoodle.eval.parser.Token;
 
 // Unary postfix operator,like x!
 public interface PostfixOperator extends Operator {
-	Value<?> evaluate(Expression expression, Token operatorToken, Value<?> operand) throws EvaluationException;
+	Value<?> evaluate(ValueResolver valueResolver, Expression expression, Token operatorToken, Value<?> operand) throws EvaluationException;
 }
