@@ -16,6 +16,7 @@
  */
 package de.flapdoodle.eval.parser;
 
+import de.flapdoodle.eval.Evaluateable;
 import de.flapdoodle.eval.config.Configuration;
 import de.flapdoodle.eval.functions.Function;
 import de.flapdoodle.eval.operators.Operator;
@@ -152,7 +153,7 @@ public class ShuntingYardConverter {
 
   private void validateFunctionParameters(Token functionToken, ArrayList<ASTNode> parameters)
       throws ParseException {
-    Function function = functionToken.function();
+    Evaluateable function = functionToken.function();
     if (parameters.size() < function.parameters().min()) {
       throw new ParseException(functionToken, "Not enough parameters for function");
     }

@@ -16,10 +16,10 @@
  */
 package de.flapdoodle.eval.parser;
 
+import de.flapdoodle.eval.Evaluateable;
 import de.flapdoodle.eval.config.Configuration;
-import de.flapdoodle.eval.config.FunctionResolver;
+import de.flapdoodle.eval.config.EvaluateableResolver;
 import de.flapdoodle.eval.config.OperatorResolver;
-import de.flapdoodle.eval.functions.Function;
 import de.flapdoodle.eval.operators.InfixOperator;
 import de.flapdoodle.eval.operators.Operator;
 import de.flapdoodle.eval.operators.PostfixOperator;
@@ -38,8 +38,8 @@ public class Tokenizer {
 
   private final OperatorResolver operatorDictionary;
 
-  private final FunctionResolver functionDictionary;
-
+  private final EvaluateableResolver functions;
+  
   private final Configuration configuration;
 
   private final List<Token> tokens = new ArrayList<>();
@@ -56,7 +56,7 @@ public class Tokenizer {
     this.expressionString = expressionString;
     this.configuration = configuration;
     this.operatorDictionary = configuration.getOperatorResolver();
-    this.functionDictionary = configuration.getFunctionResolver();
+    this.functions = configuration.functions();
   }
 
   /**
@@ -436,14 +436,14 @@ public class Tokenizer {
 
     skipBlanks();
     if (currentChar == '(') {
-      if (!functionDictionary.hasFunction(tokenName)) {
+      if (!functions.has(tokenName)) {
         throw new ParseException(
             tokenStartIndex,
             currentColumnIndex,
             tokenName,
             "Undefined function '" + tokenName + "'");
       }
-      Function function = functionDictionary.get(tokenName);
+      Evaluateable function = functions.get(tokenName);
       return Token.of(tokenStartIndex, tokenName, TokenType.FUNCTION, function);
     } else {
       return Token.of(tokenStartIndex, tokenName, TokenType.VARIABLE_OR_CONSTANT);

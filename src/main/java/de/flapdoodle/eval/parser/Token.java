@@ -16,6 +16,7 @@
  */
 package de.flapdoodle.eval.parser;
 
+import de.flapdoodle.eval.Evaluateable;
 import de.flapdoodle.eval.Nullable;
 import de.flapdoodle.eval.functions.Function;
 import de.flapdoodle.eval.operators.Operator;
@@ -42,7 +43,7 @@ public interface Token {
 
   @Nullable
   @Value.Auxiliary
-  Function function();
+  Evaluateable function();
 
   @Nullable
   @Value.Auxiliary
@@ -61,7 +62,7 @@ public interface Token {
     return ImmutableToken.of(startPosition, value, type);
   }
 
-  static Token of(int startPosition, String value, TokenType type, Function function) {
+  static Token of(int startPosition, String value, TokenType type, Evaluateable function) {
     return ImmutableToken.of(startPosition, value, type).withFunction(function);
   }
 

@@ -51,7 +51,7 @@ class TokenTest {
           3,
           "MAX",
           TokenType.FUNCTION,
-          expressionConfiguration.getFunctionResolver().get("MAX"));
+          expressionConfiguration.functions().get("MAX"));
 
     assertThat(token.start()).isEqualTo(3);
     assertThat(token.value()).isEqualTo("MAX");

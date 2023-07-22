@@ -24,29 +24,29 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Value.Immutable
-public abstract class MapBasedFunctionResolver implements FunctionResolver {
-	protected abstract Map<String, de.flapdoodle.eval.functions.Function> functions();
+public abstract class MapBasedEvaluateableResolver implements EvaluateableResolver {
+	protected abstract Map<String, de.flapdoodle.eval.Evaluateable> map();
 
 	@Value.Lazy
 	protected Map<String, String> lowerCaseToKey() {
-		return functions().keySet().stream().collect(Collectors.toMap(String::toLowerCase, Function.identity()));
+		return map().keySet().stream().collect(Collectors.toMap(String::toLowerCase, Function.identity()));
 	}
 
 	@Value.Auxiliary
 	@Override
-	public de.flapdoodle.eval.functions.Function get(String functionName) {
-		return functions().get(lowerCaseToKey().get(functionName.toLowerCase()));
+	public de.flapdoodle.eval.Evaluateable get(String functionName) {
+		return map().get(lowerCaseToKey().get(functionName.toLowerCase()));
 	}
 
-	public static ImmutableMapBasedFunctionResolver of(Pair<String, de.flapdoodle.eval.functions.Function>...entries) {
-		ImmutableMapBasedFunctionResolver.Builder builder = ImmutableMapBasedFunctionResolver.builder();
-		for (Pair<String, de.flapdoodle.eval.functions.Function> entry : entries) {
-			builder.putFunctions(entry.first(), entry.second());
+	public static ImmutableMapBasedEvaluateableResolver of(Pair<String, ? extends de.flapdoodle.eval.Evaluateable>...entries) {
+		ImmutableMapBasedEvaluateableResolver.Builder builder = ImmutableMapBasedEvaluateableResolver.builder();
+		for (Pair<String, ? extends de.flapdoodle.eval.Evaluateable> entry : entries) {
+			builder.putMap(entry.first(), entry.second());
 		}
 		return builder.build();
 	}
 
-	public static ImmutableMapBasedFunctionResolver.Builder builder() {
-		return ImmutableMapBasedFunctionResolver.builder();
+	public static ImmutableMapBasedEvaluateableResolver.Builder builder() {
+		return ImmutableMapBasedEvaluateableResolver.builder();
 	}
 }

@@ -23,7 +23,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class MapBasedFunctionResolverTest {
+class MapBasedEvaluateableResolverTest {
 
   @Test
   void testCreationOfFunctions() {
@@ -31,16 +31,16 @@ class MapBasedFunctionResolverTest {
     Function max = new Max();
 
     @SuppressWarnings({"unchecked", "varargs"})
-		FunctionResolver dictionary =
-        MapBasedFunctionResolver.builder().putFunctions("min", min).putFunctions("max", max).build();
+		EvaluateableResolver dictionary =
+        MapBasedEvaluateableResolver.builder().putMap("min", min).putMap("max", max).build();
 
-    assertThat(dictionary.hasFunction("min")).isTrue();
-    assertThat(dictionary.hasFunction("max")).isTrue();
+    assertThat(dictionary.has("min")).isTrue();
+    assertThat(dictionary.has("max")).isTrue();
 
     assertThat(dictionary.get("min")).isEqualTo(min);
     assertThat(dictionary.get("max")).isEqualTo(max);
 
-    assertThat(dictionary.hasFunction("medium")).isFalse();
+    assertThat(dictionary.has("medium")).isFalse();
   }
 
   @Test
@@ -49,14 +49,14 @@ class MapBasedFunctionResolverTest {
     Function max = new Max();
 
     @SuppressWarnings({"unchecked", "varargs"})
-		FunctionResolver dictionary =
-      MapBasedFunctionResolver.builder().putFunctions("Min", min).putFunctions("MAX", max).build();
+    EvaluateableResolver dictionary =
+      MapBasedEvaluateableResolver.builder().putMap("Min", min).putMap("MAX", max).build();
 
-    assertThat(dictionary.hasFunction("min")).isTrue();
-    assertThat(dictionary.hasFunction("MIN")).isTrue();
-    assertThat(dictionary.hasFunction("Min")).isTrue();
-    assertThat(dictionary.hasFunction("max")).isTrue();
-    assertThat(dictionary.hasFunction("MAX")).isTrue();
-    assertThat(dictionary.hasFunction("Max")).isTrue();
+    assertThat(dictionary.has("min")).isTrue();
+    assertThat(dictionary.has("MIN")).isTrue();
+    assertThat(dictionary.has("Min")).isTrue();
+    assertThat(dictionary.has("max")).isTrue();
+    assertThat(dictionary.has("MAX")).isTrue();
+    assertThat(dictionary.has("Max")).isTrue();
   }
 }

@@ -42,10 +42,8 @@ public class TestConfigurationProvider {
 				Pair.of("++", new PostfixPlusPlusOperator()),
 				Pair.of("?", new PostfixQuestionOperator())
 				);
-		Pair<String, Function>[] functions = new Pair[] { Pair.of("TEST", new DummyFunction()) };
 		StandardConfigurationWithAdditionalTestOperators = ImmutableConfiguration.copyOf(configuration)
-			.withFunctionResolver(MapBasedFunctionResolver.of(functions)
-				.andThen(configuration.getFunctionResolver()));
+			.withFunctions(Pair.of("TEST", new DummyFunction()));
 	}
 
 	public static class DummyFunction extends AbstractFunction.SingleVararg<Value.StringValue> {

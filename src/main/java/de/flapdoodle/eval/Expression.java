@@ -226,7 +226,7 @@ public abstract class Expression {
 			}
 		}
 
-		Function function = token.function();
+		Evaluateable function = token.function();
 
 //    function.validatePreEvaluation(token, parameterResults);
 

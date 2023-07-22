@@ -43,7 +43,7 @@ class ExpressionTest {
     assertThat(expression.raw()).isEqualTo("a+b");
 //    assertThat(expression.getConfiguration().getMathContext())
 //        .isEqualTo(Configuration.DEFAULT_MATH_CONTEXT);
-    assertThat(expression.configuration().getFunctionResolver().hasFunction("SUM")).isTrue();
+    assertThat(expression.configuration().functions().has("SUM")).isTrue();
     assertThat(expression.configuration().getOperatorResolver().hasOperator(InfixOperator.class, "+"))
         .isTrue();
 		assertThat(expression.configuration().getOperatorResolver().hasOperator(PrefixOperator.class, "+"))

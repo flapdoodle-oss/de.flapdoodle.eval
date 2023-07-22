@@ -16,6 +16,7 @@
  */
 package de.flapdoodle.eval.config;
 
+import de.flapdoodle.eval.Evaluateable;
 import de.flapdoodle.eval.functions.Function;
 import de.flapdoodle.eval.operators.Operator;
 import de.flapdoodle.types.Pair;
@@ -38,9 +39,7 @@ public abstract class Configuration {
 	}
 
 	@Value.Default
-	public FunctionResolver getFunctionResolver() {
-		return Defaults.functions();
-	}
+	public EvaluateableResolver functions() { return Defaults.functions(); }
 
 	@Value.Default
 	public ValueResolver getConstantResolver() {
@@ -79,15 +78,15 @@ public abstract class Configuration {
 				.andThen(getOperatorResolver()));
 	}
 
-	@SafeVarargs @Value.Auxiliary
-	public final ImmutableConfiguration witFunctions(Pair<String, Function>... functions) {
+	@SafeVarargs
+	public final ImmutableConfiguration withFunctions(Pair<String, ? extends Evaluateable>... functions) {
 		return ImmutableConfiguration.copyOf(this)
-			.withFunctionResolver(MapBasedFunctionResolver.of(functions)
-				.andThen(getFunctionResolver()));
+			.withFunctions(MapBasedEvaluateableResolver.of(functions)
+				.andThen(functions()));
 	}
 
-	public ImmutableConfiguration witFunction(String name, Function function) {
-		return witFunctions(Pair.of(name, function));
+	public ImmutableConfiguration withFunction(String name, Function function) {
+		return withFunctions(Pair.of(name, function));
 	}
 
 	public static ImmutableConfiguration defaultConfiguration() {
