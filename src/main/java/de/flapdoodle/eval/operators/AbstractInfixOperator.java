@@ -38,6 +38,7 @@ public abstract class AbstractInfixOperator extends AbstractBaseOperator impleme
 		return new Evaluator(operatorToken, leftOperand, rightOperand);
 	}
 
+	// TODO one way to solve this stuff..
 	public static abstract class Evaluatable<L extends Value<?>, R extends Value<?>> extends AbstractInfixOperator {
 
 		private final Evaluateables.Tuple<L, R> evaluatable;
@@ -54,7 +55,7 @@ public abstract class AbstractInfixOperator extends AbstractBaseOperator impleme
 
 		@Override
 		public final Value<?> evaluate(ValueResolver valueResolver, Expression expression, Token operatorToken, Value<?> leftOperand, Value<?> rightOperand) throws EvaluationException {
-			return evaluatable.evaluate(null, expression, operatorToken, Arrays.asList(leftOperand, rightOperand));
+			return evaluatable.evaluate(valueResolver, expression, operatorToken, Arrays.asList(leftOperand, rightOperand));
 		}
 	}
 
