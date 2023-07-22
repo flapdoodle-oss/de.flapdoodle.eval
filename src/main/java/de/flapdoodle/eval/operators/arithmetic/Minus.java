@@ -38,7 +38,7 @@ public class Minus extends AbstractInfixOperator {
 
     return evaluate(operatorToken, leftOperand, rightOperand)
       .using(Value.NumberValue.class, Value.NumberValue.class,
-        (l, r) -> Value.of(l.wrapped().subtract(r.wrapped(), expression.getConfiguration().getMathContext())))
+        (l, r) -> Value.of(l.wrapped().subtract(r.wrapped(), expression.configuration().getMathContext())))
       .using(Value.DateTimeValue.class, Value.DateTimeValue.class,
         (l, r) -> Value.of(Duration.ofMillis(l.wrapped().toEpochMilli() - r.wrapped().toEpochMilli())))
       .using(Value.DateTimeValue.class, Value.DurationValue.class,

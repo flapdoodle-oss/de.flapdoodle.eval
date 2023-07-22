@@ -32,6 +32,6 @@ public class Abs extends AbstractFunction.Single<Value.NumberValue> {
   public Value<?> evaluate(
 		ValueResolver variableResolver, Expression expression, Token functionToken, Value.NumberValue parameterValue) {
 
-    return Value.of(parameterValue.wrapped().abs(expression.getConfiguration().getMathContext()));
+    return Value.of(parameterValue.wrapped().abs(expression.configuration().getMathContext()));
   }
 }

@@ -33,7 +33,7 @@ public class Plus extends AbstractInfixOperator {
 
   @Override public Value<?> evaluate(Expression expression, Token operatorToken, Value<?> leftOperand, Value<?> rightOperand) throws EvaluationException {
     return evaluate(operatorToken, leftOperand, rightOperand)
-      .using(Value.NumberValue.class, Value.NumberValue.class, (l, r) -> Value.of(l.wrapped().add(r.wrapped(), expression.getConfiguration().getMathContext())))
+      .using(Value.NumberValue.class, Value.NumberValue.class, (l, r) -> Value.of(l.wrapped().add(r.wrapped(), expression.configuration().getMathContext())))
       .using(Value.DateTimeValue.class, Value.DurationValue.class, (l, r) -> Value.of(l.wrapped().plus(r.wrapped())))
       .using(Value.DurationValue.class, Value.DurationValue.class, (l, r) -> Value.of(l.wrapped().plus(r.wrapped())))
       .using(Value.DateTimeValue.class, Value.NumberValue.class, (l, r) -> Value.of(l.wrapped().plus(Duration.ofMillis(r.wrapped().longValue()))))

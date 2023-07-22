@@ -49,7 +49,7 @@ public abstract class AbstractDateTimeParser extends AbstractFunction.SingleVara
 
   @Override public Value<?> evaluateVarArg(ValueResolver variableResolver, Expression expression, Token functionToken,
     List<Value.StringValue> parameterValues) {
-    ZoneId zoneId = expression.getConfiguration().getDefaultZoneId();
+    ZoneId zoneId = expression.configuration().getDefaultZoneId();
     Instant instant;
 
     if (parameterValues.size() < 2) {

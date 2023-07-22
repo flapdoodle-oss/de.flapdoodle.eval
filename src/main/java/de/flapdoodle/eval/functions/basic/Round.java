@@ -38,6 +38,6 @@ public class Round extends AbstractFunction.Tuple<Value.NumberValue, Value.Numbe
             .wrapped()
             .setScale(
                 precision.wrapped().intValue(),
-                expression.getConfiguration().getMathContext().getRoundingMode()));
+                expression.configuration().getMathContext().getRoundingMode()));
   }
 }

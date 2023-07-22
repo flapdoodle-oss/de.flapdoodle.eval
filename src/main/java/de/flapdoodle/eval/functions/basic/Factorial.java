@@ -36,8 +36,8 @@ public class Factorial extends AbstractFunction.Single<Value.NumberValue> {
     for (int i = 1; i <= number; i++) {
       factorial =
           factorial.multiply(
-              new BigDecimal(i, expression.getConfiguration().getMathContext()),
-              expression.getConfiguration().getMathContext());
+              new BigDecimal(i, expression.configuration().getMathContext()),
+              expression.configuration().getMathContext());
     }
     return Value.of(factorial);
   }

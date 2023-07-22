@@ -40,7 +40,7 @@ public class FormatDateTime extends AbstractFunction {
 
 	@Override public Value<?> evaluate(ValueResolver variableResolver, Expression expression, Token functionToken, List<Value<?>> parameterValues)
 		throws EvaluationException {
-		ZoneId zoneId = expression.getConfiguration().getDefaultZoneId();
+		ZoneId zoneId = expression.configuration().getDefaultZoneId();
 
 		LocalDateTime dateTimeValue = ((Value.DateTimeValue) (parameterValues.get(0))).wrapped().atZone(zoneId).toLocalDateTime();
 

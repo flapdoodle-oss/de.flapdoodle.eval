@@ -44,7 +44,7 @@ public class CreateLocalDateTime extends AbstractFunction.SingleVararg<Value.Num
     int second = parameterValues.size() >= 6 ? parameterValues.get(5).wrapped().intValue() : 0;
     int nanoOfs = parameterValues.size() >= 7 ? parameterValues.get(6).wrapped().intValue() : 0;
 
-    ZoneId zoneId = expression.getConfiguration().getDefaultZoneId();
+    ZoneId zoneId = expression.configuration().getDefaultZoneId();
     return Value.of(
         LocalDateTime.of(year, month, day, hour, minute, second, nanoOfs)
             .atZone(zoneId)

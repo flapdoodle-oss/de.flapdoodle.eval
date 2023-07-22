@@ -40,15 +40,15 @@ class ExpressionTest {
   void testExpressionDefaults() {
     Expression expression = Expression.of("a+b");
 
-    assertThat(expression.expressionString()).isEqualTo("a+b");
+    assertThat(expression.raw()).isEqualTo("a+b");
 //    assertThat(expression.getConfiguration().getMathContext())
 //        .isEqualTo(Configuration.DEFAULT_MATH_CONTEXT);
-    assertThat(expression.getConfiguration().getFunctionResolver().hasFunction("SUM")).isTrue();
-    assertThat(expression.getConfiguration().getOperatorResolver().hasOperator(InfixOperator.class, "+"))
+    assertThat(expression.configuration().getFunctionResolver().hasFunction("SUM")).isTrue();
+    assertThat(expression.configuration().getOperatorResolver().hasOperator(InfixOperator.class, "+"))
         .isTrue();
-		assertThat(expression.getConfiguration().getOperatorResolver().hasOperator(PrefixOperator.class, "+"))
+		assertThat(expression.configuration().getOperatorResolver().hasOperator(PrefixOperator.class, "+"))
         .isTrue();
-    assertThat(expression.getConfiguration().getOperatorResolver().hasOperator(PostfixOperator.class, "+"))
+    assertThat(expression.configuration().getOperatorResolver().hasOperator(PostfixOperator.class, "+"))
         .isFalse();
   }
 

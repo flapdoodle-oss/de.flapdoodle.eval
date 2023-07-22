@@ -30,6 +30,6 @@ public class PrefixMinus extends AbstractPrefixOperator.Typed<Value.NumberValue>
   }
 
   @Override protected Value<?> evaluateTyped(Expression expression, Token operatorToken, Value.NumberValue operand) throws EvaluationException {
-    return Value.of(operand.wrapped().negate(expression.getConfiguration().getMathContext()));
+    return Value.of(operand.wrapped().negate(expression.configuration().getMathContext()));
   }
 }

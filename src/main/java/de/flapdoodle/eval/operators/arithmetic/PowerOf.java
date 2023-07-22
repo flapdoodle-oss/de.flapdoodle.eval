@@ -19,7 +19,6 @@ package de.flapdoodle.eval.operators.arithmetic;
 import de.flapdoodle.eval.EvaluationException;
 import de.flapdoodle.eval.Expression;
 import de.flapdoodle.eval.data.Value;
-import de.flapdoodle.eval.operators.AbstractInfixOperator;
 import de.flapdoodle.eval.operators.Precedence;
 import de.flapdoodle.eval.parser.Token;
 
@@ -40,7 +39,7 @@ public class PowerOf extends AbstractNumberInfixOperator {
 		 * http://stackoverflow.com/questions/3579779/how-to-do-a-fractional-power-on-bigdecimal-in-java
 		 */
 
-		MathContext mathContext = expression.getConfiguration().getMathContext();
+		MathContext mathContext = expression.configuration().getMathContext();
 		BigDecimal v1 = leftOperand.wrapped();
 		BigDecimal v2 = rightOperand.wrapped();
 

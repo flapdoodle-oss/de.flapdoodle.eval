@@ -36,7 +36,7 @@ public class Sum extends AbstractFunction.SingleVararg<Value.NumberValue> {
     List<Value.NumberValue> parameterValues) {
     BigDecimal sum = BigDecimal.ZERO;
     for (Value.NumberValue parameter : parameterValues) {
-      sum = sum.add(parameter.wrapped(), expression.getConfiguration().getMathContext());
+      sum = sum.add(parameter.wrapped(), expression.configuration().getMathContext());
     }
     return Value.of(sum);
   }

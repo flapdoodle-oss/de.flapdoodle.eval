@@ -48,7 +48,7 @@ public class Sqrt extends AbstractFunction.Single<Value.NumberValue> {
 
   @Override
   public Value<?> evaluate(ValueResolver variableResolver, Expression expression, Token functionToken, Value.NumberValue parameterValue) {
-    return Value.of(sqrt(parameterValue.wrapped(), expression.getConfiguration().getMathContext()));
+    return Value.of(sqrt(parameterValue.wrapped(), expression.configuration().getMathContext()));
   }
 
   private static boolean isPowerOfTen(BigDecimal thi) {

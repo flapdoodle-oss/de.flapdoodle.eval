@@ -1,12 +1,12 @@
 /**
  * Copyright (C) 2023
- *   Michael Mosmann <michael@mosmann.de>
+ * Michael Mosmann <michael@mosmann.de>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *         http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -17,7 +17,6 @@
 package de.flapdoodle.eval;
 
 import de.flapdoodle.eval.config.Configuration;
-import de.flapdoodle.eval.config.MapBasedValueResolver;
 import de.flapdoodle.eval.data.Value;
 import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.functions.Function;
@@ -37,37 +36,38 @@ import java.util.TreeSet;
 
 @org.immutables.value.Value.Immutable
 public abstract class Expression {
-	public abstract Configuration getConfiguration();
+	public abstract Configuration configuration();
 
-	public abstract String expressionString();
+	public abstract String raw();
 
 	@org.immutables.value.Value.Default
-	public ValueResolver getConstantResolver() {
-		return getConfiguration().getConstantResolver();
+	public ValueResolver constants() {
+		return configuration().getConstantResolver();
 	}
 
 	@org.immutables.value.Value.Auxiliary
 	public Expression withConstant(String variable, Value<?> value) {
-		if (getConstantResolver().get(variable)==null || getConfiguration().isAllowOverwriteConstants()) {
-			MapBasedValueResolver mapBasedVariableResolver = ValueResolver.empty()
-					.with(variable, value);
+		if (constants().get(variable) == null || configuration().isAllowOverwriteConstants()) {
 			return ImmutableExpression.builder().from(this)
-					.constantResolver(mapBasedVariableResolver.andThen(getConstantResolver()))
-					.build();
+				.constants(ValueResolver.empty()
+					.with(variable, value)
+					.andThen(constants()))
+				.build();
 		} else {
 			throw new UnsupportedOperationException(
-					String.format("Can't set value for constant '%s'", variable));
+				String.format("Can't set value for constant '%s'", variable));
 		}
 	}
 
 	@org.immutables.value.Value.Derived
 	public Either<ASTNode, ParseException> getAbstractSyntaxTree() {
-		Tokenizer tokenizer = new Tokenizer(expressionString(), getConfiguration());
+		Tokenizer tokenizer = new Tokenizer(raw(), configuration());
 		try {
 			ShuntingYardConverter converter =
-					new ShuntingYardConverter(expressionString(), tokenizer.parse(), getConfiguration());
+				new ShuntingYardConverter(raw(), tokenizer.parse(), configuration());
 			return Either.left(converter.toAbstractSyntaxTree());
-		} catch (ParseException px) {
+		}
+		catch (ParseException px) {
 			return Either.right(px);
 		}
 	}
@@ -82,10 +82,10 @@ public abstract class Expression {
 		Either<ASTNode, ParseException> tree = getAbstractSyntaxTree();
 		if (tree.isLeft())
 			return getAllASTNodesForNode(tree.left());
-			else throw tree.right();
+		else throw tree.right();
 	}
 
-	private List<ASTNode> getAllASTNodesForNode(ASTNode node) {
+	private static List<ASTNode> getAllASTNodesForNode(ASTNode node) {
 		List<ASTNode> nodes = new ArrayList<>();
 		nodes.add(node);
 		for (ASTNode child : node.getParameters()) {
@@ -94,12 +94,13 @@ public abstract class Expression {
 		return nodes;
 	}
 
+	@org.immutables.value.Value.Auxiliary
 	public Set<String> getUsedVariables() throws ParseException {
 		Set<String> variables = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
 
 		for (ASTNode node : getAllASTNodes()) {
 			if (node.getToken().getType() == TokenType.VARIABLE_OR_CONSTANT
-				&& !getConstantResolver().has(node.getToken().getValue())) {
+				&& !constants().has(node.getToken().getValue())) {
 				variables.add(node.getToken().getValue());
 			}
 		}
@@ -107,6 +108,7 @@ public abstract class Expression {
 		return variables;
 	}
 
+	@org.immutables.value.Value.Auxiliary
 	public Set<String> getUndefinedVariables(ValueResolver variableResolver) throws ParseException {
 		Set<String> variables = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
 		for (String variable : getUsedVariables()) {
@@ -117,16 +119,13 @@ public abstract class Expression {
 		return variables;
 	}
 
-
-
 	@org.immutables.value.Value.Auxiliary
 	public ASTNode createExpressionNode(String expression) throws ParseException {
-		Tokenizer tokenizer = new Tokenizer(expression, getConfiguration());
+		Tokenizer tokenizer = new Tokenizer(expression, configuration());
 		ShuntingYardConverter converter =
-			new ShuntingYardConverter(expression, tokenizer.parse(), getConfiguration());
+			new ShuntingYardConverter(expression, tokenizer.parse(), configuration());
 		return converter.toAbstractSyntaxTree();
 	}
-
 
 	/**
 	 * Evaluates the expression by parsing it (if not done before) and the evaluating it.
@@ -154,7 +153,7 @@ public abstract class Expression {
 		Value<?> result;
 		switch (token.getType()) {
 			case NUMBER_LITERAL:
-				result = numberOfString(token.getValue(), getConfiguration().getMathContext());
+				result = numberOfString(token.getValue(), configuration().getMathContext());
 				break;
 			case STRING_LITERAL:
 				result = Value.of(token.getValue());
@@ -205,7 +204,7 @@ public abstract class Expression {
 	}
 
 	private Value<?> getVariableOrConstant(ValueResolver variableResolver, Token token) throws EvaluationException {
-		Value<?> result = getConstantResolver().get(token.getValue());
+		Value<?> result = constants().get(token.getValue());
 		if (result == null) {
 			result = variableResolver.get(token.getValue());
 		}
@@ -231,7 +230,7 @@ public abstract class Expression {
 
 //    function.validatePreEvaluation(token, parameterResults);
 
-		return function.evaluateUnvalidated(variableResolver,this, token, parameterResults);
+		return function.evaluateUnvalidated(variableResolver, this, token, parameterResults);
 	}
 
 	private Value<?> evaluateArrayIndex(ValueResolver variableResolver, ASTNode startNode) throws EvaluationException {
@@ -262,9 +261,6 @@ public abstract class Expression {
 		}
 	}
 
-
-
-
 	/**
 	 * moved from somewhere
 	 */
@@ -280,15 +276,15 @@ public abstract class Expression {
 
 	public static Expression of(String expressionString) {
 		return ImmutableExpression.builder()
-			.expressionString(expressionString)
+			.raw(expressionString)
 			.configuration(Configuration.defaultConfiguration())
 			.build();
 	}
 
 	public static Expression of(String expressionString, Configuration configuration) {
 		return ImmutableExpression.builder()
-				.expressionString(expressionString)
-				.configuration(configuration)
-				.build();
+			.raw(expressionString)
+			.configuration(configuration)
+			.build();
 	}
 }

@@ -19,7 +19,6 @@ package de.flapdoodle.eval.operators.arithmetic;
 import de.flapdoodle.eval.EvaluationException;
 import de.flapdoodle.eval.Expression;
 import de.flapdoodle.eval.data.Value;
-import de.flapdoodle.eval.operators.AbstractInfixOperator;
 import de.flapdoodle.eval.operators.Precedence;
 import de.flapdoodle.eval.parser.Token;
 
@@ -36,6 +35,6 @@ public class Modulo extends AbstractNumberInfixOperator {
     if (rightOperand.wrapped().equals(BigDecimal.ZERO)) {
       throw new EvaluationException(operatorToken, "Division by zero");
     }
-    return Value.of(leftOperand.wrapped().remainder(rightOperand.wrapped(), expression.getConfiguration().getMathContext()));
+    return Value.of(leftOperand.wrapped().remainder(rightOperand.wrapped(), expression.configuration().getMathContext()));
   }
 }
