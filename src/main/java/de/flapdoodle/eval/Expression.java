@@ -35,7 +35,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 @org.immutables.value.Value.Immutable
-public abstract class Expression implements EvaluationContext {
+public abstract class Expression {
 	protected abstract Configuration configuration();
 
 	public abstract String raw();
@@ -60,13 +60,11 @@ public abstract class Expression implements EvaluationContext {
 	}
 
 	@org.immutables.value.Value.Default
-	@Override
 	public MathContext mathContext() {
 		return configuration().getMathContext();
 	}
 
 	@org.immutables.value.Value.Default
-	@Override
 	public ZoneId zoneId() {
 		return configuration().getDefaultZoneId();
 	}
@@ -145,10 +143,10 @@ public abstract class Expression implements EvaluationContext {
 	 * @return The evaluation result value.
 	 * @throws EvaluationException If there were problems while evaluating the expression.
 	 */
-	@Override
 	@org.immutables.value.Value.Auxiliary
 	public Value<?> evaluateSubtree(ValueResolver variableResolver, ASTNode startNode) throws EvaluationException {
 		Token token = startNode.getToken();
+		EvaluationContext context = context(variableResolver);
 		Value<?> result;
 		switch (token.type()) {
 			case NUMBER_LITERAL:
@@ -167,20 +165,20 @@ public abstract class Expression implements EvaluationContext {
 				result =
 					token
 						.operator(PrefixOperator.class)
-						.evaluate(variableResolver, this, token, evaluateSubtree(variableResolver, startNode.getParameters().get(0)));
+						.evaluate(variableResolver, context, token, evaluateSubtree(variableResolver, startNode.getParameters().get(0)));
 				break;
 			case POSTFIX_OPERATOR:
 				result =
 					token
 						.operator(PostfixOperator.class)
-						.evaluate(variableResolver, this, token, evaluateSubtree(variableResolver, startNode.getParameters().get(0)));
+						.evaluate(variableResolver, context, token, evaluateSubtree(variableResolver, startNode.getParameters().get(0)));
 				break;
 			case INFIX_OPERATOR:
 				result =
 					token
 						.operator(InfixOperator.class)
 						.evaluate(
-							variableResolver, this,
+							variableResolver, context,
 							token,
 							evaluateSubtree(variableResolver, startNode.getParameters().get(0)),
 							evaluateSubtree(variableResolver, startNode.getParameters().get(1)));
@@ -200,6 +198,15 @@ public abstract class Expression implements EvaluationContext {
 
 //		return result.isNumberValue() ? roundAndStripZerosIfNeeded(result) : result;
 		return result;
+	}
+
+	// VisibleInTest
+	private EvaluationContext context(ValueResolver valueResolver) {
+		return EvaluationContext.builder()
+			.mathContext(mathContext())
+			.zoneId(zoneId())
+			.subtreeEvaluator(ast -> evaluateSubtree(valueResolver, ast))
+			.build();
 	}
 
 	private Value<?> getVariableOrConstant(ValueResolver variableResolver, Token token) throws EvaluationException {
@@ -229,7 +236,7 @@ public abstract class Expression implements EvaluationContext {
 
 //    function.validatePreEvaluation(token, parameterResults);
 
-		return function.evaluate(variableResolver, this, token, parameterResults);
+		return function.evaluate(variableResolver, context(variableResolver), token, parameterResults);
 	}
 
 	private Value<?> evaluateArrayIndex(ValueResolver variableResolver, ASTNode startNode) throws EvaluationException {

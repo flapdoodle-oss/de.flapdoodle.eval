@@ -192,20 +192,25 @@ class BasicFunctionsTest extends BaseEvaluationTest {
 	@Test
 	void testNotFunctionDirectly() throws EvaluationException {
 		Not not = new Not();
-		EvaluationContext evaluationContextMock = Expression.of("ignore");
+		Expression expression = Expression.of("ignore");
+		EvaluationContext context = EvaluationContext.builder()
+			.mathContext(expression.mathContext())
+			.zoneId(expression.zoneId())
+			.subtreeEvaluator(it -> { throw new EvaluationException(it.getToken(),"fail"); })
+			.build();
 		Token token = Token.of(1, "NOT", TokenType.FUNCTION, not);
 
 		ValueResolver variableResolver = ValueResolver.empty();
 
 		assertThat(
 			not
-				.evaluate(variableResolver, evaluationContextMock, token, Arrays.asList(Value.of(true)))
+				.evaluate(variableResolver, context, token, Arrays.asList(Value.of(true)))
 				.wrapped())
 			.asInstanceOf(InstanceOfAssertFactories.BOOLEAN)
 			.isFalse();
 		assertThat(
 			not
-				.evaluate(variableResolver, evaluationContextMock, token, Arrays.asList(Value.of(false)))
+				.evaluate(variableResolver, context, token, Arrays.asList(Value.of(false)))
 				.wrapped())
 			.asInstanceOf(InstanceOfAssertFactories.BOOLEAN)
 			.isTrue();

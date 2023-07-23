@@ -41,9 +41,9 @@ public class Conditional extends Evaluateables.Triple<Value.BooleanValue, Value.
 	protected Value<?> evaluate(ValueResolver valueResolver, EvaluationContext evaluationContext, Token functionToken, Value.BooleanValue condition,
 		Value.ExpressionValue ifTrue, Value.ExpressionValue ifFalse) throws EvaluationException {
 		if (condition.wrapped()) {
-			return evaluationContext.evaluateSubtree(valueResolver, ifTrue.wrapped());
+			return evaluationContext.subtreeEvaluator().apply(ifTrue.wrapped());
 		} else {
-			return evaluationContext.evaluateSubtree(valueResolver, ifFalse.wrapped());
+			return evaluationContext.subtreeEvaluator().apply(ifFalse.wrapped());
 		}
 	}
 }

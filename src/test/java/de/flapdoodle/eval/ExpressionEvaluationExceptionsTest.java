@@ -28,12 +28,12 @@ class ExpressionEvaluationExceptionsTest {
 
 	@Test
 	void testUnexpectedToken() {
-		EvaluationContext evaluationContext = Expression.of("1");
+		Expression expression = Expression.of("1");
 
 		assertThatThrownBy(
 			() -> {
 				ASTNode node = ASTNode.of(Token.of(1, "(", TokenType.BRACE_OPEN));
-				evaluationContext.evaluateSubtree(ValueResolver.empty(), node);
+				expression.evaluateSubtree(ValueResolver.empty(), node);
 			})
 			.isInstanceOf(EvaluationException.class)
 			.hasMessage(
