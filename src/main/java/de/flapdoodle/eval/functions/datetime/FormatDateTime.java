@@ -31,8 +31,8 @@ public class FormatDateTime extends Evaluateables.Base {
 	public FormatDateTime() {
 		super(
 			Parameters.optionalWith(
-				Parameter.of(Value.DateTimeValue.class, "value"),
-				Parameter.of(Value.StringValue.class, "format")
+				Parameter.of(Value.DateTimeValue.class),
+				Parameter.of(Value.StringValue.class)
 			)
 		);
 	}

@@ -28,7 +28,7 @@ import de.flapdoodle.eval.parser.Token;
 public class Log10 extends Evaluateables.Single<Value.NumberValue> {
 
 	public Log10() {
-		super(Parameter.of(Value.NumberValue.class, "value")
+		super(Parameter.of(Value.NumberValue.class)
 			.withValidators(new NonZeroNumber(), new NonNegativeNumber()));
 	}
 

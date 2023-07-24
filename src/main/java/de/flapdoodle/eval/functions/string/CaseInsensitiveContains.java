@@ -24,8 +24,8 @@ import de.flapdoodle.eval.parser.Token;
 public class CaseInsensitiveContains extends Evaluateables.Tuple<Value.StringValue, Value.StringValue> {
 	public CaseInsensitiveContains() {
 		super(
-			Parameter.of(Value.StringValue.class, "string"),
-			Parameter.of(Value.StringValue.class, "substring")
+			Parameter.of(Value.StringValue.class),
+			Parameter.of(Value.StringValue.class)
 		);
 	}
 

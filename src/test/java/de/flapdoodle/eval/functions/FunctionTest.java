@@ -33,15 +33,9 @@ class FunctionTest {
 	void testParameterDefinition() {
 		Evaluateable function = new CorrectFunctionDefinitionFunction();
 
-		assertThat(function.parameters().get(0).name()).isEqualTo("default");
 		assertThat(function.parameters().get(0).isLazy()).isFalse();
-
-		assertThat(function.parameters().get(1).name()).isEqualTo("lazy");
 		assertThat(function.parameters().get(1).isLazy()).isTrue();
-
-		assertThat(function.parameters().get(2).name()).isEqualTo("vararg");
 		assertThat(function.parameters().get(2).isLazy()).isFalse();
-		
 		assertThat(function.parameters().isVarArg()).isTrue();
 	}
 
@@ -61,9 +55,9 @@ class FunctionTest {
 		protected CorrectFunctionDefinitionFunction() {
 			super(
 				Parameters.varArgWith(
-				Parameter.of(Value.class, "default"),
-				Parameter.lazyWith(Value.class, "lazy"),
-					Parameter.of(Value.class, "vararg")
+				Parameter.of(Value.class),
+				Parameter.lazyWith(Value.class),
+					Parameter.of(Value.class)
 				)
 			);
 		}

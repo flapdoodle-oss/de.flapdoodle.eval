@@ -23,6 +23,6 @@ import de.flapdoodle.eval.functions.validations.NonZeroNumber;
 
 public abstract class NonZeroFunction extends Evaluateables.Single<Value.NumberValue> {
 	public NonZeroFunction() {
-		super(Parameter.of(Value.NumberValue.class, "value").withValidators(new NonZeroNumber()));
+		super(Parameter.of(Value.NumberValue.class).withValidators(new NonZeroNumber()));
 	}
 }

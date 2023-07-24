@@ -42,7 +42,7 @@ public class Sqrt extends Evaluateables.Single<Value.NumberValue> {
 	private static final BigDecimal ONE_HALF = BigDecimal.valueOf(5L, 1);
 
 	public Sqrt() {
-		super(Parameter.of(Value.NumberValue.class, "value")
+		super(Parameter.of(Value.NumberValue.class)
 			.withValidators(new NonNegativeNumber()));
 	}
 

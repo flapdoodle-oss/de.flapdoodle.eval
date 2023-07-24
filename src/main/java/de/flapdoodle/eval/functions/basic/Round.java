@@ -24,8 +24,8 @@ import de.flapdoodle.eval.parser.Token;
 public class Round extends Evaluateables.Tuple<Value.NumberValue, Value.NumberValue> {
 
 	public Round() {
-		super(Parameter.of(Value.NumberValue.class, "value"),
-			Parameter.of(Value.NumberValue.class, "scale"));
+		super(Parameter.of(Value.NumberValue.class),
+			Parameter.of(Value.NumberValue.class));
 	}
 
 	@Override

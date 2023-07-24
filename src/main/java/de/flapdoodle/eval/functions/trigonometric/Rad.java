@@ -25,7 +25,7 @@ import de.flapdoodle.eval.parser.Token;
 
 public class Rad extends Evaluateables.Single<Value.NumberValue> {
 	public Rad() {
-		super(Value.NumberValue.class, "degrees");
+		super(Value.NumberValue.class);
 	}
 
 	@Override

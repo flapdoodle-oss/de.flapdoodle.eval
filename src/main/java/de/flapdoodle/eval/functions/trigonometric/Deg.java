@@ -25,7 +25,7 @@ import de.flapdoodle.eval.parser.Token;
 
 public class Deg extends Evaluateables.Single<Value.NumberValue> {
 	public Deg() {
-		super(Value.NumberValue.class, "radians");
+		super(Value.NumberValue.class);
 	}
 
 	@Override

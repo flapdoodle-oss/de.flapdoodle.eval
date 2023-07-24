@@ -24,7 +24,7 @@ import de.flapdoodle.eval.parser.Token;
 public class Atan2 extends Evaluateables.Tuple<Value.NumberValue, Value.NumberValue> {
 
 	public Atan2() {
-		super(Parameter.of(Value.NumberValue.class, "y"), Parameter.of(Value.NumberValue.class, "x"));
+		super(Parameter.of(Value.NumberValue.class), Parameter.of(Value.NumberValue.class));
 	}
 
 	@Override

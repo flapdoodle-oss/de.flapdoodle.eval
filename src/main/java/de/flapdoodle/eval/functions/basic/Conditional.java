@@ -31,9 +31,9 @@ public class Conditional extends Evaluateables.Triple<Value.BooleanValue, Value.
 
 	public Conditional() {
 		super(
-			Parameter.of(Value.BooleanValue.class, "condition"),
-			Parameter.lazyWith(Value.ExpressionValue.class, "resultIfTrue"),
-			Parameter.lazyWith(Value.ExpressionValue.class, "resultIfFalse")
+			Parameter.of(Value.BooleanValue.class),
+			Parameter.lazyWith(Value.ExpressionValue.class),
+			Parameter.lazyWith(Value.ExpressionValue.class)
 		);
 	}
 

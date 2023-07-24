@@ -45,7 +45,7 @@ public class TestConfigurationProvider {
 	public static class DummyFunction extends Evaluateables.SingleVararg<Value.StringValue> {
 
 		public DummyFunction() {
-			super(Parameter.of(Value.StringValue.class, "input"));
+			super(Parameter.of(Value.StringValue.class));
 		}
 
 		@Override

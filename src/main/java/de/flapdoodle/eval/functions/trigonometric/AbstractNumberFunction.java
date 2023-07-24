@@ -25,6 +25,6 @@ public abstract class AbstractNumberFunction extends Evaluateables.Single<Value.
 	}
 
 	public AbstractNumberFunction(String name) {
-		super(Value.NumberValue.class, name);
+		super(Value.NumberValue.class);
 	}
 }

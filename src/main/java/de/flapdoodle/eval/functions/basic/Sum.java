@@ -29,7 +29,7 @@ import java.util.List;
 public class Sum extends Evaluateables.SingleVararg<Value.NumberValue> {
 
 	public Sum() {
-		super(Parameter.of(Value.NumberValue.class, "value"));
+		super(Parameter.of(Value.NumberValue.class));
 	}
 
 	@Override

@@ -44,12 +44,8 @@ public abstract class Evaluateables {
 			this.definition = definition;
 		}
 
-		protected Single(Class<T> parameterType, String name) {
-			this(Parameter.of(parameterType, name));
-		}
-
 		protected Single(Class<T> parameterType) {
-			this(parameterType, "value");
+			this(Parameter.of(parameterType));
 		}
 
 		@Override
@@ -75,14 +71,6 @@ public abstract class Evaluateables {
 			super(Parameters.varArgWith(definition));
 
 			this.definition = definition;
-		}
-
-		protected SingleVararg(Class<T> parameterType, String name) {
-			this(Parameter.of(parameterType, name));
-		}
-
-		protected SingleVararg(Class<T> parameterType) {
-			this(parameterType, "value");
 		}
 
 		@Override

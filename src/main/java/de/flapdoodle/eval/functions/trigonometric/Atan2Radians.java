@@ -25,7 +25,7 @@ public class Atan2Radians extends Evaluateables.Tuple<Value.NumberValue, Value.N
 
 	public Atan2Radians() {
 		super(
-			Parameter.of(Value.NumberValue.class, "y"), Parameter.of(Value.NumberValue.class, "x"));
+			Parameter.of(Value.NumberValue.class), Parameter.of(Value.NumberValue.class));
 	}
 
 	@Override

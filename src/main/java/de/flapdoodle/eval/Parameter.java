@@ -29,11 +29,8 @@ import java.util.List;
 @Value.Immutable
 public interface Parameter<T extends de.flapdoodle.eval.data.Value<?>> {
 
-	@Builder.Parameter
+	@Value.Parameter
 	Class<T> type();
-
-	/** Name of the parameter, useful for error messages etc. */
-	String name();
 
 	/**
 	 * Set to true, the parameter will not be evaluated in advance, but the corresponding {@link
@@ -48,16 +45,12 @@ public interface Parameter<T extends de.flapdoodle.eval.data.Value<?>> {
 
 	List<ParameterValidator<T>> validators();
 
-	static <T extends de.flapdoodle.eval.data.Value<?>> ImmutableParameter.Builder<T> builder(Class<T> type) {
-		return ImmutableParameter.builder(type);
+	static <T extends de.flapdoodle.eval.data.Value<?>> ImmutableParameter<T> of(Class<T> type) {
+		return ImmutableParameter.of(type);
 	}
 
-	static <T extends de.flapdoodle.eval.data.Value<?>> ImmutableParameter<T> of(Class<T> type, String name) {
-		return builder(type).name(name).build();
-	}
-
-	static <T extends de.flapdoodle.eval.data.Value<?>> ImmutableParameter<T> lazyWith(Class<T> type, String name) {
-		return builder(type).name(name).isLazy(true).build();
+	static <T extends de.flapdoodle.eval.data.Value<?>> ImmutableParameter<T> lazyWith(Class<T> type) {
+		return ImmutableParameter.of(type).withIsLazy(true);
 	}
 
 	@Value.Auxiliary

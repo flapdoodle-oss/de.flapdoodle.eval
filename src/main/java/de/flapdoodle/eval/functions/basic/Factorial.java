@@ -27,7 +27,7 @@ import java.math.BigDecimal;
 public class Factorial extends Evaluateables.Single<Value.NumberValue> {
 
 	public Factorial() {
-		super(Value.NumberValue.class, "base");
+		super(Value.NumberValue.class);
 	}
 
 	@Override
