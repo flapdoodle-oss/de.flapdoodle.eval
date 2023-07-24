@@ -44,7 +44,7 @@ import java.util.List;
 
 public abstract class AbstractDateTimeParser extends Evaluateables.SingleVararg<Value.StringValue> {
 	protected AbstractDateTimeParser() {
-		super(Parameter.varArgWith(Value.StringValue.class, "value"));
+		super(Parameter.of(Value.StringValue.class, "value"));
 	}
 
 	@Override

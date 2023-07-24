@@ -9,10 +9,10 @@ import java.util.stream.Collectors;
 
 public abstract class Evaluateables {
 	public abstract static class Base implements Evaluateable {
-		private final ImmutableParameters parameters;
+		private final Parameters parameters;
 
-		protected Base(Parameter<?>... parameters) {
-			this.parameters = Parameters.of(parameters);
+		protected Base(Parameters parameters) {
+			this.parameters = parameters;
 		}
 
 		@Override
@@ -40,9 +40,7 @@ public abstract class Evaluateables {
 		private final Parameter<T> definition;
 
 		protected Single(Parameter<T> definition) {
-			super(definition);
-
-			if (definition.isVarArg()) throw new IllegalArgumentException("varArg is true");
+			super(Parameters.of(definition));
 			this.definition = definition;
 		}
 
@@ -74,9 +72,8 @@ public abstract class Evaluateables {
 		private final Parameter<T> definition;
 
 		protected SingleVararg(Parameter<T> definition) {
-			super(definition);
+			super(Parameters.varArgWith(definition));
 
-			if (!definition.isVarArg()) throw new IllegalArgumentException("varArg is false");
 			this.definition = definition;
 		}
 
@@ -107,9 +104,7 @@ public abstract class Evaluateables {
 		private final Parameter<B> b;
 
 		protected Tuple(Parameter<A> a, Parameter<B> b) {
-			super(a, b);
-			if (a.isVarArg()) throw new IllegalArgumentException("a.varArg is true");
-			if (b.isVarArg()) throw new IllegalArgumentException("b.varArg is true");
+			super(Parameters.of(a, b));
 			this.a = a;
 			this.b = b;
 		}
@@ -138,10 +133,7 @@ public abstract class Evaluateables {
 		private final Parameter<C> c;
 
 		protected Triple(Parameter<A> a, Parameter<B> b, Parameter<C> c) {
-			super(a, b, c);
-			if (a.isVarArg()) throw new IllegalArgumentException("a.varArg is true");
-			if (b.isVarArg()) throw new IllegalArgumentException("b.varArg is true");
-			if (c.isVarArg()) throw new IllegalArgumentException("c.varArg is true");
+			super(Parameters.of(a, b, c));
 			this.a = a;
 			this.b = b;
 			this.c = c;

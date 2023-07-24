@@ -19,6 +19,7 @@ package de.flapdoodle.eval.functions.basic;
 import de.flapdoodle.eval.Evaluateables;
 import de.flapdoodle.eval.EvaluationContext;
 import de.flapdoodle.eval.EvaluationException;
+import de.flapdoodle.eval.Parameters;
 import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
 import de.flapdoodle.eval.parser.Token;
@@ -29,7 +30,7 @@ import java.util.List;
 public class RandomNumber extends Evaluateables.Base {
 
 	public RandomNumber() {
-		super();
+		super(Parameters.of());
 	}
 
 	@Override

@@ -17,7 +17,6 @@
 package de.flapdoodle.eval;
 
 import de.flapdoodle.eval.functions.basic.Conditional;
-import de.flapdoodle.eval.functions.basic.Min;
 import de.flapdoodle.eval.functions.validations.ParameterValidator;
 import de.flapdoodle.eval.parser.ASTNode;
 import de.flapdoodle.eval.parser.Token;
@@ -37,21 +36,6 @@ public interface Parameter<T extends de.flapdoodle.eval.data.Value<?>> {
 	String name();
 
 	/**
-	 * Whether this parameter is a variable argument parameter (can be repeated).
-	 *
-	 * @see Min for an example.
-	 */
-	@Value.Default
-	default boolean isVarArg() {
-		return false;
-	}
-
-	@Value.Default
-	default boolean isOptional() {
-		return false;
-	}
-
-	/**
 	 * Set to true, the parameter will not be evaluated in advance, but the corresponding {@link
 	 * ASTNode} will be passed as a parameter value.
 	 *
@@ -62,25 +46,17 @@ public interface Parameter<T extends de.flapdoodle.eval.data.Value<?>> {
 		return false;
 	}
 
-	public abstract List<ParameterValidator<T>> validators();
+	List<ParameterValidator<T>> validators();
 
-	public static <T extends de.flapdoodle.eval.data.Value<?>> ImmutableParameter.Builder<T> builder(Class<T> type) {
+	static <T extends de.flapdoodle.eval.data.Value<?>> ImmutableParameter.Builder<T> builder(Class<T> type) {
 		return ImmutableParameter.builder(type);
 	}
 
-	public static <T extends de.flapdoodle.eval.data.Value<?>> ImmutableParameter<T> of(Class<T> type, String name) {
+	static <T extends de.flapdoodle.eval.data.Value<?>> ImmutableParameter<T> of(Class<T> type, String name) {
 		return builder(type).name(name).build();
 	}
 
-	public static <T extends de.flapdoodle.eval.data.Value<?>> ImmutableParameter<T> varArgWith(Class<T> type, String name) {
-		return builder(type).name(name).isVarArg(true).build();
-	}
-
-	public static <T extends de.flapdoodle.eval.data.Value<?>> ImmutableParameter<T> optionalWith(Class<T> type, String name) {
-		return builder(type).name(name).isOptional(true).build();
-	}
-
-	public static <T extends de.flapdoodle.eval.data.Value<?>> ImmutableParameter<T> lazyWith(Class<T> type, String name) {
+	static <T extends de.flapdoodle.eval.data.Value<?>> ImmutableParameter<T> lazyWith(Class<T> type, String name) {
 		return builder(type).name(name).isLazy(true).build();
 	}
 

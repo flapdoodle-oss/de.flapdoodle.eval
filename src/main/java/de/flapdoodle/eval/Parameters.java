@@ -9,45 +9,37 @@ import java.util.List;
 public abstract class Parameters {
 	public abstract List<Parameter<?>> list();
 
+	@Value.Default
+	public boolean isVarArg() {
+		return false;
+//		return !list().isEmpty() && list().get(list().size() - 1).isVarArg();
+	}
+
+	@Value.Default
+	public boolean hasOptional() {
+		return false;
+//		return !list().isEmpty() && list().get(list().size() - 1).isOptional();
+	}
+
 	@Value.Check
 	protected void check() {
-		for (int i = 0; i < list().size() - 1; i++) {
-			Parameter<?> it = list().get(i);
-			if (it.isVarArg()) {
-				throw new IllegalArgumentException(
-					"Only last parameter may be defined as variable argument");
-			}
-			if (it.isOptional()) {
-				throw new IllegalArgumentException(
-					"Only last parameter may be defined as optional argument");
-			}
+		if (isVarArg() && hasOptional()) {
+			throw new IllegalArgumentException("varArg and optional is not of any use");
 		}
 	}
 
 	@Value.Derived
 	public int min() {
 		if (list().isEmpty()) return 0;
-		Parameter<?> last = list().get(list().size() - 1);
-		return list().size() - (last.isOptional() ? 1 : 0);
+		return list().size() - (hasOptional() ? 1 : 0);
 	}
 
 	@Value.Derived
 	public int max() {
 		if (list().isEmpty()) return 0;
-		Parameter<?> last = list().get(list().size() - 1);
-		return last.isVarArg()
+		return isVarArg()
 			? Integer.MAX_VALUE
 			: list().size();
-	}
-
-	@Value.Derived
-	public boolean hasVarArgs() {
-		return !list().isEmpty() && list().get(list().size() - 1).isVarArg();
-	}
-
-	@Value.Derived
-	public boolean hasOptional() {
-		return !list().isEmpty() && list().get(list().size() - 1).isOptional();
 	}
 
 	@Value.Auxiliary
@@ -57,7 +49,7 @@ public abstract class Parameters {
 
 	@Value.Auxiliary
 	public Parameter<?> get(int index) {
-		if (hasVarArgs() && index >= list().size()) {
+		if (isVarArg() && index >= list().size()) {
 			index = list().size() - 1;
 		}
 		return list().get(index);
@@ -86,16 +78,30 @@ public abstract class Parameters {
 			.build();
 	}
 
-	public static ImmutableParameters of(Parameter<?> first, Parameter<?>... all) {
-		return ImmutableParameters.builder()
-			.addList(first)
-			.addList(all)
-			.build();
-	}
+//	public static ImmutableParameters of(Parameter<?> first, Parameter<?>... all) {
+//		return ImmutableParameters.builder()
+//			.addList(first)
+//			.addList(all)
+//			.build();
+//	}
 
 	public static ImmutableParameters of(Iterable<? extends Parameter<?>> all) {
 		return ImmutableParameters.builder()
 			.addAllList(all)
+			.build();
+	}
+
+	public static ImmutableParameters optionalWith(Parameter<?>... all) {
+		return ImmutableParameters.builder()
+			.addList(all)
+			.hasOptional(true)
+			.build();
+	}
+
+	public static ImmutableParameters varArgWith(Parameter<?> ... all) {
+		return ImmutableParameters.builder()
+			.addList(all)
+			.isVarArg(true)
 			.build();
 	}
 }

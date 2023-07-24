@@ -29,13 +29,11 @@ class ParameterTest {
 		Parameter definition =
 			Parameter.builder(Value.StringValue.class)
 				.name("name")
-				.isVarArg(true)
 				.isLazy(true)
 				.build();
 
 		assertThat(definition.name()).isEqualTo("name");
 		assertThat(definition.type()).isEqualTo(Value.StringValue.class);
-		assertThat(definition.isVarArg()).isTrue();
 		assertThat(definition.isLazy()).isTrue();
 	}
 }

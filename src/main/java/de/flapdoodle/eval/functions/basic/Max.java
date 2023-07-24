@@ -29,7 +29,7 @@ import java.util.List;
 public class Max extends Evaluateables.SingleVararg<Value.NumberValue> {
 
 	public Max() {
-		super(Parameter.varArgWith(Value.NumberValue.class, "value"));
+		super(Parameter.of(Value.NumberValue.class, "value"));
 	}
 
 	@Override

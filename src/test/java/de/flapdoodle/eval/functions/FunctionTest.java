@@ -35,15 +35,14 @@ class FunctionTest {
 
 		assertThat(function.parameters().get(0).name()).isEqualTo("default");
 		assertThat(function.parameters().get(0).isLazy()).isFalse();
-		assertThat(function.parameters().get(0).isVarArg()).isFalse();
 
 		assertThat(function.parameters().get(1).name()).isEqualTo("lazy");
 		assertThat(function.parameters().get(1).isLazy()).isTrue();
-		assertThat(function.parameters().get(1).isVarArg()).isFalse();
 
 		assertThat(function.parameters().get(2).name()).isEqualTo("vararg");
 		assertThat(function.parameters().get(2).isLazy()).isFalse();
-		assertThat(function.parameters().get(2).isVarArg()).isTrue();
+		
+		assertThat(function.parameters().isVarArg()).isTrue();
 	}
 
 	@Test
@@ -57,20 +56,15 @@ class FunctionTest {
 		assertThat(function.parameterIsLazy(4)).isFalse();
 	}
 
-	@Test
-	void testVarargNotAllowed() {
-		assertThatThrownBy(WrongVarargFunctionDefinitionFunction::new)
-			.isInstanceOf(IllegalArgumentException.class)
-			.hasMessage("Only last parameter may be defined as variable argument");
-	}
-
 	private static class CorrectFunctionDefinitionFunction extends Evaluateables.Base {
 
 		protected CorrectFunctionDefinitionFunction() {
 			super(
+				Parameters.varArgWith(
 				Parameter.of(Value.class, "default"),
 				Parameter.lazyWith(Value.class, "lazy"),
-				Parameter.varArgWith(Value.class, "vararg")
+					Parameter.of(Value.class, "vararg")
+				)
 			);
 		}
 
@@ -81,18 +75,4 @@ class FunctionTest {
 		}
 	}
 
-	private static class WrongVarargFunctionDefinitionFunction extends Evaluateables.Base {
-		public WrongVarargFunctionDefinitionFunction() {
-			super(
-				Parameter.of(Value.class, "default"),
-				Parameter.varArgWith(Value.class, "vararg"),
-				Parameter.of(Value.class, "another")
-			);
-		}
-		@Override
-		protected Value<?> evaluateValidated(ValueResolver variableResolver, EvaluationContext evaluationContext, Token functionToken, List<Value<?>> arguments)
-			throws EvaluationException {
-			return Value.of("OK");
-		}
-	}
 }

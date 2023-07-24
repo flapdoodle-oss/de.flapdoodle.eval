@@ -29,7 +29,7 @@ import java.util.List;
 public class Min extends Evaluateables.SingleVararg<Value.NumberValue> {
 
 	public Min() {
-		super(Parameter.varArgWith(Value.NumberValue.class, "value"));
+		super(Parameter.of(Value.NumberValue.class, "value"));
 	}
 
 	@Override
