@@ -42,10 +42,10 @@ class LessOrEqualsTest extends BaseEvaluationTest {
 			"\"9\"<=\"9\" : true",
 			"-4<=-4 :true",
 			"-5<=-4 :true",
-			"DT_DATE_TIME(2022,10,30)<=DT_DATE_TIME(2022,10,30) : true",
-			"DT_DATE_TIME(2022,10,30)<=DT_DATE_TIME(2022,10,28) : false",
-			"DT_DATE_TIME(2022,10,30)<=DT_DATE_TIME(2022,10,31) : true",
-			"DT_DURATION_PARSE(\"P2D\")<=DT_DURATION_PARSE(\"PT24H\") : false"
+			"localDateTime(2022,10,30)<=localDateTime(2022,10,30) : true",
+			"localDateTime(2022,10,30)<=localDateTime(2022,10,28) : false",
+			"localDateTime(2022,10,30)<=localDateTime(2022,10,31) : true",
+			"parseDuration(\"P2D\")<=parseDuration(\"PT24H\") : false"
 		})
 	void testInfixLessEqualsLiterals(String expression, String expectedResult)
 		throws EvaluationException, ParseException {

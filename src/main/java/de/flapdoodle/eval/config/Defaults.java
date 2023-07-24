@@ -117,15 +117,15 @@ public abstract class Defaults {
 			.putMap("toLower", new ToLowerCase())
 			.putMap("toUpper", new ToUpperCase())
 			// date time functions
-			.putMap("DT_DATE_TIME", new CreateLocalDateTime())
-			.putMap("DT_PARSE", new DateTimeParser())
-			.putMap("DT_ZONED_PARSE", new ZonedDateTimeParser())
-			.putMap("DT_FORMAT", new FormatDateTime())
-			.putMap("DT_EPOCH", new DateTime2Epoch())
-			.putMap("DT_DATE_TIME_EPOCH", new EpochFromNumber())
-			.putMap("DT_DURATION_MILLIS", new DurationMillisFromNumber())
-			.putMap("DT_DURATION_DAYS", new DurationDaysFromNumber())
-			.putMap("DT_DURATION_PARSE", new DurationParser())
+			.putMap("localDateTime", new CreateLocalDateTime())
+			.putMap("parseLocalDateTime", new DateTimeParser())
+			.putMap("parseZonedDateTime", new ZonedDateTimeParser())
+			.putMap("formatLocalDateTime", new FormatDateTime())
+			.putMap("localDateTime2EpochMilli", new DateTime2Epoch())
+			.putMap("localDateTimeOfEpochMilli", new EpochFromNumber())
+			.putMap("durationOfMillis", new DurationMillisFromNumber())
+			.putMap("durationOfDays", new DurationDaysFromNumber())
+			.putMap("parseDuration", new DurationParser())
 			.build();
 	}
 

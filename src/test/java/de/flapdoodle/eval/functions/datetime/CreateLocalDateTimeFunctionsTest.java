@@ -36,12 +36,12 @@ class CreateLocalDateTimeFunctionsTest extends BaseEvaluationTest {
 	@CsvSource(
 		delimiter = '|',
 		value = {
-			"DT_PARSE(\"2022-10-30T11:50:20Z\") | 2022-10-30T11:50:20Z",
-			"DT_PARSE(\"2022-10-30T11:50:20\") | 2022-10-30T09:50:20Z",
-			"DT_PARSE(\"2022-10-30T11:50:20.000000030\") | 2022-10-30T09:50:20.000000030Z",
-			"DT_PARSE(\"2022-10-30\") | 2022-10-30T00:00:00Z",
-			"DT_PARSE(\"30/10/2022 11:50:20\", \"dd/MM/yyyy HH:mm:ss\") | 2022-10-30T09:50:20Z",
-			"DT_PARSE(\"30/10/2022\",\"dd/MM/yyyy\") | 2022-10-30T00:00:00Z",
+			"parseLocalDateTime(\"2022-10-30T11:50:20Z\") | 2022-10-30T11:50:20Z",
+			"parseLocalDateTime(\"2022-10-30T11:50:20\") | 2022-10-30T09:50:20Z",
+			"parseLocalDateTime(\"2022-10-30T11:50:20.000000030\") | 2022-10-30T09:50:20.000000030Z",
+			"parseLocalDateTime(\"2022-10-30\") | 2022-10-30T00:00:00Z",
+			"parseLocalDateTime(\"30/10/2022 11:50:20\", \"dd/MM/yyyy HH:mm:ss\") | 2022-10-30T09:50:20Z",
+			"parseLocalDateTime(\"30/10/2022\",\"dd/MM/yyyy\") | 2022-10-30T00:00:00Z",
 		})
 	void testDateTimeParse(String expression, String expectedResult)
 		throws EvaluationException, ParseException {
@@ -52,7 +52,7 @@ class CreateLocalDateTimeFunctionsTest extends BaseEvaluationTest {
 	@CsvSource(
 		delimiter = '|',
 		value = {
-			"DT_PARSE(\"NOT A DATE\") | Unable to parse date/time: NOT A DATE",
+			"parseLocalDateTime(\"NOT A DATE\") | Unable to parse date/time: NOT A DATE",
 		})
 	void testDateTimeParseFailure(String expression, String message) {
 		assertExpressionThrowsException(expression, message, DateTimeTestConfiguration);
@@ -62,12 +62,12 @@ class CreateLocalDateTimeFunctionsTest extends BaseEvaluationTest {
 	@CsvSource(
 		delimiter = '|',
 		value = {
-			"DT_ZONED_PARSE(\"2022-10-30T11:50:20Z\") | 2022-10-30T11:50:20Z",
-			"DT_ZONED_PARSE(\"2011-12-03T10:15:30+01:00[Europe/Paris]\") | 2011-12-03T09:15:30Z",
-			"DT_ZONED_PARSE(\"2011-12-03T10:15:30+01:00\") | 2011-12-03T09:15:30Z",
-			"DT_ZONED_PARSE(\"03/12/2011 10:15:30 Europe/Paris\", \"dd/MM/yyyy HH:mm:ss v\") |"
+			"parseZonedDateTime(\"2022-10-30T11:50:20Z\") | 2022-10-30T11:50:20Z",
+			"parseZonedDateTime(\"2011-12-03T10:15:30+01:00[Europe/Paris]\") | 2011-12-03T09:15:30Z",
+			"parseZonedDateTime(\"2011-12-03T10:15:30+01:00\") | 2011-12-03T09:15:30Z",
+			"parseZonedDateTime(\"03/12/2011 10:15:30 Europe/Paris\", \"dd/MM/yyyy HH:mm:ss v\") |"
 				+ " 2011-12-03T09:15:30Z",
-			"DT_ZONED_PARSE(\"03/08/2019T16:20:17:717+05:30\",\"dd/MM/uuuu'T'HH:mm:ss:SSSXXXXX\") |"
+			"parseZonedDateTime(\"03/08/2019T16:20:17:717+05:30\",\"dd/MM/uuuu'T'HH:mm:ss:SSSXXXXX\") |"
 				+ " 2019-08-03T10:50:17.717Z",
 		})
 	void testZonedDateTimeParse(String expression, String expectedResult)
@@ -79,7 +79,7 @@ class CreateLocalDateTimeFunctionsTest extends BaseEvaluationTest {
 	@CsvSource(
 		delimiter = '|',
 		value = {
-			"DT_ZONED_PARSE(\"NOT A DATE\") | Unable to parse zoned date/time: NOT A DATE",
+			"parseZonedDateTime(\"NOT A DATE\") | Unable to parse zoned date/time: NOT A DATE",
 		})
 	void testZonedDateTimeParseFailure(String expression, String message) {
 		assertExpressionThrowsException(expression, message, DateTimeTestConfiguration);
@@ -89,10 +89,10 @@ class CreateLocalDateTimeFunctionsTest extends BaseEvaluationTest {
 	@CsvSource(
 		delimiter = '|',
 		value = {
-			"DT_DATE_TIME(2022,10,30) | 2022-10-29T22:00:00Z",
-			"DT_DATE_TIME(2022,10,30,11) | 2022-10-30T09:00:00Z",
-			"DT_DATE_TIME(2022,10,30,11,50,20) | 2022-10-30T09:50:20Z",
-			"DT_DATE_TIME(2022,10,30,11,50,20,30) | 2022-10-30T09:50:20.000000030Z"
+			"localDateTime(2022,10,30) | 2022-10-29T22:00:00Z",
+			"localDateTime(2022,10,30,11) | 2022-10-30T09:00:00Z",
+			"localDateTime(2022,10,30,11,50,20) | 2022-10-30T09:50:20Z",
+			"localDateTime(2022,10,30,11,50,20,30) | 2022-10-30T09:50:20.000000030Z"
 		})
 	void testDateTime(String expression, String expectedResult)
 		throws EvaluationException, ParseException {
@@ -103,9 +103,9 @@ class CreateLocalDateTimeFunctionsTest extends BaseEvaluationTest {
 	@CsvSource(
 		delimiter = '|',
 		value = {
-			"DT_FORMAT(DT_PARSE(\"2022-10-30T11:50:20\")) | 2022-10-30T11:50:20",
-			"DT_FORMAT(DT_PARSE(\"2022-10-30T11:50:20.000000030\"), \"dd/MM/yyyy\") | 30/10/2022",
-			"DT_FORMAT(DT_PARSE(\"2022-10-30T11:50:20.000000030\"), \"dd/MM/yyyy HH:mm:ss\") |"
+			"formatLocalDateTime(parseLocalDateTime(\"2022-10-30T11:50:20\")) | 2022-10-30T11:50:20",
+			"formatLocalDateTime(parseLocalDateTime(\"2022-10-30T11:50:20.000000030\"), \"dd/MM/yyyy\") | 30/10/2022",
+			"formatLocalDateTime(parseLocalDateTime(\"2022-10-30T11:50:20.000000030\"), \"dd/MM/yyyy HH:mm:ss\") |"
 				+ " 30/10/2022 11:50:20"
 		})
 	void testDateTimeFormat(String expression, String expectedResult)
@@ -117,8 +117,8 @@ class CreateLocalDateTimeFunctionsTest extends BaseEvaluationTest {
 	@CsvSource(
 		delimiter = '|',
 		value = {
-			"DT_EPOCH(DT_DATE_TIME_EPOCH(1667130620000)) | 1667130620000",
-			"DT_EPOCH(DT_DATE_TIME_EPOCH(0)) | 0"
+			"localDateTime2EpochMilli(localDateTimeOfEpochMilli(1667130620000)) | 1667130620000",
+			"localDateTime2EpochMilli(localDateTimeOfEpochMilli(0)) | 0"
 		})
 	void testDateTimeToEpoch(String expression, String expectedResult)
 		throws EvaluationException, ParseException {
@@ -129,8 +129,8 @@ class CreateLocalDateTimeFunctionsTest extends BaseEvaluationTest {
 	@CsvSource(
 		delimiter = '|',
 		value = {
-			"DT_DURATION_MILLIS(1667130620000) | PT463091H50M20S",
-			"DT_DURATION_MILLIS(0) | PT0S"
+			"durationOfMillis(1667130620000) | PT463091H50M20S",
+			"durationOfMillis(0) | PT0S"
 		})
 	void testDurationFromMillis(String expression, String expectedResult)
 		throws EvaluationException, ParseException {
@@ -140,7 +140,7 @@ class CreateLocalDateTimeFunctionsTest extends BaseEvaluationTest {
 	@ParameterizedTest
 	@CsvSource(
 		delimiter = '|',
-		value = { "DT_DURATION_DAYS(53216) | PT1277184H", "DT_DURATION_DAYS(1) | PT24H" })
+		value = { "durationOfDays(53216) | PT1277184H", "durationOfDays(1) | PT24H" })
 	void testDurationFromDays(String expression, String expectedResult)
 		throws EvaluationException, ParseException {
 		assertExpressionHasExpectedResult(expression, expectedResult);
@@ -150,8 +150,8 @@ class CreateLocalDateTimeFunctionsTest extends BaseEvaluationTest {
 	@CsvSource(
 		delimiter = '|',
 		value = {
-			"DT_DURATION_PARSE(\"PT1277184H\") | PT1277184H",
-			"DT_DURATION_PARSE(\"P1D\") | PT24H"
+			"parseDuration(\"PT1277184H\") | PT1277184H",
+			"parseDuration(\"P1D\") | PT24H"
 		})
 	void testDurationParse(String expression, String expectedResult)
 		throws EvaluationException, ParseException {
