@@ -38,27 +38,6 @@ public abstract class AbstractInfixOperator extends AbstractBaseOperator impleme
 		return new Evaluator(operatorToken, leftOperand, rightOperand);
 	}
 
-	// TODO one way to solve this stuff..
-	public static abstract class Evaluatable<L extends Value<?>, R extends Value<?>> extends AbstractInfixOperator {
-
-		private final Evaluateables.Tuple<L, R> evaluatable;
-
-		protected Evaluatable(Precedence precedence, boolean leftAssociative, Evaluateables.Tuple<L, R> evaluatable) {
-			super(precedence, leftAssociative);
-			this.evaluatable = evaluatable;
-		}
-
-		protected Evaluatable(Precedence precedence, Evaluateables.Tuple<L, R> evaluatable) {
-			super(precedence);
-			this.evaluatable = evaluatable;
-		}
-
-		@Override
-		public final Value<?> evaluate(ValueResolver valueResolver, EvaluationContext evaluationContext, Token operatorToken, Value<?> leftOperand, Value<?> rightOperand) throws EvaluationException {
-			return evaluatable.evaluate(valueResolver, evaluationContext, operatorToken, Arrays.asList(leftOperand, rightOperand));
-		}
-	}
-
 	public static abstract class Typed<L extends Value<?>, R extends Value<?>> extends AbstractInfixOperator {
 
 		private final Class<L> leftType;
