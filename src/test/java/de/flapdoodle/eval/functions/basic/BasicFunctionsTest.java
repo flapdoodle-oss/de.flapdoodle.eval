@@ -44,13 +44,13 @@ class BasicFunctionsTest extends BaseEvaluationTest {
 	@CsvSource(
 		delimiter = ':',
 		value = {
-			"FACT(0) : 1",
-			"FACT(1) : 1",
-			"FACT(2) : 2",
-			"FACT(3) : 6",
-			"FACT(5) : 120",
-			"FACT(10) : 3628800",
-			"FACT(20) : 2432902008176640000"
+			"factorial(0) : 1",
+			"factorial(1) : 1",
+			"factorial(2) : 2",
+			"factorial(3) : 6",
+			"factorial(5) : 120",
+			"factorial(10) : 3628800",
+			"factorial(20) : 2432902008176640000"
 		})
 	void testFactorial(String expression, String expectedResult)
 		throws EvaluationException, ParseException {
@@ -61,9 +61,9 @@ class BasicFunctionsTest extends BaseEvaluationTest {
 	@CsvSource(
 		delimiter = ':',
 		value = {
-			"IF(true, 4/2, 4/0) : 2",
-			"IF(true, 4/IF(false, 5/0, 2*2), 4/0) : 1",
-			"IF(true, 6/IF(false, 5/0, 2*IF(true, 3, 6/0)), 4/0) : 1"
+			"if(true, 4/2, 4/0) : 2",
+			"if(true, 4/if(false, 5/0, 2*2), 4/0) : 1",
+			"if(true, 6/if(false, 5/0, 2*if(true, 3, 6/0)), 4/0) : 1"
 		})
 	void testIf(String expression, String expectedResult) throws EvaluationException, ParseException {
 		assertExpressionHasExpectedResult(expression, expectedResult);
@@ -73,10 +73,10 @@ class BasicFunctionsTest extends BaseEvaluationTest {
 	@CsvSource(
 		delimiter = ':',
 		value = {
-			"MAX(99) : 99",
-			"MAX(2,1) : 2",
-			"MAX(1,9,-5,6,3,7) : 9",
-			"MAX(17,88,77,66,609,1567,1876534) : 1876534"
+			"max(99) : 99",
+			"max(2,1) : 2",
+			"max(1,9,-5,6,3,7) : 9",
+			"max(17,88,77,66,609,1567,1876534) : 1876534"
 		})
 	void testMax(String expression, String expectedResult)
 		throws EvaluationException, ParseException {
@@ -87,10 +87,10 @@ class BasicFunctionsTest extends BaseEvaluationTest {
 	@CsvSource(
 		delimiter = ':',
 		value = {
-			"MIN(99) : 99",
-			"MIN(2,1) : 1",
-			"MIN(1,9,-5,6,3,7) : -5",
-			"MIN(17,88,77,66,609,1567,1876534) : 17"
+			"min(99) : 99",
+			"min(2,1) : 1",
+			"min(1,9,-5,6,3,7) : -5",
+			"min(17,88,77,66,609,1567,1876534) : 17"
 		})
 	void testMin(String expression, String expectedResult)
 		throws EvaluationException, ParseException {
@@ -101,12 +101,12 @@ class BasicFunctionsTest extends BaseEvaluationTest {
 	@CsvSource(
 		delimiter = ':',
 		value = {
-			"ROUND(1.1,0) : 1",
-			"ROUND(1.5,0) : 2",
-			"ROUND(2.34,1) : 2.3",
-			"ROUND(2.35,1) : 2.4",
-			"ROUND(2.323789,2) : 2.32",
-			"ROUND(2.324789,2) : 2.32"
+			"round(1.1,0) : 1",
+			"round(1.5,0) : 2",
+			"round(2.34,1) : 2.3",
+			"round(2.35,1) : 2.4",
+			"round(2.323789,2) : 2.32",
+			"round(2.324789,2) : 2.32"
 		})
 	void testRoundHalfEven(String expression, String expectedResult)
 		throws EvaluationException, ParseException {
@@ -117,12 +117,12 @@ class BasicFunctionsTest extends BaseEvaluationTest {
 	@CsvSource(
 		delimiter = ':',
 		value = {
-			"ROUND(1.1,0) : 2",
-			"ROUND(1.5,0) : 2",
-			"ROUND(2.34,1) : 2.4",
-			"ROUND(2.35,1) : 2.4",
-			"ROUND(2.323789,2) : 2.33",
-			"ROUND(2.324789,2) : 2.33"
+			"round(1.1,0) : 2",
+			"round(1.5,0) : 2",
+			"round(2.34,1) : 2.4",
+			"round(2.35,1) : 2.4",
+			"round(2.323789,2) : 2.33",
+			"round(2.324789,2) : 2.33"
 		})
 	void testRoundUp(String expression, String expectedResult)
 		throws EvaluationException, ParseException {
@@ -135,11 +135,11 @@ class BasicFunctionsTest extends BaseEvaluationTest {
 	@CsvSource(
 		delimiter = ':',
 		value = {
-			"SUM(1) : 1",
-			"SUM(1,2,3,4) : 10",
-			"SUM(1,-1) : 0",
-			"SUM(1,10,100,1000,10000) : 11111",
-			"SUM(1,2,3,-3,-2,5) : 6"
+			"sum(1) : 1",
+			"sum(1,2,3,4) : 10",
+			"sum(1,-1) : 0",
+			"sum(1,10,100,1000,10000) : 11111",
+			"sum(1,2,3,-3,-2,5) : 6"
 		})
 	void testSum(String expression, String expectedResult)
 		throws EvaluationException, ParseException {
@@ -150,14 +150,14 @@ class BasicFunctionsTest extends BaseEvaluationTest {
 	@CsvSource(
 		delimiter = ':',
 		value = {
-			"SQRT(0) : 0",
-			"SQRT(1) : 1",
-			"SQRT(2) : 1.41421356237309504880168872420969807856967187537694807317667973799073",
-			"SQRT(4) : 2",
-			"SQRT(5) : 2.23606797749978969640917366873127623544061835961152572427089724541052",
-			"SQRT(10) : 3.16227766016837933199889354443271853371955513932521682685750485279259",
-			"SQRT(365) : 19.10497317454280017916829575249669141539647233176799736525808213487",
-			"SQRT(236769) : 486.58914907753543122473972072155030396245230523850016876894122736411182"
+			"sqrt(0) : 0",
+			"sqrt(1) : 1",
+			"sqrt(2) : 1.41421356237309504880168872420969807856967187537694807317667973799073",
+			"sqrt(4) : 2",
+			"sqrt(5) : 2.23606797749978969640917366873127623544061835961152572427089724541052",
+			"sqrt(10) : 3.16227766016837933199889354443271853371955513932521682685750485279259",
+			"sqrt(365) : 19.10497317454280017916829575249669141539647233176799736525808213487",
+			"sqrt(236769) : 486.58914907753543122473972072155030396245230523850016876894122736411182"
 		})
 	void testSqrt(String expression, String expectedResult)
 		throws EvaluationException, ParseException {
@@ -166,7 +166,7 @@ class BasicFunctionsTest extends BaseEvaluationTest {
 
 	@Test
 	void testSqrtNegative() {
-		assertThatThrownBy(() -> Expression.of("SQRT(-1)").evaluate(ValueResolver.empty()))
+		assertThatThrownBy(() -> Expression.of("sqrt(-1)").evaluate(ValueResolver.empty()))
 			.isInstanceOf(EvaluationException.class)
 			.hasMessage("Parameter must not be negative");
 	}
@@ -181,8 +181,8 @@ class BasicFunctionsTest extends BaseEvaluationTest {
 //        "NOT(\"true\") : false",
 //        "NOT(\"false\") : true",
 //        "NOT(2-4/2) : true",
-			"NOT(true) : false",
-			"NOT(false) : true",
+			"not(true) : false",
+			"not(false) : true",
 		})
 	void testBooleanNegation(String expression, String expectedResult)
 		throws EvaluationException, ParseException {
@@ -218,9 +218,9 @@ class BasicFunctionsTest extends BaseEvaluationTest {
 
 	@Test
 	void testRandom() throws EvaluationException, ParseException {
-		Expression expression1 = Expression.of("RANDOM()");
+		Expression expression1 = Expression.of("random()");
 		Value<?> r1 = expression1.evaluate(ValueResolver.empty());
-		Expression expression = Expression.of("RANDOM()");
+		Expression expression = Expression.of("random()");
 		Value<?> r2 = expression.evaluate(ValueResolver.empty());
 
 		assertThat(r1.wrapped()).isNotEqualTo(r2.wrapped());
@@ -230,13 +230,13 @@ class BasicFunctionsTest extends BaseEvaluationTest {
 	@CsvSource(
 		delimiter = ':',
 		value = {
-			"ABS(0) : 0",
-			"ABS(1) : 1",
-			"ABS(-1) : 1",
-			"ABS(20) : 20",
-			"ABS(-20) : 20",
-			"ABS(2.12345) : 2.12345",
-			"ABS(-2.12345) : 2.12345"
+			"abs(0) : 0",
+			"abs(1) : 1",
+			"abs(-1) : 1",
+			"abs(20) : 20",
+			"abs(-20) : 20",
+			"abs(2.12345) : 2.12345",
+			"abs(-2.12345) : 2.12345"
 		})
 	void testAbs(String expression, String expectedResult)
 		throws EvaluationException, ParseException {
@@ -247,14 +247,14 @@ class BasicFunctionsTest extends BaseEvaluationTest {
 	@CsvSource(
 		delimiter = ':',
 		value = {
-			"FLOOR(0) : 0",
-			"FLOOR(1) : 1",
-			"FLOOR(-1) : -1",
-			"FLOOR(20) : 20",
-			"FLOOR(-20) : -20",
-			"FLOOR(2.12345) : 2",
-			"FLOOR(-2.12345) : -3",
-			"FLOOR(-2.97345) : -3"
+			"floor(0) : 0",
+			"floor(1) : 1",
+			"floor(-1) : -1",
+			"floor(20) : 20",
+			"floor(-20) : -20",
+			"floor(2.12345) : 2",
+			"floor(-2.12345) : -3",
+			"floor(-2.97345) : -3"
 		})
 	void testFloor(String expression, String expectedResult)
 		throws EvaluationException, ParseException {
@@ -265,14 +265,14 @@ class BasicFunctionsTest extends BaseEvaluationTest {
 	@CsvSource(
 		delimiter = ':',
 		value = {
-			"CEILING(0) : 0",
-			"CEILING(1) : 1",
-			"CEILING(-1) : -1",
-			"CEILING(20) : 20",
-			"CEILING(-20) : -20",
-			"CEILING(2.12345) : 3",
-			"CEILING(-2.12345) : -2",
-			"CEILING(-2.97345) : -2"
+			"ceiling(0) : 0",
+			"ceiling(1) : 1",
+			"ceiling(-1) : -1",
+			"ceiling(20) : 20",
+			"ceiling(-20) : -20",
+			"ceiling(2.12345) : 3",
+			"ceiling(-2.12345) : -2",
+			"ceiling(-2.97345) : -2"
 		})
 	void testCeiling(String expression, String expectedResult)
 		throws EvaluationException, ParseException {
@@ -283,10 +283,10 @@ class BasicFunctionsTest extends BaseEvaluationTest {
 	@CsvSource(
 		delimiter = ':',
 		value = {
-			"LOG(1) : 0",
-			"LOG(10) : 2.302585092994046",
-			"LOG(2.12345) : 0.7530421244614831",
-			"LOG(1567) : 7.356918242356021"
+			"log(1) : 0",
+			"log(10) : 2.302585092994046",
+			"log(2.12345) : 0.7530421244614831",
+			"log(1567) : 7.356918242356021"
 		})
 	void testLog(String expression, String expectedResult)
 		throws EvaluationException, ParseException {
@@ -295,14 +295,14 @@ class BasicFunctionsTest extends BaseEvaluationTest {
 
 	@Test
 	void testLogNegative() {
-		assertThatThrownBy(() -> Expression.of("LOG(-1)").evaluate(ValueResolver.empty()))
+		assertThatThrownBy(() -> Expression.of("log(-1)").evaluate(ValueResolver.empty()))
 			.isInstanceOf(EvaluationException.class)
 			.hasMessage("Parameter must not be negative");
 	}
 
 	@Test
 	void testLogZero() {
-		assertThatThrownBy(() -> Expression.of("LOG(0)").evaluate(ValueResolver.empty()))
+		assertThatThrownBy(() -> Expression.of("log(0)").evaluate(ValueResolver.empty()))
 			.isInstanceOf(EvaluationException.class)
 			.hasMessage("Parameter must not be zero");
 	}
@@ -311,10 +311,10 @@ class BasicFunctionsTest extends BaseEvaluationTest {
 	@CsvSource(
 		delimiter = ':',
 		value = {
-			"LOG10(1) : 0",
-			"LOG10(10) : 1",
-			"LOG10(2.12345) : 0.3270420392943239",
-			"LOG10(1567) : 3.1950689964685903"
+			"log10(1) : 0",
+			"log10(10) : 1",
+			"log10(2.12345) : 0.3270420392943239",
+			"log10(1567) : 3.1950689964685903"
 		})
 	void testLog10(String expression, String expectedResult)
 		throws EvaluationException, ParseException {
@@ -323,14 +323,14 @@ class BasicFunctionsTest extends BaseEvaluationTest {
 
 	@Test
 	void testLog10Negative() {
-		assertThatThrownBy(() -> Expression.of("LOG10(-1)").evaluate(ValueResolver.empty()))
+		assertThatThrownBy(() -> Expression.of("log10(-1)").evaluate(ValueResolver.empty()))
 			.isInstanceOf(EvaluationException.class)
 			.hasMessage("Parameter must not be negative");
 	}
 
 	@Test
 	void testLog10Zero() {
-		assertThatThrownBy(() -> Expression.of("LOG10(0)").evaluate(ValueResolver.empty()))
+		assertThatThrownBy(() -> Expression.of("log10(0)").evaluate(ValueResolver.empty()))
 			.isInstanceOf(EvaluationException.class)
 			.hasMessage("Parameter must not be zero");
 	}

@@ -75,7 +75,7 @@ class ShuntingYardConverterTest extends BaseParserTest {
 	@Test
 	void testFunctions() throws ParseException {
 		assertASTTreeIsEqualTo(
-			"MAX(1,2,3)-MIN(3,2,SUM(1,2,3))",
-			"{\"type\":\"INFIX_OPERATOR\",\"value\":\"-\",\"children\":[{\"type\":\"FUNCTION\",\"value\":\"MAX\",\"children\":[{\"type\":\"NUMBER_LITERAL\",\"value\":\"1\"},{\"type\":\"NUMBER_LITERAL\",\"value\":\"2\"},{\"type\":\"NUMBER_LITERAL\",\"value\":\"3\"}]},{\"type\":\"FUNCTION\",\"value\":\"MIN\",\"children\":[{\"type\":\"NUMBER_LITERAL\",\"value\":\"3\"},{\"type\":\"NUMBER_LITERAL\",\"value\":\"2\"},{\"type\":\"FUNCTION\",\"value\":\"SUM\",\"children\":[{\"type\":\"NUMBER_LITERAL\",\"value\":\"1\"},{\"type\":\"NUMBER_LITERAL\",\"value\":\"2\"},{\"type\":\"NUMBER_LITERAL\",\"value\":\"3\"}]}]}]}");
+			"max(1,2,3)-min(3,2,sum(1,2,3))",
+			"{\"type\":\"INFIX_OPERATOR\",\"value\":\"-\",\"children\":[{\"type\":\"FUNCTION\",\"value\":\"max\",\"children\":[{\"type\":\"NUMBER_LITERAL\",\"value\":\"1\"},{\"type\":\"NUMBER_LITERAL\",\"value\":\"2\"},{\"type\":\"NUMBER_LITERAL\",\"value\":\"3\"}]},{\"type\":\"FUNCTION\",\"value\":\"min\",\"children\":[{\"type\":\"NUMBER_LITERAL\",\"value\":\"3\"},{\"type\":\"NUMBER_LITERAL\",\"value\":\"2\"},{\"type\":\"FUNCTION\",\"value\":\"sum\",\"children\":[{\"type\":\"NUMBER_LITERAL\",\"value\":\"1\"},{\"type\":\"NUMBER_LITERAL\",\"value\":\"2\"},{\"type\":\"NUMBER_LITERAL\",\"value\":\"3\"}]}]}]}");
 	}
 }

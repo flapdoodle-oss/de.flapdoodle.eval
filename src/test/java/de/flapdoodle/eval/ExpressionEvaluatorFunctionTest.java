@@ -27,23 +27,23 @@ class ExpressionEvaluatorFunctionTest extends BaseExpressionEvaluatorTest {
 
 	@Test
 	void testSingleParameterFunction() throws ParseException, EvaluationException {
-		assertThat(evaluate("FACT(3)")).isEqualTo("6");
+		assertThat(evaluate("factorial(3)")).isEqualTo("6");
 	}
 
 	@Test
 	void testDualParameterFunction() throws ParseException, EvaluationException {
-		assertThat(evaluate("ROUND(3.123, 2)")).isEqualTo("3.12");
+		assertThat(evaluate("round(3.123, 2)")).isEqualTo("3.12");
 	}
 
 	@Test
 	void testNestedFunctions() throws ParseException, EvaluationException {
-		assertThat(evaluate("FACT(ROUND(3.95, 0))")).isEqualTo("24");
+		assertThat(evaluate("factorial(round(3.95, 0))")).isEqualTo("24");
 	}
 
 	@ParameterizedTest
 	@CsvSource(
 		delimiter = ':',
-		value = { "MAX(5) : 5", "MAX(4,6,3,8) : 8" })
+		value = { "max(5) : 5", "max(4,6,3,8) : 8" })
 	void testVarArgFunction(String expressionString, String expectedResult)
 		throws ParseException, EvaluationException {
 		assertThat(evaluate(expressionString)).isEqualTo(expectedResult);

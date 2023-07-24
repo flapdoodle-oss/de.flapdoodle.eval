@@ -70,8 +70,8 @@ class TokenizerFunctionsTest extends BaseParserTest {
 	@Test
 	void testWithMoreParameters() throws ParseException {
 		assertAllTokensParsedCorrectly(
-			"SUM(a, 2, 3)",
-			Token.of(1, "SUM", TokenType.FUNCTION),
+			"sum(a, 2, 3)",
+			Token.of(1, "sum", TokenType.FUNCTION),
 			Token.of(4, "(", TokenType.BRACE_OPEN),
 			Token.of(5, "a", TokenType.VARIABLE_OR_CONSTANT),
 			Token.of(6, ",", TokenType.COMMA),
@@ -98,40 +98,40 @@ class TokenizerFunctionsTest extends BaseParserTest {
 	@Test
 	void testFunctionInParameter() throws ParseException {
 		assertAllTokensParsedCorrectly(
-			"TEST(a, FACT(x), 3)",
+			"TEST(a, factorial(x), 3)",
 			Token.of(1, "TEST", TokenType.FUNCTION),
 			Token.of(5, "(", TokenType.BRACE_OPEN),
 			Token.of(6, "a", TokenType.VARIABLE_OR_CONSTANT),
 			Token.of(7, ",", TokenType.COMMA),
-			Token.of(9, "FACT", TokenType.FUNCTION),
-			Token.of(13, "(", TokenType.BRACE_OPEN),
-			Token.of(14, "x", TokenType.VARIABLE_OR_CONSTANT),
-			Token.of(15, ")", TokenType.BRACE_CLOSE),
-			Token.of(16, ",", TokenType.COMMA),
-			Token.of(18, "3", TokenType.NUMBER_LITERAL),
-			Token.of(19, ")", TokenType.BRACE_CLOSE));
+			Token.of(9, "factorial", TokenType.FUNCTION),
+			Token.of(18, "(", TokenType.BRACE_OPEN),
+			Token.of(19, "x", TokenType.VARIABLE_OR_CONSTANT),
+			Token.of(20, ")", TokenType.BRACE_CLOSE),
+			Token.of(21, ",", TokenType.COMMA),
+			Token.of(23, "3", TokenType.NUMBER_LITERAL),
+			Token.of(24, ")", TokenType.BRACE_CLOSE));
 	}
 
 	@Test
 	void testFunctionInParameterInFunctionParameter() throws ParseException {
 		assertAllTokensParsedCorrectly(
-			"SUM(a,FACT(MIN(x,y)),3)",
-			Token.of(1, "SUM", TokenType.FUNCTION),
+			"sum(a,factorial(min(x,y)),3)",
+			Token.of(1, "sum", TokenType.FUNCTION),
 			Token.of(4, "(", TokenType.BRACE_OPEN),
 			Token.of(5, "a", TokenType.VARIABLE_OR_CONSTANT),
 			Token.of(6, ",", TokenType.COMMA),
-			Token.of(7, "FACT", TokenType.FUNCTION),
-			Token.of(11, "(", TokenType.BRACE_OPEN),
-			Token.of(12, "MIN", TokenType.FUNCTION),
-			Token.of(15, "(", TokenType.BRACE_OPEN),
-			Token.of(16, "x", TokenType.VARIABLE_OR_CONSTANT),
-			Token.of(17, ",", TokenType.COMMA),
-			Token.of(18, "y", TokenType.VARIABLE_OR_CONSTANT),
-			Token.of(19, ")", TokenType.BRACE_CLOSE),
-			Token.of(20, ")", TokenType.BRACE_CLOSE),
-			Token.of(21, ",", TokenType.COMMA),
-			Token.of(22, "3", TokenType.NUMBER_LITERAL),
-			Token.of(23, ")", TokenType.BRACE_CLOSE));
+			Token.of(7, "factorial", TokenType.FUNCTION),
+			Token.of(16, "(", TokenType.BRACE_OPEN),
+			Token.of(17, "min", TokenType.FUNCTION),
+			Token.of(20, "(", TokenType.BRACE_OPEN),
+			Token.of(21, "x", TokenType.VARIABLE_OR_CONSTANT),
+			Token.of(22, ",", TokenType.COMMA),
+			Token.of(23, "y", TokenType.VARIABLE_OR_CONSTANT),
+			Token.of(24, ")", TokenType.BRACE_CLOSE),
+			Token.of(25, ")", TokenType.BRACE_CLOSE),
+			Token.of(26, ",", TokenType.COMMA),
+			Token.of(27, "3", TokenType.NUMBER_LITERAL),
+			Token.of(28, ")", TokenType.BRACE_CLOSE));
 	}
 
 	@Test

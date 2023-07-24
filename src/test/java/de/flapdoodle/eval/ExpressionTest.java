@@ -43,7 +43,7 @@ class ExpressionTest {
 		assertThat(expression.raw()).isEqualTo("a+b");
 //    assertThat(expression.getConfiguration().getMathContext())
 //        .isEqualTo(Configuration.DEFAULT_MATH_CONTEXT);
-		assertThat(expression.configuration().functions().has("SUM")).isTrue();
+		assertThat(expression.configuration().functions().has("sum")).isTrue();
 		assertThat(expression.configuration().getOperatorResolver().hasOperator(InfixOperator.class, "+"))
 			.isTrue();
 		assertThat(expression.configuration().getOperatorResolver().hasOperator(PrefixOperator.class, "+"))
@@ -163,13 +163,13 @@ class ExpressionTest {
 
 	@Test
 	void testGetUsedVariables() throws ParseException {
-		Expression expression = Expression.of("a/2*PI+MIN(e,b)");
+		Expression expression = Expression.of("a/2*PI+min(e,b)");
 		assertThat(expression.getUsedVariables()).containsExactlyInAnyOrder("a", "b");
 	}
 
 	@Test
 	void testGetUsedVariablesLongNames() throws ParseException {
-		Expression expression = Expression.of("var1/2*PI+MIN(var2,var3)");
+		Expression expression = Expression.of("var1/2*PI+min(var2,var3)");
 		assertThat(expression.getUsedVariables()).containsExactlyInAnyOrder("var1", "var2", "var3");
 	}
 

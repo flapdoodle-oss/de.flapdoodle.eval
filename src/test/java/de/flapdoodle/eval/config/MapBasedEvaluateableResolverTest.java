@@ -52,11 +52,11 @@ class MapBasedEvaluateableResolverTest {
 		EvaluateableResolver dictionary =
 			MapBasedEvaluateableResolver.builder().putMap("Min", min).putMap("MAX", max).build();
 
-		assertThat(dictionary.has("min")).isTrue();
-		assertThat(dictionary.has("MIN")).isTrue();
+		assertThat(dictionary.has("min")).isFalse();
+		assertThat(dictionary.has("MIN")).isFalse();
 		assertThat(dictionary.has("Min")).isTrue();
-		assertThat(dictionary.has("max")).isTrue();
+		assertThat(dictionary.has("max")).isFalse();
 		assertThat(dictionary.has("MAX")).isTrue();
-		assertThat(dictionary.has("Max")).isTrue();
+		assertThat(dictionary.has("Max")).isFalse();
 	}
 }

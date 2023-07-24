@@ -28,12 +28,12 @@ class StringFunctionsTest extends BaseEvaluationTest {
 	@CsvSource(
 		delimiter = ':',
 		value = {
-			"STR_UPPER(\"\") : ''",
-			"STR_UPPER(\"a\") : A",
-			"STR_UPPER(\"A\") : A",
-			"STR_UPPER(\"AbCdEf\") : ABCDEF",
-			"STR_UPPER(\"A1b3C4/?\") : A1B3C4/?",
-			"STR_UPPER(\"äöüß\") : ÄÖÜSS"
+			"toUpper(\"\") : ''",
+			"toUpper(\"a\") : A",
+			"toUpper(\"A\") : A",
+			"toUpper(\"AbCdEf\") : ABCDEF",
+			"toUpper(\"A1b3C4/?\") : A1B3C4/?",
+			"toUpper(\"äöüß\") : ÄÖÜSS"
 		})
 	void testUpper(String expression, String expectedResult)
 		throws EvaluationException, ParseException {
@@ -44,12 +44,12 @@ class StringFunctionsTest extends BaseEvaluationTest {
 	@CsvSource(
 		delimiter = ':',
 		value = {
-			"STR_LOWER(\"\") : ''",
-			"STR_LOWER(\"A\") : a",
-			"STR_LOWER(\"a\") : a",
-			"STR_LOWER(\"AbCdEf\") : abcdef",
-			"STR_LOWER(\"A1b3C4/?\") : a1b3c4/?",
-			"STR_LOWER(\"ÄÖÜSS\") : äöüss"
+			"toLower(\"\") : ''",
+			"toLower(\"A\") : a",
+			"toLower(\"a\") : a",
+			"toLower(\"AbCdEf\") : abcdef",
+			"toLower(\"A1b3C4/?\") : a1b3c4/?",
+			"toLower(\"ÄÖÜSS\") : äöüss"
 		})
 	void testLower(String expression, String expectedResult)
 		throws EvaluationException, ParseException {
@@ -60,13 +60,13 @@ class StringFunctionsTest extends BaseEvaluationTest {
 	@CsvSource(
 		delimiter = ':',
 		value = {
-			"STR_CONTAINS(\"\", \"\") : true",
-			"STR_CONTAINS(\"a\", \"a\") : true",
-			"STR_CONTAINS(\"Hello World\", \"Wor\") : true",
-			"STR_CONTAINS(\"What a world\", \"what\") : true",
-			"STR_CONTAINS(\"What a world\", \"a world\") : true",
-			"STR_CONTAINS(\"What a world\", \"moon\") : false",
-			"STR_CONTAINS(\"\", \"text\") : false"
+			"contains(\"\", \"\") : true",
+			"contains(\"a\", \"a\") : true",
+			"contains(\"Hello World\", \"Wor\") : true",
+			"contains(\"What a world\", \"what\") : true",
+			"contains(\"What a world\", \"a world\") : true",
+			"contains(\"What a world\", \"moon\") : false",
+			"contains(\"\", \"text\") : false"
 		})
 	void testContains(String expression, String expectedResult)
 		throws EvaluationException, ParseException {

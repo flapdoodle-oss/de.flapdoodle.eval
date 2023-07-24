@@ -27,15 +27,10 @@ import java.util.stream.Collectors;
 public abstract class MapBasedEvaluateableResolver implements EvaluateableResolver {
 	protected abstract Map<String, de.flapdoodle.eval.Evaluateable> map();
 
-	@Value.Lazy
-	protected Map<String, String> lowerCaseToKey() {
-		return map().keySet().stream().collect(Collectors.toMap(String::toLowerCase, Function.identity()));
-	}
-
 	@Value.Auxiliary
 	@Override
 	public de.flapdoodle.eval.Evaluateable get(String functionName) {
-		return map().get(lowerCaseToKey().get(functionName.toLowerCase()));
+		return map().get(functionName);
 	}
 
 	public static ImmutableMapBasedEvaluateableResolver of(Pair<String, ? extends de.flapdoodle.eval.Evaluateable>... entries) {

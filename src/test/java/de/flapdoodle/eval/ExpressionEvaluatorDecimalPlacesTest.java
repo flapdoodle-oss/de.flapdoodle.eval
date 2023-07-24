@@ -57,7 +57,7 @@ class ExpressionEvaluatorDecimalPlacesTest extends BaseExpressionEvaluatorTest {
 
 	@Test
 	void testDefaultNoRoundingFunction() throws ParseException, EvaluationException {
-		assertThat(evaluate("SUM(2.12345,1.54321)")).isEqualTo("3.66666");
+		assertThat(evaluate("sum(2.12345,1.54321)")).isEqualTo("3.66666");
 	}
 
 	@Test

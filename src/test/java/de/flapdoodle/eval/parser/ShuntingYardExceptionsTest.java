@@ -124,7 +124,7 @@ class ShuntingYardExceptionsTest extends BaseParserTest {
 
 	@Test
 	void testFunctionNotEnoughParameters() {
-		Expression expression = Expression.of("ROUND(2)");
+		Expression expression = Expression.of("round(2)");
 
 		assertThatThrownBy(() -> expression.evaluate(ValueResolver.empty()))
 			.isInstanceOf(ParseException.class)
@@ -133,7 +133,7 @@ class ShuntingYardExceptionsTest extends BaseParserTest {
 
 	@Test
 	void testFunctionNotEnoughParametersForVarArgs() {
-		Expression expression = Expression.of("MIN()");
+		Expression expression = Expression.of("min()");
 
 		assertThatThrownBy(() -> expression.evaluate(ValueResolver.empty()))
 			.isInstanceOf(ParseException.class)
@@ -142,7 +142,7 @@ class ShuntingYardExceptionsTest extends BaseParserTest {
 
 	@Test
 	void testFunctionTooManyParameters() {
-		Expression expression = Expression.of("ROUND(1,2,3)");
+		Expression expression = Expression.of("round(1,2,3)");
 
 		assertThatThrownBy(() -> expression.evaluate(ValueResolver.empty()))
 			.isInstanceOf(ParseException.class)
@@ -153,8 +153,8 @@ class ShuntingYardExceptionsTest extends BaseParserTest {
 	@ValueSource(
 		strings = {
 			"Hello, World",
-			"Hello ROUND(1,2) + (1 + 1)",
-			"Hello ROUND(1,2)",
+			"Hello round(1,2) + (1 + 1)",
+			"Hello round(1,2)",
 			"Hello 1 + (1 + 1)",
 			"Hello 1 + 1",
 			"Hello World",

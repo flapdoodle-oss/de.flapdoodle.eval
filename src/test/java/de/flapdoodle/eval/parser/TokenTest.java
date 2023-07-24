@@ -49,12 +49,12 @@ class TokenTest {
 		Token token =
 			Token.of(
 				3,
-				"MAX",
+				"max",
 				TokenType.FUNCTION,
-				expressionConfiguration.functions().get("MAX"));
+				expressionConfiguration.functions().get("max"));
 
 		assertThat(token.start()).isEqualTo(3);
-		assertThat(token.value()).isEqualTo("MAX");
+		assertThat(token.value()).isEqualTo("max");
 		assertThat(token.type()).isEqualTo(TokenType.FUNCTION);
 		assertThat(token.function()).isNotNull();
 		assertThat(token.operator()).isNull();
