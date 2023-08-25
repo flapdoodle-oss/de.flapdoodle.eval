@@ -33,8 +33,9 @@ import java.util.List;
  * will follow the infix expression notation, skipping any blank characters.
  */
 public class Tokenizer {
-
 	private final String expressionString;
+	private final char[] chars;
+	private final int end;
 
 	private final OperatorResolver operatorDictionary;
 
@@ -44,7 +45,7 @@ public class Tokenizer {
 
 	private final List<Token> tokens = new ArrayList<>();
 
-	private int currentColumnIndex = 0;
+	private int index = 0;
 
 	private int currentChar = -2;
 
@@ -54,6 +55,9 @@ public class Tokenizer {
 
 	public Tokenizer(String expressionString, Configuration configuration) {
 		this.expressionString = expressionString;
+		this.chars = expressionString.toCharArray();
+		this.end = chars.length;
+		
 		this.configuration = configuration;
 		this.operatorDictionary = configuration.getOperatorResolver();
 		this.functions = configuration.functions();
@@ -137,7 +141,7 @@ public class Tokenizer {
 		skipBlanks();
 
 		// end of input
-		if (currentChar == -1) {
+		if (currentChar == 0) {
 			return null;
 		}
 
@@ -157,7 +161,7 @@ public class Tokenizer {
 			&& configuration.isStructuresAllowed()) {
 			return parseStructureSeparator();
 		} else if (currentChar == ',') {
-			Token token = Token.of(currentColumnIndex, ",", TokenType.COMMA);
+			Token token = Token.of(index, ",", TokenType.COMMA);
 			consumeChar();
 			return token;
 		} else if (isAtIdentifierStart()) {
@@ -170,7 +174,7 @@ public class Tokenizer {
 	}
 
 	private Token parseStructureSeparator() throws ParseException {
-		Token token = Token.of(currentColumnIndex, ".", TokenType.STRUCTURE_SEPARATOR);
+		Token token = Token.of(index, ".", TokenType.STRUCTURE_SEPARATOR);
 		if (arrayOpenOrStructureSeparatorNotAllowed()) {
 			throw new ParseException(token, "Structure separator not allowed here");
 		}
@@ -179,7 +183,7 @@ public class Tokenizer {
 	}
 
 	private Token parseArrayClose() throws ParseException {
-		Token token = Token.of(currentColumnIndex, "]", TokenType.ARRAY_CLOSE);
+		Token token = Token.of(index, "]", TokenType.ARRAY_CLOSE);
 		if (!arrayCloseAllowed()) {
 			throw new ParseException(token, "Array close not allowed here");
 		}
@@ -192,7 +196,7 @@ public class Tokenizer {
 	}
 
 	private Token parseArrayOpen() throws ParseException {
-		Token token = Token.of(currentColumnIndex, "[", TokenType.ARRAY_OPEN);
+		Token token = Token.of(index, "[", TokenType.ARRAY_OPEN);
 		if (arrayOpenOrStructureSeparatorNotAllowed()) {
 			throw new ParseException(token, "Array open not allowed here");
 		}
@@ -202,7 +206,7 @@ public class Tokenizer {
 	}
 
 	private Token parseBraceClose() throws ParseException {
-		Token token = Token.of(currentColumnIndex, ")", TokenType.BRACE_CLOSE);
+		Token token = Token.of(index, ")", TokenType.BRACE_CLOSE);
 		consumeChar();
 		braceBalance--;
 		if (braceBalance < 0) {
@@ -212,7 +216,7 @@ public class Tokenizer {
 	}
 
 	private Token parseBraceOpen() {
-		Token token = Token.of(currentColumnIndex, "(", TokenType.BRACE_OPEN);
+		Token token = Token.of(index, "(", TokenType.BRACE_OPEN);
 		consumeChar();
 		braceBalance++;
 		return token;
@@ -223,7 +227,7 @@ public class Tokenizer {
 	}
 
 	private Token parseOperator() throws ParseException {
-		int tokenStartIndex = currentColumnIndex;
+		int tokenStartIndex = index;
 		StringBuilder tokenValue = new StringBuilder();
 		while (true) {
 			tokenValue.append((char) currentChar);
@@ -363,12 +367,12 @@ public class Tokenizer {
 	}
 
 	private Token parseDecimalNumberLiteral() throws ParseException {
-		int tokenStartIndex = currentColumnIndex;
+		int tokenStartIndex = index;
 		StringBuilder tokenValue = new StringBuilder();
 
-		int lastChar = -1;
+		int lastChar = 0;
 		boolean scientificNotation = false;
-		while (currentChar != -1 && isAtNumberChar()) {
+		while (currentChar != 0 && isAtNumberChar()) {
 			if (currentChar == 'e' || currentChar == 'E') {
 				scientificNotation = true;
 			}
@@ -391,7 +395,7 @@ public class Tokenizer {
 	}
 
 	private Token parseHexNumberLiteral() {
-		int tokenStartIndex = currentColumnIndex;
+		int tokenStartIndex = index;
 		StringBuilder tokenValue = new StringBuilder();
 
 		// hexadecimal number, consume "0x"
@@ -399,7 +403,7 @@ public class Tokenizer {
 		consumeChar();
 		tokenValue.append((char) currentChar);
 		consumeChar();
-		while (currentChar != -1 && isAtHexChar()) {
+		while (currentChar != 0 && isAtHexChar()) {
 			tokenValue.append((char) currentChar);
 			consumeChar();
 		}
@@ -407,9 +411,9 @@ public class Tokenizer {
 	}
 
 	private Token parseIdentifier() throws ParseException {
-		int tokenStartIndex = currentColumnIndex;
+		int tokenStartIndex = index;
 		StringBuilder tokenValue = new StringBuilder();
-		while (currentChar != -1 && isAtIdentifierChar()) {
+		while (currentChar != 0 && isAtIdentifierChar()) {
 			tokenValue.append((char) currentChar);
 			consumeChar();
 		}
@@ -440,7 +444,7 @@ public class Tokenizer {
 			if (!functions.has(tokenName)) {
 				throw new ParseException(
 					tokenStartIndex,
-					currentColumnIndex,
+					index,
 					tokenName,
 					"Undefined function '" + tokenName + "'");
 			}
@@ -452,12 +456,12 @@ public class Tokenizer {
 	}
 
 	Token parseStringLiteral() throws ParseException {
-		int tokenStartIndex = currentColumnIndex;
+		int tokenStartIndex = index;
 		StringBuilder tokenValue = new StringBuilder();
 		// skip starting quote
 		consumeChar();
 		boolean inQuote = true;
-		while (inQuote && currentChar != -1) {
+		while (inQuote && currentChar != 0) {
 			if (currentChar == '\\') {
 				consumeChar();
 				tokenValue.append(escapeCharacter(currentChar));
@@ -470,7 +474,7 @@ public class Tokenizer {
 		}
 		if (inQuote) {
 			throw new ParseException(
-				tokenStartIndex, currentColumnIndex, tokenValue.toString(), "Closing quote not found");
+				tokenStartIndex, index, tokenValue.toString(), "Closing quote not found");
 		}
 		return Token.of(tokenStartIndex, tokenValue.toString(), TokenType.STRING_LITERAL);
 	}
@@ -495,7 +499,7 @@ public class Tokenizer {
 				return '\f';
 			default:
 				throw new ParseException(
-					currentColumnIndex, 1, "\\" + (char) character, "Unknown escape character");
+					index, 1, "\\" + (char) character, "Unknown escape character");
 		}
 	}
 
@@ -524,13 +528,13 @@ public class Tokenizer {
 	}
 
 	private boolean isNextCharNumberChar() {
-		if (peekNextChar() == -1) {
+		if (peekNextChar() == 0) {
 			return false;
 		}
 		consumeChar();
 		boolean isAtNumber = isAtNumberChar();
-		currentColumnIndex--;
-		currentChar = expressionString.charAt(currentColumnIndex - 1);
+		index--;
+		currentChar = expressionString.charAt(index - 1);
 		return isAtNumber;
 	}
 
@@ -577,26 +581,57 @@ public class Tokenizer {
 			// consume first character of expression
 			consumeChar();
 		}
-		while (currentChar != -1 && Character.isWhitespace(currentChar)) {
+		while (currentChar != 0 && Character.isWhitespace(currentChar)) {
 			consumeChar();
 		}
 	}
 
 	private int peekNextChar() {
-		return currentColumnIndex == expressionString.length()
-			? -1
-			: expressionString.charAt(currentColumnIndex);
+		return index == end
+			? 0
+			: chars[index];
 	}
 
 	private int peekPreviousChar() {
-		return currentColumnIndex == 1 ? -1 : expressionString.charAt(currentColumnIndex - 2);
+		return index == 1 ? 0 : chars[index - 2];
 	}
 
 	private void consumeChar() {
-		if (currentColumnIndex == expressionString.length()) {
-			currentChar = -1;
+		if (index == end) {
+			currentChar = 0;
 		} else {
-			currentChar = expressionString.charAt(currentColumnIndex++);
+			currentChar = chars[index++];
 		}
 	}
+
+	/***
+	 *
+	 */
+
+//	protected void skip() throws java.text.ParseException {
+//		get();
+//	}
+
+	protected char peek(int offset) {
+		if (index+offset < 0) return 0;
+		if (index+offset >= end) return 0;
+		return chars[index+offset];
+	}
+
+//	protected char get() throws java.text.ParseException {
+//		if (index >= end) throw parseException("EOF");
+//		return chars[index++];
+//	}
+//
+//	protected char get(String message) throws java.text.ParseException {
+//		if (index >= end) throw parseException(message);
+//		return chars[index++];
+//	}
+
+	protected void skipWS() {
+		while (index < end && Character.isWhitespace(chars[index])) {
+			index++;
+		}
+	}
+
 }
