@@ -39,7 +39,7 @@ public class ShuntingYardConverter {
 
 	private final Deque<Token> operatorStack = new ArrayDeque<>();
 	private final Deque<ASTNode> operandStack = new ArrayDeque<>();
-
+	
 	public ShuntingYardConverter(
 		String originalExpression,
 		List<Token> expressionTokens,

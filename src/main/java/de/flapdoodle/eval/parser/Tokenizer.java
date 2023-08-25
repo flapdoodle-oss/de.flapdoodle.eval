@@ -66,8 +66,10 @@ public class Tokenizer {
 	 * @throws ParseException When the expression can't be parsed.
 	 */
 	public List<Token> parse() throws ParseException {
-		Token currentToken = getNextToken();
-		while (currentToken != null) {
+		Expression2Token.parse(this.expressionString);
+
+		Token currentToken;
+		while ((currentToken = getNextToken()) != null) {
 			if (implicitMultiplicationPossible(currentToken)) {
 				if (configuration.isImplicitMultiplicationAllowed()) {
 					Token multiplication =
@@ -83,7 +85,6 @@ public class Tokenizer {
 			}
 			validateToken(currentToken);
 			tokens.add(currentToken);
-			currentToken = getNextToken();
 		}
 
 		if (braceBalance > 0) {
