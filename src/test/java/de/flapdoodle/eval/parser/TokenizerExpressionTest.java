@@ -24,37 +24,37 @@ class TokenizerExpressionTest extends BaseParserTest {
 
 	@Test
 	void testSingleNumber() throws ParseException {
-		assertAllTokensParsedCorrectly("1", Token.of(1, "1", TokenType.NUMBER_LITERAL));
+		assertAllTokensParsedCorrectly("1", Token.of(0, "1", TokenType.NUMBER_LITERAL));
 	}
 
 	@Test
 	void testSingleVariable() throws ParseException {
-		assertAllTokensParsedCorrectly("a", Token.of(1, "a", TokenType.VARIABLE_OR_CONSTANT));
+		assertAllTokensParsedCorrectly("a", Token.of(0, "a", TokenType.VARIABLE_OR_CONSTANT));
 	}
 
 	@Test
 	void testSimple() throws ParseException {
 		assertAllTokensParsedCorrectly(
 			"a+123",
-			Token.of(1, "a", TokenType.VARIABLE_OR_CONSTANT),
-			Token.of(2, "+", TokenType.INFIX_OPERATOR),
-			Token.of(3, "123", TokenType.NUMBER_LITERAL));
+			Token.of(0, "a", TokenType.VARIABLE_OR_CONSTANT),
+			Token.of(1, "+", TokenType.INFIX_OPERATOR),
+			Token.of(2, "123", TokenType.NUMBER_LITERAL));
 	}
 
 	@Test
 	void testTwo() throws ParseException {
 		assertAllTokensParsedCorrectly(
 			"a+123+c",
-			Token.of(1, "a", TokenType.VARIABLE_OR_CONSTANT),
-			Token.of(2, "+", TokenType.INFIX_OPERATOR),
-			Token.of(3, "123", TokenType.NUMBER_LITERAL),
-			Token.of(6, "+", TokenType.INFIX_OPERATOR),
-			Token.of(7, "c", TokenType.VARIABLE_OR_CONSTANT));
+			Token.of(0, "a", TokenType.VARIABLE_OR_CONSTANT),
+			Token.of(1, "+", TokenType.INFIX_OPERATOR),
+			Token.of(2, "123", TokenType.NUMBER_LITERAL),
+			Token.of(5, "+", TokenType.INFIX_OPERATOR),
+			Token.of(6, "c", TokenType.VARIABLE_OR_CONSTANT));
 	}
 
 	@Test
 	void testUndefinedOperator() {
 		assertThatThrownBy(() -> new Tokenizer("a $ b", configuration).parse())
-			.isEqualTo(new ParseException(3, 3, "$", "Undefined operator '$'"));
+			.isEqualTo(new ParseException(2, 2, "$", "Undefined operator '$'"));
 	}
 }

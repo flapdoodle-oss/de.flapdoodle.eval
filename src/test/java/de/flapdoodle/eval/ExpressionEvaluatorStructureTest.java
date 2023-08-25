@@ -123,7 +123,7 @@ class ExpressionEvaluatorStructureTest extends BaseExpressionEvaluatorTest {
 			.isInstanceOf(EvaluationException.class)
 			.hasMessage("Field 'field2' not found in structure")
 			.extracting("startPosition")
-			.isEqualTo(14);
+			.isEqualTo(13);
 	}
 
 	@Test

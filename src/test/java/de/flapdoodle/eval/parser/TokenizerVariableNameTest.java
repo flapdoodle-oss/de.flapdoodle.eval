@@ -22,38 +22,38 @@ class TokenizerVariableNameTest extends BaseParserTest {
 
 	@Test
 	void testSimple() throws ParseException {
-		assertAllTokensParsedCorrectly("a", Token.of(1, "a", TokenType.VARIABLE_OR_CONSTANT));
+		assertAllTokensParsedCorrectly("a", Token.of(0, "a", TokenType.VARIABLE_OR_CONSTANT));
 	}
 
 	@Test
 	void testEndWithNumber() throws ParseException {
-		assertAllTokensParsedCorrectly("var1", Token.of(1, "var1", TokenType.VARIABLE_OR_CONSTANT));
+		assertAllTokensParsedCorrectly("var1", Token.of(0, "var1", TokenType.VARIABLE_OR_CONSTANT));
 	}
 
 	@Test
 	void testContainsNumber() throws ParseException {
 		assertAllTokensParsedCorrectly(
-			"var2test", Token.of(1, "var2test", TokenType.VARIABLE_OR_CONSTANT));
+			"var2test", Token.of(0, "var2test", TokenType.VARIABLE_OR_CONSTANT));
 	}
 
 	@Test
 	void testUnderscore() throws ParseException {
 		assertAllTokensParsedCorrectly(
-			"_var_2_", Token.of(1, "_var_2_", TokenType.VARIABLE_OR_CONSTANT));
+			"_var_2_", Token.of(0, "_var_2_", TokenType.VARIABLE_OR_CONSTANT));
 	}
 
 	@Test
 	void testUmlaut() throws ParseException {
-		assertAllTokensParsedCorrectly("Grün", Token.of(1, "Grün", TokenType.VARIABLE_OR_CONSTANT));
+		assertAllTokensParsedCorrectly("Grün", Token.of(0, "Grün", TokenType.VARIABLE_OR_CONSTANT));
 		assertAllTokensParsedCorrectly(
 			"olá_enchanté_γεια_σας",
-			Token.of(1, "olá_enchanté_γεια_σας", TokenType.VARIABLE_OR_CONSTANT));
+			Token.of(0, "olá_enchanté_γεια_σας", TokenType.VARIABLE_OR_CONSTANT));
 	}
 
 	@Test
 	void testSpecialAlphabetical() throws ParseException {
 		assertAllTokensParsedCorrectly(
 			"olá_enchanté_γεια_σας",
-			Token.of(1, "olá_enchanté_γεια_σας", TokenType.VARIABLE_OR_CONSTANT));
+			Token.of(0, "olá_enchanté_γεια_σας", TokenType.VARIABLE_OR_CONSTANT));
 	}
 }

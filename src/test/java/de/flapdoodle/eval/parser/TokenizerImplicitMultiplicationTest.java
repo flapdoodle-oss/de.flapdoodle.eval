@@ -27,46 +27,46 @@ class TokenizerImplicitMultiplicationTest extends BaseParserTest {
 	void testImplicitBraces() throws ParseException {
 		assertAllTokensParsedCorrectly(
 			"(a+b)(a-b)",
-			Token.of(1, "(", TokenType.BRACE_OPEN),
-			Token.of(2, "a", TokenType.VARIABLE_OR_CONSTANT),
-			Token.of(3, "+", TokenType.INFIX_OPERATOR),
-			Token.of(4, "b", TokenType.VARIABLE_OR_CONSTANT),
-			Token.of(5, ")", TokenType.BRACE_CLOSE),
-			Token.of(6, "*", TokenType.INFIX_OPERATOR),
-			Token.of(6, "(", TokenType.BRACE_OPEN),
-			Token.of(7, "a", TokenType.VARIABLE_OR_CONSTANT),
-			Token.of(8, "-", TokenType.INFIX_OPERATOR),
-			Token.of(9, "b", TokenType.VARIABLE_OR_CONSTANT),
-			Token.of(10, ")", TokenType.BRACE_CLOSE));
+			Token.of(0, "(", TokenType.BRACE_OPEN),
+			Token.of(1, "a", TokenType.VARIABLE_OR_CONSTANT),
+			Token.of(2, "+", TokenType.INFIX_OPERATOR),
+			Token.of(3, "b", TokenType.VARIABLE_OR_CONSTANT),
+			Token.of(4, ")", TokenType.BRACE_CLOSE),
+			Token.of(5, "*", TokenType.INFIX_OPERATOR),
+			Token.of(5, "(", TokenType.BRACE_OPEN),
+			Token.of(6, "a", TokenType.VARIABLE_OR_CONSTANT),
+			Token.of(7, "-", TokenType.INFIX_OPERATOR),
+			Token.of(8, "b", TokenType.VARIABLE_OR_CONSTANT),
+			Token.of(9, ")", TokenType.BRACE_CLOSE));
 	}
 
 	@Test
 	void testImplicitNumberBraces() throws ParseException {
 		assertAllTokensParsedCorrectly(
 			"2(x)",
-			Token.of(1, "2", TokenType.NUMBER_LITERAL),
-			Token.of(2, "*", TokenType.INFIX_OPERATOR),
-			Token.of(2, "(", TokenType.BRACE_OPEN),
-			Token.of(3, "x", TokenType.VARIABLE_OR_CONSTANT),
-			Token.of(4, ")", TokenType.BRACE_CLOSE));
+			Token.of(0, "2", TokenType.NUMBER_LITERAL),
+			Token.of(1, "*", TokenType.INFIX_OPERATOR),
+			Token.of(1, "(", TokenType.BRACE_OPEN),
+			Token.of(2, "x", TokenType.VARIABLE_OR_CONSTANT),
+			Token.of(3, ")", TokenType.BRACE_CLOSE));
 	}
 
 	@Test
 	void testImplicitNumberNoBraces() throws ParseException {
 		assertAllTokensParsedCorrectly(
 			"2x",
-			Token.of(1, "2", TokenType.NUMBER_LITERAL),
-			Token.of(2, "*", TokenType.INFIX_OPERATOR),
-			Token.of(2, "x", TokenType.VARIABLE_OR_CONSTANT));
+			Token.of(0, "2", TokenType.NUMBER_LITERAL),
+			Token.of(1, "*", TokenType.INFIX_OPERATOR),
+			Token.of(1, "x", TokenType.VARIABLE_OR_CONSTANT));
 	}
 
 	@Test
 	void testImplicitNumberVariable() throws ParseException {
 		assertAllTokensParsedCorrectly(
 			"2x",
-			Token.of(1, "2", TokenType.NUMBER_LITERAL),
-			Token.of(2, "*", TokenType.INFIX_OPERATOR),
-			Token.of(2, "x", TokenType.VARIABLE_OR_CONSTANT));
+			Token.of(0, "2", TokenType.NUMBER_LITERAL),
+			Token.of(1, "*", TokenType.INFIX_OPERATOR),
+			Token.of(1, "x", TokenType.VARIABLE_OR_CONSTANT));
 	}
 
 	@Test
@@ -75,6 +75,6 @@ class TokenizerImplicitMultiplicationTest extends BaseParserTest {
 			Configuration.builder().isImplicitMultiplicationAllowed(false).build();
 
 		assertThatThrownBy(() -> new Tokenizer("2(x+y)", config).parse())
-			.isEqualTo(new ParseException(2, 2, "(", "Missing operator"));
+			.isEqualTo(new ParseException(1, 1, "(", "Missing operator"));
 	}
 }

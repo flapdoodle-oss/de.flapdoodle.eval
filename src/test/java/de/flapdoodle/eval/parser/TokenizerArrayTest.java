@@ -27,28 +27,28 @@ class TokenizerArrayTest extends BaseParserTest {
 	void testArraySimple() throws ParseException {
 		assertAllTokensParsedCorrectly(
 			"a[1]",
-			Token.of(1, "a", TokenType.VARIABLE_OR_CONSTANT),
-			Token.of(2, "[", TokenType.ARRAY_OPEN),
-			Token.of(3, "1", TokenType.NUMBER_LITERAL),
-			Token.of(4, "]", TokenType.ARRAY_CLOSE));
+			Token.of(0, "a", TokenType.VARIABLE_OR_CONSTANT),
+			Token.of(1, "[", TokenType.ARRAY_OPEN),
+			Token.of(2, "1", TokenType.NUMBER_LITERAL),
+			Token.of(3, "]", TokenType.ARRAY_CLOSE));
 	}
 
 	@Test
 	void testArrayNested() throws ParseException {
 		assertAllTokensParsedCorrectly(
 			"a[b[2] + c[3]]",
-			Token.of(1, "a", TokenType.VARIABLE_OR_CONSTANT),
-			Token.of(2, "[", TokenType.ARRAY_OPEN),
-			Token.of(3, "b", TokenType.VARIABLE_OR_CONSTANT),
-			Token.of(4, "[", TokenType.ARRAY_OPEN),
-			Token.of(5, "2", TokenType.NUMBER_LITERAL),
-			Token.of(6, "]", TokenType.ARRAY_CLOSE),
-			Token.of(8, "+", TokenType.INFIX_OPERATOR),
-			Token.of(10, "c", TokenType.VARIABLE_OR_CONSTANT),
-			Token.of(11, "[", TokenType.ARRAY_OPEN),
-			Token.of(12, "3", TokenType.NUMBER_LITERAL),
-			Token.of(13, "]", TokenType.ARRAY_CLOSE),
-			Token.of(14, "]", TokenType.ARRAY_CLOSE));
+			Token.of(0, "a", TokenType.VARIABLE_OR_CONSTANT),
+			Token.of(1, "[", TokenType.ARRAY_OPEN),
+			Token.of(2, "b", TokenType.VARIABLE_OR_CONSTANT),
+			Token.of(3, "[", TokenType.ARRAY_OPEN),
+			Token.of(4, "2", TokenType.NUMBER_LITERAL),
+			Token.of(5, "]", TokenType.ARRAY_CLOSE),
+			Token.of(7, "+", TokenType.INFIX_OPERATOR),
+			Token.of(9, "c", TokenType.VARIABLE_OR_CONSTANT),
+			Token.of(10, "[", TokenType.ARRAY_OPEN),
+			Token.of(11, "3", TokenType.NUMBER_LITERAL),
+			Token.of(12, "]", TokenType.ARRAY_CLOSE),
+			Token.of(13, "]", TokenType.ARRAY_CLOSE));
 	}
 
 	@Test
@@ -60,37 +60,37 @@ class TokenizerArrayTest extends BaseParserTest {
 	@Test
 	void testUnexpectedClosingArray() {
 		assertThatThrownBy(() -> new Tokenizer("a[2+4]]", configuration).parse())
-			.isEqualTo(new ParseException(7, 7, "]", "Unexpected closing array"));
+			.isEqualTo(new ParseException(6, 6, "]", "Unexpected closing array"));
 	}
 
 	@Test
 	void testOpenArrayNotAllowedBeginning() {
 		assertThatThrownBy(() -> new Tokenizer("[1]", configuration).parse())
-			.isEqualTo(new ParseException(1, 1, "[", "Array open not allowed here"));
+			.isEqualTo(new ParseException(0, 0, "[", "Array open not allowed here"));
 	}
 
 	@Test
 	void testOpenArrayNotAllowedAfterOperator() {
 		assertThatThrownBy(() -> new Tokenizer("1+[1]", configuration).parse())
-			.isEqualTo(new ParseException(3, 3, "[", "Array open not allowed here"));
+			.isEqualTo(new ParseException(2, 2, "[", "Array open not allowed here"));
 	}
 
 	@Test
 	void testOpenArrayNotAllowedAfterBrace() {
 		assertThatThrownBy(() -> new Tokenizer("([1]", configuration).parse())
-			.isEqualTo(new ParseException(2, 2, "[", "Array open not allowed here"));
+			.isEqualTo(new ParseException(1, 1, "[", "Array open not allowed here"));
 	}
 
 	@Test
 	void testCloseArrayNotAllowedBeginning() {
 		assertThatThrownBy(() -> new Tokenizer("]", configuration).parse())
-			.isEqualTo(new ParseException(1, 1, "]", "Array close not allowed here"));
+			.isEqualTo(new ParseException(0, 0, "]", "Array close not allowed here"));
 	}
 
 	@Test
 	void testCloseArrayNotAllowedAfterBrace() {
 		assertThatThrownBy(() -> new Tokenizer("(]", configuration).parse())
-			.isEqualTo(new ParseException(2, 2, "]", "Array close not allowed here"));
+			.isEqualTo(new ParseException(1, 1, "]", "Array close not allowed here"));
 	}
 
 	@Test
@@ -98,7 +98,7 @@ class TokenizerArrayTest extends BaseParserTest {
 		Configuration config = Configuration.builder().isArraysAllowed(false).build();
 
 		assertThatThrownBy(() -> new Tokenizer("a[0]", config).parse())
-			.isEqualTo(new ParseException(2, 2, "[", "Undefined operator '['"));
+			.isEqualTo(new ParseException(1, 1, "[", "Undefined operator '['"));
 	}
 
 	@Test
@@ -106,6 +106,6 @@ class TokenizerArrayTest extends BaseParserTest {
 		Configuration config = Configuration.builder().isArraysAllowed(false).build();
 
 		assertThatThrownBy(() -> new Tokenizer("]", config).parse())
-			.isEqualTo(new ParseException(1, 1, "]", "Undefined operator ']'"));
+			.isEqualTo(new ParseException(0, 0, "]", "Undefined operator ']'"));
 	}
 }

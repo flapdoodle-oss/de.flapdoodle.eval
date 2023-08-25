@@ -26,11 +26,11 @@ class TokenizerBracesTest extends BaseParserTest {
 	void testBracesSimple() throws ParseException {
 		assertAllTokensParsedCorrectly(
 			"(a + b)",
-			Token.of(1, "(", TokenType.BRACE_OPEN),
-			Token.of(2, "a", TokenType.VARIABLE_OR_CONSTANT),
-			Token.of(4, "+", TokenType.INFIX_OPERATOR),
-			Token.of(6, "b", TokenType.VARIABLE_OR_CONSTANT),
-			Token.of(7, ")", TokenType.BRACE_CLOSE));
+			Token.of(0, "(", TokenType.BRACE_OPEN),
+			Token.of(1, "a", TokenType.VARIABLE_OR_CONSTANT),
+			Token.of(3, "+", TokenType.INFIX_OPERATOR),
+			Token.of(5, "b", TokenType.VARIABLE_OR_CONSTANT),
+			Token.of(6, ")", TokenType.BRACE_CLOSE));
 	}
 
 	@Test
@@ -38,15 +38,15 @@ class TokenizerBracesTest extends BaseParserTest {
 
 		assertAllTokensParsedCorrectly(
 			"(a+(b+c))",
-			Token.of(1, "(", TokenType.BRACE_OPEN),
-			Token.of(2, "a", TokenType.VARIABLE_OR_CONSTANT),
-			Token.of(3, "+", TokenType.INFIX_OPERATOR),
-			Token.of(4, "(", TokenType.BRACE_OPEN),
-			Token.of(5, "b", TokenType.VARIABLE_OR_CONSTANT),
-			Token.of(6, "+", TokenType.INFIX_OPERATOR),
-			Token.of(7, "c", TokenType.VARIABLE_OR_CONSTANT),
-			Token.of(8, ")", TokenType.BRACE_CLOSE),
-			Token.of(9, ")", TokenType.BRACE_CLOSE));
+			Token.of(0, "(", TokenType.BRACE_OPEN),
+			Token.of(1, "a", TokenType.VARIABLE_OR_CONSTANT),
+			Token.of(2, "+", TokenType.INFIX_OPERATOR),
+			Token.of(3, "(", TokenType.BRACE_OPEN),
+			Token.of(4, "b", TokenType.VARIABLE_OR_CONSTANT),
+			Token.of(5, "+", TokenType.INFIX_OPERATOR),
+			Token.of(6, "c", TokenType.VARIABLE_OR_CONSTANT),
+			Token.of(7, ")", TokenType.BRACE_CLOSE),
+			Token.of(8, ")", TokenType.BRACE_CLOSE));
 	}
 
 	@Test
@@ -58,6 +58,6 @@ class TokenizerBracesTest extends BaseParserTest {
 	@Test
 	void testUnexpectedClosingBrace() {
 		assertThatThrownBy(() -> new Tokenizer("(2+4))", configuration).parse())
-			.isEqualTo(new ParseException(6, 6, ")", "Unexpected closing brace"));
+			.isEqualTo(new ParseException(5, 5, ")", "Unexpected closing brace"));
 	}
 }

@@ -28,10 +28,10 @@ class TokenizerFunctionsTest extends BaseParserTest {
 		configuration = configuration.withFunction("f", new DummyFunction());
 		assertAllTokensParsedCorrectly(
 			"f(x)",
-			Token.of(1, "f", TokenType.FUNCTION),
-			Token.of(2, "(", TokenType.BRACE_OPEN),
-			Token.of(3, "x", TokenType.VARIABLE_OR_CONSTANT),
-			Token.of(4, ")", TokenType.BRACE_CLOSE));
+			Token.of(0, "f", TokenType.FUNCTION),
+			Token.of(1, "(", TokenType.BRACE_OPEN),
+			Token.of(2, "x", TokenType.VARIABLE_OR_CONSTANT),
+			Token.of(3, ")", TokenType.BRACE_CLOSE));
 	}
 
 	@Test
@@ -39,10 +39,10 @@ class TokenizerFunctionsTest extends BaseParserTest {
 		configuration = configuration.withFunction("f", new DummyFunction());
 		assertAllTokensParsedCorrectly(
 			"f (x)",
-			Token.of(1, "f", TokenType.FUNCTION),
-			Token.of(3, "(", TokenType.BRACE_OPEN),
-			Token.of(4, "x", TokenType.VARIABLE_OR_CONSTANT),
-			Token.of(5, ")", TokenType.BRACE_CLOSE));
+			Token.of(0, "f", TokenType.FUNCTION),
+			Token.of(2, "(", TokenType.BRACE_OPEN),
+			Token.of(3, "x", TokenType.VARIABLE_OR_CONSTANT),
+			Token.of(4, ")", TokenType.BRACE_CLOSE));
 	}
 
 	@Test
@@ -50,10 +50,10 @@ class TokenizerFunctionsTest extends BaseParserTest {
 		configuration = configuration.withFunction("_f_x_", new DummyFunction());
 		assertAllTokensParsedCorrectly(
 			"_f_x_(x)",
-			Token.of(1, "_f_x_", TokenType.FUNCTION),
-			Token.of(6, "(", TokenType.BRACE_OPEN),
-			Token.of(7, "x", TokenType.VARIABLE_OR_CONSTANT),
-			Token.of(8, ")", TokenType.BRACE_CLOSE));
+			Token.of(0, "_f_x_", TokenType.FUNCTION),
+			Token.of(5, "(", TokenType.BRACE_OPEN),
+			Token.of(6, "x", TokenType.VARIABLE_OR_CONSTANT),
+			Token.of(7, ")", TokenType.BRACE_CLOSE));
 	}
 
 	@Test
@@ -61,82 +61,82 @@ class TokenizerFunctionsTest extends BaseParserTest {
 		configuration = configuration.withFunction("f1x2", new DummyFunction());
 		assertAllTokensParsedCorrectly(
 			"f1x2(x)",
-			Token.of(1, "f1x2", TokenType.FUNCTION),
-			Token.of(5, "(", TokenType.BRACE_OPEN),
-			Token.of(6, "x", TokenType.VARIABLE_OR_CONSTANT),
-			Token.of(7, ")", TokenType.BRACE_CLOSE));
+			Token.of(0, "f1x2", TokenType.FUNCTION),
+			Token.of(4, "(", TokenType.BRACE_OPEN),
+			Token.of(5, "x", TokenType.VARIABLE_OR_CONSTANT),
+			Token.of(6, ")", TokenType.BRACE_CLOSE));
 	}
 
 	@Test
 	void testWithMoreParameters() throws ParseException {
 		assertAllTokensParsedCorrectly(
 			"sum(a, 2, 3)",
-			Token.of(1, "sum", TokenType.FUNCTION),
-			Token.of(4, "(", TokenType.BRACE_OPEN),
-			Token.of(5, "a", TokenType.VARIABLE_OR_CONSTANT),
-			Token.of(6, ",", TokenType.COMMA),
-			Token.of(8, "2", TokenType.NUMBER_LITERAL),
-			Token.of(9, ",", TokenType.COMMA),
-			Token.of(11, "3", TokenType.NUMBER_LITERAL),
-			Token.of(12, ")", TokenType.BRACE_CLOSE));
+			Token.of(0, "sum", TokenType.FUNCTION),
+			Token.of(3, "(", TokenType.BRACE_OPEN),
+			Token.of(4, "a", TokenType.VARIABLE_OR_CONSTANT),
+			Token.of(5, ",", TokenType.COMMA),
+			Token.of(7, "2", TokenType.NUMBER_LITERAL),
+			Token.of(8, ",", TokenType.COMMA),
+			Token.of(10, "3", TokenType.NUMBER_LITERAL),
+			Token.of(11, ")", TokenType.BRACE_CLOSE));
 	}
 
 	@Test
 	void testWithMixedParameters() throws ParseException {
 		assertAllTokensParsedCorrectly(
 			"TEST(a, \"hello\", 3)",
-			Token.of(1, "TEST", TokenType.FUNCTION),
-			Token.of(5, "(", TokenType.BRACE_OPEN),
-			Token.of(6, "a", TokenType.VARIABLE_OR_CONSTANT),
-			Token.of(7, ",", TokenType.COMMA),
-			Token.of(9, "hello", TokenType.STRING_LITERAL),
-			Token.of(16, ",", TokenType.COMMA),
-			Token.of(18, "3", TokenType.NUMBER_LITERAL),
-			Token.of(19, ")", TokenType.BRACE_CLOSE));
+			Token.of(0, "TEST", TokenType.FUNCTION),
+			Token.of(4, "(", TokenType.BRACE_OPEN),
+			Token.of(5, "a", TokenType.VARIABLE_OR_CONSTANT),
+			Token.of(6, ",", TokenType.COMMA),
+			Token.of(8, "hello", TokenType.STRING_LITERAL),
+			Token.of(15, ",", TokenType.COMMA),
+			Token.of(17, "3", TokenType.NUMBER_LITERAL),
+			Token.of(18, ")", TokenType.BRACE_CLOSE));
 	}
 
 	@Test
 	void testFunctionInParameter() throws ParseException {
 		assertAllTokensParsedCorrectly(
 			"TEST(a, factorial(x), 3)",
-			Token.of(1, "TEST", TokenType.FUNCTION),
-			Token.of(5, "(", TokenType.BRACE_OPEN),
-			Token.of(6, "a", TokenType.VARIABLE_OR_CONSTANT),
-			Token.of(7, ",", TokenType.COMMA),
-			Token.of(9, "factorial", TokenType.FUNCTION),
-			Token.of(18, "(", TokenType.BRACE_OPEN),
-			Token.of(19, "x", TokenType.VARIABLE_OR_CONSTANT),
-			Token.of(20, ")", TokenType.BRACE_CLOSE),
-			Token.of(21, ",", TokenType.COMMA),
-			Token.of(23, "3", TokenType.NUMBER_LITERAL),
-			Token.of(24, ")", TokenType.BRACE_CLOSE));
+			Token.of(0, "TEST", TokenType.FUNCTION),
+			Token.of(4, "(", TokenType.BRACE_OPEN),
+			Token.of(5, "a", TokenType.VARIABLE_OR_CONSTANT),
+			Token.of(6, ",", TokenType.COMMA),
+			Token.of(8, "factorial", TokenType.FUNCTION),
+			Token.of(17, "(", TokenType.BRACE_OPEN),
+			Token.of(18, "x", TokenType.VARIABLE_OR_CONSTANT),
+			Token.of(19, ")", TokenType.BRACE_CLOSE),
+			Token.of(20, ",", TokenType.COMMA),
+			Token.of(22, "3", TokenType.NUMBER_LITERAL),
+			Token.of(23, ")", TokenType.BRACE_CLOSE));
 	}
 
 	@Test
 	void testFunctionInParameterInFunctionParameter() throws ParseException {
 		assertAllTokensParsedCorrectly(
 			"sum(a,factorial(min(x,y)),3)",
-			Token.of(1, "sum", TokenType.FUNCTION),
-			Token.of(4, "(", TokenType.BRACE_OPEN),
-			Token.of(5, "a", TokenType.VARIABLE_OR_CONSTANT),
-			Token.of(6, ",", TokenType.COMMA),
-			Token.of(7, "factorial", TokenType.FUNCTION),
-			Token.of(16, "(", TokenType.BRACE_OPEN),
-			Token.of(17, "min", TokenType.FUNCTION),
-			Token.of(20, "(", TokenType.BRACE_OPEN),
-			Token.of(21, "x", TokenType.VARIABLE_OR_CONSTANT),
-			Token.of(22, ",", TokenType.COMMA),
-			Token.of(23, "y", TokenType.VARIABLE_OR_CONSTANT),
+			Token.of(0, "sum", TokenType.FUNCTION),
+			Token.of(3, "(", TokenType.BRACE_OPEN),
+			Token.of(4, "a", TokenType.VARIABLE_OR_CONSTANT),
+			Token.of(5, ",", TokenType.COMMA),
+			Token.of(6, "factorial", TokenType.FUNCTION),
+			Token.of(15, "(", TokenType.BRACE_OPEN),
+			Token.of(16, "min", TokenType.FUNCTION),
+			Token.of(19, "(", TokenType.BRACE_OPEN),
+			Token.of(20, "x", TokenType.VARIABLE_OR_CONSTANT),
+			Token.of(21, ",", TokenType.COMMA),
+			Token.of(22, "y", TokenType.VARIABLE_OR_CONSTANT),
+			Token.of(23, ")", TokenType.BRACE_CLOSE),
 			Token.of(24, ")", TokenType.BRACE_CLOSE),
-			Token.of(25, ")", TokenType.BRACE_CLOSE),
-			Token.of(26, ",", TokenType.COMMA),
-			Token.of(27, "3", TokenType.NUMBER_LITERAL),
-			Token.of(28, ")", TokenType.BRACE_CLOSE));
+			Token.of(25, ",", TokenType.COMMA),
+			Token.of(26, "3", TokenType.NUMBER_LITERAL),
+			Token.of(27, ")", TokenType.BRACE_CLOSE));
 	}
 
 	@Test
 	void testUndefinedFunction() {
 		assertThatThrownBy(() -> new Tokenizer("a(b)", configuration).parse())
-			.isEqualTo(new ParseException(1, 2, "a", "Undefined function 'a'"));
+			.isEqualTo(new ParseException(0, 1, "a", "Undefined function 'a'"));
 	}
 }

@@ -47,7 +47,7 @@ public class Tokenizer {
 
 	private int index = 0;
 
-	private int currentChar = -2;
+//	private int currentChar = -2;
 
 	private int braceBalance;
 
@@ -140,6 +140,7 @@ public class Tokenizer {
 		// blanks are always skipped.
 		skipBlanks();
 
+		char currentChar=get();
 		// end of input
 		if (currentChar == 0) {
 			return null;
@@ -230,9 +231,10 @@ public class Tokenizer {
 		int tokenStartIndex = index;
 		StringBuilder tokenValue = new StringBuilder();
 		while (true) {
+			char currentChar=get();
 			tokenValue.append((char) currentChar);
 			String tokenString = tokenValue.toString();
-			String possibleNextOperator = tokenString + (char) peekNextChar();
+			String possibleNextOperator = tokenString + peek(1); // (char) peekNextChar();
 			boolean possibleNextOperatorFound =
 				(prefixOperatorAllowed() && operatorDictionary.hasOperator(PrefixOperator.class, possibleNextOperator))
 					|| (postfixOperatorAllowed()
@@ -358,7 +360,8 @@ public class Tokenizer {
 	}
 
 	private Token parseNumberLiteral() throws ParseException {
-		int nextChar = peekNextChar();
+		char currentChar=get();
+		char nextChar = peek(1); //peekNextChar();
 		if (currentChar == '0' && (nextChar == 'x' || nextChar == 'X')) {
 			return parseHexNumberLiteral();
 		} else {
@@ -372,7 +375,8 @@ public class Tokenizer {
 
 		int lastChar = 0;
 		boolean scientificNotation = false;
-		while (currentChar != 0 && isAtNumberChar()) {
+		char currentChar;
+		while ((currentChar = get()) != 0 && isAtNumberChar()) {
 			if (currentChar == 'e' || currentChar == 'E') {
 				scientificNotation = true;
 			}
@@ -399,11 +403,12 @@ public class Tokenizer {
 		StringBuilder tokenValue = new StringBuilder();
 
 		// hexadecimal number, consume "0x"
-		tokenValue.append((char) currentChar);
+		tokenValue.append((char) get());
 		consumeChar();
-		tokenValue.append((char) currentChar);
+		tokenValue.append((char) get());
 		consumeChar();
-		while (currentChar != 0 && isAtHexChar()) {
+		char currentChar;
+		while ((currentChar = get()) != 0 && isAtHexChar()) {
 			tokenValue.append((char) currentChar);
 			consumeChar();
 		}
@@ -413,7 +418,8 @@ public class Tokenizer {
 	private Token parseIdentifier() throws ParseException {
 		int tokenStartIndex = index;
 		StringBuilder tokenValue = new StringBuilder();
-		while (currentChar != 0 && isAtIdentifierChar()) {
+		char currentChar;
+		while ((currentChar = get()) != 0 && isAtIdentifierChar()) {
 			tokenValue.append((char) currentChar);
 			consumeChar();
 		}
@@ -440,6 +446,7 @@ public class Tokenizer {
 		}
 
 		skipBlanks();
+		currentChar = get();
 		if (currentChar == '(') {
 			if (!functions.has(tokenName)) {
 				throw new ParseException(
@@ -461,10 +468,11 @@ public class Tokenizer {
 		// skip starting quote
 		consumeChar();
 		boolean inQuote = true;
-		while (inQuote && currentChar != 0) {
+		char currentChar;
+		while (inQuote && (currentChar = get()) != 0) {
 			if (currentChar == '\\') {
 				consumeChar();
-				tokenValue.append(escapeCharacter(currentChar));
+				tokenValue.append(escapeCharacter(get()));
 			} else if (currentChar == '"') {
 				inQuote = false;
 			} else {
@@ -504,14 +512,16 @@ public class Tokenizer {
 	}
 
 	private boolean isAtNumberStart() {
+		char currentChar = get();
 		if (Character.isDigit(currentChar)) {
 			return true;
 		}
-		return currentChar == '.' && Character.isDigit(peekNextChar());
+		return currentChar == '.' && Character.isDigit(peek(1)/*peekNextChar()*/);
 	}
 
 	private boolean isAtNumberChar() {
-		int previousChar = peekPreviousChar();
+		char currentChar = get();
+		int previousChar = peek(-1); //peekPreviousChar();
 
 		if ((previousChar == 'e' || previousChar == 'E') && currentChar != '.') {
 			return Character.isDigit(currentChar) || currentChar == '+' || currentChar == '-';
@@ -528,18 +538,18 @@ public class Tokenizer {
 	}
 
 	private boolean isNextCharNumberChar() {
-		if (peekNextChar() == 0) {
+		if (peek(1)/*peekNextChar()*/ == 0) {
 			return false;
 		}
 		consumeChar();
 		boolean isAtNumber = isAtNumberChar();
 		index--;
-		currentChar = expressionString.charAt(index - 1);
+//		currentChar = expressionString.charAt(index - 1);
 		return isAtNumber;
 	}
 
 	private boolean isAtHexChar() {
-		switch (currentChar) {
+		switch (get()) {
 			case '0':
 			case '1':
 			case '2':
@@ -569,28 +579,32 @@ public class Tokenizer {
 	}
 
 	private boolean isAtIdentifierStart() {
+		char currentChar = get();
 		return Character.isLetter(currentChar) || currentChar == '_';
 	}
 
 	private boolean isAtIdentifierChar() {
+		char currentChar = get();
 		return Character.isLetter(currentChar) || Character.isDigit(currentChar) || currentChar == '_';
 	}
 
 	private void skipBlanks() {
-		if (currentChar == -2) {
-			// consume first character of expression
-			consumeChar();
-		}
-		while (currentChar != 0 && Character.isWhitespace(currentChar)) {
+//		char currentChar = get();
+//		if (currentChar == -2) {
+//			// consume first character of expression
+//			consumeChar();
+//		}
+		char currentChar;
+		while ((currentChar = get()) != 0 && Character.isWhitespace(currentChar)) {
 			consumeChar();
 		}
 	}
 
-	private int peekNextChar() {
-		return index == end
-			? 0
-			: chars[index];
-	}
+//	private char peekNextChar() {
+//		return index == end
+//			? 0
+//			: chars[index];
+//	}
 
 	private int peekPreviousChar() {
 		return index == 1 ? 0 : chars[index - 2];
@@ -598,9 +612,10 @@ public class Tokenizer {
 
 	private void consumeChar() {
 		if (index == end) {
-			currentChar = 0;
+//			currentChar = 0;
 		} else {
-			currentChar = chars[index++];
+//			currentChar = chars[index++];
+			index++;
 		}
 	}
 
@@ -612,10 +627,14 @@ public class Tokenizer {
 //		get();
 //	}
 
-	protected char peek(int offset) {
+	private char peek(int offset) {
 		if (index+offset < 0) return 0;
 		if (index+offset >= end) return 0;
 		return chars[index+offset];
+	}
+
+	private char get() {
+		return peek(0);
 	}
 
 //	protected char get() throws java.text.ParseException {

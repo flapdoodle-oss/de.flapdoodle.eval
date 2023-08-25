@@ -27,66 +27,66 @@ class TokenizerStructureTest extends BaseParserTest {
 	void testStructureSimple() throws ParseException {
 		assertAllTokensParsedCorrectly(
 			"a.b",
-			Token.of(1, "a", TokenType.VARIABLE_OR_CONSTANT),
-			Token.of(2, ".", TokenType.STRUCTURE_SEPARATOR),
-			Token.of(3, "b", TokenType.VARIABLE_OR_CONSTANT));
+			Token.of(0, "a", TokenType.VARIABLE_OR_CONSTANT),
+			Token.of(1, ".", TokenType.STRUCTURE_SEPARATOR),
+			Token.of(2, "b", TokenType.VARIABLE_OR_CONSTANT));
 	}
 
 	@Test
 	void testStructureLeftIsE() throws ParseException {
 		assertAllTokensParsedCorrectly(
 			"e.b",
-			Token.of(1, "e", TokenType.VARIABLE_OR_CONSTANT),
-			Token.of(2, ".", TokenType.STRUCTURE_SEPARATOR),
-			Token.of(3, "b", TokenType.VARIABLE_OR_CONSTANT));
+			Token.of(0, "e", TokenType.VARIABLE_OR_CONSTANT),
+			Token.of(1, ".", TokenType.STRUCTURE_SEPARATOR),
+			Token.of(2, "b", TokenType.VARIABLE_OR_CONSTANT));
 	}
 
 	@Test
 	void testStructureRightIsE() throws ParseException {
 		assertAllTokensParsedCorrectly(
 			"a.e",
-			Token.of(1, "a", TokenType.VARIABLE_OR_CONSTANT),
-			Token.of(2, ".", TokenType.STRUCTURE_SEPARATOR),
-			Token.of(3, "e", TokenType.VARIABLE_OR_CONSTANT));
+			Token.of(0, "a", TokenType.VARIABLE_OR_CONSTANT),
+			Token.of(1, ".", TokenType.STRUCTURE_SEPARATOR),
+			Token.of(2, "e", TokenType.VARIABLE_OR_CONSTANT));
 	}
 
 	@Test
 	void testStructureBothAreE() throws ParseException {
 		assertAllTokensParsedCorrectly(
 			"e.e",
-			Token.of(1, "e", TokenType.VARIABLE_OR_CONSTANT),
-			Token.of(2, ".", TokenType.STRUCTURE_SEPARATOR),
-			Token.of(3, "e", TokenType.VARIABLE_OR_CONSTANT));
+			Token.of(0, "e", TokenType.VARIABLE_OR_CONSTANT),
+			Token.of(1, ".", TokenType.STRUCTURE_SEPARATOR),
+			Token.of(2, "e", TokenType.VARIABLE_OR_CONSTANT));
 	}
 
 	@Test
 	void testStructureLeftEndsE() throws ParseException {
 		assertAllTokensParsedCorrectly(
 			"variable.a",
-			Token.of(1, "variable", TokenType.VARIABLE_OR_CONSTANT),
-			Token.of(9, ".", TokenType.STRUCTURE_SEPARATOR),
-			Token.of(10, "a", TokenType.VARIABLE_OR_CONSTANT));
+			Token.of(0, "variable", TokenType.VARIABLE_OR_CONSTANT),
+			Token.of(8, ".", TokenType.STRUCTURE_SEPARATOR),
+			Token.of(9, "a", TokenType.VARIABLE_OR_CONSTANT));
 	}
 
 	@Test
 	void testStructureRightStartsE() throws ParseException {
 		assertAllTokensParsedCorrectly(
 			"a.end",
-			Token.of(1, "a", TokenType.VARIABLE_OR_CONSTANT),
-			Token.of(2, ".", TokenType.STRUCTURE_SEPARATOR),
-			Token.of(3, "end", TokenType.VARIABLE_OR_CONSTANT));
+			Token.of(0, "a", TokenType.VARIABLE_OR_CONSTANT),
+			Token.of(1, ".", TokenType.STRUCTURE_SEPARATOR),
+			Token.of(2, "end", TokenType.VARIABLE_OR_CONSTANT));
 	}
 
 	@Test
 	void testStructureSeparatorNotAllowedBegin() {
 		assertThatThrownBy(() -> new Tokenizer(".", configuration).parse())
-			.isEqualTo(new ParseException(1, 1, ".", "Structure separator not allowed here"));
+			.isEqualTo(new ParseException(0, 0, ".", "Structure separator not allowed here"));
 	}
 
 	@Test
 	void testStructureSeparatorNotAllowedOperator() {
 		assertThatThrownBy(() -> new Tokenizer("-.", configuration).parse())
-			.isEqualTo(new ParseException(2, 2, ".", "Structure separator not allowed here"));
+			.isEqualTo(new ParseException(1, 1, ".", "Structure separator not allowed here"));
 	}
 
 	@Test
@@ -95,6 +95,6 @@ class TokenizerStructureTest extends BaseParserTest {
 			Configuration.builder().isStructuresAllowed(false).build();
 
 		assertThatThrownBy(() -> new Tokenizer("a.b", config).parse())
-			.isEqualTo(new ParseException(2, 2, ".", "Undefined operator '.'"));
+			.isEqualTo(new ParseException(1, 1, ".", "Undefined operator '.'"));
 	}
 }

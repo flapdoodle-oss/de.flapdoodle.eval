@@ -24,75 +24,75 @@ class TokenizerOperatorSeparationTest extends BaseParserTest {
 	void testInfixPrefix() throws ParseException {
 		assertAllTokensParsedCorrectly(
 			"2+-3",
-			Token.of(1, "2", TokenType.NUMBER_LITERAL),
-			Token.of(2, "+", TokenType.INFIX_OPERATOR),
-			Token.of(3, "-", TokenType.PREFIX_OPERATOR),
-			Token.of(4, "3", TokenType.NUMBER_LITERAL));
+			Token.of(0, "2", TokenType.NUMBER_LITERAL),
+			Token.of(1, "+", TokenType.INFIX_OPERATOR),
+			Token.of(2, "-", TokenType.PREFIX_OPERATOR),
+			Token.of(3, "3", TokenType.NUMBER_LITERAL));
 	}
 
 	@Test
 	void testPostfixInfix() throws ParseException {
 		assertAllTokensParsedCorrectly(
 			"a++-3",
-			Token.of(1, "a", TokenType.VARIABLE_OR_CONSTANT),
-			Token.of(2, "++", TokenType.POSTFIX_OPERATOR),
-			Token.of(4, "-", TokenType.INFIX_OPERATOR),
-			Token.of(5, "3", TokenType.NUMBER_LITERAL));
+			Token.of(0, "a", TokenType.VARIABLE_OR_CONSTANT),
+			Token.of(1, "++", TokenType.POSTFIX_OPERATOR),
+			Token.of(3, "-", TokenType.INFIX_OPERATOR),
+			Token.of(4, "3", TokenType.NUMBER_LITERAL));
 	}
 
 	@Test
 	void testPostfixInfixPrefix() throws ParseException {
 		assertAllTokensParsedCorrectly(
 			"a++--3",
-			Token.of(1, "a", TokenType.VARIABLE_OR_CONSTANT),
-			Token.of(2, "++", TokenType.POSTFIX_OPERATOR),
-			Token.of(4, "-", TokenType.INFIX_OPERATOR),
-			Token.of(5, "-", TokenType.PREFIX_OPERATOR),
-			Token.of(6, "3", TokenType.NUMBER_LITERAL));
+			Token.of(0, "a", TokenType.VARIABLE_OR_CONSTANT),
+			Token.of(1, "++", TokenType.POSTFIX_OPERATOR),
+			Token.of(3, "-", TokenType.INFIX_OPERATOR),
+			Token.of(4, "-", TokenType.PREFIX_OPERATOR),
+			Token.of(5, "3", TokenType.NUMBER_LITERAL));
 	}
 
 	@Test
 	void testPrefixPrefix() throws ParseException {
 		assertAllTokensParsedCorrectly(
 			"!-2",
-			Token.of(1, "!", TokenType.PREFIX_OPERATOR),
-			Token.of(2, "-", TokenType.PREFIX_OPERATOR),
-			Token.of(3, "2", TokenType.NUMBER_LITERAL));
+			Token.of(0, "!", TokenType.PREFIX_OPERATOR),
+			Token.of(1, "-", TokenType.PREFIX_OPERATOR),
+			Token.of(2, "2", TokenType.NUMBER_LITERAL));
 	}
 
 	@Test
 	void testEqualsEqualsNumbers() throws ParseException {
 		assertAllTokensParsedCorrectly(
 			"3==3",
-			Token.of(1, "3", TokenType.NUMBER_LITERAL),
-			Token.of(2, "==", TokenType.INFIX_OPERATOR),
-			Token.of(4, "3", TokenType.NUMBER_LITERAL));
+			Token.of(0, "3", TokenType.NUMBER_LITERAL),
+			Token.of(1, "==", TokenType.INFIX_OPERATOR),
+			Token.of(3, "3", TokenType.NUMBER_LITERAL));
 	}
 
 	@Test
 	void testEqualsEqualsVariables() throws ParseException {
 		assertAllTokensParsedCorrectly(
 			"a==b",
-			Token.of(1, "a", TokenType.VARIABLE_OR_CONSTANT),
-			Token.of(2, "==", TokenType.INFIX_OPERATOR),
-			Token.of(4, "b", TokenType.VARIABLE_OR_CONSTANT));
+			Token.of(0, "a", TokenType.VARIABLE_OR_CONSTANT),
+			Token.of(1, "==", TokenType.INFIX_OPERATOR),
+			Token.of(3, "b", TokenType.VARIABLE_OR_CONSTANT));
 	}
 
 	@Test
 	void testEqualsNumbers() throws ParseException {
 		assertAllTokensParsedCorrectly(
 			"3=3",
-			Token.of(1, "3", TokenType.NUMBER_LITERAL),
-			Token.of(2, "=", TokenType.INFIX_OPERATOR),
-			Token.of(3, "3", TokenType.NUMBER_LITERAL));
+			Token.of(0, "3", TokenType.NUMBER_LITERAL),
+			Token.of(1, "=", TokenType.INFIX_OPERATOR),
+			Token.of(2, "3", TokenType.NUMBER_LITERAL));
 	}
 
 	@Test
 	void testEqualsVariables() throws ParseException {
 		assertAllTokensParsedCorrectly(
 			"a=b",
-			Token.of(1, "a", TokenType.VARIABLE_OR_CONSTANT),
-			Token.of(2, "=", TokenType.INFIX_OPERATOR),
-			Token.of(3, "b", TokenType.VARIABLE_OR_CONSTANT));
+			Token.of(0, "a", TokenType.VARIABLE_OR_CONSTANT),
+			Token.of(1, "=", TokenType.INFIX_OPERATOR),
+			Token.of(2, "b", TokenType.VARIABLE_OR_CONSTANT));
 	}
 }

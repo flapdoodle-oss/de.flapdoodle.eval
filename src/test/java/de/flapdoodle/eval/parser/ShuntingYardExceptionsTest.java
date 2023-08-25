@@ -174,7 +174,7 @@ class ShuntingYardExceptionsTest extends BaseParserTest {
 	@ParameterizedTest
 	@CsvSource(
 		delimiter = ':',
-		value = { "(x+y)*(a-) : 10", "a** : 3", "5+, : 3" })
+		value = { "(x+y)*(a-) : 9", "a** : 2", "5+, : 2" })
 	void testInvalidTokenAfterInfixOperator(String expressionString, int position) {
 		Expression expression = Expression.of(expressionString);
 

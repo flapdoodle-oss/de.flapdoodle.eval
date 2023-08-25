@@ -28,43 +28,43 @@ class TokenizerStringLiteralTest extends BaseParserTest {
 	@Test
 	void testSimpleQuote() throws ParseException {
 		assertAllTokensParsedCorrectly(
-			"\"Hello, World\"", Token.of(1, "Hello, World", TokenType.STRING_LITERAL));
+			"\"Hello, World\"", Token.of(0, "Hello, World", TokenType.STRING_LITERAL));
 	}
 
 	@Test
 	void testSimpleQuoteLeadingBlanks() throws ParseException {
 		assertAllTokensParsedCorrectly(
-			"  \t\n \"Hello, World\"", Token.of(6, "Hello, World", TokenType.STRING_LITERAL));
+			"  \t\n \"Hello, World\"", Token.of(5, "Hello, World", TokenType.STRING_LITERAL));
 	}
 
 	@Test
 	void testSimpleQuoteTrailingBlanks() throws ParseException {
 		assertAllTokensParsedCorrectly(
-			"\"Hello, World\"  \t\n ", Token.of(1, "Hello, World", TokenType.STRING_LITERAL));
+			"\"Hello, World\"  \t\n ", Token.of(0, "Hello, World", TokenType.STRING_LITERAL));
 	}
 
 	@Test
 	void testEscapeDoubleQuote() throws ParseException {
 		assertAllTokensParsedCorrectly(
-			"\"Hello, \\\"World\\\"\"", Token.of(1, "Hello, \"World\"", TokenType.STRING_LITERAL));
+			"\"Hello, \\\"World\\\"\"", Token.of(0, "Hello, \"World\"", TokenType.STRING_LITERAL));
 	}
 
 	@Test
 	void testEscapeSingleQuote() throws ParseException {
 		assertAllTokensParsedCorrectly(
-			"\"Hello, \\'World\\'\"", Token.of(1, "Hello, 'World'", TokenType.STRING_LITERAL));
+			"\"Hello, \\'World\\'\"", Token.of(0, "Hello, 'World'", TokenType.STRING_LITERAL));
 	}
 
 	@Test
 	void testEscapeBackslash() throws ParseException {
 		assertAllTokensParsedCorrectly(
-			"\"a \\\\ b\"", Token.of(1, "a \\ b", TokenType.STRING_LITERAL));
+			"\"a \\\\ b\"", Token.of(0, "a \\ b", TokenType.STRING_LITERAL));
 	}
 
 	@Test
 	void testEscapeCharacters() throws ParseException {
 		assertAllTokensParsedCorrectly(
-			"\" \\t \\r \\n \\f \\b \"", Token.of(1, " \t \r \n \f \b ", TokenType.STRING_LITERAL));
+			"\" \\t \\r \\n \\f \\b \"", Token.of(0, " \t \r \n \f \b ", TokenType.STRING_LITERAL));
 	}
 
 	@Test
@@ -81,11 +81,11 @@ class TokenizerStringLiteralTest extends BaseParserTest {
 	void testSimpleQuoteOperation() throws ParseException {
 		assertAllTokensParsedCorrectly(
 			"\"Hello\" + \" \" + \"World\"",
-			Token.of(1, "Hello", TokenType.STRING_LITERAL),
-			Token.of(9, "+", TokenType.INFIX_OPERATOR),
-			Token.of(11, " ", TokenType.STRING_LITERAL),
-			Token.of(15, "+", TokenType.INFIX_OPERATOR),
-			Token.of(17, "World", TokenType.STRING_LITERAL));
+			Token.of(0, "Hello", TokenType.STRING_LITERAL),
+			Token.of(8, "+", TokenType.INFIX_OPERATOR),
+			Token.of(10, " ", TokenType.STRING_LITERAL),
+			Token.of(14, "+", TokenType.INFIX_OPERATOR),
+			Token.of(16, "World", TokenType.STRING_LITERAL));
 	}
 
 	@Test

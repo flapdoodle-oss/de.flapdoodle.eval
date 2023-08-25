@@ -27,60 +27,60 @@ class TokenizerNumberLiteralTest extends BaseParserTest {
 
 	@Test
 	void testSingleDigit() throws ParseException {
-		assertAllTokensParsedCorrectly("7", Token.of(1, "7", NUMBER_LITERAL));
+		assertAllTokensParsedCorrectly("7", Token.of(0, "7", NUMBER_LITERAL));
 	}
 
 	@Test
 	void testMultipleDigit() throws ParseException {
-		assertAllTokensParsedCorrectly("888", Token.of(1, "888", NUMBER_LITERAL));
+		assertAllTokensParsedCorrectly("888", Token.of(0, "888", NUMBER_LITERAL));
 	}
 
 	@Test
 	void testBlanks() throws ParseException {
-		assertAllTokensParsedCorrectly("\t 123 \r\n", Token.of(3, "123", NUMBER_LITERAL));
+		assertAllTokensParsedCorrectly("\t 123 \r\n", Token.of(2, "123", NUMBER_LITERAL));
 	}
 
 	@Test
 	void testDecimal() throws ParseException {
-		assertAllTokensParsedCorrectly("123.834", Token.of(1, "123.834", NUMBER_LITERAL));
+		assertAllTokensParsedCorrectly("123.834", Token.of(0, "123.834", NUMBER_LITERAL));
 	}
 
 	@Test
 	void testDecimalStart() throws ParseException {
-		assertAllTokensParsedCorrectly(".9", Token.of(1, ".9", NUMBER_LITERAL));
+		assertAllTokensParsedCorrectly(".9", Token.of(0, ".9", NUMBER_LITERAL));
 	}
 
 	@Test
 	void testDecimalEnd() throws ParseException {
-		assertAllTokensParsedCorrectly("123.", Token.of(1, "123.", NUMBER_LITERAL));
+		assertAllTokensParsedCorrectly("123.", Token.of(0, "123.", NUMBER_LITERAL));
 	}
 
 	@Test
 	void testHexNumberSimple() throws ParseException {
-		assertAllTokensParsedCorrectly("0x0", Token.of(1, "0x0", NUMBER_LITERAL));
+		assertAllTokensParsedCorrectly("0x0", Token.of(0, "0x0", NUMBER_LITERAL));
 	}
 
 	@Test
 	void testHexNumberLong() throws ParseException {
-		assertAllTokensParsedCorrectly("0x3ABCDEF0", Token.of(1, "0x3ABCDEF0", NUMBER_LITERAL));
+		assertAllTokensParsedCorrectly("0x3ABCDEF0", Token.of(0, "0x3ABCDEF0", NUMBER_LITERAL));
 		assertAllTokensParsedCorrectly(
-			" \t0x3abcdefAbcdef09873EE ", Token.of(3, "0x3abcdefAbcdef09873EE", NUMBER_LITERAL));
+			" \t0x3abcdefAbcdef09873EE ", Token.of(2, "0x3abcdefAbcdef09873EE", NUMBER_LITERAL));
 	}
 
 	@Test
 	void testHexNumberBlank() throws ParseException {
 		assertAllTokensParsedCorrectly(
-			" \t0x3abcdefAbcdef09873EE ", Token.of(3, "0x3abcdefAbcdef09873EE", NUMBER_LITERAL));
+			" \t0x3abcdefAbcdef09873EE ", Token.of(2, "0x3abcdefAbcdef09873EE", NUMBER_LITERAL));
 	}
 
 	@Test
 	void testSciOK() throws ParseException {
-		assertAllTokensParsedCorrectly("2e1", Token.of(1, "2e1", NUMBER_LITERAL));
-		assertAllTokensParsedCorrectly("2E1", Token.of(1, "2E1", NUMBER_LITERAL));
-		assertAllTokensParsedCorrectly("2e-1", Token.of(1, "2e-1", NUMBER_LITERAL));
-		assertAllTokensParsedCorrectly("2E-1", Token.of(1, "2E-1", NUMBER_LITERAL));
-		assertAllTokensParsedCorrectly("2e+1", Token.of(1, "2e+1", NUMBER_LITERAL));
-		assertAllTokensParsedCorrectly("2E+1", Token.of(1, "2E+1", NUMBER_LITERAL));
+		assertAllTokensParsedCorrectly("2e1", Token.of(0, "2e1", NUMBER_LITERAL));
+		assertAllTokensParsedCorrectly("2E1", Token.of(0, "2E1", NUMBER_LITERAL));
+		assertAllTokensParsedCorrectly("2e-1", Token.of(0, "2e-1", NUMBER_LITERAL));
+		assertAllTokensParsedCorrectly("2E-1", Token.of(0, "2E-1", NUMBER_LITERAL));
+		assertAllTokensParsedCorrectly("2e+1", Token.of(0, "2e+1", NUMBER_LITERAL));
+		assertAllTokensParsedCorrectly("2E+1", Token.of(0, "2E+1", NUMBER_LITERAL));
 	}
 
 	@ParameterizedTest
