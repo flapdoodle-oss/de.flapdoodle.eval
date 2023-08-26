@@ -20,7 +20,6 @@ import de.flapdoodle.eval.Evaluateable;
 import de.flapdoodle.eval.config.Configuration;
 import de.flapdoodle.eval.config.EvaluateableResolver;
 import de.flapdoodle.eval.config.OperatorResolver;
-import de.flapdoodle.eval.nparser.CleanTokenizer;
 import de.flapdoodle.eval.operators.InfixOperator;
 import de.flapdoodle.eval.operators.Operator;
 import de.flapdoodle.eval.operators.PostfixOperator;
@@ -28,7 +27,6 @@ import de.flapdoodle.eval.operators.PrefixOperator;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * The tokenizer is responsible to parse a string and return a list of tokens. The order of tokens

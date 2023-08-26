@@ -16,12 +16,9 @@
  */
 package de.flapdoodle.eval.nparser;
 
-import de.flapdoodle.eval.Evaluateable;
 import de.flapdoodle.eval.config.Configuration;
-import de.flapdoodle.eval.config.EvaluateableResolver;
 import de.flapdoodle.eval.config.OperatorResolver;
 import de.flapdoodle.eval.operators.InfixOperator;
-import de.flapdoodle.eval.operators.Operator;
 import de.flapdoodle.eval.operators.PostfixOperator;
 import de.flapdoodle.eval.operators.PrefixOperator;
 import de.flapdoodle.eval.parser.TokenType;
@@ -34,14 +31,12 @@ import java.util.Optional;
  * The tokenizer is responsible to parse a string and return a list of tokens. The order of tokens
  * will follow the infix expression notation, skipping any blank characters.
  */
-public class CleanTokenizer {
+public class Tokenizer {
 	private final String expressionString;
 	private final char[] chars;
 	private final int end;
 
 	private final OperatorResolver operatorDictionary;
-
-	private final EvaluateableResolver functions;
 
 	private final Configuration configuration;
 
@@ -53,14 +48,13 @@ public class CleanTokenizer {
 
 	private int arrayBalance;
 
-	public CleanTokenizer(String expressionString, Configuration configuration) {
+	public Tokenizer(String expressionString, Configuration configuration) {
 		this.expressionString = expressionString;
 		this.chars = expressionString.toCharArray();
 		this.end = chars.length;
 		
 		this.configuration = configuration;
 		this.operatorDictionary = configuration.getOperatorResolver();
-		this.functions = configuration.functions();
 	}
 
 	/**
@@ -258,13 +252,10 @@ public class CleanTokenizer {
 		}
 		String tokenString = tokenValue.toString();
 		if (prefixOperatorAllowed() && operatorDictionary.hasOperator(PrefixOperator.class, tokenString)) {
-			Operator operator = operatorDictionary.get(PrefixOperator.class, tokenString);
 			return Token.of(tokenStartIndex, tokenString, TokenType.PREFIX_OPERATOR);
 		} else if (postfixOperatorAllowed() && operatorDictionary.hasOperator(PostfixOperator.class, tokenString)) {
-			Operator operator = operatorDictionary.get(PostfixOperator.class, tokenString);
 			return Token.of(tokenStartIndex, tokenString, TokenType.POSTFIX_OPERATOR);
 		} else if (operatorDictionary.hasOperator(InfixOperator.class, tokenString)) {
-			Operator operator = operatorDictionary.get(InfixOperator.class, tokenString);
 			return Token.of(tokenStartIndex, tokenString, TokenType.INFIX_OPERATOR);
 		} else if (tokenString.equals(".") && configuration.isStructuresAllowed()) {
 			return Token.of(tokenStartIndex, tokenString, TokenType.STRUCTURE_SEPARATOR);
@@ -410,14 +401,6 @@ public class CleanTokenizer {
 		skipBlanks();
 		currentChar = get();
 		if (currentChar == '(') {
-			if (!functions.has(tokenName)) {
-				throw new ParseException(
-					tokenStartIndex,
-					index,
-					tokenName,
-					"Undefined function '" + tokenName + "'");
-			}
-			Evaluateable function = functions.get(tokenName);
 			return Token.of(tokenStartIndex, tokenName, TokenType.FUNCTION);
 		} else {
 			return Token.of(tokenStartIndex, tokenName, TokenType.VARIABLE_OR_CONSTANT);
