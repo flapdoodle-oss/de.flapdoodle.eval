@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.flapdoodle.eval.parser;
+package de.flapdoodle.eval.nparser;
 
 import de.flapdoodle.eval.Evaluateable;
 import de.flapdoodle.eval.config.Configuration;
@@ -24,6 +24,7 @@ import de.flapdoodle.eval.operators.InfixOperator;
 import de.flapdoodle.eval.operators.Operator;
 import de.flapdoodle.eval.operators.PostfixOperator;
 import de.flapdoodle.eval.operators.PrefixOperator;
+import de.flapdoodle.eval.parser.TokenType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,8 +80,7 @@ public class CleanTokenizer {
 						Token.of(
 							currentToken.start(),
 							"*",
-							TokenType.INFIX_OPERATOR,
-							operatorDictionary.get(InfixOperator.class, "*"));
+							TokenType.INFIX_OPERATOR);
 					tokens.add(multiplication);
 				} else {
 					throw new ParseException(currentToken, "Missing operator");
@@ -259,13 +259,13 @@ public class CleanTokenizer {
 		String tokenString = tokenValue.toString();
 		if (prefixOperatorAllowed() && operatorDictionary.hasOperator(PrefixOperator.class, tokenString)) {
 			Operator operator = operatorDictionary.get(PrefixOperator.class, tokenString);
-			return Token.of(tokenStartIndex, tokenString, TokenType.PREFIX_OPERATOR, operator);
+			return Token.of(tokenStartIndex, tokenString, TokenType.PREFIX_OPERATOR);
 		} else if (postfixOperatorAllowed() && operatorDictionary.hasOperator(PostfixOperator.class, tokenString)) {
 			Operator operator = operatorDictionary.get(PostfixOperator.class, tokenString);
-			return Token.of(tokenStartIndex, tokenString, TokenType.POSTFIX_OPERATOR, operator);
+			return Token.of(tokenStartIndex, tokenString, TokenType.POSTFIX_OPERATOR);
 		} else if (operatorDictionary.hasOperator(InfixOperator.class, tokenString)) {
 			Operator operator = operatorDictionary.get(InfixOperator.class, tokenString);
-			return Token.of(tokenStartIndex, tokenString, TokenType.INFIX_OPERATOR, operator);
+			return Token.of(tokenStartIndex, tokenString, TokenType.INFIX_OPERATOR);
 		} else if (tokenString.equals(".") && configuration.isStructuresAllowed()) {
 			return Token.of(tokenStartIndex, tokenString, TokenType.STRUCTURE_SEPARATOR);
 		}
@@ -394,20 +394,17 @@ public class CleanTokenizer {
 			return Token.of(
 				tokenStartIndex,
 				tokenName,
-				TokenType.PREFIX_OPERATOR,
-				operatorDictionary.get(PrefixOperator.class, tokenName));
+				TokenType.PREFIX_OPERATOR);
 		} else if (postfixOperatorAllowed() && operatorDictionary.hasOperator(PostfixOperator.class, tokenName)) {
 			return Token.of(
 				tokenStartIndex,
 				tokenName,
-				TokenType.POSTFIX_OPERATOR,
-				operatorDictionary.get(PostfixOperator.class, tokenName));
+				TokenType.POSTFIX_OPERATOR);
 		} else if (operatorDictionary.hasOperator(InfixOperator.class, tokenName)) {
 			return Token.of(
 				tokenStartIndex,
 				tokenName,
-				TokenType.INFIX_OPERATOR,
-				operatorDictionary.get(InfixOperator.class, tokenName));
+				TokenType.INFIX_OPERATOR);
 		}
 
 		skipBlanks();
@@ -421,7 +418,7 @@ public class CleanTokenizer {
 					"Undefined function '" + tokenName + "'");
 			}
 			Evaluateable function = functions.get(tokenName);
-			return Token.of(tokenStartIndex, tokenName, TokenType.FUNCTION, function);
+			return Token.of(tokenStartIndex, tokenName, TokenType.FUNCTION);
 		} else {
 			return Token.of(tokenStartIndex, tokenName, TokenType.VARIABLE_OR_CONSTANT);
 		}

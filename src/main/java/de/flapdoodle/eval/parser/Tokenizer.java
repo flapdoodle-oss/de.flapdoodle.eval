@@ -20,6 +20,7 @@ import de.flapdoodle.eval.Evaluateable;
 import de.flapdoodle.eval.config.Configuration;
 import de.flapdoodle.eval.config.EvaluateableResolver;
 import de.flapdoodle.eval.config.OperatorResolver;
+import de.flapdoodle.eval.nparser.CleanTokenizer;
 import de.flapdoodle.eval.operators.InfixOperator;
 import de.flapdoodle.eval.operators.Operator;
 import de.flapdoodle.eval.operators.PostfixOperator;
@@ -71,9 +72,6 @@ public class Tokenizer {
 	 * @throws ParseException When the expression can't be parsed.
 	 */
 	public List<Token> parse() throws ParseException {
-		if (ThreadLocalRandom.current().nextBoolean()) {
-			return new CleanTokenizer(expressionString, configuration).parse();
-		}
 
 		Token currentToken;
 		while ((currentToken = getNextToken()) != null) {
