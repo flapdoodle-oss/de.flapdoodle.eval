@@ -72,8 +72,9 @@ public class CleanTokenizer {
 	 */
 	public List<Token> parse() throws ParseException {
 
-		Token currentToken;
-		while ((currentToken = getNextToken()) != null) {
+		Optional<Token> token;
+		while ((token = nextToken()).isPresent()) {
+			Token currentToken = token.get();
 			if (implicitMultiplicationPossible(currentToken)) {
 				if (configuration.isImplicitMultiplicationAllowed()) {
 					Token multiplication =
@@ -130,17 +131,17 @@ public class CleanTokenizer {
 		}
 	}
 
-	private Token getNextToken() throws ParseException {
-
+	private Optional<Token> nextToken() throws ParseException {
 		// blanks are always skipped.
 		skipBlanks();
 
+		return eof()
+			? Optional.empty()
+			: Optional.of(parseNextToken());
+	}
+	
+	private Token parseNextToken() throws ParseException {
 		char currentChar=get();
-		// end of input
-		if (currentChar == 0) {
-			return null;
-		}
-
 		// we have a token start, identify and parse it
 		if (currentChar == '"') {
 			return parseStringLiteral();
@@ -184,10 +185,10 @@ public class CleanTokenizer {
 			throw new ParseException(token, "Array close not allowed here");
 		}
 		next();
-		arrayBalance--;
-		if (arrayBalance < 0) {
+		if (arrayBalance <= 0) {
 			throw new ParseException(token, "Unexpected closing array");
 		}
+		arrayBalance--;
 		return token;
 	}
 
@@ -204,10 +205,10 @@ public class CleanTokenizer {
 	private Token parseBraceClose() throws ParseException {
 		Token token = Token.of(index, ")", TokenType.BRACE_CLOSE);
 		next();
-		braceBalance--;
-		if (braceBalance < 0) {
+		if (braceBalance <= 0) {
 			throw new ParseException(token, "Unexpected closing brace");
 		}
+		braceBalance--;
 		return token;
 	}
 
