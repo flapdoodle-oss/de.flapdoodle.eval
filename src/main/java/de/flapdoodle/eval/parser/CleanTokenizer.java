@@ -218,10 +218,6 @@ public class CleanTokenizer {
 		return token;
 	}
 
-	private Optional<Token> previousToken() {
-		return tokens.isEmpty() ? Optional.empty() : Optional.of(tokens.get(tokens.size() - 1));
-	}
-
 	private boolean isPreviousTokenType(TokenType ... match) {
 		return matchPreviousTokenType(match).orElse(false);
 	}
@@ -231,12 +227,15 @@ public class CleanTokenizer {
 	}
 
 	private Optional<Boolean> matchPreviousTokenType(TokenType... match) {
-		return previousToken().map(token -> {
-			for (TokenType m : match) {
-				if (m == token.type()) return true;
-			}
-			return false;
-		});
+		return (tokens.isEmpty()
+			? Optional.empty()
+			: Optional.of(tokens.get(tokens.size() - 1).type()))
+			.map(type -> {
+				for (TokenType m : match) {
+					if (m == type) return true;
+				}
+				return false;
+			});
 	}
 
 	private Token parseOperator() throws ParseException {
