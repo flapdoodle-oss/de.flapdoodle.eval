@@ -70,7 +70,6 @@ public class Tokenizer {
 	 * @throws ParseException When the expression can't be parsed.
 	 */
 	public List<Token> parse() throws ParseException {
-		Expression2Token.parse(this.expressionString);
 
 		Token currentToken;
 		while ((currentToken = getNextToken()) != null) {
@@ -605,10 +604,6 @@ public class Tokenizer {
 //			? 0
 //			: chars[index];
 //	}
-
-	private int peekPreviousChar() {
-		return index == 1 ? 0 : chars[index - 2];
-	}
 
 	private void consumeChar() {
 		if (index == end) {
