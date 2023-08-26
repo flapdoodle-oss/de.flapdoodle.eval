@@ -48,8 +48,6 @@ public class CleanTokenizer {
 
 	private int index = 0;
 
-//	private int currentChar = -2;
-
 	private int braceBalance;
 
 	private int arrayBalance;
@@ -244,7 +242,7 @@ public class CleanTokenizer {
 		StringBuilder tokenValue = new StringBuilder();
 		while (true) {
 			char currentChar=get();
-			tokenValue.append((char) currentChar);
+			tokenValue.append(currentChar);
 			String tokenString = tokenValue.toString();
 			String possibleNextOperator = tokenString + peek(1); // (char) peekNextChar();
 			boolean possibleNextOperatorFound =
@@ -342,12 +340,12 @@ public class CleanTokenizer {
 
 		int lastChar = 0;
 		boolean scientificNotation = false;
-		char currentChar;
-		while ((currentChar = get()) != 0 && isNumberChar(0)) {
+		while (notEof() && isNumberChar(0)) {
+			char currentChar = get();
 			if (currentChar == 'e' || currentChar == 'E') {
 				scientificNotation = true;
 			}
-			tokenValue.append((char) currentChar);
+			tokenValue.append(currentChar);
 			lastChar = currentChar;
 			next();
 		}
@@ -386,8 +384,8 @@ public class CleanTokenizer {
 		int tokenStartIndex = index;
 		StringBuilder tokenValue = new StringBuilder();
 		char currentChar;
-		while ((currentChar = get()) != 0 && isAtIdentifierChar()) {
-			tokenValue.append((char) currentChar);
+		while ((currentChar = get()) != 0 && isIdentifierChar(currentChar)) {
+			tokenValue.append(currentChar);
 			next();
 		}
 		String tokenName = tokenValue.toString();
@@ -435,8 +433,8 @@ public class CleanTokenizer {
 		// skip starting quote
 		next();
 		boolean inQuote = true;
-		char currentChar;
-		while (inQuote && (currentChar = get()) != 0) {
+		while (inQuote && notEof()) {
+			char currentChar = get();
 			if (currentChar == '\\') {
 				next();
 				tokenValue.append(escapeCharacter(get()));
@@ -540,12 +538,6 @@ public class CleanTokenizer {
 
 	private static boolean isIdentifierStart(char currentChar) {
 		return Character.isLetter(currentChar) || currentChar == '_';
-	}
-
-	@Deprecated
-	private boolean isAtIdentifierChar() {
-		char currentChar = get();
-		return isIdentifierChar(currentChar);
 	}
 
 	private static boolean isIdentifierChar(char currentChar) {
