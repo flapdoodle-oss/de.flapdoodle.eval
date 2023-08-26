@@ -27,13 +27,13 @@ import de.flapdoodle.eval.operators.PrefixOperator;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
+import java.util.Optional;
 
 /**
  * The tokenizer is responsible to parse a string and return a list of tokens. The order of tokens
  * will follow the infix expression notation, skipping any blank characters.
  */
-public class Tokenizer {
+public class CleanTokenizer {
 	private final String expressionString;
 	private final char[] chars;
 	private final int end;
@@ -54,7 +54,7 @@ public class Tokenizer {
 
 	private int arrayBalance;
 
-	public Tokenizer(String expressionString, Configuration configuration) {
+	public CleanTokenizer(String expressionString, Configuration configuration) {
 		this.expressionString = expressionString;
 		this.chars = expressionString.toCharArray();
 		this.end = chars.length;
@@ -71,9 +71,6 @@ public class Tokenizer {
 	 * @throws ParseException When the expression can't be parsed.
 	 */
 	public List<Token> parse() throws ParseException {
-		if (ThreadLocalRandom.current().nextBoolean()) {
-			return new CleanTokenizer(expressionString, configuration).parse();
-		}
 
 		Token currentToken;
 		while ((currentToken = getNextToken()) != null) {
@@ -106,23 +103,18 @@ public class Tokenizer {
 	}
 
 	private boolean implicitMultiplicationPossible(Token currentToken) {
-		Token previousToken = getPreviousToken();
-
-		if (previousToken == null) {
-			return false;
+		switch (currentToken.type()) {
+			case BRACE_OPEN:
+				return isPreviousTokenType(TokenType.BRACE_CLOSE, TokenType.NUMBER_LITERAL);
+			case VARIABLE_OR_CONSTANT:
+				return isPreviousTokenType(TokenType.NUMBER_LITERAL);
+			default:
+				return false;
 		}
-
-		return ((previousToken.type() == TokenType.BRACE_CLOSE && currentToken.type() == TokenType.BRACE_OPEN)
-			|| (previousToken.type() == TokenType.NUMBER_LITERAL
-			&& currentToken.type() == TokenType.VARIABLE_OR_CONSTANT)
-			|| (previousToken.type() == TokenType.NUMBER_LITERAL && currentToken.type() == TokenType.BRACE_OPEN));
 	}
 
 	private void validateToken(Token currentToken) throws ParseException {
-		Token previousToken = getPreviousToken();
-		if (previousToken != null
-			&& previousToken.type() == TokenType.INFIX_OPERATOR
-			&& invalidTokenAfterInfixOperator(currentToken)) {
+		if (isPreviousTokenType(TokenType.INFIX_OPERATOR) && invalidTokenAfterInfixOperator(currentToken)) {
 			throw new ParseException(currentToken, "Unexpected token after infix operator");
 		}
 	}
@@ -166,11 +158,11 @@ public class Tokenizer {
 			return parseStructureSeparator();
 		} else if (currentChar == ',') {
 			Token token = Token.of(index, ",", TokenType.COMMA);
-			consumeChar();
+			next();
 			return token;
-		} else if (isAtIdentifierStart()) {
+		} else if (isIdentifierStart(currentChar)) {
 			return parseIdentifier();
-		} else if (isAtNumberStart()) {
+		} else if (isNumberStart(0)) {
 			return parseNumberLiteral();
 		} else {
 			return parseOperator();
@@ -182,7 +174,7 @@ public class Tokenizer {
 		if (arrayOpenOrStructureSeparatorNotAllowed()) {
 			throw new ParseException(token, "Structure separator not allowed here");
 		}
-		consumeChar();
+		next();
 		return token;
 	}
 
@@ -191,7 +183,7 @@ public class Tokenizer {
 		if (!arrayCloseAllowed()) {
 			throw new ParseException(token, "Array close not allowed here");
 		}
-		consumeChar();
+		next();
 		arrayBalance--;
 		if (arrayBalance < 0) {
 			throw new ParseException(token, "Unexpected closing array");
@@ -204,14 +196,14 @@ public class Tokenizer {
 		if (arrayOpenOrStructureSeparatorNotAllowed()) {
 			throw new ParseException(token, "Array open not allowed here");
 		}
-		consumeChar();
+		next();
 		arrayBalance++;
 		return token;
 	}
 
 	private Token parseBraceClose() throws ParseException {
 		Token token = Token.of(index, ")", TokenType.BRACE_CLOSE);
-		consumeChar();
+		next();
 		braceBalance--;
 		if (braceBalance < 0) {
 			throw new ParseException(token, "Unexpected closing brace");
@@ -221,13 +213,30 @@ public class Tokenizer {
 
 	private Token parseBraceOpen() {
 		Token token = Token.of(index, "(", TokenType.BRACE_OPEN);
-		consumeChar();
+		next();
 		braceBalance++;
 		return token;
 	}
 
-	private Token getPreviousToken() {
-		return tokens.isEmpty() ? null : tokens.get(tokens.size() - 1);
+	private Optional<Token> previousToken() {
+		return tokens.isEmpty() ? Optional.empty() : Optional.of(tokens.get(tokens.size() - 1));
+	}
+
+	private boolean isPreviousTokenType(TokenType ... match) {
+		return matchPreviousTokenType(match).orElse(false);
+	}
+
+	private Optional<Boolean> dontMatchPreviousTokenType(TokenType... match) {
+		return matchPreviousTokenType(match).map(it -> !it);
+	}
+
+	private Optional<Boolean> matchPreviousTokenType(TokenType... match) {
+		return previousToken().map(token -> {
+			for (TokenType m : match) {
+				if (m == token.type()) return true;
+			}
+			return false;
+		});
 	}
 
 	private Token parseOperator() throws ParseException {
@@ -244,7 +253,7 @@ public class Tokenizer {
 					&& operatorDictionary.hasOperator(PostfixOperator.class, possibleNextOperator))
 					|| (infixOperatorAllowed()
 					&& operatorDictionary.hasOperator(InfixOperator.class, possibleNextOperator));
-			consumeChar();
+			next();
 			if (!possibleNextOperatorFound) {
 				break;
 			}
@@ -270,96 +279,51 @@ public class Tokenizer {
 	}
 
 	private boolean arrayOpenOrStructureSeparatorNotAllowed() {
-		Token previousToken = getPreviousToken();
-
-		if (previousToken == null) {
-			return true;
-		}
-
-		switch (previousToken.type()) {
-			case BRACE_CLOSE:
-			case VARIABLE_OR_CONSTANT:
-			case ARRAY_CLOSE:
-			case STRING_LITERAL:
-				return false;
-			default:
-				return true;
-		}
+		return !isPreviousTokenType(
+			TokenType.BRACE_CLOSE,
+			TokenType.VARIABLE_OR_CONSTANT,
+			TokenType.ARRAY_CLOSE,
+			TokenType.STRING_LITERAL
+		);
 	}
 
 	private boolean arrayCloseAllowed() {
-		Token previousToken = getPreviousToken();
-
-		if (previousToken == null) {
-			return false;
-		}
-
-		switch (previousToken.type()) {
-			case BRACE_OPEN:
-			case INFIX_OPERATOR:
-			case PREFIX_OPERATOR:
-			case FUNCTION:
-			case COMMA:
-			case ARRAY_OPEN:
-				return false;
-			default:
-				return true;
-		}
+		return dontMatchPreviousTokenType(
+			TokenType.BRACE_OPEN,
+			TokenType.INFIX_OPERATOR,
+			TokenType.PREFIX_OPERATOR,
+			TokenType.FUNCTION,
+			TokenType.COMMA,
+			TokenType.ARRAY_OPEN
+		).orElse(false);
 	}
 
 	private boolean prefixOperatorAllowed() {
-		Token previousToken = getPreviousToken();
-
-		if (previousToken == null) {
-			return true;
-		}
-
-		switch (previousToken.type()) {
-			case BRACE_OPEN:
-			case INFIX_OPERATOR:
-			case COMMA:
-			case PREFIX_OPERATOR:
-				return true;
-			default:
-				return false;
-		}
+		return matchPreviousTokenType(
+			TokenType.BRACE_OPEN,
+			TokenType.INFIX_OPERATOR,
+			TokenType.COMMA,
+			TokenType.PREFIX_OPERATOR
+		).orElse(true);
 	}
 
 	private boolean postfixOperatorAllowed() {
-		Token previousToken = getPreviousToken();
-
-		if (previousToken == null) {
-			return false;
-		}
-
-		switch (previousToken.type()) {
-			case BRACE_CLOSE:
-			case NUMBER_LITERAL:
-			case VARIABLE_OR_CONSTANT:
-			case STRING_LITERAL:
-				return true;
-			default:
-				return false;
-		}
+		return isPreviousTokenType(
+			TokenType.BRACE_CLOSE,
+			TokenType.NUMBER_LITERAL,
+			TokenType.VARIABLE_OR_CONSTANT,
+			TokenType.STRING_LITERAL
+		);
 	}
 
 	private boolean infixOperatorAllowed() {
-		Token previousToken = getPreviousToken();
-
-		if (previousToken == null) {
-			return false;
-		}
-
-		switch (previousToken.type()) {
-			case BRACE_CLOSE:
-			case VARIABLE_OR_CONSTANT:
-			case STRING_LITERAL:
-			case POSTFIX_OPERATOR:
-			case NUMBER_LITERAL:
-				return true;
-			default:
-				return false;
-		}
+		return isPreviousTokenType(
+			TokenType.BRACE_CLOSE,
+			TokenType.VARIABLE_OR_CONSTANT,
+			TokenType.STRING_LITERAL,
+			TokenType.POSTFIX_OPERATOR,
+			TokenType.NUMBER_LITERAL
+		);
 	}
 
 	private Token parseNumberLiteral() throws ParseException {
@@ -379,13 +343,13 @@ public class Tokenizer {
 		int lastChar = 0;
 		boolean scientificNotation = false;
 		char currentChar;
-		while ((currentChar = get()) != 0 && isAtNumberChar()) {
+		while ((currentChar = get()) != 0 && isNumberChar(0)) {
 			if (currentChar == 'e' || currentChar == 'E') {
 				scientificNotation = true;
 			}
 			tokenValue.append((char) currentChar);
 			lastChar = currentChar;
-			consumeChar();
+			next();
 		}
 		// illegal scientific format literal
 		if (scientificNotation
@@ -406,14 +370,14 @@ public class Tokenizer {
 		StringBuilder tokenValue = new StringBuilder();
 
 		// hexadecimal number, consume "0x"
-		tokenValue.append((char) get());
-		consumeChar();
-		tokenValue.append((char) get());
-		consumeChar();
+		tokenValue.append(get());
+		next();
+		tokenValue.append(get());
+		next();
 		char currentChar;
-		while ((currentChar = get()) != 0 && isAtHexChar()) {
-			tokenValue.append((char) currentChar);
-			consumeChar();
+		while ((currentChar = get()) != 0 && isHexChar(currentChar)) {
+			tokenValue.append(currentChar);
+			next();
 		}
 		return Token.of(tokenStartIndex, tokenValue.toString(), TokenType.NUMBER_LITERAL);
 	}
@@ -424,7 +388,7 @@ public class Tokenizer {
 		char currentChar;
 		while ((currentChar = get()) != 0 && isAtIdentifierChar()) {
 			tokenValue.append((char) currentChar);
-			consumeChar();
+			next();
 		}
 		String tokenName = tokenValue.toString();
 
@@ -469,19 +433,19 @@ public class Tokenizer {
 		int tokenStartIndex = index;
 		StringBuilder tokenValue = new StringBuilder();
 		// skip starting quote
-		consumeChar();
+		next();
 		boolean inQuote = true;
 		char currentChar;
 		while (inQuote && (currentChar = get()) != 0) {
 			if (currentChar == '\\') {
-				consumeChar();
+				next();
 				tokenValue.append(escapeCharacter(get()));
 			} else if (currentChar == '"') {
 				inQuote = false;
 			} else {
 				tokenValue.append((char) currentChar);
 			}
-			consumeChar();
+			next();
 		}
 		if (inQuote) {
 			throw new ParseException(
@@ -514,17 +478,17 @@ public class Tokenizer {
 		}
 	}
 
-	private boolean isAtNumberStart() {
-		char currentChar = get();
+	private boolean isNumberStart(int offset) {
+		char currentChar = peek(offset);
 		if (Character.isDigit(currentChar)) {
 			return true;
 		}
-		return currentChar == '.' && Character.isDigit(peek(1)/*peekNextChar()*/);
+		return currentChar == '.' && Character.isDigit(peek(offset + 1));
 	}
 
-	private boolean isAtNumberChar() {
-		char currentChar = get();
-		int previousChar = peek(-1); //peekPreviousChar();
+	private boolean isNumberChar(int offset) {
+		char currentChar = peek(offset);
+		int previousChar = peek(offset-1); //peekPreviousChar();
 
 		if ((previousChar == 'e' || previousChar == 'E') && currentChar != '.') {
 			return Character.isDigit(currentChar) || currentChar == '+' || currentChar == '-';
@@ -541,18 +505,11 @@ public class Tokenizer {
 	}
 
 	private boolean isNextCharNumberChar() {
-		if (peek(1)/*peekNextChar()*/ == 0) {
-			return false;
-		}
-		consumeChar();
-		boolean isAtNumber = isAtNumberChar();
-		index--;
-//		currentChar = expressionString.charAt(index - 1);
-		return isAtNumber;
+		return hasNext() && isNumberChar(1);
 	}
 
-	private boolean isAtHexChar() {
-		switch (get()) {
+	private static boolean isHexChar(char current) {
+		switch (current) {
 			case '0':
 			case '1':
 			case '2':
@@ -581,75 +538,52 @@ public class Tokenizer {
 		}
 	}
 
-	private boolean isAtIdentifierStart() {
-		char currentChar = get();
+	private static boolean isIdentifierStart(char currentChar) {
 		return Character.isLetter(currentChar) || currentChar == '_';
 	}
 
+	@Deprecated
 	private boolean isAtIdentifierChar() {
 		char currentChar = get();
+		return isIdentifierChar(currentChar);
+	}
+
+	private static boolean isIdentifierChar(char currentChar) {
 		return Character.isLetter(currentChar) || Character.isDigit(currentChar) || currentChar == '_';
 	}
 
 	private void skipBlanks() {
-//		char currentChar = get();
-//		if (currentChar == -2) {
-//			// consume first character of expression
-//			consumeChar();
-//		}
-		char currentChar;
-		while ((currentChar = get()) != 0 && Character.isWhitespace(currentChar)) {
-			consumeChar();
-		}
-	}
-
-//	private char peekNextChar() {
-//		return index == end
-//			? 0
-//			: chars[index];
-//	}
-
-	private void consumeChar() {
-		if (index == end) {
-//			currentChar = 0;
-		} else {
-//			currentChar = chars[index++];
+		while (notEof() && Character.isWhitespace(get())) {
 			index++;
 		}
 	}
 
-	/***
-	 *
-	 */
+	private void next() {
+		if (notEof()) index++;
+	}
 
-//	protected void skip() throws java.text.ParseException {
-//		get();
-//	}
+	private boolean hasNext() {
+		return has(1);
+	}
+
+	private boolean has(int offset) {
+		if (index+offset < 0) return false;
+		return index + offset < end;
+	}
 
 	private char peek(int offset) {
-		if (index+offset < 0) return 0;
-		if (index+offset >= end) return 0;
-		return chars[index+offset];
+		return has(offset) ?  chars[index+offset] : 0;
+	}
+
+	private boolean eof() {
+		return index >= end;
+	}
+
+	private boolean notEof() {
+		return !eof();
 	}
 
 	private char get() {
 		return peek(0);
 	}
-
-//	protected char get() throws java.text.ParseException {
-//		if (index >= end) throw parseException("EOF");
-//		return chars[index++];
-//	}
-//
-//	protected char get(String message) throws java.text.ParseException {
-//		if (index >= end) throw parseException(message);
-//		return chars[index++];
-//	}
-
-	protected void skipWS() {
-		while (index < end && Character.isWhitespace(chars[index])) {
-			index++;
-		}
-	}
-
 }
