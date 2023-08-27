@@ -16,12 +16,7 @@
  */
 package de.flapdoodle.eval.parser;
 
-import de.flapdoodle.eval.config.Configuration;
-import de.flapdoodle.eval.config.OperatorResolver;
 import de.flapdoodle.eval.config.Operators;
-import de.flapdoodle.eval.operators.InfixOperator;
-import de.flapdoodle.eval.operators.PostfixOperator;
-import de.flapdoodle.eval.operators.PrefixOperator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,24 +31,19 @@ public class Tokenizer {
 	private final char[] chars;
 	private final int end;
 
-	private final Configuration configuration;
-
 	private final List<Token> tokens = new ArrayList<>();
 	private final Operators operators;
 
 	private int index = 0;
+	private int braceBalance = 0;
+	private int arrayBalance = 0;
 
-	private int braceBalance;
-
-	private int arrayBalance;
-
-	public Tokenizer(String expressionString, Configuration configuration) {
+	public Tokenizer(String expressionString, Operators operators) {
 		this.expressionString = expressionString;
 		this.chars = expressionString.toCharArray();
 		this.end = chars.length;
-		
-		this.configuration = configuration;
-		this.operators = configuration.operators();
+
+		this.operators = operators;
 	}
 
 	/**
@@ -68,16 +58,12 @@ public class Tokenizer {
 		while ((token = nextToken()).isPresent()) {
 			Token currentToken = token.get();
 			if (implicitMultiplicationPossible(currentToken)) {
-				if (configuration.isImplicitMultiplicationAllowed()) {
-					Token multiplication =
-						Token.of(
-							currentToken.start(),
-							"*",
-							TokenType.INFIX_OPERATOR);
-					tokens.add(multiplication);
-				} else {
-					throw new ParseException(currentToken, "Missing operator");
-				}
+				Token multiplication =
+					Token.of(
+						currentToken.start(),
+						"*",
+						TokenType.INFIX_OPERATOR);
+				tokens.add(multiplication);
 			}
 			validateToken(currentToken);
 			tokens.add(currentToken);
@@ -130,9 +116,9 @@ public class Tokenizer {
 			? Optional.empty()
 			: Optional.of(parseNextToken());
 	}
-	
+
 	private Token parseNextToken() throws ParseException {
-		char currentChar=get();
+		char currentChar = get();
 		// we have a token start, identify and parse it
 		if (currentChar == '"') {
 			return parseStringLiteral();
@@ -140,13 +126,11 @@ public class Tokenizer {
 			return parseBraceOpen();
 		} else if (currentChar == ')') {
 			return parseBraceClose();
-		} else if (currentChar == '[' && configuration.isArraysAllowed()) {
+		} else if (currentChar == '[') {
 			return parseArrayOpen();
-		} else if (currentChar == ']' && configuration.isArraysAllowed()) {
+		} else if (currentChar == ']') {
 			return parseArrayClose();
-		} else if (currentChar == '.'
-			&& !isNextCharNumberChar()
-			&& configuration.isStructuresAllowed()) {
+		} else if (currentChar == '.' && !isNextCharNumberChar()) {
 			return parseStructureSeparator();
 		} else if (currentChar == ',') {
 			Token token = Token.of(index, ",", TokenType.COMMA);
@@ -156,7 +140,7 @@ public class Tokenizer {
 			return parseIdentifier();
 		} else if (isNumberStart(0)) {
 			return parseNumberLiteral();
-		} else if (currentChar == '.' && configuration.isStructuresAllowed()) {
+		} else if (currentChar == '.') {
 			Token token = Token.of(index, ".", TokenType.STRUCTURE_SEPARATOR);
 			next();
 			return token;
@@ -214,7 +198,7 @@ public class Tokenizer {
 		return token;
 	}
 
-	private boolean isPreviousTokenType(TokenType ... match) {
+	private boolean isPreviousTokenType(TokenType... match) {
 		return matchPreviousTokenType(match).orElse(false);
 	}
 
@@ -327,7 +311,7 @@ public class Tokenizer {
 	}
 
 	private Token parseNumberLiteral() throws ParseException {
-		char currentChar=get();
+		char currentChar = get();
 		char nextChar = peek(1); //peekNextChar();
 		if (currentChar == '0' && (nextChar == 'x' || nextChar == 'X')) {
 			return parseHexNumberLiteral();
@@ -477,7 +461,7 @@ public class Tokenizer {
 
 	private boolean isNumberChar(int offset) {
 		char currentChar = peek(offset);
-		int previousChar = peek(offset-1); //peekPreviousChar();
+		int previousChar = peek(offset - 1); //peekPreviousChar();
 
 		if ((previousChar == 'e' || previousChar == 'E') && currentChar != '.') {
 			return Character.isDigit(currentChar) || currentChar == '+' || currentChar == '-';
@@ -550,12 +534,12 @@ public class Tokenizer {
 	}
 
 	private boolean has(int offset) {
-		if (index+offset < 0) return false;
+		if (index + offset < 0) return false;
 		return index + offset < end;
 	}
 
 	private char peek(int offset) {
-		return has(offset) ?  chars[index+offset] : 0;
+		return has(offset) ? chars[index + offset] : 0;
 	}
 
 	private boolean eof() {

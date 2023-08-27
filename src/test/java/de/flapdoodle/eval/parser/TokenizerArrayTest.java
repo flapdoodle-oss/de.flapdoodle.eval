@@ -16,7 +16,6 @@
  */
 package de.flapdoodle.eval.parser;
 
-import de.flapdoodle.eval.config.Configuration;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -53,59 +52,43 @@ class TokenizerArrayTest extends BaseParserTest {
 
 	@Test
 	void testMissingClosingArray() {
-		assertThatThrownBy(() -> new Tokenizer("a[2+4", configuration).parse())
+		assertThatThrownBy(() -> new Tokenizer("a[2+4", configuration.operators()).parse())
 			.isEqualTo(new ParseException(1, 5, "a[2+4", "Closing array not found"));
 	}
 
 	@Test
 	void testUnexpectedClosingArray() {
-		assertThatThrownBy(() -> new Tokenizer("a[2+4]]", configuration).parse())
+		assertThatThrownBy(() -> new Tokenizer("a[2+4]]", configuration.operators()).parse())
 			.isEqualTo(new ParseException(6, 6, "]", "Unexpected closing array"));
 	}
 
 	@Test
 	void testOpenArrayNotAllowedBeginning() {
-		assertThatThrownBy(() -> new Tokenizer("[1]", configuration).parse())
+		assertThatThrownBy(() -> new Tokenizer("[1]", configuration.operators()).parse())
 			.isEqualTo(new ParseException(0, 0, "[", "Array open not allowed here"));
 	}
 
 	@Test
 	void testOpenArrayNotAllowedAfterOperator() {
-		assertThatThrownBy(() -> new Tokenizer("1+[1]", configuration).parse())
+		assertThatThrownBy(() -> new Tokenizer("1+[1]", configuration.operators()).parse())
 			.isEqualTo(new ParseException(2, 2, "[", "Array open not allowed here"));
 	}
 
 	@Test
 	void testOpenArrayNotAllowedAfterBrace() {
-		assertThatThrownBy(() -> new Tokenizer("([1]", configuration).parse())
+		assertThatThrownBy(() -> new Tokenizer("([1]", configuration.operators()).parse())
 			.isEqualTo(new ParseException(1, 1, "[", "Array open not allowed here"));
 	}
 
 	@Test
 	void testCloseArrayNotAllowedBeginning() {
-		assertThatThrownBy(() -> new Tokenizer("]", configuration).parse())
+		assertThatThrownBy(() -> new Tokenizer("]", configuration.operators()).parse())
 			.isEqualTo(new ParseException(0, 0, "]", "Array close not allowed here"));
 	}
 
 	@Test
 	void testCloseArrayNotAllowedAfterBrace() {
-		assertThatThrownBy(() -> new Tokenizer("(]", configuration).parse())
+		assertThatThrownBy(() -> new Tokenizer("(]", configuration.operators()).parse())
 			.isEqualTo(new ParseException(1, 1, "]", "Array close not allowed here"));
-	}
-
-	@Test
-	void testArraysNotAllowedOpen() {
-		Configuration config = Configuration.builder().isArraysAllowed(false).build();
-
-		assertThatThrownBy(() -> new Tokenizer("a[0]", config).parse())
-			.isEqualTo(new ParseException(1, 1, "[", "Undefined operator '['"));
-	}
-
-	@Test
-	void testArraysNotAllowedClose() {
-		Configuration config = Configuration.builder().isArraysAllowed(false).build();
-
-		assertThatThrownBy(() -> new Tokenizer("]", config).parse())
-			.isEqualTo(new ParseException(0, 0, "]", "Undefined operator ']'"));
 	}
 }

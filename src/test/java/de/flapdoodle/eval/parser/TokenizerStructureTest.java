@@ -16,7 +16,6 @@
  */
 package de.flapdoodle.eval.parser;
 
-import de.flapdoodle.eval.config.Configuration;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -79,22 +78,13 @@ class TokenizerStructureTest extends BaseParserTest {
 
 	@Test
 	void testStructureSeparatorNotAllowedBegin() {
-		assertThatThrownBy(() -> new Tokenizer(".", configuration).parse())
+		assertThatThrownBy(() -> new Tokenizer(".", configuration.operators()).parse())
 			.isEqualTo(new ParseException(0, 0, ".", "Structure separator not allowed here"));
 	}
 
 	@Test
 	void testStructureSeparatorNotAllowedOperator() {
-		assertThatThrownBy(() -> new Tokenizer("-.", configuration).parse())
+		assertThatThrownBy(() -> new Tokenizer("-.", configuration.operators()).parse())
 			.isEqualTo(new ParseException(1, 1, ".", "Structure separator not allowed here"));
-	}
-
-	@Test
-	void testStructureNotAllowed() {
-		Configuration config =
-			Configuration.builder().isStructuresAllowed(false).build();
-
-		assertThatThrownBy(() -> new Tokenizer("a.b", config).parse())
-			.isEqualTo(new ParseException(1, 1, ".", "Undefined operator '.'"));
 	}
 }

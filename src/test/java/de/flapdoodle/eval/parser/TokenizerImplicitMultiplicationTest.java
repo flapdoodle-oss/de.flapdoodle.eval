@@ -68,13 +68,4 @@ class TokenizerImplicitMultiplicationTest extends BaseParserTest {
 			Token.of(1, "*", TokenType.INFIX_OPERATOR),
 			Token.of(1, "x", TokenType.VARIABLE_OR_CONSTANT));
 	}
-
-	@Test
-	void testImplicitMultiplicationNotAllowed() {
-		Configuration config =
-			Configuration.builder().isImplicitMultiplicationAllowed(false).build();
-
-		assertThatThrownBy(() -> new Tokenizer("2(x+y)", config).parse())
-			.isEqualTo(new ParseException(1, 1, "(", "Missing operator"));
-	}
 }

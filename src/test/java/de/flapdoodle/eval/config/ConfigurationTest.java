@@ -41,9 +41,6 @@ class ConfigurationTest {
 			.isSameAs(Defaults.operators());
 		assertThat(configuration.functions())
 			.isSameAs(Defaults.functions());
-		assertThat(configuration.isArraysAllowed()).isTrue();
-		assertThat(configuration.isStructuresAllowed()).isTrue();
-		assertThat(configuration.isImplicitMultiplicationAllowed()).isTrue();
 		assertThat(configuration.getConstantResolver())
 			.isSameAs(Defaults.constants());
 //    assertThat(configuration.getDecimalPlacesRounding())

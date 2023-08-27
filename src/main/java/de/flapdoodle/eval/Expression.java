@@ -72,7 +72,7 @@ public abstract class Expression {
 
 	@org.immutables.value.Value.Derived
 	public Either<ASTNode, ParseException> getAbstractSyntaxTree() {
-		Tokenizer tokenizer = new Tokenizer(raw(), configuration());
+		Tokenizer tokenizer = new Tokenizer(raw(), configuration().operators());
 		try {
 			ShuntingYardConverter converter =
 				new ShuntingYardConverter(raw(), tokenizer.parse(), configuration());

@@ -56,21 +56,6 @@ public abstract class Configuration {
 	}
 
 	@Value.Default
-	public boolean isImplicitMultiplicationAllowed() {
-		return true;
-	}
-
-	@Value.Default
-	public boolean isArraysAllowed() {
-		return true;
-	}
-
-	@Value.Default
-	public boolean isStructuresAllowed() {
-		return true;
-	}
-
-	@Value.Default
 	public boolean isAllowOverwriteConstants() {
 		return true;
 	}
