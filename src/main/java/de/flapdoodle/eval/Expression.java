@@ -160,7 +160,6 @@ public abstract class Expression {
 				break;
 			case VARIABLE_OR_CONSTANT:
 				result = getVariableOrConstant(token);
-				// Value.ExpressionValue ??
 				break;
 			case PREFIX_OPERATOR:
 				result = PrefixOperatorNode.of(operator(token, PrefixOperator.class), fill(startNode.getParameters().get(0)));
@@ -207,9 +206,6 @@ public abstract class Expression {
 				break;
 			case VARIABLE_OR_CONSTANT:
 				result = getVariableOrConstant(variableResolver, token);
-				if (result instanceof Value.ExpressionValue) {
-					result = evaluateSubtree(variableResolver, ((Value.ExpressionValue) result).wrapped());
-				}
 				break;
 			case PREFIX_OPERATOR:
 				result =
@@ -284,7 +280,11 @@ public abstract class Expression {
 		Evaluateable function = function(token);
 		List<Node> parameterResults = new ArrayList<>();
 		for (int i = 0; i < startNode.getParameters().size(); i++) {
-			parameterResults.add(fill(startNode.getParameters().get(i)));
+			if (function.parameterIsLazy(i)) {
+				parameterResults.add(LazyNode.of(fill(startNode.getParameters().get(i))));
+			} else {
+				parameterResults.add(fill(startNode.getParameters().get(i)));
+			}
 		}
 
 		return FunctionNode.of(function, parameterResults);
