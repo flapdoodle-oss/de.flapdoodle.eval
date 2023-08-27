@@ -80,10 +80,6 @@ public abstract class Value<T> {
 	}
 
 	@org.immutables.value.Value.Immutable
-	public static abstract class ExpressionValue extends Value<ASTNode> {
-	}
-
-	@org.immutables.value.Value.Immutable
 	public static abstract class FailedWithException<T> extends Value<T> {
 		public abstract EvaluationException exception();
 		@Nullable
@@ -133,10 +129,6 @@ public abstract class Value<T> {
 	public static <T> MapValue of(Function<T, Value<?>> mapper, Map<String, T> map) {
 		return of(ValueMap.of(map.entrySet().stream()
 			.collect(Collectors.toMap(Map.Entry::getKey, entry -> mapper.apply(entry.getValue())))));
-	}
-
-	public static ExpressionValue of(ASTNode value) {
-		return ImmutableExpressionValue.of(value);
 	}
 
 	public static ArrayValue of(Collection<? extends Value<?>> array) {
