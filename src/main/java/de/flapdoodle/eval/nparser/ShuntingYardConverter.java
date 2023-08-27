@@ -23,6 +23,8 @@ import de.flapdoodle.eval.operators.Operator;
 import de.flapdoodle.eval.operators.PostfixOperator;
 import de.flapdoodle.eval.operators.PrefixOperator;
 import de.flapdoodle.eval.parser.TokenType;
+import de.flapdoodle.eval.parser.ASTNode;
+import de.flapdoodle.eval.parser.ParseException;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;

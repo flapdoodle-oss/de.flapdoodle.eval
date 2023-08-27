@@ -17,6 +17,7 @@
 package de.flapdoodle.eval.parser;
 
 import de.flapdoodle.eval.BaseException;
+import de.flapdoodle.eval.CommonToken;
 
 /**
  * Exception while parsing the expression.
@@ -31,7 +32,7 @@ public class ParseException extends BaseException {
 		super(1, expression.length(), expression, message);
 	}
 
-	public ParseException(Token token, String message) {
+	public ParseException(CommonToken token, String message) {
 		super(
 			token.start(),
 			token.start() + token.value().length() - 1,

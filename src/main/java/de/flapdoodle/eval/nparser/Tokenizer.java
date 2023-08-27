@@ -22,6 +22,7 @@ import de.flapdoodle.eval.operators.InfixOperator;
 import de.flapdoodle.eval.operators.PostfixOperator;
 import de.flapdoodle.eval.operators.PrefixOperator;
 import de.flapdoodle.eval.parser.TokenType;
+import de.flapdoodle.eval.parser.ParseException;
 
 import java.util.ArrayList;
 import java.util.List;
