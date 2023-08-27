@@ -16,6 +16,7 @@
  */
 package de.flapdoodle.eval.parser;
 
+import de.flapdoodle.eval.CommonToken;
 import de.flapdoodle.eval.config.Configuration;
 import org.junit.jupiter.api.Test;
 
@@ -33,7 +34,7 @@ class TokenTest {
 			counter++;
 			String tokenString =
 				type == TokenType.NUMBER_LITERAL ? Integer.toString(counter) : "token" + counter;
-			Token token = Token.of(counter, tokenString, type);
+			CommonToken token = CommonToken.of(counter, tokenString, type);
 
 			assertThat(token.type()).isEqualTo(type);
 			assertThat(token.start()).isEqualTo(counter);

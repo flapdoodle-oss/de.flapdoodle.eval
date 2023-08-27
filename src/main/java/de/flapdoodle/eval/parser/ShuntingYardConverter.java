@@ -16,6 +16,7 @@
  */
 package de.flapdoodle.eval.parser;
 
+import de.flapdoodle.eval.CommonToken;
 import de.flapdoodle.eval.Evaluateable;
 import de.flapdoodle.eval.config.Configuration;
 import de.flapdoodle.eval.operators.InfixOperator;
@@ -34,18 +35,18 @@ import java.util.List;
  */
 public class ShuntingYardConverter {
 
-	private final List<Token> expressionTokens;
+	private final List<CommonToken> expressionTokens;
 
 	private final String originalExpression;
 
 	private final Configuration configuration;
 
-	private final Deque<Token> operatorStack = new ArrayDeque<>();
+	private final Deque<CommonToken> operatorStack = new ArrayDeque<>();
 	private final Deque<ASTNode> operandStack = new ArrayDeque<>();
 	
 	public ShuntingYardConverter(
 		String originalExpression,
-		List<Token> expressionTokens,
+		List<CommonToken> expressionTokens,
 		Configuration configuration) {
 		this.originalExpression = originalExpression;
 		this.expressionTokens = expressionTokens;
@@ -54,8 +55,8 @@ public class ShuntingYardConverter {
 
 	public ASTNode toAbstractSyntaxTree() throws ParseException {
 
-		Token previousToken = null;
-		for (Token currentToken : expressionTokens) {
+		CommonToken previousToken = null;
+		for (CommonToken currentToken : expressionTokens) {
 			switch (currentToken.type()) {
 				case VARIABLE_OR_CONSTANT:
 				case NUMBER_LITERAL:
@@ -96,7 +97,7 @@ public class ShuntingYardConverter {
 		}
 
 		while (!operatorStack.isEmpty()) {
-			Token token = operatorStack.pop();
+			CommonToken token = operatorStack.pop();
 			createOperatorNode(token);
 		}
 
@@ -111,21 +112,21 @@ public class ShuntingYardConverter {
 		return operandStack.pop();
 	}
 
-	private void processStructureSeparator(Token currentToken) throws ParseException {
-		Token nextToken = operatorStack.isEmpty() ? null : operatorStack.peek();
+	private void processStructureSeparator(CommonToken currentToken) throws ParseException {
+		CommonToken nextToken = operatorStack.isEmpty() ? null : operatorStack.peek();
 		while (nextToken != null && nextToken.type() == TokenType.STRUCTURE_SEPARATOR) {
-			Token token = operatorStack.pop();
+			CommonToken token = operatorStack.pop();
 			createOperatorNode(token);
 			nextToken = operatorStack.peek();
 		}
 		operatorStack.push(currentToken);
 	}
 
-	private void processBraceOpen(Token previousToken, Token currentToken) {
+	private void processBraceOpen(CommonToken previousToken, CommonToken currentToken) {
 		if (previousToken != null && previousToken.type() == TokenType.FUNCTION) {
 			// start of parameter list, marker for variable number of arguments
-			Token paramStart =
-				Token.of(
+			CommonToken paramStart =
+				CommonToken.of(
 					currentToken.start(),
 					currentToken.value(),
 					TokenType.FUNCTION_PARAM_START);
@@ -138,7 +139,7 @@ public class ShuntingYardConverter {
 		processOperatorsFromStackUntilTokenType(TokenType.BRACE_OPEN);
 		operatorStack.pop(); // throw away the marker
 		if (!operatorStack.isEmpty() && operatorStack.peek().type() == TokenType.FUNCTION) {
-			Token functionToken = operatorStack.pop();
+			CommonToken functionToken = operatorStack.pop();
 			ArrayList<ASTNode> parameters = new ArrayList<>();
 			while (true) {
 				// add all parameters in reverse order from stack to the parameter array
@@ -153,7 +154,7 @@ public class ShuntingYardConverter {
 		}
 	}
 
-	private void validateFunctionParameters(Token functionToken, ArrayList<ASTNode> parameters)
+	private void validateFunctionParameters(CommonToken functionToken, ArrayList<ASTNode> parameters)
 		throws ParseException {
 		Evaluateable function = configuration.functions().get(functionToken.value());
 		if (parameters.size() < function.parameters().min()) {
@@ -183,16 +184,16 @@ public class ShuntingYardConverter {
 	 *
 	 * @param currentToken The current ARRAY_OPEN ("[") token.
 	 */
-	private void processArrayOpen(Token currentToken) throws ParseException {
-		Token nextToken = operatorStack.isEmpty() ? null : operatorStack.peek();
+	private void processArrayOpen(CommonToken currentToken) throws ParseException {
+		CommonToken nextToken = operatorStack.isEmpty() ? null : operatorStack.peek();
 		while (nextToken != null && (nextToken.type() == TokenType.STRUCTURE_SEPARATOR)) {
-			Token token = operatorStack.pop();
+			CommonToken token = operatorStack.pop();
 			createOperatorNode(token);
 			nextToken = operatorStack.isEmpty() ? null : operatorStack.peek();
 		}
 		// create ARRAY_INDEX operator (just like a function name) and push it to the operator stack
-		Token arrayIndex =
-			Token.of(currentToken.start(), currentToken.value(), TokenType.ARRAY_INDEX);
+		CommonToken arrayIndex =
+			CommonToken.of(currentToken.start(), currentToken.value(), TokenType.ARRAY_INDEX);
 		operatorStack.push(arrayIndex);
 
 		// push the ARRAY_OPEN to the operators, too (to later match the ARRAY_CLOSE)
@@ -207,7 +208,7 @@ public class ShuntingYardConverter {
 	private void processArrayClose() throws ParseException {
 		processOperatorsFromStackUntilTokenType(TokenType.ARRAY_OPEN);
 		operatorStack.pop(); // throw away the marker
-		Token arrayToken = operatorStack.pop();
+		CommonToken arrayToken = operatorStack.pop();
 		ArrayList<ASTNode> operands = new ArrayList<>();
 
 		// second parameter of the "ARRAY_INDEX" function is the index (first on stack)
@@ -225,12 +226,12 @@ public class ShuntingYardConverter {
 	private void processOperatorsFromStackUntilTokenType(TokenType untilTokenType)
 		throws ParseException {
 		while (!operatorStack.isEmpty() && operatorStack.peek().type() != untilTokenType) {
-			Token token = operatorStack.pop();
+			CommonToken token = operatorStack.pop();
 			createOperatorNode(token);
 		}
 	}
 
-	private void createOperatorNode(Token token) throws ParseException {
+	private void createOperatorNode(CommonToken token) throws ParseException {
 		if (operandStack.isEmpty()) {
 			throw new ParseException(token, "Missing operand for operator");
 		}
@@ -249,24 +250,24 @@ public class ShuntingYardConverter {
 		}
 	}
 
-	private void processOperator(Token currentToken) throws ParseException {
-		Token nextToken = operatorStack.isEmpty() ? null : operatorStack.peek();
+	private void processOperator(CommonToken currentToken) throws ParseException {
+		CommonToken nextToken = operatorStack.isEmpty() ? null : operatorStack.peek();
 		while (isOperator(nextToken)
 			&& isNextOperatorOfHigherPrecedence(
 			currentToken, nextToken)) {
-			Token token = operatorStack.pop();
+			CommonToken token = operatorStack.pop();
 			createOperatorNode(token);
 			nextToken = operatorStack.isEmpty() ? null : operatorStack.peek();
 		}
 		operatorStack.push(currentToken);
 	}
 	private boolean isNextOperatorOfHigherPrecedence(
-			Token currentOperator, Token nextOperator
+			CommonToken currentOperator, CommonToken nextOperator
 	) throws ParseException {
 		return isNextOperatorOfHigherPrecedence(operator(currentOperator), operator(nextOperator));
 	}
 
-	private Operator operator(Token token) throws ParseException {
+	private Operator operator(CommonToken token) throws ParseException {
 		switch (token.type()) {
 			case PREFIX_OPERATOR:
 				return configuration.getOperatorResolver().get(PrefixOperator.class, token.value());
@@ -294,7 +295,7 @@ public class ShuntingYardConverter {
 		}
 	}
 
-	private boolean isOperator(Token token) {
+	private boolean isOperator(CommonToken token) {
 		if (token == null) {
 			return false;
 		}

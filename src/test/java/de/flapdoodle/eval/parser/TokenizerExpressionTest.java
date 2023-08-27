@@ -16,6 +16,7 @@
  */
 package de.flapdoodle.eval.parser;
 
+import de.flapdoodle.eval.CommonToken;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -24,32 +25,32 @@ class TokenizerExpressionTest extends BaseParserTest {
 
 	@Test
 	void testSingleNumber() throws ParseException {
-		assertAllTokensParsedCorrectly("1", Token.of(0, "1", TokenType.NUMBER_LITERAL));
+		assertAllTokensParsedCorrectly("1", CommonToken.of(0, "1", TokenType.NUMBER_LITERAL));
 	}
 
 	@Test
 	void testSingleVariable() throws ParseException {
-		assertAllTokensParsedCorrectly("a", Token.of(0, "a", TokenType.VARIABLE_OR_CONSTANT));
+		assertAllTokensParsedCorrectly("a", CommonToken.of(0, "a", TokenType.VARIABLE_OR_CONSTANT));
 	}
 
 	@Test
 	void testSimple() throws ParseException {
 		assertAllTokensParsedCorrectly(
 			"a+123",
-			Token.of(0, "a", TokenType.VARIABLE_OR_CONSTANT),
-			Token.of(1, "+", TokenType.INFIX_OPERATOR),
-			Token.of(2, "123", TokenType.NUMBER_LITERAL));
+			CommonToken.of(0, "a", TokenType.VARIABLE_OR_CONSTANT),
+			CommonToken.of(1, "+", TokenType.INFIX_OPERATOR),
+			CommonToken.of(2, "123", TokenType.NUMBER_LITERAL));
 	}
 
 	@Test
 	void testTwo() throws ParseException {
 		assertAllTokensParsedCorrectly(
 			"a+123+c",
-			Token.of(0, "a", TokenType.VARIABLE_OR_CONSTANT),
-			Token.of(1, "+", TokenType.INFIX_OPERATOR),
-			Token.of(2, "123", TokenType.NUMBER_LITERAL),
-			Token.of(5, "+", TokenType.INFIX_OPERATOR),
-			Token.of(6, "c", TokenType.VARIABLE_OR_CONSTANT));
+			CommonToken.of(0, "a", TokenType.VARIABLE_OR_CONSTANT),
+			CommonToken.of(1, "+", TokenType.INFIX_OPERATOR),
+			CommonToken.of(2, "123", TokenType.NUMBER_LITERAL),
+			CommonToken.of(5, "+", TokenType.INFIX_OPERATOR),
+			CommonToken.of(6, "c", TokenType.VARIABLE_OR_CONSTANT));
 	}
 
 	@Test

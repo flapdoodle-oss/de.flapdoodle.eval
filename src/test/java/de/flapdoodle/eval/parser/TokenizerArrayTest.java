@@ -16,6 +16,7 @@
  */
 package de.flapdoodle.eval.parser;
 
+import de.flapdoodle.eval.CommonToken;
 import de.flapdoodle.eval.config.Configuration;
 import org.junit.jupiter.api.Test;
 
@@ -27,28 +28,28 @@ class TokenizerArrayTest extends BaseParserTest {
 	void testArraySimple() throws ParseException {
 		assertAllTokensParsedCorrectly(
 			"a[1]",
-			Token.of(0, "a", TokenType.VARIABLE_OR_CONSTANT),
-			Token.of(1, "[", TokenType.ARRAY_OPEN),
-			Token.of(2, "1", TokenType.NUMBER_LITERAL),
-			Token.of(3, "]", TokenType.ARRAY_CLOSE));
+			CommonToken.of(0, "a", TokenType.VARIABLE_OR_CONSTANT),
+			CommonToken.of(1, "[", TokenType.ARRAY_OPEN),
+			CommonToken.of(2, "1", TokenType.NUMBER_LITERAL),
+			CommonToken.of(3, "]", TokenType.ARRAY_CLOSE));
 	}
 
 	@Test
 	void testArrayNested() throws ParseException {
 		assertAllTokensParsedCorrectly(
 			"a[b[2] + c[3]]",
-			Token.of(0, "a", TokenType.VARIABLE_OR_CONSTANT),
-			Token.of(1, "[", TokenType.ARRAY_OPEN),
-			Token.of(2, "b", TokenType.VARIABLE_OR_CONSTANT),
-			Token.of(3, "[", TokenType.ARRAY_OPEN),
-			Token.of(4, "2", TokenType.NUMBER_LITERAL),
-			Token.of(5, "]", TokenType.ARRAY_CLOSE),
-			Token.of(7, "+", TokenType.INFIX_OPERATOR),
-			Token.of(9, "c", TokenType.VARIABLE_OR_CONSTANT),
-			Token.of(10, "[", TokenType.ARRAY_OPEN),
-			Token.of(11, "3", TokenType.NUMBER_LITERAL),
-			Token.of(12, "]", TokenType.ARRAY_CLOSE),
-			Token.of(13, "]", TokenType.ARRAY_CLOSE));
+			CommonToken.of(0, "a", TokenType.VARIABLE_OR_CONSTANT),
+			CommonToken.of(1, "[", TokenType.ARRAY_OPEN),
+			CommonToken.of(2, "b", TokenType.VARIABLE_OR_CONSTANT),
+			CommonToken.of(3, "[", TokenType.ARRAY_OPEN),
+			CommonToken.of(4, "2", TokenType.NUMBER_LITERAL),
+			CommonToken.of(5, "]", TokenType.ARRAY_CLOSE),
+			CommonToken.of(7, "+", TokenType.INFIX_OPERATOR),
+			CommonToken.of(9, "c", TokenType.VARIABLE_OR_CONSTANT),
+			CommonToken.of(10, "[", TokenType.ARRAY_OPEN),
+			CommonToken.of(11, "3", TokenType.NUMBER_LITERAL),
+			CommonToken.of(12, "]", TokenType.ARRAY_CLOSE),
+			CommonToken.of(13, "]", TokenType.ARRAY_CLOSE));
 	}
 
 	@Test

@@ -16,6 +16,7 @@
  */
 package de.flapdoodle.eval.parser;
 
+import de.flapdoodle.eval.CommonToken;
 import de.flapdoodle.eval.config.Configuration;
 import org.junit.jupiter.api.Test;
 
@@ -27,54 +28,54 @@ class TokenizerStructureTest extends BaseParserTest {
 	void testStructureSimple() throws ParseException {
 		assertAllTokensParsedCorrectly(
 			"a.b",
-			Token.of(0, "a", TokenType.VARIABLE_OR_CONSTANT),
-			Token.of(1, ".", TokenType.STRUCTURE_SEPARATOR),
-			Token.of(2, "b", TokenType.VARIABLE_OR_CONSTANT));
+			CommonToken.of(0, "a", TokenType.VARIABLE_OR_CONSTANT),
+			CommonToken.of(1, ".", TokenType.STRUCTURE_SEPARATOR),
+			CommonToken.of(2, "b", TokenType.VARIABLE_OR_CONSTANT));
 	}
 
 	@Test
 	void testStructureLeftIsE() throws ParseException {
 		assertAllTokensParsedCorrectly(
 			"e.b",
-			Token.of(0, "e", TokenType.VARIABLE_OR_CONSTANT),
-			Token.of(1, ".", TokenType.STRUCTURE_SEPARATOR),
-			Token.of(2, "b", TokenType.VARIABLE_OR_CONSTANT));
+			CommonToken.of(0, "e", TokenType.VARIABLE_OR_CONSTANT),
+			CommonToken.of(1, ".", TokenType.STRUCTURE_SEPARATOR),
+			CommonToken.of(2, "b", TokenType.VARIABLE_OR_CONSTANT));
 	}
 
 	@Test
 	void testStructureRightIsE() throws ParseException {
 		assertAllTokensParsedCorrectly(
 			"a.e",
-			Token.of(0, "a", TokenType.VARIABLE_OR_CONSTANT),
-			Token.of(1, ".", TokenType.STRUCTURE_SEPARATOR),
-			Token.of(2, "e", TokenType.VARIABLE_OR_CONSTANT));
+			CommonToken.of(0, "a", TokenType.VARIABLE_OR_CONSTANT),
+			CommonToken.of(1, ".", TokenType.STRUCTURE_SEPARATOR),
+			CommonToken.of(2, "e", TokenType.VARIABLE_OR_CONSTANT));
 	}
 
 	@Test
 	void testStructureBothAreE() throws ParseException {
 		assertAllTokensParsedCorrectly(
 			"e.e",
-			Token.of(0, "e", TokenType.VARIABLE_OR_CONSTANT),
-			Token.of(1, ".", TokenType.STRUCTURE_SEPARATOR),
-			Token.of(2, "e", TokenType.VARIABLE_OR_CONSTANT));
+			CommonToken.of(0, "e", TokenType.VARIABLE_OR_CONSTANT),
+			CommonToken.of(1, ".", TokenType.STRUCTURE_SEPARATOR),
+			CommonToken.of(2, "e", TokenType.VARIABLE_OR_CONSTANT));
 	}
 
 	@Test
 	void testStructureLeftEndsE() throws ParseException {
 		assertAllTokensParsedCorrectly(
 			"variable.a",
-			Token.of(0, "variable", TokenType.VARIABLE_OR_CONSTANT),
-			Token.of(8, ".", TokenType.STRUCTURE_SEPARATOR),
-			Token.of(9, "a", TokenType.VARIABLE_OR_CONSTANT));
+			CommonToken.of(0, "variable", TokenType.VARIABLE_OR_CONSTANT),
+			CommonToken.of(8, ".", TokenType.STRUCTURE_SEPARATOR),
+			CommonToken.of(9, "a", TokenType.VARIABLE_OR_CONSTANT));
 	}
 
 	@Test
 	void testStructureRightStartsE() throws ParseException {
 		assertAllTokensParsedCorrectly(
 			"a.end",
-			Token.of(0, "a", TokenType.VARIABLE_OR_CONSTANT),
-			Token.of(1, ".", TokenType.STRUCTURE_SEPARATOR),
-			Token.of(2, "end", TokenType.VARIABLE_OR_CONSTANT));
+			CommonToken.of(0, "a", TokenType.VARIABLE_OR_CONSTANT),
+			CommonToken.of(1, ".", TokenType.STRUCTURE_SEPARATOR),
+			CommonToken.of(2, "end", TokenType.VARIABLE_OR_CONSTANT));
 	}
 
 	@Test

@@ -19,7 +19,6 @@ package de.flapdoodle.eval;
 import de.flapdoodle.eval.config.Configuration;
 import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
-import de.flapdoodle.eval.parser.Token;
 import de.flapdoodle.eval.operators.InfixOperator;
 import de.flapdoodle.eval.operators.Operator;
 import de.flapdoodle.eval.operators.PostfixOperator;
@@ -202,10 +201,7 @@ public abstract class Expression {
 	}
 	
 	private <T extends Operator> T operator(CommonToken commonToken, Class<T> operatorType) {
-		if (commonToken instanceof Token) {
-			return configuration().getOperatorResolver().get(operatorType, commonToken.value());
-		}
-		throw new IllegalArgumentException("no operator for match: " + operatorType + " -> " + commonToken);
+		return configuration().getOperatorResolver().get(operatorType, commonToken.value());
 	}
 
 	// VisibleInTest
@@ -245,10 +241,7 @@ public abstract class Expression {
 	}
 
 	private Evaluateable function(CommonToken commonToken) {
-		if (commonToken instanceof Token) {
-			return configuration().functions().get(commonToken.value());
-		}
-		throw new IllegalArgumentException("could not find function for "+commonToken);
+		return configuration().functions().get(commonToken.value());
 	}
 
 	private Value<?> evaluateArrayIndex(ValueResolver variableResolver, ASTNode startNode) throws EvaluationException {

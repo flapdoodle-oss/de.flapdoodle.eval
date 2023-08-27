@@ -16,6 +16,7 @@
  */
 package de.flapdoodle.eval.parser;
 
+import de.flapdoodle.eval.CommonToken;
 import de.flapdoodle.eval.config.Configuration;
 import de.flapdoodle.eval.config.TestConfigurationProvider;
 import org.assertj.core.api.Assertions;
@@ -30,8 +31,8 @@ public abstract class BaseParserTest {
 	Configuration configuration =
 		TestConfigurationProvider.StandardConfigurationWithAdditionalTestOperators;
 
-	void assertAllTokensParsedCorrectly(String input, Token... expectedTokens) throws ParseException {
-		List<Token> tokensParsed = new Tokenizer(input, configuration).parse();
+	void assertAllTokensParsedCorrectly(String input, CommonToken... expectedTokens) throws ParseException {
+		List<CommonToken> tokensParsed = new Tokenizer(input, configuration).parse();
 
 		Assertions.assertThat(tokensParsed).containsExactly(expectedTokens);
 	}
@@ -43,7 +44,7 @@ public abstract class BaseParserTest {
 	 */
 	void assertASTTreeIsEqualTo(String expression, String treeJSON) throws ParseException {
 
-		List<Token> tokensParsed = new Tokenizer(expression, configuration).parse();
+		List<CommonToken> tokensParsed = new Tokenizer(expression, configuration).parse();
 		ASTNode root =
 			new ShuntingYardConverter(expression, tokensParsed, configuration).toAbstractSyntaxTree();
 		assertThat(root.toJSON()).isEqualTo(treeJSON);

@@ -18,7 +18,6 @@ package de.flapdoodle.eval;
 
 import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.parser.ASTNode;
-import de.flapdoodle.eval.parser.Token;
 import de.flapdoodle.eval.parser.TokenType;
 import org.junit.jupiter.api.Test;
 
@@ -32,7 +31,7 @@ class ExpressionEvaluationExceptionsTest {
 
 		assertThatThrownBy(
 			() -> {
-				ASTNode node = ASTNode.of(Token.of(1, "(", TokenType.BRACE_OPEN));
+				ASTNode node = ASTNode.of(CommonToken.of(1, "(", TokenType.BRACE_OPEN));
 				expression.evaluateSubtree(ValueResolver.empty(), node);
 			})
 			.isInstanceOf(EvaluationException.class)

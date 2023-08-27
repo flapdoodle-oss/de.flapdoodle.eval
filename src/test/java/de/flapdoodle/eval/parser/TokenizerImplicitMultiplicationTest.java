@@ -16,6 +16,7 @@
  */
 package de.flapdoodle.eval.parser;
 
+import de.flapdoodle.eval.CommonToken;
 import de.flapdoodle.eval.config.Configuration;
 import org.junit.jupiter.api.Test;
 
@@ -27,46 +28,46 @@ class TokenizerImplicitMultiplicationTest extends BaseParserTest {
 	void testImplicitBraces() throws ParseException {
 		assertAllTokensParsedCorrectly(
 			"(a+b)(a-b)",
-			Token.of(0, "(", TokenType.BRACE_OPEN),
-			Token.of(1, "a", TokenType.VARIABLE_OR_CONSTANT),
-			Token.of(2, "+", TokenType.INFIX_OPERATOR),
-			Token.of(3, "b", TokenType.VARIABLE_OR_CONSTANT),
-			Token.of(4, ")", TokenType.BRACE_CLOSE),
-			Token.of(5, "*", TokenType.INFIX_OPERATOR),
-			Token.of(5, "(", TokenType.BRACE_OPEN),
-			Token.of(6, "a", TokenType.VARIABLE_OR_CONSTANT),
-			Token.of(7, "-", TokenType.INFIX_OPERATOR),
-			Token.of(8, "b", TokenType.VARIABLE_OR_CONSTANT),
-			Token.of(9, ")", TokenType.BRACE_CLOSE));
+			CommonToken.of(0, "(", TokenType.BRACE_OPEN),
+			CommonToken.of(1, "a", TokenType.VARIABLE_OR_CONSTANT),
+			CommonToken.of(2, "+", TokenType.INFIX_OPERATOR),
+			CommonToken.of(3, "b", TokenType.VARIABLE_OR_CONSTANT),
+			CommonToken.of(4, ")", TokenType.BRACE_CLOSE),
+			CommonToken.of(5, "*", TokenType.INFIX_OPERATOR),
+			CommonToken.of(5, "(", TokenType.BRACE_OPEN),
+			CommonToken.of(6, "a", TokenType.VARIABLE_OR_CONSTANT),
+			CommonToken.of(7, "-", TokenType.INFIX_OPERATOR),
+			CommonToken.of(8, "b", TokenType.VARIABLE_OR_CONSTANT),
+			CommonToken.of(9, ")", TokenType.BRACE_CLOSE));
 	}
 
 	@Test
 	void testImplicitNumberBraces() throws ParseException {
 		assertAllTokensParsedCorrectly(
 			"2(x)",
-			Token.of(0, "2", TokenType.NUMBER_LITERAL),
-			Token.of(1, "*", TokenType.INFIX_OPERATOR),
-			Token.of(1, "(", TokenType.BRACE_OPEN),
-			Token.of(2, "x", TokenType.VARIABLE_OR_CONSTANT),
-			Token.of(3, ")", TokenType.BRACE_CLOSE));
+			CommonToken.of(0, "2", TokenType.NUMBER_LITERAL),
+			CommonToken.of(1, "*", TokenType.INFIX_OPERATOR),
+			CommonToken.of(1, "(", TokenType.BRACE_OPEN),
+			CommonToken.of(2, "x", TokenType.VARIABLE_OR_CONSTANT),
+			CommonToken.of(3, ")", TokenType.BRACE_CLOSE));
 	}
 
 	@Test
 	void testImplicitNumberNoBraces() throws ParseException {
 		assertAllTokensParsedCorrectly(
 			"2x",
-			Token.of(0, "2", TokenType.NUMBER_LITERAL),
-			Token.of(1, "*", TokenType.INFIX_OPERATOR),
-			Token.of(1, "x", TokenType.VARIABLE_OR_CONSTANT));
+			CommonToken.of(0, "2", TokenType.NUMBER_LITERAL),
+			CommonToken.of(1, "*", TokenType.INFIX_OPERATOR),
+			CommonToken.of(1, "x", TokenType.VARIABLE_OR_CONSTANT));
 	}
 
 	@Test
 	void testImplicitNumberVariable() throws ParseException {
 		assertAllTokensParsedCorrectly(
 			"2x",
-			Token.of(0, "2", TokenType.NUMBER_LITERAL),
-			Token.of(1, "*", TokenType.INFIX_OPERATOR),
-			Token.of(1, "x", TokenType.VARIABLE_OR_CONSTANT));
+			CommonToken.of(0, "2", TokenType.NUMBER_LITERAL),
+			CommonToken.of(1, "*", TokenType.INFIX_OPERATOR),
+			CommonToken.of(1, "x", TokenType.VARIABLE_OR_CONSTANT));
 	}
 
 	@Test
