@@ -56,6 +56,7 @@ public interface OperatorResolver {
 			// booleans
 			.putInfixOperators("=", new Equals())
 			.putInfixOperators("==", new Equals())
+			.putInfixOperators("===", new Same())
 			.putInfixOperators("!=", new NotEquals())
 			.putInfixOperators("<>", new NotEquals())
 			.putInfixOperators(">", new Greater())

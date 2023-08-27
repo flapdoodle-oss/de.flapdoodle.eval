@@ -234,10 +234,37 @@ public class Tokenizer {
 			});
 	}
 
+	private Token parseOperatorVarLen() throws ParseException {
+		int tokenStartIndex = index;
+		boolean prefixOperatorAllowed = prefixOperatorAllowed();
+		boolean postfixOperatorAllowed = postfixOperatorAllowed();
+		boolean infixOperatorAllowed = infixOperatorAllowed();
+
+		StringBuilder tokenValue = new StringBuilder();
+
+		int offset=0;
+		char currentChar;
+		while ((currentChar = peek(offset)) != 0) {
+
+		}
+		String tokenString = tokenValue.toString();
+		throw new ParseException(
+			tokenStartIndex,
+			tokenStartIndex + tokenString.length() - 1,
+			tokenString,
+			"Undefined operator '" + tokenString + "'");
+	}
+
 	// TODO .. das funktioniert vermutlich nur für operatoren die zwei lang sind!!
 	private Token parseOperator() throws ParseException {
 		int tokenStartIndex = index;
+
+		boolean prefixOperatorAllowed = prefixOperatorAllowed();
+		boolean postfixOperatorAllowed = postfixOperatorAllowed();
+		boolean infixOperatorAllowed = infixOperatorAllowed();
+
 		StringBuilder tokenValue = new StringBuilder();
+
 		while (true) {
 			char currentChar=get();
 			tokenValue.append(currentChar);
@@ -245,10 +272,10 @@ public class Tokenizer {
 			String possibleNextOperator = tokenString + peek(1);
 			// multi char operators, <= -- etc.
 			boolean possibleNextOperatorFound =
-				(prefixOperatorAllowed() && operatorDictionary.hasOperator(PrefixOperator.class, possibleNextOperator))
-					|| (postfixOperatorAllowed()
+				(prefixOperatorAllowed && operatorDictionary.hasOperator(PrefixOperator.class, possibleNextOperator))
+					|| (postfixOperatorAllowed
 					&& operatorDictionary.hasOperator(PostfixOperator.class, possibleNextOperator))
-					|| (infixOperatorAllowed()
+					|| (infixOperatorAllowed
 					&& operatorDictionary.hasOperator(InfixOperator.class, possibleNextOperator));
 
 			next();
@@ -257,9 +284,9 @@ public class Tokenizer {
 			}
 		}
 		String tokenString = tokenValue.toString();
-		if (prefixOperatorAllowed() && operatorDictionary.hasOperator(PrefixOperator.class, tokenString)) {
+		if (prefixOperatorAllowed && operatorDictionary.hasOperator(PrefixOperator.class, tokenString)) {
 			return Token.of(tokenStartIndex, tokenString, TokenType.PREFIX_OPERATOR);
-		} else if (postfixOperatorAllowed() && operatorDictionary.hasOperator(PostfixOperator.class, tokenString)) {
+		} else if (postfixOperatorAllowed && operatorDictionary.hasOperator(PostfixOperator.class, tokenString)) {
 			return Token.of(tokenStartIndex, tokenString, TokenType.POSTFIX_OPERATOR);
 		} else if (operatorDictionary.hasOperator(InfixOperator.class, tokenString)) {
 			return Token.of(tokenStartIndex, tokenString, TokenType.INFIX_OPERATOR);
