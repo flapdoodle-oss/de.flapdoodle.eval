@@ -134,16 +134,10 @@ public abstract class Expression {
 	 * @throws ParseException      If there were problems while parsing the expression.
 	 */
 	public Value<?> evaluate(ValueResolver variableResolver) throws EvaluationException, ParseException {
-
 		Either<ASTNode, ParseException> ast = getAbstractSyntaxTree();
-		if (true) {
-			if (ast.isLeft()) {
-				Node start = fill(ast.left());
-				return start.evaluate(variableResolver, context());
-			} else throw ast.right();
-		}
 		if (ast.isLeft()) {
-			return evaluateSubtree(variableResolver, ast.left());
+			Node start = fill(ast.left());
+			return start.evaluate(variableResolver, context());
 		} else throw ast.right();
 	}
 
@@ -185,64 +179,6 @@ public abstract class Expression {
 		return result;
 	}
 
-	/**
-	 * Evaluates only a subtree of the abstract syntax tree.
-	 *
-	 * @param startNode The {@link ASTNode} to start evaluation from.
-	 * @return The evaluation result value.
-	 * @throws EvaluationException If there were problems while evaluating the expression.
-	 */
-	@org.immutables.value.Value.Auxiliary
-	protected Value<?> evaluateSubtree(ValueResolver variableResolver, ASTNode startNode) throws EvaluationException {
-		Token token = startNode.getToken();
-		EvaluationContext context = context();
-		Value<?> result;
-		switch (token.type()) {
-			case NUMBER_LITERAL:
-				result = numberOfString(token.value(), configuration().getMathContext());
-				break;
-			case STRING_LITERAL:
-				result = Value.of(token.value());
-				break;
-			case VARIABLE_OR_CONSTANT:
-				result = getVariableOrConstant(variableResolver, token);
-				break;
-			case PREFIX_OPERATOR:
-				result =
-					operator(token, PrefixOperator.class)
-						.evaluate(variableResolver, context, token, evaluateSubtree(variableResolver, startNode.getParameters().get(0)));
-				break;
-			case POSTFIX_OPERATOR:
-				result =
-					operator(token, PostfixOperator.class)
-						.evaluate(variableResolver, context, token, evaluateSubtree(variableResolver, startNode.getParameters().get(0)));
-				break;
-			case INFIX_OPERATOR:
-				result =
-					operator(token, InfixOperator.class)
-						.evaluate(
-							variableResolver, context,
-							token,
-							evaluateSubtree(variableResolver, startNode.getParameters().get(0)),
-							evaluateSubtree(variableResolver, startNode.getParameters().get(1)));
-				break;
-			case ARRAY_INDEX:
-				result = evaluateArrayIndex(variableResolver, startNode);
-				break;
-			case STRUCTURE_SEPARATOR:
-				result = evaluateStructureSeparator(variableResolver, startNode);
-				break;
-			case FUNCTION:
-				result = evaluateFunction(variableResolver, startNode, token);
-				break;
-			default:
-				throw new EvaluationException(token, "Unexpected evaluation token: " + token);
-		}
-
-//		return result.isNumberValue() ? roundAndStripZerosIfNeeded(result) : result;
-		return result;
-	}
-	
 	private <T extends Operator> T operator(Token token, Class<T> operatorType) {
 		return configuration().getOperatorResolver().get(operatorType, token.value());
 	}
@@ -263,20 +199,8 @@ public abstract class Expression {
 		return ValueLookup.of(token);
 	}
 
-	private Value<?> getVariableOrConstant(ValueResolver variableResolver, Token token) throws EvaluationException {
-		Value<?> result = constants().get(token.value());
-		if (result == null) {
-			result = variableResolver.get(token.value());
-		}
-		if (result == null) {
-			throw new EvaluationException(
-				token, String.format("Variable or constant value for '%s' not found", token.value()));
-		}
-		return result;
-	}
-
 	private FunctionNode evaluateFunction(ASTNode startNode, Token token) throws EvaluationException {
-		Evaluateable function = function(token);
+		Evaluateable function = configuration().functions().get(token.value());
 		List<Node> parameterResults = new ArrayList<>();
 		for (int i = 0; i < startNode.getParameters().size(); i++) {
 			parameterResults.add(fill(startNode.getParameters().get(i)));
@@ -285,50 +209,8 @@ public abstract class Expression {
 		return FunctionNode.of(token, function, parameterResults);
 	}
 
-	private Value<?> evaluateFunction(ValueResolver variableResolver, ASTNode startNode, Token token)
-		throws EvaluationException {
-		Evaluateable function = function(token);
-		List<Value<?>> parameterResults = new ArrayList<>();
-		for (int i = 0; i < startNode.getParameters().size(); i++) {
-			if (function.parameterIsLazy(i)) {
-				parameterResults.add(evaluateSubtreeOrException(variableResolver, startNode.getParameters().get(i)));
-			} else {
-				parameterResults.add(evaluateSubtree(variableResolver, startNode.getParameters().get(i)));
-			}
-		}
-
-		Value<?> evaluated = function.evaluate(variableResolver, context(), token, parameterResults);
-		if (evaluated instanceof Value.FailedWithException) {
-			throw ((Value.FailedWithException<?>) evaluated).exception();
-		}
-		return evaluated;
-	}
-
-	private Value<?> evaluateSubtreeOrException(ValueResolver variableResolver, ASTNode startNode) {
-		try {
-			return evaluateSubtree(variableResolver, startNode);
-		} catch (EvaluationException rx) {
-			return Value.failedWith(rx);
-		}
-	}
-
-	private Evaluateable function(Token token) {
-		return configuration().functions().get(token.value());
-	}
-
 	private ArrayAccessNode evaluateArrayIndex(ASTNode startNode) throws EvaluationException {
 		return ArrayAccessNode.of(startNode.getToken(), fill(startNode.getParameters().get(0)), fill(startNode.getParameters().get(1)));
-	}
-
-	private Value<?> evaluateArrayIndex(ValueResolver variableResolver, ASTNode startNode) throws EvaluationException {
-		Value<?> array = evaluateSubtree(variableResolver, startNode.getParameters().get(0));
-		Value<?> index = evaluateSubtree(variableResolver, startNode.getParameters().get(1));
-
-		if (array instanceof Value.ArrayValue && index instanceof Value.NumberValue) {
-			return ((Value.ArrayValue) array).wrapped().get(((Value.NumberValue) index).wrapped().intValue());
-		} else {
-			throw EvaluationException.ofUnsupportedDataTypeInOperation(startNode.getToken());
-		}
 	}
 
 	private StructureAccessNode evaluateStructureSeparator(ASTNode startNode) throws EvaluationException {
@@ -337,26 +219,6 @@ public abstract class Expression {
 		return StructureAccessNode.of(startNode.getToken(), structure, nameToken);
 	}
 
-	private Value<?> evaluateStructureSeparator(ValueResolver variableResolver, ASTNode startNode) throws EvaluationException {
-		Value<?> structure = evaluateSubtree(variableResolver, startNode.getParameters().get(0));
-		Token nameToken = startNode.getParameters().get(1).getToken();
-		String name = nameToken.value();
-
-		if (structure instanceof Value.MapValue) {
-			Value.MapValue structure1 = (Value.MapValue) structure;
-			if (!structure1.wrapped().containsKey(name)) {
-				throw new EvaluationException(
-					nameToken, String.format("Field '%s' not found in structure", name));
-			}
-			return structure1.wrapped().get(name);
-		} else {
-			throw EvaluationException.ofUnsupportedDataTypeInOperation(startNode.getToken());
-		}
-	}
-
-	/**
-	 * moved from somewhere
-	 */
 	private static List<ASTNode> getAllASTNodesForNode(ASTNode node) {
 		List<ASTNode> nodes = new ArrayList<>();
 		nodes.add(node);
