@@ -16,11 +16,11 @@
  */
 package de.flapdoodle.eval.functions.basic;
 
+import de.flapdoodle.eval.CommonToken;
 import de.flapdoodle.eval.Evaluateables;
 import de.flapdoodle.eval.EvaluationContext;
 import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
-import de.flapdoodle.eval.parser.Token;
 
 public class Not extends Evaluateables.Single<Value.BooleanValue> {
 
@@ -29,7 +29,7 @@ public class Not extends Evaluateables.Single<Value.BooleanValue> {
 	}
 
 	@Override
-	protected Value<?> evaluate(ValueResolver variableResolver, EvaluationContext evaluationContext, Token functionToken,
+	protected Value<?> evaluate(ValueResolver variableResolver, EvaluationContext evaluationContext, CommonToken functionToken,
 		Value.BooleanValue parameterValue) {
 		boolean result = parameterValue.wrapped();
 

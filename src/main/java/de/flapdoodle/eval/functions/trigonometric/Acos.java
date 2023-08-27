@@ -16,14 +16,14 @@
  */
 package de.flapdoodle.eval.functions.trigonometric;
 
+import de.flapdoodle.eval.CommonToken;
 import de.flapdoodle.eval.EvaluationContext;
 import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
-import de.flapdoodle.eval.parser.Token;
 
 public class Acos extends AbstractNumberFunction {
 	@Override
-	protected Value<?> evaluate(ValueResolver valueResolver, EvaluationContext evaluationContext, Token functionToken,
+	protected Value<?> evaluate(ValueResolver valueResolver, EvaluationContext evaluationContext, CommonToken functionToken,
 		Value.NumberValue parameterValue) {
 		return Value.of(Math.toDegrees(Math.acos(parameterValue.wrapped().doubleValue())));
 	}

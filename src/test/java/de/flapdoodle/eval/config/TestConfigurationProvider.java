@@ -49,7 +49,7 @@ public class TestConfigurationProvider {
 		}
 
 		@Override
-		protected Value<?> evaluateVarArg(ValueResolver variableResolver, EvaluationContext evaluationContext, Token functionToken,
+		protected Value<?> evaluateVarArg(ValueResolver variableResolver, EvaluationContext evaluationContext, CommonToken functionToken,
 			List<Value.StringValue> parameterValues) {
 			// dummy implementation
 			return Value.of("OK");

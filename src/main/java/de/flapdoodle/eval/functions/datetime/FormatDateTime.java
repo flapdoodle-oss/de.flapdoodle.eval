@@ -19,7 +19,6 @@ package de.flapdoodle.eval.functions.datetime;
 import de.flapdoodle.eval.*;
 import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
-import de.flapdoodle.eval.parser.Token;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -38,7 +37,7 @@ public class FormatDateTime extends Evaluateables.Base {
 	}
 
 	@Override
-	protected Value<?> evaluateValidated(ValueResolver variableResolver, EvaluationContext evaluationContext, Token functionToken, List<Value<?>> arguments)
+	protected Value<?> evaluateValidated(ValueResolver variableResolver, EvaluationContext evaluationContext, CommonToken functionToken, List<Value<?>> arguments)
 		throws EvaluationException {
 		ZoneId zoneId = evaluationContext.zoneId();
 

@@ -16,13 +16,13 @@
  */
 package de.flapdoodle.eval.functions.datetime;
 
+import de.flapdoodle.eval.CommonToken;
 import de.flapdoodle.eval.Evaluateables;
 import de.flapdoodle.eval.EvaluationContext;
 import de.flapdoodle.eval.Parameter;
 import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
 import de.flapdoodle.eval.functions.validations.NonNegativeNumber;
-import de.flapdoodle.eval.parser.Token;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -35,7 +35,7 @@ public class CreateLocalDateTime extends Evaluateables.SingleVararg<Value.Number
 			.withValidators(new NonNegativeNumber()));
 	}
 	@Override
-	protected Value<?> evaluateVarArg(ValueResolver variableResolver, EvaluationContext evaluationContext, Token functionToken,
+	protected Value<?> evaluateVarArg(ValueResolver variableResolver, EvaluationContext evaluationContext, CommonToken functionToken,
 		List<Value.NumberValue> parameterValues) {
 		int year = parameterValues.get(0).wrapped().intValue();
 		int month = parameterValues.get(1).wrapped().intValue();

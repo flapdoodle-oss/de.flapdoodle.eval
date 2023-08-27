@@ -16,11 +16,11 @@
  */
 package de.flapdoodle.eval.functions.datetime;
 
+import de.flapdoodle.eval.CommonToken;
 import de.flapdoodle.eval.Evaluateables;
 import de.flapdoodle.eval.EvaluationContext;
 import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
-import de.flapdoodle.eval.parser.Token;
 
 import java.math.BigDecimal;
 import java.time.Duration;
@@ -32,7 +32,7 @@ public class DurationMillisFromNumber extends Evaluateables.Single<Value.NumberV
 	}
 
 	@Override
-	protected Value<?> evaluate(ValueResolver variableResolver, EvaluationContext evaluationContext, Token functionToken,
+	protected Value<?> evaluate(ValueResolver variableResolver, EvaluationContext evaluationContext, CommonToken functionToken,
 		Value.NumberValue parameterValue) {
 		BigDecimal millis = parameterValue.wrapped();
 		return Value.of(Duration.ofMillis(millis.longValue()));

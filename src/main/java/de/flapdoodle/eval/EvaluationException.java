@@ -21,7 +21,7 @@ import de.flapdoodle.eval.parser.Token;
 /** Exception while evaluating the parsed expression. */
 public class EvaluationException extends BaseException {
 
-	public EvaluationException(Token token, String message) {
+	public EvaluationException(CommonToken token, String message) {
 		super(
 			token.start(),
 			token.start() + token.value().length(),
@@ -29,7 +29,7 @@ public class EvaluationException extends BaseException {
 			message);
 	}
 
-	public static EvaluationException ofUnsupportedDataTypeInOperation(Token token) {
+	public static EvaluationException ofUnsupportedDataTypeInOperation(CommonToken token) {
 		return new EvaluationException(token, "Unsupported data types in operation");
 	}
 }

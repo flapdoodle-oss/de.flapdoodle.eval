@@ -16,11 +16,11 @@
  */
 package de.flapdoodle.eval.functions.datetime;
 
+import de.flapdoodle.eval.CommonToken;
 import de.flapdoodle.eval.Evaluateables;
 import de.flapdoodle.eval.EvaluationContext;
 import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
-import de.flapdoodle.eval.parser.Token;
 
 import java.time.Duration;
 
@@ -31,7 +31,7 @@ public class DurationParser extends Evaluateables.Single<Value.StringValue> {
 	}
 
 	@Override
-	protected Value<?> evaluate(ValueResolver variableResolver, EvaluationContext evaluationContext, Token functionToken,
+	protected Value<?> evaluate(ValueResolver variableResolver, EvaluationContext evaluationContext, CommonToken functionToken,
 		Value.StringValue parameterValue) {
 		String text = parameterValue.wrapped();
 		return Value.of(Duration.parse(text));

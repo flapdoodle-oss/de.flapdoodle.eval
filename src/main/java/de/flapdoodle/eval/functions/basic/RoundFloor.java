@@ -16,11 +16,11 @@
  */
 package de.flapdoodle.eval.functions.basic;
 
+import de.flapdoodle.eval.CommonToken;
 import de.flapdoodle.eval.Evaluateables;
 import de.flapdoodle.eval.EvaluationContext;
 import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
-import de.flapdoodle.eval.parser.Token;
 
 import java.math.RoundingMode;
 
@@ -30,7 +30,7 @@ public class RoundFloor extends Evaluateables.Single<Value.NumberValue> {
 		super(Value.NumberValue.class);
 	}
 	@Override
-	protected Value<?> evaluate(ValueResolver variableResolver, EvaluationContext evaluationContext, Token functionToken, Value.NumberValue parameterValue) {
+	protected Value<?> evaluate(ValueResolver variableResolver, EvaluationContext evaluationContext, CommonToken functionToken, Value.NumberValue parameterValue) {
 		return Value.of(parameterValue.wrapped().setScale(0, RoundingMode.FLOOR));
 	}
 }

@@ -19,7 +19,6 @@ package de.flapdoodle.eval.functions;
 import de.flapdoodle.eval.*;
 import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
-import de.flapdoodle.eval.parser.Token;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -63,7 +62,7 @@ class FunctionTest {
 		}
 
 		@Override
-		protected Value<?> evaluateValidated(ValueResolver variableResolver, EvaluationContext evaluationContext, Token functionToken, List<Value<?>> arguments)
+		protected Value<?> evaluateValidated(ValueResolver variableResolver, EvaluationContext evaluationContext, CommonToken functionToken, List<Value<?>> arguments)
 			throws EvaluationException {
 			return Value.of("OK");
 		}

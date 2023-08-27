@@ -16,16 +16,16 @@
  */
 package de.flapdoodle.eval.functions.trigonometric;
 
+import de.flapdoodle.eval.CommonToken;
 import de.flapdoodle.eval.EvaluationContext;
 import de.flapdoodle.eval.EvaluationException;
 import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
-import de.flapdoodle.eval.parser.Token;
 
 public class AcotRadians extends NonZeroFunction {
 
 	@Override
-	protected Value<?> evaluate(ValueResolver variableResolver, EvaluationContext evaluationContext, Token functionToken,
+	protected Value<?> evaluate(ValueResolver variableResolver, EvaluationContext evaluationContext, CommonToken functionToken,
 		Value.NumberValue parameterValue) throws EvaluationException {
 		/* Formula: acot(x) = (pi / 2) - atan(x) */
 		return Value.of((Math.PI / 2) - Math.atan(parameterValue.wrapped().doubleValue()));
