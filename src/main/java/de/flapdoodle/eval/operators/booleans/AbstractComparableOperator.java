@@ -16,13 +16,13 @@
  */
 package de.flapdoodle.eval.operators.booleans;
 
+import de.flapdoodle.eval.CommonToken;
 import de.flapdoodle.eval.EvaluationContext;
 import de.flapdoodle.eval.EvaluationException;
 import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
 import de.flapdoodle.eval.operators.AbstractInfixOperator;
 import de.flapdoodle.eval.operators.Precedence;
-import de.flapdoodle.eval.parser.Token;
 
 public abstract class AbstractComparableOperator extends AbstractInfixOperator {
 
@@ -35,7 +35,7 @@ public abstract class AbstractComparableOperator extends AbstractInfixOperator {
 	}
 
 	@Override
-	public Value<?> evaluate(ValueResolver valueResolver, EvaluationContext evaluationContext, Token operatorToken, Value<?> leftOperand, Value<?> rightOperand) throws EvaluationException {
+	public Value<?> evaluate(ValueResolver valueResolver, EvaluationContext evaluationContext, CommonToken operatorToken, Value<?> leftOperand, Value<?> rightOperand) throws EvaluationException {
 		if (leftOperand.getClass() == rightOperand.getClass()) {
 			if (leftOperand instanceof Value.ComparableValue) {
 				return evaluateComparable(evaluationContext, operatorToken, (Value.ComparableValue) leftOperand, (Value.ComparableValue) rightOperand);
@@ -45,6 +45,6 @@ public abstract class AbstractComparableOperator extends AbstractInfixOperator {
 		throw new EvaluationException(operatorToken, "different types: " + leftOperand + ", " + rightOperand);
 	}
 
-	protected abstract <T extends Comparable<T>, V extends Value.ComparableValue<T>> Value<?> evaluateComparable(EvaluationContext evaluationContext, Token operatorToken,
+	protected abstract <T extends Comparable<T>, V extends Value.ComparableValue<T>> Value<?> evaluateComparable(EvaluationContext evaluationContext, CommonToken operatorToken,
 		V leftOperand, V rightOperand);
 }

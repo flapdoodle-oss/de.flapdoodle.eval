@@ -55,7 +55,7 @@ public abstract class Parameters {
 		return list().get(index);
 	}
 
-	public void validate(Token token, List<de.flapdoodle.eval.data.Value<?>> parameterValues) throws EvaluationException {
+	public void validate(CommonToken token, List<de.flapdoodle.eval.data.Value<?>> parameterValues) throws EvaluationException {
 		if (parameterValues.size() < min()) {
 			throw new EvaluationException(token, "not enough parameters: " + parameterValues.size() + " < " + min());
 		}

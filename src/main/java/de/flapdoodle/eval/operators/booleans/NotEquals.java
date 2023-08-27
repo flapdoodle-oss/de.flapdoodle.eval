@@ -16,12 +16,12 @@
  */
 package de.flapdoodle.eval.operators.booleans;
 
+import de.flapdoodle.eval.CommonToken;
 import de.flapdoodle.eval.EvaluationContext;
 import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
 import de.flapdoodle.eval.operators.AbstractInfixOperator;
 import de.flapdoodle.eval.operators.Precedence;
-import de.flapdoodle.eval.parser.Token;
 
 import java.util.Objects;
 
@@ -33,7 +33,7 @@ public class NotEquals extends AbstractInfixOperator {
 
 	@Override
 	public Value<?> evaluate(
-		ValueResolver valueResolver, EvaluationContext evaluationContext, Token operatorToken, Value<?> leftExpression, Value<?> rightExpression) {
+		ValueResolver valueResolver, EvaluationContext evaluationContext, CommonToken operatorToken, Value<?> leftExpression, Value<?> rightExpression) {
 
 		return Value.of(!Objects.equals(leftExpression.wrapped(), rightExpression.wrapped()));
 	}

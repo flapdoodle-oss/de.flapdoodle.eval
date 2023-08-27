@@ -16,15 +16,15 @@
  */
 package de.flapdoodle.eval.functions.validations;
 
+import de.flapdoodle.eval.CommonToken;
 import de.flapdoodle.eval.EvaluationException;
 import de.flapdoodle.eval.data.Value;
-import de.flapdoodle.eval.parser.Token;
 
 import java.math.BigDecimal;
 
 public class NonZeroNumber implements ParameterValidator<Value.NumberValue> {
 	@Override
-	public void validate(Token token, Value.NumberValue parameterValue) throws EvaluationException {
+	public void validate(CommonToken token, Value.NumberValue parameterValue) throws EvaluationException {
 		if (parameterValue.wrapped().equals(BigDecimal.ZERO)) {
 			throw new EvaluationException(token, "Parameter must not be zero");
 		}

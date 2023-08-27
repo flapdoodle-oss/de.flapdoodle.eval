@@ -16,12 +16,12 @@
  */
 package de.flapdoodle.eval.operators.arithmetic;
 
+import de.flapdoodle.eval.CommonToken;
 import de.flapdoodle.eval.EvaluationContext;
 import de.flapdoodle.eval.EvaluationException;
 import de.flapdoodle.eval.data.Value;
 import de.flapdoodle.eval.operators.AbstractPrefixOperator;
 import de.flapdoodle.eval.operators.Precedence;
-import de.flapdoodle.eval.parser.Token;
 
 public class PrefixMinus extends AbstractPrefixOperator.Typed<Value.NumberValue> {
 
@@ -30,7 +30,7 @@ public class PrefixMinus extends AbstractPrefixOperator.Typed<Value.NumberValue>
 	}
 
 	@Override
-	protected Value<?> evaluateTyped(EvaluationContext evaluationContext, Token operatorToken, Value.NumberValue operand) throws EvaluationException {
+	protected Value<?> evaluateTyped(EvaluationContext evaluationContext, CommonToken operatorToken, Value.NumberValue operand) throws EvaluationException {
 		return Value.of(operand.wrapped().negate(evaluationContext.mathContext()));
 	}
 }

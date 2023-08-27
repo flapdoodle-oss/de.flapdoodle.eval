@@ -2,7 +2,6 @@ package de.flapdoodle.eval;
 
 import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
-import de.flapdoodle.eval.parser.Token;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,7 +20,7 @@ public abstract class Evaluateables {
 		}
 
 		@Override
-		public final Value<?> evaluate(ValueResolver valueResolver, EvaluationContext evaluationContext, Token token, List<Value<?>> arguments) throws EvaluationException {
+		public final Value<?> evaluate(ValueResolver valueResolver, EvaluationContext evaluationContext, CommonToken token, List<Value<?>> arguments) throws EvaluationException {
 			parameters().validate(token, arguments);
 			return evaluateValidated(valueResolver, evaluationContext, token, arguments);
 		}

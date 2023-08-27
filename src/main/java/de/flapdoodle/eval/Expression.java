@@ -87,7 +87,9 @@ public abstract class Expression {
 	@org.immutables.value.Value.Auxiliary
 	// TODO mit @Check annotieren?
 	public void validate() throws ParseException {
-		if (!getAbstractSyntaxTree().isLeft()) throw getAbstractSyntaxTree().right();
+		Either<ASTNode, ParseException> astOrException = getAbstractSyntaxTree();
+		
+		if (!astOrException.isLeft()) throw astOrException.right();
 	}
 
 	@org.immutables.value.Value.Auxiliary
@@ -146,7 +148,7 @@ public abstract class Expression {
 	 */
 	@org.immutables.value.Value.Auxiliary
 	public Value<?> evaluateSubtree(ValueResolver variableResolver, ASTNode startNode) throws EvaluationException {
-		Token token = startNode.getToken();
+		CommonToken token = startNode.getToken();
 		EvaluationContext context = context(variableResolver);
 		Value<?> result;
 		switch (token.type()) {
@@ -198,12 +200,16 @@ public abstract class Expression {
 		return result;
 	}
 	
-	private <T extends Operator> T operator(Token token, Class<T> operatorType) {
-		Operator def = token.operator();
-		if (operatorType.isInstance(def)) {
-			return operatorType.cast(def);
+	private <T extends Operator> T operator(CommonToken commonToken, Class<T> operatorType) {
+		if (commonToken instanceof Token) {
+			Token token = (Token) commonToken;
+			Operator def = token.operator();
+			if (operatorType.isInstance(def)) {
+				return operatorType.cast(def);
+			}
+			throw new IllegalArgumentException("operator definition does not match: " + operatorType + " -> " + def);
 		}
-		throw new IllegalArgumentException("operator definition does not match: " + operatorType + " -> " + def);
+		throw new IllegalArgumentException("no operator for match: " + operatorType + " -> " + commonToken);
 	}
 
 	// VisibleInTest
@@ -215,7 +221,7 @@ public abstract class Expression {
 			.build();
 	}
 
-	private Value<?> getVariableOrConstant(ValueResolver variableResolver, Token token) throws EvaluationException {
+	private Value<?> getVariableOrConstant(ValueResolver variableResolver, CommonToken token) throws EvaluationException {
 		Value<?> result = constants().get(token.value());
 		if (result == null) {
 			result = variableResolver.get(token.value());
@@ -227,7 +233,7 @@ public abstract class Expression {
 		return result;
 	}
 
-	private Value<?> evaluateFunction(ValueResolver variableResolver, ASTNode startNode, Token token)
+	private Value<?> evaluateFunction(ValueResolver variableResolver, ASTNode startNode, CommonToken token)
 		throws EvaluationException {
 		Evaluateable function = function(token);
 		List<Value<?>> parameterResults = new ArrayList<>();
@@ -242,8 +248,11 @@ public abstract class Expression {
 		return function.evaluate(variableResolver, context(variableResolver), token, parameterResults);
 	}
 
-	private Evaluateable function(Token token) {
-		return token.function();
+	private Evaluateable function(CommonToken commonToken) {
+		if (commonToken instanceof Token) {
+			return ((Token) commonToken).function();
+		}
+		throw new IllegalArgumentException("could not find function for "+commonToken);
 	}
 
 	private Value<?> evaluateArrayIndex(ValueResolver variableResolver, ASTNode startNode) throws EvaluationException {
@@ -259,7 +268,7 @@ public abstract class Expression {
 
 	private Value<?> evaluateStructureSeparator(ValueResolver variableResolver, ASTNode startNode) throws EvaluationException {
 		Value<?> structure = evaluateSubtree(variableResolver, startNode.getParameters().get(0));
-		Token nameToken = startNode.getParameters().get(1).getToken();
+		CommonToken nameToken = startNode.getParameters().get(1).getToken();
 		String name = nameToken.value();
 
 		if (structure instanceof Value.MapValue) {

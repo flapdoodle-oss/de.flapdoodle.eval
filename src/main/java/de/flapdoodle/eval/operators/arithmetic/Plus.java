@@ -16,13 +16,13 @@
  */
 package de.flapdoodle.eval.operators.arithmetic;
 
+import de.flapdoodle.eval.CommonToken;
 import de.flapdoodle.eval.EvaluationContext;
 import de.flapdoodle.eval.EvaluationException;
 import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
 import de.flapdoodle.eval.operators.AbstractInfixOperator;
 import de.flapdoodle.eval.operators.Precedence;
-import de.flapdoodle.eval.parser.Token;
 
 import java.time.Duration;
 
@@ -33,7 +33,7 @@ public class Plus extends AbstractInfixOperator {
 	}
 
 	@Override
-	public Value<?> evaluate(ValueResolver valueResolver, EvaluationContext evaluationContext, Token operatorToken, Value<?> leftOperand, Value<?> rightOperand) throws EvaluationException {
+	public Value<?> evaluate(ValueResolver valueResolver, EvaluationContext evaluationContext, CommonToken operatorToken, Value<?> leftOperand, Value<?> rightOperand) throws EvaluationException {
 		return evaluate(operatorToken, leftOperand, rightOperand)
 			.using(Value.NumberValue.class, Value.NumberValue.class, (l, r) -> Value.of(l.wrapped().add(r.wrapped(), evaluationContext.mathContext())))
 			.using(Value.DateTimeValue.class, Value.DurationValue.class, (l, r) -> Value.of(l.wrapped().plus(r.wrapped())))

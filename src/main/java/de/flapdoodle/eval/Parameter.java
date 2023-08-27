@@ -54,7 +54,7 @@ public interface Parameter<T extends de.flapdoodle.eval.data.Value<?>> {
 	}
 
 	@Value.Auxiliary
-	default void validate(Token token, de.flapdoodle.eval.data.Value<?> parameterValue) throws EvaluationException {
+	default void validate(CommonToken token, de.flapdoodle.eval.data.Value<?> parameterValue) throws EvaluationException {
 		if (type().isInstance(parameterValue)) {
 			T value = type().cast(parameterValue);
 			for (ParameterValidator<T> validator : validators()) {
