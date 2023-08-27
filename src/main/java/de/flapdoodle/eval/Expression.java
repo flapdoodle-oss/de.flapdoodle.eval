@@ -19,6 +19,7 @@ package de.flapdoodle.eval;
 import de.flapdoodle.eval.config.Configuration;
 import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
+import de.flapdoodle.eval.evaluate.*;
 import de.flapdoodle.eval.operators.InfixOperator;
 import de.flapdoodle.eval.operators.Operator;
 import de.flapdoodle.eval.operators.PostfixOperator;
@@ -133,10 +134,56 @@ public abstract class Expression {
 	 * @throws ParseException      If there were problems while parsing the expression.
 	 */
 	public Value<?> evaluate(ValueResolver variableResolver) throws EvaluationException, ParseException {
+
 		Either<ASTNode, ParseException> ast = getAbstractSyntaxTree();
+		if (false) {
+			if (ast.isLeft()) {
+				Node start = fill(ast.left());
+				return start.evaluate(variableResolver);
+			} else throw ast.right();
+		}
 		if (ast.isLeft()) {
 			return evaluateSubtree(variableResolver, ast.left());
 		} else throw ast.right();
+	}
+
+	@org.immutables.value.Value.Auxiliary
+	protected Node fill(ASTNode startNode) throws EvaluationException {
+		Node result;
+		Token token = startNode.getToken();
+		switch (token.type()) {
+			case NUMBER_LITERAL:
+				result = ComparableValueNode.of(numberOfString(token.value(), configuration().getMathContext()));
+				break;
+			case STRING_LITERAL:
+				result = ComparableValueNode.of(Value.of(token.value()));
+				break;
+			case VARIABLE_OR_CONSTANT:
+				result = getVariableOrConstant(token);
+				// Value.ExpressionValue ??
+				break;
+			case PREFIX_OPERATOR:
+				result = PrefixOperatorNode.of(operator(token, PrefixOperator.class), fill(startNode.getParameters().get(0)));
+				break;
+			case POSTFIX_OPERATOR:
+				result = PostfixOperatorNode.of(operator(token, PostfixOperator.class), fill(startNode.getParameters().get(0)));
+				break;
+			case INFIX_OPERATOR:
+				result = InfixOperatorNode.of(operator(token, InfixOperator.class), fill(startNode.getParameters().get(0)), fill(startNode.getParameters().get(1)));
+				break;
+			case ARRAY_INDEX:
+				result = evaluateArrayIndex(startNode);
+				break;
+			case STRUCTURE_SEPARATOR:
+				result = evaluateStructureSeparator(startNode);
+				break;
+			case FUNCTION:
+				result = evaluateFunction(startNode, token);
+				break;
+			default:
+				throw new EvaluationException(token, "Unexpected evaluation token: " + token);
+		}
+		return result;
 	}
 
 	/**
@@ -147,7 +194,7 @@ public abstract class Expression {
 	 * @throws EvaluationException If there were problems while evaluating the expression.
 	 */
 	@org.immutables.value.Value.Auxiliary
-	public Value<?> evaluateSubtree(ValueResolver variableResolver, ASTNode startNode) throws EvaluationException {
+	protected Value<?> evaluateSubtree(ValueResolver variableResolver, ASTNode startNode) throws EvaluationException {
 		Token token = startNode.getToken();
 		EvaluationContext context = context(variableResolver);
 		Value<?> result;
@@ -213,6 +260,14 @@ public abstract class Expression {
 			.build();
 	}
 
+	private Node getVariableOrConstant(Token token) {
+		Value<?> result = constants().get(token.value());
+		if (result!=null) {
+			return ValueNode.of(result);
+		}
+		return ValueLookup.of(token.value());
+	}
+
 	private Value<?> getVariableOrConstant(ValueResolver variableResolver, Token token) throws EvaluationException {
 		Value<?> result = constants().get(token.value());
 		if (result == null) {
@@ -223,6 +278,16 @@ public abstract class Expression {
 				token, String.format("Variable or constant value for '%s' not found", token.value()));
 		}
 		return result;
+	}
+
+	private FunctionNode evaluateFunction(ASTNode startNode, Token token) throws EvaluationException {
+		Evaluateable function = function(token);
+		List<Node> parameterResults = new ArrayList<>();
+		for (int i = 0; i < startNode.getParameters().size(); i++) {
+			parameterResults.add(fill(startNode.getParameters().get(i)));
+		}
+
+		return FunctionNode.of(function, parameterResults);
 	}
 
 	private Value<?> evaluateFunction(ValueResolver variableResolver, ASTNode startNode, Token token)
@@ -244,6 +309,10 @@ public abstract class Expression {
 		return configuration().functions().get(token.value());
 	}
 
+	private ArrayAccessNode evaluateArrayIndex(ASTNode startNode) throws EvaluationException {
+		return ArrayAccessNode.of(fill(startNode.getParameters().get(0)), fill(startNode.getParameters().get(1)));
+	}
+
 	private Value<?> evaluateArrayIndex(ValueResolver variableResolver, ASTNode startNode) throws EvaluationException {
 		Value<?> array = evaluateSubtree(variableResolver, startNode.getParameters().get(0));
 		Value<?> index = evaluateSubtree(variableResolver, startNode.getParameters().get(1));
@@ -253,6 +322,14 @@ public abstract class Expression {
 		} else {
 			throw EvaluationException.ofUnsupportedDataTypeInOperation(startNode.getToken());
 		}
+	}
+
+	private StructureAccessNode evaluateStructureSeparator(ASTNode startNode) throws EvaluationException {
+		Node structure = fill(startNode.getParameters().get(0));
+		Token nameToken = startNode.getParameters().get(1).getToken();
+		String name = nameToken.value();
+
+		return StructureAccessNode.of(structure, name);
 	}
 
 	private Value<?> evaluateStructureSeparator(ValueResolver variableResolver, ASTNode startNode) throws EvaluationException {
