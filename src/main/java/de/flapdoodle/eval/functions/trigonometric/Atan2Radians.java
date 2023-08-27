@@ -19,6 +19,7 @@ package de.flapdoodle.eval.functions.trigonometric;
 import de.flapdoodle.eval.*;
 import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
+import de.flapdoodle.eval.parser.Token;
 
 public class Atan2Radians extends Evaluateables.Tuple<Value.NumberValue, Value.NumberValue> {
 
@@ -28,7 +29,7 @@ public class Atan2Radians extends Evaluateables.Tuple<Value.NumberValue, Value.N
 	}
 
 	@Override
-	protected Value<?> evaluate(ValueResolver variableResolver, EvaluationContext evaluationContext, CommonToken functionToken,
+	protected Value<?> evaluate(ValueResolver variableResolver, EvaluationContext evaluationContext, Token functionToken,
 		Value.NumberValue y, Value.NumberValue x) throws EvaluationException {
 		return Value.of(
 			Math.atan2(

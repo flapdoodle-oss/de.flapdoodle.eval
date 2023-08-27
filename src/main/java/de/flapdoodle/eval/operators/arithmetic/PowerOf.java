@@ -16,7 +16,7 @@
  */
 package de.flapdoodle.eval.operators.arithmetic;
 
-import de.flapdoodle.eval.CommonToken;
+import de.flapdoodle.eval.parser.Token;
 import de.flapdoodle.eval.EvaluationContext;
 import de.flapdoodle.eval.EvaluationException;
 import de.flapdoodle.eval.data.Value;
@@ -33,7 +33,7 @@ public class PowerOf extends AbstractNumberInfixOperator {
 	}
 
 	@Override
-	protected Value<?> evaluateTyped(EvaluationContext evaluationContext, CommonToken operatorToken, Value.NumberValue leftOperand, Value.NumberValue rightOperand)
+	protected Value<?> evaluateTyped(EvaluationContext evaluationContext, Token operatorToken, Value.NumberValue leftOperand, Value.NumberValue rightOperand)
 		throws EvaluationException {
 		/*-
 		 * Thanks to Gene Marin:

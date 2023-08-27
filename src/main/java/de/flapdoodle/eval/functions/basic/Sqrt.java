@@ -16,7 +16,7 @@
  */
 package de.flapdoodle.eval.functions.basic;
 
-import de.flapdoodle.eval.CommonToken;
+import de.flapdoodle.eval.parser.Token;
 import de.flapdoodle.eval.Evaluateables;
 import de.flapdoodle.eval.EvaluationContext;
 import de.flapdoodle.eval.Parameter;
@@ -47,7 +47,7 @@ public class Sqrt extends Evaluateables.Single<Value.NumberValue> {
 	}
 
 	@Override
-	protected Value<?> evaluate(ValueResolver variableResolver, EvaluationContext evaluationContext, CommonToken functionToken, Value.NumberValue parameterValue) {
+	protected Value<?> evaluate(ValueResolver variableResolver, EvaluationContext evaluationContext, Token functionToken, Value.NumberValue parameterValue) {
 		return Value.of(sqrt(parameterValue.wrapped(), evaluationContext.mathContext()));
 	}
 

@@ -19,6 +19,7 @@ package de.flapdoodle.eval.functions.basic;
 import de.flapdoodle.eval.*;
 import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
+import de.flapdoodle.eval.parser.Token;
 
 import java.security.SecureRandom;
 import java.util.List;
@@ -30,7 +31,7 @@ public class RandomNumber extends Evaluateables.Base {
 	}
 
 	@Override
-	protected Value<?> evaluateValidated(ValueResolver valueResolver, EvaluationContext evaluationContext, CommonToken token, List<Value<?>> parameters)
+	protected Value<?> evaluateValidated(ValueResolver valueResolver, EvaluationContext evaluationContext, Token token, List<Value<?>> parameters)
 		throws EvaluationException {
 		SecureRandom secureRandom = new SecureRandom();
 

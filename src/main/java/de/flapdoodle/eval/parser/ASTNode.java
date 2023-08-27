@@ -16,7 +16,6 @@
  */
 package de.flapdoodle.eval.parser;
 
-import de.flapdoodle.eval.CommonToken;
 import org.immutables.value.Value;
 
 import java.util.List;
@@ -41,9 +40,9 @@ public abstract class ASTNode {
 
 	public abstract List<ASTNode> getParameters();
 
-	public abstract CommonToken getToken();
+	public abstract Token getToken();
 
-	public static ASTNode of(CommonToken token, ASTNode... parameters) {
+	public static ASTNode of(Token token, ASTNode... parameters) {
 		return ImmutableASTNode.builder()
 			.token(token)
 			.addParameters(parameters)

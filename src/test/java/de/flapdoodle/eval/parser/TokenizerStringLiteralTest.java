@@ -16,7 +16,6 @@
  */
 package de.flapdoodle.eval.parser;
 
-import de.flapdoodle.eval.CommonToken;
 import de.flapdoodle.eval.Expression;
 import de.flapdoodle.eval.config.MapBasedValueResolver;
 import de.flapdoodle.eval.config.ValueResolver;
@@ -29,43 +28,43 @@ class TokenizerStringLiteralTest extends BaseParserTest {
 	@Test
 	void testSimpleQuote() throws ParseException {
 		assertAllTokensParsedCorrectly(
-			"\"Hello, World\"", CommonToken.of(0, "Hello, World", TokenType.STRING_LITERAL));
+			"\"Hello, World\"", Token.of(0, "Hello, World", TokenType.STRING_LITERAL));
 	}
 
 	@Test
 	void testSimpleQuoteLeadingBlanks() throws ParseException {
 		assertAllTokensParsedCorrectly(
-			"  \t\n \"Hello, World\"", CommonToken.of(5, "Hello, World", TokenType.STRING_LITERAL));
+			"  \t\n \"Hello, World\"", Token.of(5, "Hello, World", TokenType.STRING_LITERAL));
 	}
 
 	@Test
 	void testSimpleQuoteTrailingBlanks() throws ParseException {
 		assertAllTokensParsedCorrectly(
-			"\"Hello, World\"  \t\n ", CommonToken.of(0, "Hello, World", TokenType.STRING_LITERAL));
+			"\"Hello, World\"  \t\n ", Token.of(0, "Hello, World", TokenType.STRING_LITERAL));
 	}
 
 	@Test
 	void testEscapeDoubleQuote() throws ParseException {
 		assertAllTokensParsedCorrectly(
-			"\"Hello, \\\"World\\\"\"", CommonToken.of(0, "Hello, \"World\"", TokenType.STRING_LITERAL));
+			"\"Hello, \\\"World\\\"\"", Token.of(0, "Hello, \"World\"", TokenType.STRING_LITERAL));
 	}
 
 	@Test
 	void testEscapeSingleQuote() throws ParseException {
 		assertAllTokensParsedCorrectly(
-			"\"Hello, \\'World\\'\"", CommonToken.of(0, "Hello, 'World'", TokenType.STRING_LITERAL));
+			"\"Hello, \\'World\\'\"", Token.of(0, "Hello, 'World'", TokenType.STRING_LITERAL));
 	}
 
 	@Test
 	void testEscapeBackslash() throws ParseException {
 		assertAllTokensParsedCorrectly(
-			"\"a \\\\ b\"", CommonToken.of(0, "a \\ b", TokenType.STRING_LITERAL));
+			"\"a \\\\ b\"", Token.of(0, "a \\ b", TokenType.STRING_LITERAL));
 	}
 
 	@Test
 	void testEscapeCharacters() throws ParseException {
 		assertAllTokensParsedCorrectly(
-			"\" \\t \\r \\n \\f \\b \"", CommonToken.of(0, " \t \r \n \f \b ", TokenType.STRING_LITERAL));
+			"\" \\t \\r \\n \\f \\b \"", Token.of(0, " \t \r \n \f \b ", TokenType.STRING_LITERAL));
 	}
 
 	@Test
@@ -82,11 +81,11 @@ class TokenizerStringLiteralTest extends BaseParserTest {
 	void testSimpleQuoteOperation() throws ParseException {
 		assertAllTokensParsedCorrectly(
 			"\"Hello\" + \" \" + \"World\"",
-			CommonToken.of(0, "Hello", TokenType.STRING_LITERAL),
-			CommonToken.of(8, "+", TokenType.INFIX_OPERATOR),
-			CommonToken.of(10, " ", TokenType.STRING_LITERAL),
-			CommonToken.of(14, "+", TokenType.INFIX_OPERATOR),
-			CommonToken.of(16, "World", TokenType.STRING_LITERAL));
+			Token.of(0, "Hello", TokenType.STRING_LITERAL),
+			Token.of(8, "+", TokenType.INFIX_OPERATOR),
+			Token.of(10, " ", TokenType.STRING_LITERAL),
+			Token.of(14, "+", TokenType.INFIX_OPERATOR),
+			Token.of(16, "World", TokenType.STRING_LITERAL));
 	}
 
 	@Test

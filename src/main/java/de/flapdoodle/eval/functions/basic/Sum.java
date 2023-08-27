@@ -16,7 +16,7 @@
  */
 package de.flapdoodle.eval.functions.basic;
 
-import de.flapdoodle.eval.CommonToken;
+import de.flapdoodle.eval.parser.Token;
 import de.flapdoodle.eval.Evaluateables;
 import de.flapdoodle.eval.EvaluationContext;
 import de.flapdoodle.eval.Parameter;
@@ -33,7 +33,7 @@ public class Sum extends Evaluateables.SingleVararg<Value.NumberValue> {
 	}
 
 	@Override
-	protected Value<?> evaluateVarArg(ValueResolver variableResolver, EvaluationContext evaluationContext, CommonToken functionToken,
+	protected Value<?> evaluateVarArg(ValueResolver variableResolver, EvaluationContext evaluationContext, Token functionToken,
 		List<Value.NumberValue> parameterValues) {
 		BigDecimal sum = BigDecimal.ZERO;
 		for (Value.NumberValue parameter : parameterValues) {

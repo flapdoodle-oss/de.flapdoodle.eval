@@ -16,13 +16,13 @@
  */
 package de.flapdoodle.eval.functions.validations;
 
-import de.flapdoodle.eval.CommonToken;
+import de.flapdoodle.eval.parser.Token;
 import de.flapdoodle.eval.EvaluationException;
 import de.flapdoodle.eval.data.Value;
 
 public class NonNegativeNumber implements ParameterValidator<Value.NumberValue> {
 	@Override
-	public void validate(CommonToken token, Value.NumberValue parameterValue) throws EvaluationException {
+	public void validate(Token token, Value.NumberValue parameterValue) throws EvaluationException {
 		if (((Value.NumberValue) parameterValue).wrapped().signum() < 0) {
 			throw new EvaluationException(token, "Parameter must not be negative");
 		}

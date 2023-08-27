@@ -16,7 +16,6 @@
  */
 package de.flapdoodle.eval.parser;
 
-import de.flapdoodle.eval.CommonToken;
 import de.flapdoodle.eval.EvaluationContext;
 import de.flapdoodle.eval.EvaluationException;
 import de.flapdoodle.eval.data.Value;
@@ -44,16 +43,16 @@ class TokenizerLiteralOperatorsTest extends BaseParserTest {
 	void testAndOrNot() throws ParseException {
 		assertAllTokensParsedCorrectly(
 			"NOT a AND b DENIED OR NOT(c)",
-			CommonToken.of(0, "NOT", TokenType.PREFIX_OPERATOR),
-			CommonToken.of(4, "a", TokenType.VARIABLE_OR_CONSTANT),
-			CommonToken.of(6, "AND", TokenType.INFIX_OPERATOR),
-			CommonToken.of(10, "b", TokenType.VARIABLE_OR_CONSTANT),
-			CommonToken.of(12, "DENIED", TokenType.POSTFIX_OPERATOR),
-			CommonToken.of(19, "OR", TokenType.INFIX_OPERATOR),
-			CommonToken.of(22, "NOT", TokenType.PREFIX_OPERATOR),
-			CommonToken.of(25, "(", TokenType.BRACE_OPEN),
-			CommonToken.of(26, "c", TokenType.VARIABLE_OR_CONSTANT),
-			CommonToken.of(27, ")", TokenType.BRACE_CLOSE));
+			Token.of(0, "NOT", TokenType.PREFIX_OPERATOR),
+			Token.of(4, "a", TokenType.VARIABLE_OR_CONSTANT),
+			Token.of(6, "AND", TokenType.INFIX_OPERATOR),
+			Token.of(10, "b", TokenType.VARIABLE_OR_CONSTANT),
+			Token.of(12, "DENIED", TokenType.POSTFIX_OPERATOR),
+			Token.of(19, "OR", TokenType.INFIX_OPERATOR),
+			Token.of(22, "NOT", TokenType.PREFIX_OPERATOR),
+			Token.of(25, "(", TokenType.BRACE_OPEN),
+			Token.of(26, "c", TokenType.VARIABLE_OR_CONSTANT),
+			Token.of(27, ")", TokenType.BRACE_CLOSE));
 	}
 
 	static class AndOperator extends AbstractInfixOperator.Typed<Value.BooleanValue, Value.BooleanValue> {
@@ -62,7 +61,7 @@ class TokenizerLiteralOperatorsTest extends BaseParserTest {
 		}
 
 		@Override
-		protected Value<?> evaluateTyped(EvaluationContext evaluationContext, CommonToken operatorToken, Value.BooleanValue leftOperand, Value.BooleanValue rightOperand)
+		protected Value<?> evaluateTyped(EvaluationContext evaluationContext, Token operatorToken, Value.BooleanValue leftOperand, Value.BooleanValue rightOperand)
 			throws EvaluationException {
 			return Value.of(leftOperand.wrapped() && rightOperand.wrapped());
 		}
@@ -74,7 +73,7 @@ class TokenizerLiteralOperatorsTest extends BaseParserTest {
 		}
 
 		@Override
-		protected Value<?> evaluateTyped(EvaluationContext evaluationContext, CommonToken operatorToken, Value.BooleanValue leftOperand, Value.BooleanValue rightOperand)
+		protected Value<?> evaluateTyped(EvaluationContext evaluationContext, Token operatorToken, Value.BooleanValue leftOperand, Value.BooleanValue rightOperand)
 			throws EvaluationException {
 			return Value.of(leftOperand.wrapped() || rightOperand.wrapped());
 		}
@@ -86,7 +85,7 @@ class TokenizerLiteralOperatorsTest extends BaseParserTest {
 		}
 
 		@Override
-		protected Value<?> evaluateTyped(EvaluationContext evaluationContext, CommonToken operatorToken, Value.BooleanValue operand) throws EvaluationException {
+		protected Value<?> evaluateTyped(EvaluationContext evaluationContext, Token operatorToken, Value.BooleanValue operand) throws EvaluationException {
 			return Value.of(!operand.wrapped());
 		}
 	}
@@ -97,7 +96,7 @@ class TokenizerLiteralOperatorsTest extends BaseParserTest {
 		}
 
 		@Override
-		protected Value<?> evaluateTyped(EvaluationContext evaluationContext, CommonToken operatorToken, Value.BooleanValue operand) throws EvaluationException {
+		protected Value<?> evaluateTyped(EvaluationContext evaluationContext, Token operatorToken, Value.BooleanValue operand) throws EvaluationException {
 			return Value.of(!operand.wrapped());
 		}
 	}

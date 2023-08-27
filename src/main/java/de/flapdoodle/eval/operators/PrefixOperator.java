@@ -16,7 +16,7 @@
  */
 package de.flapdoodle.eval.operators;
 
-import de.flapdoodle.eval.CommonToken;
+import de.flapdoodle.eval.parser.Token;
 import de.flapdoodle.eval.EvaluationContext;
 import de.flapdoodle.eval.EvaluationException;
 import de.flapdoodle.eval.config.ValueResolver;
@@ -24,5 +24,5 @@ import de.flapdoodle.eval.data.Value;
 
 // Unary prefix operator, like -x
 public interface PrefixOperator extends Operator {
-	Value<?> evaluate(ValueResolver valueResolver, EvaluationContext evaluationContext, CommonToken operatorToken, Value<?> operand) throws EvaluationException;
+	Value<?> evaluate(ValueResolver valueResolver, EvaluationContext evaluationContext, Token operatorToken, Value<?> operand) throws EvaluationException;
 }

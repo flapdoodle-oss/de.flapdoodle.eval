@@ -16,7 +16,7 @@
  */
 package de.flapdoodle.eval.operators;
 
-import de.flapdoodle.eval.CommonToken;
+import de.flapdoodle.eval.parser.Token;
 import de.flapdoodle.eval.EvaluationException;
 import de.flapdoodle.eval.data.Value;
 
@@ -48,7 +48,7 @@ public abstract class AbstractBaseOperator implements Operator {
 		return leftAssociative;
 	}
 
-	protected static <T extends Value<?>> T requireValueType(CommonToken operatorToken, Value<?> value, Class<T> type) throws EvaluationException {
+	protected static <T extends Value<?>> T requireValueType(Token operatorToken, Value<?> value, Class<T> type) throws EvaluationException {
 		if (type.isInstance(value)) {
 			return type.cast(value);
 		}

@@ -1,5 +1,6 @@
 package de.flapdoodle.eval;
 
+import de.flapdoodle.eval.parser.Token;
 import org.immutables.value.Value;
 
 import java.util.List;
@@ -54,7 +55,7 @@ public abstract class Parameters {
 		return list().get(index);
 	}
 
-	public void validate(CommonToken token, List<de.flapdoodle.eval.data.Value<?>> parameterValues) throws EvaluationException {
+	public void validate(Token token, List<de.flapdoodle.eval.data.Value<?>> parameterValues) throws EvaluationException {
 		if (parameterValues.size() < min()) {
 			throw new EvaluationException(token, "not enough parameters: " + parameterValues.size() + " < " + min());
 		}

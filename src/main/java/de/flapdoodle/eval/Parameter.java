@@ -19,6 +19,7 @@ package de.flapdoodle.eval;
 import de.flapdoodle.eval.functions.basic.Conditional;
 import de.flapdoodle.eval.functions.validations.ParameterValidator;
 import de.flapdoodle.eval.parser.ASTNode;
+import de.flapdoodle.eval.parser.Token;
 import org.immutables.value.Value;
 
 import java.util.List;
@@ -52,7 +53,7 @@ public interface Parameter<T extends de.flapdoodle.eval.data.Value<?>> {
 	}
 
 	@Value.Auxiliary
-	default void validate(CommonToken token, de.flapdoodle.eval.data.Value<?> parameterValue) throws EvaluationException {
+	default void validate(Token token, de.flapdoodle.eval.data.Value<?> parameterValue) throws EvaluationException {
 		if (type().isInstance(parameterValue)) {
 			T value = type().cast(parameterValue);
 			for (ParameterValidator<T> validator : validators()) {

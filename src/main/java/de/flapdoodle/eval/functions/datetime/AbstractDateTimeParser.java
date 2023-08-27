@@ -31,7 +31,7 @@
 */
 package de.flapdoodle.eval.functions.datetime;
 
-import de.flapdoodle.eval.CommonToken;
+import de.flapdoodle.eval.parser.Token;
 import de.flapdoodle.eval.Evaluateables;
 import de.flapdoodle.eval.EvaluationContext;
 import de.flapdoodle.eval.Parameter;
@@ -48,7 +48,7 @@ public abstract class AbstractDateTimeParser extends Evaluateables.SingleVararg<
 	}
 
 	@Override
-	protected Value<?> evaluateVarArg(ValueResolver variableResolver, EvaluationContext evaluationContext, CommonToken functionToken,
+	protected Value<?> evaluateVarArg(ValueResolver variableResolver, EvaluationContext evaluationContext, Token functionToken,
 		List<Value.StringValue> parameterValues) {
 		ZoneId zoneId = evaluationContext.zoneId();
 		Instant instant;

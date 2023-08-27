@@ -16,7 +16,6 @@
  */
 package de.flapdoodle.eval.parser;
 
-import de.flapdoodle.eval.CommonToken;
 import de.flapdoodle.eval.config.Configuration;
 import de.flapdoodle.eval.config.OperatorResolver;
 import de.flapdoodle.eval.operators.InfixOperator;
@@ -40,7 +39,7 @@ public class Tokenizer {
 
 	private final Configuration configuration;
 
-	private final List<CommonToken> tokens = new ArrayList<>();
+	private final List<Token> tokens = new ArrayList<>();
 
 	private int index = 0;
 
@@ -63,15 +62,15 @@ public class Tokenizer {
 	 * @return A list of expression tokens.
 	 * @throws ParseException When the expression can't be parsed.
 	 */
-	public List<CommonToken> parse() throws ParseException {
+	public List<Token> parse() throws ParseException {
 
-		Optional<CommonToken> token;
+		Optional<Token> token;
 		while ((token = nextToken()).isPresent()) {
-			CommonToken currentToken = token.get();
+			Token currentToken = token.get();
 			if (implicitMultiplicationPossible(currentToken)) {
 				if (configuration.isImplicitMultiplicationAllowed()) {
-					CommonToken multiplication =
-						CommonToken.of(
+					Token multiplication =
+						Token.of(
 							currentToken.start(),
 							"*",
 							TokenType.INFIX_OPERATOR);
@@ -95,7 +94,7 @@ public class Tokenizer {
 		return tokens;
 	}
 
-	private boolean implicitMultiplicationPossible(CommonToken currentToken) {
+	private boolean implicitMultiplicationPossible(Token currentToken) {
 		switch (currentToken.type()) {
 			case BRACE_OPEN:
 				return isPreviousTokenType(TokenType.BRACE_CLOSE, TokenType.NUMBER_LITERAL);
@@ -106,13 +105,13 @@ public class Tokenizer {
 		}
 	}
 
-	private void validateToken(CommonToken currentToken) throws ParseException {
+	private void validateToken(Token currentToken) throws ParseException {
 		if (isPreviousTokenType(TokenType.INFIX_OPERATOR) && invalidTokenAfterInfixOperator(currentToken)) {
 			throw new ParseException(currentToken, "Unexpected token after infix operator");
 		}
 	}
 
-	private boolean invalidTokenAfterInfixOperator(CommonToken token) {
+	private boolean invalidTokenAfterInfixOperator(Token token) {
 		switch (token.type()) {
 			case INFIX_OPERATOR:
 			case BRACE_CLOSE:
@@ -123,7 +122,7 @@ public class Tokenizer {
 		}
 	}
 
-	private Optional<CommonToken> nextToken() throws ParseException {
+	private Optional<Token> nextToken() throws ParseException {
 		// blanks are always skipped.
 		skipBlanks();
 
@@ -132,7 +131,7 @@ public class Tokenizer {
 			: Optional.of(parseNextToken());
 	}
 	
-	private CommonToken parseNextToken() throws ParseException {
+	private Token parseNextToken() throws ParseException {
 		char currentChar=get();
 		// we have a token start, identify and parse it
 		if (currentChar == '"') {
@@ -150,7 +149,7 @@ public class Tokenizer {
 			&& configuration.isStructuresAllowed()) {
 			return parseStructureSeparator();
 		} else if (currentChar == ',') {
-			CommonToken token = CommonToken.of(index, ",", TokenType.COMMA);
+			Token token = Token.of(index, ",", TokenType.COMMA);
 			next();
 			return token;
 		} else if (isIdentifierStart(currentChar)) {
@@ -162,8 +161,8 @@ public class Tokenizer {
 		}
 	}
 
-	private CommonToken parseStructureSeparator() throws ParseException {
-		CommonToken token = CommonToken.of(index, ".", TokenType.STRUCTURE_SEPARATOR);
+	private Token parseStructureSeparator() throws ParseException {
+		Token token = Token.of(index, ".", TokenType.STRUCTURE_SEPARATOR);
 		if (arrayOpenOrStructureSeparatorNotAllowed()) {
 			throw new ParseException(token, "Structure separator not allowed here");
 		}
@@ -171,8 +170,8 @@ public class Tokenizer {
 		return token;
 	}
 
-	private CommonToken parseArrayClose() throws ParseException {
-		CommonToken token = CommonToken.of(index, "]", TokenType.ARRAY_CLOSE);
+	private Token parseArrayClose() throws ParseException {
+		Token token = Token.of(index, "]", TokenType.ARRAY_CLOSE);
 		if (!arrayCloseAllowed()) {
 			throw new ParseException(token, "Array close not allowed here");
 		}
@@ -184,8 +183,8 @@ public class Tokenizer {
 		return token;
 	}
 
-	private CommonToken parseArrayOpen() throws ParseException {
-		CommonToken token = CommonToken.of(index, "[", TokenType.ARRAY_OPEN);
+	private Token parseArrayOpen() throws ParseException {
+		Token token = Token.of(index, "[", TokenType.ARRAY_OPEN);
 		if (arrayOpenOrStructureSeparatorNotAllowed()) {
 			throw new ParseException(token, "Array open not allowed here");
 		}
@@ -194,8 +193,8 @@ public class Tokenizer {
 		return token;
 	}
 
-	private CommonToken parseBraceClose() throws ParseException {
-		CommonToken token = CommonToken.of(index, ")", TokenType.BRACE_CLOSE);
+	private Token parseBraceClose() throws ParseException {
+		Token token = Token.of(index, ")", TokenType.BRACE_CLOSE);
 		next();
 		if (braceBalance <= 0) {
 			throw new ParseException(token, "Unexpected closing brace");
@@ -204,8 +203,8 @@ public class Tokenizer {
 		return token;
 	}
 
-	private CommonToken parseBraceOpen() {
-		CommonToken token = CommonToken.of(index, "(", TokenType.BRACE_OPEN);
+	private Token parseBraceOpen() {
+		Token token = Token.of(index, "(", TokenType.BRACE_OPEN);
 		next();
 		braceBalance++;
 		return token;
@@ -231,7 +230,7 @@ public class Tokenizer {
 			});
 	}
 
-	private CommonToken parseOperator() throws ParseException {
+	private Token parseOperator() throws ParseException {
 		int tokenStartIndex = index;
 		StringBuilder tokenValue = new StringBuilder();
 		while (true) {
@@ -252,13 +251,13 @@ public class Tokenizer {
 		}
 		String tokenString = tokenValue.toString();
 		if (prefixOperatorAllowed() && operatorDictionary.hasOperator(PrefixOperator.class, tokenString)) {
-			return CommonToken.of(tokenStartIndex, tokenString, TokenType.PREFIX_OPERATOR);
+			return Token.of(tokenStartIndex, tokenString, TokenType.PREFIX_OPERATOR);
 		} else if (postfixOperatorAllowed() && operatorDictionary.hasOperator(PostfixOperator.class, tokenString)) {
-			return CommonToken.of(tokenStartIndex, tokenString, TokenType.POSTFIX_OPERATOR);
+			return Token.of(tokenStartIndex, tokenString, TokenType.POSTFIX_OPERATOR);
 		} else if (operatorDictionary.hasOperator(InfixOperator.class, tokenString)) {
-			return CommonToken.of(tokenStartIndex, tokenString, TokenType.INFIX_OPERATOR);
+			return Token.of(tokenStartIndex, tokenString, TokenType.INFIX_OPERATOR);
 		} else if (tokenString.equals(".") && configuration.isStructuresAllowed()) {
-			return CommonToken.of(tokenStartIndex, tokenString, TokenType.STRUCTURE_SEPARATOR);
+			return Token.of(tokenStartIndex, tokenString, TokenType.STRUCTURE_SEPARATOR);
 		}
 		throw new ParseException(
 			tokenStartIndex,
@@ -315,7 +314,7 @@ public class Tokenizer {
 		);
 	}
 
-	private CommonToken parseNumberLiteral() throws ParseException {
+	private Token parseNumberLiteral() throws ParseException {
 		char currentChar=get();
 		char nextChar = peek(1); //peekNextChar();
 		if (currentChar == '0' && (nextChar == 'x' || nextChar == 'X')) {
@@ -325,7 +324,7 @@ public class Tokenizer {
 		}
 	}
 
-	private CommonToken parseDecimalNumberLiteral() throws ParseException {
+	private Token parseDecimalNumberLiteral() throws ParseException {
 		int tokenStartIndex = index;
 		StringBuilder tokenValue = new StringBuilder();
 
@@ -348,13 +347,13 @@ public class Tokenizer {
 			|| lastChar == '-'
 			|| lastChar == '.')) {
 			throw new ParseException(
-				CommonToken.of(tokenStartIndex, tokenValue.toString(), TokenType.NUMBER_LITERAL),
+				Token.of(tokenStartIndex, tokenValue.toString(), TokenType.NUMBER_LITERAL),
 				"Illegal scientific format");
 		}
-		return CommonToken.of(tokenStartIndex, tokenValue.toString(), TokenType.NUMBER_LITERAL);
+		return Token.of(tokenStartIndex, tokenValue.toString(), TokenType.NUMBER_LITERAL);
 	}
 
-	private CommonToken parseHexNumberLiteral() {
+	private Token parseHexNumberLiteral() {
 		int tokenStartIndex = index;
 		StringBuilder tokenValue = new StringBuilder();
 
@@ -368,10 +367,10 @@ public class Tokenizer {
 			tokenValue.append(currentChar);
 			next();
 		}
-		return CommonToken.of(tokenStartIndex, tokenValue.toString(), TokenType.NUMBER_LITERAL);
+		return Token.of(tokenStartIndex, tokenValue.toString(), TokenType.NUMBER_LITERAL);
 	}
 
-	private CommonToken parseIdentifier() throws ParseException {
+	private Token parseIdentifier() throws ParseException {
 		int tokenStartIndex = index;
 		StringBuilder tokenValue = new StringBuilder();
 		char currentChar;
@@ -382,17 +381,17 @@ public class Tokenizer {
 		String tokenName = tokenValue.toString();
 
 		if (prefixOperatorAllowed() && operatorDictionary.hasOperator(PrefixOperator.class, tokenName)) {
-			return CommonToken.of(
+			return Token.of(
 				tokenStartIndex,
 				tokenName,
 				TokenType.PREFIX_OPERATOR);
 		} else if (postfixOperatorAllowed() && operatorDictionary.hasOperator(PostfixOperator.class, tokenName)) {
-			return CommonToken.of(
+			return Token.of(
 				tokenStartIndex,
 				tokenName,
 				TokenType.POSTFIX_OPERATOR);
 		} else if (operatorDictionary.hasOperator(InfixOperator.class, tokenName)) {
-			return CommonToken.of(
+			return Token.of(
 				tokenStartIndex,
 				tokenName,
 				TokenType.INFIX_OPERATOR);
@@ -401,13 +400,13 @@ public class Tokenizer {
 		skipBlanks();
 		currentChar = get();
 		if (currentChar == '(') {
-			return CommonToken.of(tokenStartIndex, tokenName, TokenType.FUNCTION);
+			return Token.of(tokenStartIndex, tokenName, TokenType.FUNCTION);
 		} else {
-			return CommonToken.of(tokenStartIndex, tokenName, TokenType.VARIABLE_OR_CONSTANT);
+			return Token.of(tokenStartIndex, tokenName, TokenType.VARIABLE_OR_CONSTANT);
 		}
 	}
 
-	CommonToken parseStringLiteral() throws ParseException {
+	Token parseStringLiteral() throws ParseException {
 		int tokenStartIndex = index;
 		StringBuilder tokenValue = new StringBuilder();
 		// skip starting quote
@@ -429,7 +428,7 @@ public class Tokenizer {
 			throw new ParseException(
 				tokenStartIndex, index, tokenValue.toString(), "Closing quote not found");
 		}
-		return CommonToken.of(tokenStartIndex, tokenValue.toString(), TokenType.STRING_LITERAL);
+		return Token.of(tokenStartIndex, tokenValue.toString(), TokenType.STRING_LITERAL);
 	}
 
 	private char escapeCharacter(int character) throws ParseException {

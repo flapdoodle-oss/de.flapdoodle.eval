@@ -16,13 +16,12 @@
  */
 package de.flapdoodle.eval.parser;
 
-import de.flapdoodle.eval.CommonToken;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class ASTNodeTest {
-	final CommonToken variable = CommonToken.of(1, "variable", TokenType.VARIABLE_OR_CONSTANT);
+	final Token variable = Token.of(1, "variable", TokenType.VARIABLE_OR_CONSTANT);
 
 	@Test
 	void testJSONSingle() {
@@ -34,7 +33,7 @@ class ASTNodeTest {
 
 	@Test
 	void testJSONPrefix() {
-		CommonToken token = CommonToken.of(1, "-", TokenType.PREFIX_OPERATOR);
+		Token token = Token.of(1, "-", TokenType.PREFIX_OPERATOR);
 		ASTNode node = ASTNode.of(token, ASTNode.of(variable));
 
 		assertThat(node.toJSON())
@@ -44,7 +43,7 @@ class ASTNodeTest {
 
 	@Test
 	void testJSONInfix() {
-		CommonToken token = CommonToken.of(1, "+", TokenType.INFIX_OPERATOR);
+		Token token = Token.of(1, "+", TokenType.INFIX_OPERATOR);
 		ASTNode node = ASTNode.of(token, ASTNode.of(variable), ASTNode.of(variable));
 
 		assertThat(node.toJSON())
@@ -54,7 +53,7 @@ class ASTNodeTest {
 
 	@Test
 	void testJSONFunction() {
-		CommonToken token = CommonToken.of(1, "+", TokenType.FUNCTION);
+		Token token = Token.of(1, "+", TokenType.FUNCTION);
 		ASTNode node =
 			ASTNode.of(token, ASTNode.of(variable), ASTNode.of(variable), ASTNode.of(variable));
 

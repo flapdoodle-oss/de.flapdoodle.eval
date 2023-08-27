@@ -16,7 +16,7 @@
  */
 package de.flapdoodle.eval.operators;
 
-import de.flapdoodle.eval.CommonToken;
+import de.flapdoodle.eval.parser.Token;
 import de.flapdoodle.eval.EvaluationContext;
 import de.flapdoodle.eval.EvaluationException;
 import de.flapdoodle.eval.config.ValueResolver;
@@ -54,10 +54,10 @@ public abstract class AbstractPostfixOperator extends AbstractBaseOperator imple
 		}
 
 		@Override
-		public final Value<?> evaluate(ValueResolver valueResolver, EvaluationContext evaluationContext, CommonToken operatorToken, Value<?> operand) throws EvaluationException {
+		public final Value<?> evaluate(ValueResolver valueResolver, EvaluationContext evaluationContext, Token operatorToken, Value<?> operand) throws EvaluationException {
 			return evaluateTyped(evaluationContext, operatorToken, requireValueType(operatorToken, operand, type));
 		}
 
-		protected abstract Value<?> evaluateTyped(EvaluationContext evaluationContext, CommonToken operatorToken, L operand) throws EvaluationException;
+		protected abstract Value<?> evaluateTyped(EvaluationContext evaluationContext, Token operatorToken, L operand) throws EvaluationException;
 	}
 }

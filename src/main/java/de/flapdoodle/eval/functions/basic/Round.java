@@ -19,6 +19,7 @@ package de.flapdoodle.eval.functions.basic;
 import de.flapdoodle.eval.*;
 import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
+import de.flapdoodle.eval.parser.Token;
 
 public class Round extends Evaluateables.Tuple<Value.NumberValue, Value.NumberValue> {
 
@@ -28,7 +29,7 @@ public class Round extends Evaluateables.Tuple<Value.NumberValue, Value.NumberVa
 	}
 
 	@Override
-	protected Value<?> evaluate(ValueResolver variableResolver, EvaluationContext evaluationContext, CommonToken functionToken, Value.NumberValue value,
+	protected Value<?> evaluate(ValueResolver variableResolver, EvaluationContext evaluationContext, Token functionToken, Value.NumberValue value,
 		Value.NumberValue precision) throws EvaluationException {
 		return Value.of(
 			value

@@ -16,7 +16,7 @@
  */
 package de.flapdoodle.eval.operators;
 
-import de.flapdoodle.eval.CommonToken;
+import de.flapdoodle.eval.parser.Token;
 import de.flapdoodle.eval.EvaluationContext;
 import de.flapdoodle.eval.EvaluationException;
 import de.flapdoodle.eval.config.ValueResolver;
@@ -31,7 +31,7 @@ public abstract class AbstractInfixOperator extends AbstractBaseOperator impleme
 		super(precedence);
 	}
 
-	protected static Evaluator evaluate(CommonToken operatorToken, Value<?> leftOperand, Value<?> rightOperand) {
+	protected static Evaluator evaluate(Token operatorToken, Value<?> leftOperand, Value<?> rightOperand) {
 		return new Evaluator(operatorToken, leftOperand, rightOperand);
 	}
 
@@ -53,11 +53,11 @@ public abstract class AbstractInfixOperator extends AbstractBaseOperator impleme
 		}
 
 		@Override
-		public final Value<?> evaluate(ValueResolver valueResolver, EvaluationContext evaluationContext, CommonToken operatorToken, Value<?> leftOperand, Value<?> rightOperand) throws EvaluationException {
+		public final Value<?> evaluate(ValueResolver valueResolver, EvaluationContext evaluationContext, Token operatorToken, Value<?> leftOperand, Value<?> rightOperand) throws EvaluationException {
 			return evaluateTyped(evaluationContext, operatorToken, requireValueType(operatorToken, leftOperand, leftType),
 				requireValueType(operatorToken, rightOperand, rightType));
 		}
 
-		protected abstract Value<?> evaluateTyped(EvaluationContext evaluationContext, CommonToken operatorToken, L leftOperand, R rightOperand) throws EvaluationException;
+		protected abstract Value<?> evaluateTyped(EvaluationContext evaluationContext, Token operatorToken, L leftOperand, R rightOperand) throws EvaluationException;
 	}
 }

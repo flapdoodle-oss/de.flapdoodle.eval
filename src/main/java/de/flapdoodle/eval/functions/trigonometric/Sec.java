@@ -16,7 +16,7 @@
  */
 package de.flapdoodle.eval.functions.trigonometric;
 
-import de.flapdoodle.eval.CommonToken;
+import de.flapdoodle.eval.parser.Token;
 import de.flapdoodle.eval.EvaluationContext;
 import de.flapdoodle.eval.EvaluationException;
 import de.flapdoodle.eval.config.ValueResolver;
@@ -24,7 +24,7 @@ import de.flapdoodle.eval.data.Value;
 
 public class Sec extends NonZeroFunction {
 	@Override
-	protected Value<?> evaluate(ValueResolver variableResolver, EvaluationContext evaluationContext, CommonToken functionToken,
+	protected Value<?> evaluate(ValueResolver variableResolver, EvaluationContext evaluationContext, Token functionToken,
 		Value.NumberValue parameterValue) throws EvaluationException {
 		/* Formula: sec(x) = 1 / cos(x) */
 		return Value.of(1.0 / Math.cos(Math.toRadians(parameterValue.wrapped().doubleValue())));

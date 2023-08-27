@@ -21,6 +21,7 @@ import de.flapdoodle.eval.data.Value;
 import de.flapdoodle.eval.operators.AbstractPostfixOperator;
 import de.flapdoodle.eval.operators.AbstractPrefixOperator;
 import de.flapdoodle.eval.operators.Precedence;
+import de.flapdoodle.eval.parser.Token;
 import de.flapdoodle.types.Pair;
 
 import java.math.BigDecimal;
@@ -48,7 +49,7 @@ public class TestConfigurationProvider {
 		}
 
 		@Override
-		protected Value<?> evaluateVarArg(ValueResolver variableResolver, EvaluationContext evaluationContext, CommonToken functionToken,
+		protected Value<?> evaluateVarArg(ValueResolver variableResolver, EvaluationContext evaluationContext, Token functionToken,
 			List<Value.StringValue> parameterValues) {
 			// dummy implementation
 			return Value.of("OK");
@@ -62,7 +63,7 @@ public class TestConfigurationProvider {
 		}
 
 		@Override
-		protected Value<?> evaluateTyped(EvaluationContext evaluationContext, CommonToken operatorToken, Value.NumberValue operand) throws EvaluationException {
+		protected Value<?> evaluateTyped(EvaluationContext evaluationContext, Token operatorToken, Value.NumberValue operand) throws EvaluationException {
 			return Value.of(operand.wrapped().add(BigDecimal.ONE));
 		}
 	}
@@ -74,7 +75,7 @@ public class TestConfigurationProvider {
 		}
 
 		@Override
-		protected Value<?> evaluateTyped(EvaluationContext evaluationContext, CommonToken operatorToken, Value.NumberValue operand) throws EvaluationException {
+		protected Value<?> evaluateTyped(EvaluationContext evaluationContext, Token operatorToken, Value.NumberValue operand) throws EvaluationException {
 			return Value.of(operand.wrapped().add(BigDecimal.ONE));
 		}
 	}
@@ -86,7 +87,7 @@ public class TestConfigurationProvider {
 		}
 
 		@Override
-		protected Value<?> evaluateTyped(EvaluationContext evaluationContext, CommonToken operatorToken, Value.NullValue operand) throws EvaluationException {
+		protected Value<?> evaluateTyped(EvaluationContext evaluationContext, Token operatorToken, Value.NullValue operand) throws EvaluationException {
 			return Value.of("?");
 		}
 	}

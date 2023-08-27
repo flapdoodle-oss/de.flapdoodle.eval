@@ -19,6 +19,7 @@ package de.flapdoodle.eval.functions.basic;
 import de.flapdoodle.eval.*;
 import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
+import de.flapdoodle.eval.parser.Token;
 
 /**
  * Conditional evaluation function. If parameter <code>condition</code> is <code>true</code>, the
@@ -37,7 +38,7 @@ public class Conditional extends Evaluateables.Triple<Value.BooleanValue, Value.
 	}
 
 	@Override
-	protected Value<?> evaluate(ValueResolver valueResolver, EvaluationContext evaluationContext, CommonToken functionToken, Value.BooleanValue condition,
+	protected Value<?> evaluate(ValueResolver valueResolver, EvaluationContext evaluationContext, Token functionToken, Value.BooleanValue condition,
 		Value.ExpressionValue ifTrue, Value.ExpressionValue ifFalse) throws EvaluationException {
 		if (condition.wrapped()) {
 			return evaluationContext.subtreeEvaluator().apply(ifTrue.wrapped());

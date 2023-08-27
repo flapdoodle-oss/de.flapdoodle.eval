@@ -16,7 +16,7 @@
  */
 package de.flapdoodle.eval.operators.booleans;
 
-import de.flapdoodle.eval.CommonToken;
+import de.flapdoodle.eval.parser.Token;
 import de.flapdoodle.eval.EvaluationContext;
 import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
@@ -33,7 +33,7 @@ public class Equals extends AbstractInfixOperator {
 
 	@Override
 	public Value<?> evaluate(
-		ValueResolver valueResolver, EvaluationContext evaluationContext, CommonToken operatorToken, Value<?> a, Value<?> b) {
+		ValueResolver valueResolver, EvaluationContext evaluationContext, Token operatorToken, Value<?> a, Value<?> b) {
 		return Value.of(Objects.equals(a.wrapped(), b.wrapped()));
 	}
 }

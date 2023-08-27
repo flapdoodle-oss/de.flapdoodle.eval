@@ -16,7 +16,7 @@
  */
 package de.flapdoodle.eval.functions.trigonometric;
 
-import de.flapdoodle.eval.CommonToken;
+import de.flapdoodle.eval.parser.Token;
 import de.flapdoodle.eval.EvaluationContext;
 import de.flapdoodle.eval.EvaluationException;
 import de.flapdoodle.eval.config.ValueResolver;
@@ -25,7 +25,7 @@ import de.flapdoodle.eval.data.Value;
 public class AtanH extends AbstractNumberFunction {
 
 	@Override
-	protected Value<?> evaluate(ValueResolver variableResolver, EvaluationContext evaluationContext, CommonToken functionToken,
+	protected Value<?> evaluate(ValueResolver variableResolver, EvaluationContext evaluationContext, Token functionToken,
 		Value.NumberValue parameterValue) throws EvaluationException {
 		/* Formula: atanh(x) = 0.5*ln((1 + x)/(1 - x)) */
 		double value = parameterValue.wrapped().doubleValue();

@@ -16,7 +16,7 @@
  */
 package de.flapdoodle.eval.operators.booleans;
 
-import de.flapdoodle.eval.CommonToken;
+import de.flapdoodle.eval.parser.Token;
 import de.flapdoodle.eval.EvaluationContext;
 import de.flapdoodle.eval.EvaluationException;
 import de.flapdoodle.eval.data.Value;
@@ -29,7 +29,7 @@ public class Or extends AbstractBooleanInfixOperator {
 	}
 
 	@Override
-	protected Value<?> evaluateTyped(EvaluationContext evaluationContext, CommonToken operatorToken, Value.BooleanValue leftOperand, Value.BooleanValue rightOperand)
+	protected Value<?> evaluateTyped(EvaluationContext evaluationContext, Token operatorToken, Value.BooleanValue leftOperand, Value.BooleanValue rightOperand)
 		throws EvaluationException {
 		return Value.of(leftOperand.wrapped() || rightOperand.wrapped());
 	}

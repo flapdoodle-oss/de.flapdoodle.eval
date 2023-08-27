@@ -16,10 +16,10 @@
  */
 package de.flapdoodle.eval.functions.validations;
 
-import de.flapdoodle.eval.CommonToken;
+import de.flapdoodle.eval.parser.Token;
 import de.flapdoodle.eval.EvaluationException;
 import de.flapdoodle.eval.data.Value;
 
 public interface ParameterValidator<T extends Value<?>> {
-	void validate(CommonToken token, T parameterValue) throws EvaluationException;
+	void validate(Token token, T parameterValue) throws EvaluationException;
 }

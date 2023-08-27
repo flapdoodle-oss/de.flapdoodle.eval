@@ -1,18 +1,18 @@
 package de.flapdoodle.eval.operators;
 
-import de.flapdoodle.eval.CommonToken;
+import de.flapdoodle.eval.parser.Token;
 import de.flapdoodle.eval.EvaluationException;
 import de.flapdoodle.eval.data.Value;
 
 import java.util.Optional;
 
 public class Evaluator {
-	private final CommonToken operatorToken;
+	private final Token operatorToken;
 	private final Value<?> leftOperand;
 	private final Value<?> rightOperand;
 	private Optional<Value<?>> result = Optional.empty();
 
-	public Evaluator(CommonToken operatorToken, Value<?> leftOperand, Value<?> rightOperand) {
+	public Evaluator(Token operatorToken, Value<?> leftOperand, Value<?> rightOperand) {
 		this.operatorToken = operatorToken;
 		this.leftOperand = leftOperand;
 		this.rightOperand = rightOperand;

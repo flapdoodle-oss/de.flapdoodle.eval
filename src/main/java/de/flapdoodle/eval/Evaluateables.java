@@ -2,6 +2,7 @@ package de.flapdoodle.eval;
 
 import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
+import de.flapdoodle.eval.parser.Token;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,12 +21,12 @@ public abstract class Evaluateables {
 		}
 
 		@Override
-		public final Value<?> evaluate(ValueResolver valueResolver, EvaluationContext evaluationContext, CommonToken token, List<Value<?>> arguments) throws EvaluationException {
+		public final Value<?> evaluate(ValueResolver valueResolver, EvaluationContext evaluationContext, Token token, List<Value<?>> arguments) throws EvaluationException {
 			parameters().validate(token, arguments);
 			return evaluateValidated(valueResolver, evaluationContext, token, arguments);
 		}
 
-		protected abstract Value<?> evaluateValidated(ValueResolver valueResolver, EvaluationContext evaluationContext, CommonToken token, List<Value<?>> parameters)
+		protected abstract Value<?> evaluateValidated(ValueResolver valueResolver, EvaluationContext evaluationContext, Token token, List<Value<?>> parameters)
 			throws EvaluationException;
 	}
 
@@ -48,12 +49,12 @@ public abstract class Evaluateables {
 		}
 
 		@Override
-		protected final Value<?> evaluateValidated(ValueResolver valueResolver, EvaluationContext evaluationContext, CommonToken token, List<Value<?>> arguments)
+		protected final Value<?> evaluateValidated(ValueResolver valueResolver, EvaluationContext evaluationContext, Token token, List<Value<?>> arguments)
 			throws EvaluationException {
 			return evaluate(valueResolver, evaluationContext, token, definition.type().cast(arguments.get(0)));
 		}
 
-		protected abstract Value<?> evaluate(ValueResolver variableResolver, EvaluationContext evaluationContext, CommonToken functionToken, T parameterValue)
+		protected abstract Value<?> evaluate(ValueResolver variableResolver, EvaluationContext evaluationContext, Token functionToken, T parameterValue)
 			throws EvaluationException;
 	}
 
@@ -73,13 +74,13 @@ public abstract class Evaluateables {
 		}
 
 		@Override
-		protected final Value<?> evaluateValidated(ValueResolver variableResolver, EvaluationContext evaluationContext, CommonToken functionToken, List<Value<?>> arguments)
+		protected final Value<?> evaluateValidated(ValueResolver variableResolver, EvaluationContext evaluationContext, Token functionToken, List<Value<?>> arguments)
 			throws EvaluationException {
 			return evaluateVarArg(variableResolver, evaluationContext, functionToken, arguments.stream().map(it -> definition.type().cast(it)).collect(
 				Collectors.toList()));
 		}
 
-		protected abstract Value<?> evaluateVarArg(ValueResolver variableResolver, EvaluationContext evaluationContext, CommonToken functionToken, List<T> parameterValues);
+		protected abstract Value<?> evaluateVarArg(ValueResolver variableResolver, EvaluationContext evaluationContext, Token functionToken, List<T> parameterValues);
 	}
 
 	/**
@@ -97,7 +98,7 @@ public abstract class Evaluateables {
 		}
 
 		@Override
-		protected final Value<?> evaluateValidated(ValueResolver variableResolver, EvaluationContext evaluationContext, CommonToken functionToken, List<Value<?>> arguments)
+		protected final Value<?> evaluateValidated(ValueResolver variableResolver, EvaluationContext evaluationContext, Token functionToken, List<Value<?>> arguments)
 			throws EvaluationException {
 			if (arguments.size() != 2) throw EvaluationException.ofUnsupportedDataTypeInOperation(functionToken);
 			return evaluate(variableResolver, evaluationContext, functionToken,
@@ -106,7 +107,7 @@ public abstract class Evaluateables {
 			);
 		}
 
-		protected abstract Value<?> evaluate(ValueResolver variableResolver, EvaluationContext evaluationContext, CommonToken functionToken, A a, B b)
+		protected abstract Value<?> evaluate(ValueResolver variableResolver, EvaluationContext evaluationContext, Token functionToken, A a, B b)
 			throws EvaluationException;
 	}
 
@@ -127,7 +128,7 @@ public abstract class Evaluateables {
 		}
 
 		@Override
-		protected final Value<?> evaluateValidated(ValueResolver variableResolver, EvaluationContext evaluationContext, CommonToken functionToken, List<Value<?>> arguments)
+		protected final Value<?> evaluateValidated(ValueResolver variableResolver, EvaluationContext evaluationContext, Token functionToken, List<Value<?>> arguments)
 			throws EvaluationException {
 			if (arguments.size() != 3) throw EvaluationException.ofUnsupportedDataTypeInOperation(functionToken);
 			return evaluate(variableResolver, evaluationContext, functionToken,
@@ -137,7 +138,7 @@ public abstract class Evaluateables {
 			);
 		}
 
-		protected abstract Value<?> evaluate(ValueResolver variableResolver, EvaluationContext evaluationContext, CommonToken functionToken, A a, B b, C c)
+		protected abstract Value<?> evaluate(ValueResolver variableResolver, EvaluationContext evaluationContext, Token functionToken, A a, B b, C c)
 			throws EvaluationException;
 	}
 
