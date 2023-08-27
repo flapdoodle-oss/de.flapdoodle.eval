@@ -18,7 +18,7 @@ package de.flapdoodle.eval;
 
 import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.parser.ASTNode;
-import de.flapdoodle.eval.parser.Token;
+import de.flapdoodle.eval.nparser.Token;
 import de.flapdoodle.eval.parser.TokenType;
 import org.junit.jupiter.api.Test;
 

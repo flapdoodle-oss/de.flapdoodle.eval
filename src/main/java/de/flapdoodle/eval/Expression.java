@@ -19,6 +19,7 @@ package de.flapdoodle.eval;
 import de.flapdoodle.eval.config.Configuration;
 import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
+import de.flapdoodle.eval.nparser.Token;
 import de.flapdoodle.eval.operators.InfixOperator;
 import de.flapdoodle.eval.operators.Operator;
 import de.flapdoodle.eval.operators.PostfixOperator;
@@ -34,7 +35,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.concurrent.ThreadLocalRandom;
 
 @org.immutables.value.Value.Immutable
 public abstract class Expression {
@@ -73,10 +73,10 @@ public abstract class Expression {
 
 	@org.immutables.value.Value.Derived
 	public Either<ASTNode, ParseException> getAbstractSyntaxTree() {
-		de.flapdoodle.eval.nparser.Tokenizer tokenizer = new de.flapdoodle.eval.nparser.Tokenizer(raw(), configuration());
+		Tokenizer tokenizer = new Tokenizer(raw(), configuration());
 		try {
-			de.flapdoodle.eval.nparser.ShuntingYardConverter converter =
-				new de.flapdoodle.eval.nparser.ShuntingYardConverter(raw(), tokenizer.parse(), configuration());
+			ShuntingYardConverter converter =
+				new ShuntingYardConverter(raw(), tokenizer.parse(), configuration());
 			return Either.left(converter.toAbstractSyntaxTree());
 		}
 		catch (ParseException px) {
@@ -203,14 +203,6 @@ public abstract class Expression {
 	
 	private <T extends Operator> T operator(CommonToken commonToken, Class<T> operatorType) {
 		if (commonToken instanceof Token) {
-			Token token = (Token) commonToken;
-			Operator def = token.operator();
-			if (operatorType.isInstance(def)) {
-				return operatorType.cast(def);
-			}
-			throw new IllegalArgumentException("operator definition does not match: " + operatorType + " -> " + def);
-		}
-		if (commonToken instanceof de.flapdoodle.eval.nparser.Token) {
 			return configuration().getOperatorResolver().get(operatorType, commonToken.value());
 		}
 		throw new IllegalArgumentException("no operator for match: " + operatorType + " -> " + commonToken);
@@ -254,9 +246,6 @@ public abstract class Expression {
 
 	private Evaluateable function(CommonToken commonToken) {
 		if (commonToken instanceof Token) {
-			return ((Token) commonToken).function();
-		}
-		if (commonToken instanceof de.flapdoodle.eval.nparser.Token) {
 			return configuration().functions().get(commonToken.value());
 		}
 		throw new IllegalArgumentException("could not find function for "+commonToken);

@@ -17,6 +17,7 @@
 package de.flapdoodle.eval.parser;
 
 import de.flapdoodle.eval.functions.basic.Min;
+import de.flapdoodle.eval.nparser.Token;
 import de.flapdoodle.eval.operators.arithmetic.Plus;
 import de.flapdoodle.eval.operators.arithmetic.PrefixMinus;
 import org.junit.jupiter.api.Test;
@@ -36,7 +37,7 @@ class ASTNodeTest {
 
 	@Test
 	void testJSONPrefix() {
-		Token token = Token.of(1, "-", TokenType.PREFIX_OPERATOR, new PrefixMinus());
+		Token token = Token.of(1, "-", TokenType.PREFIX_OPERATOR);
 		ASTNode node = ASTNode.of(token, ASTNode.of(variable));
 
 		assertThat(node.toJSON())
@@ -46,7 +47,7 @@ class ASTNodeTest {
 
 	@Test
 	void testJSONInfix() {
-		Token token = Token.of(1, "+", TokenType.INFIX_OPERATOR, new Plus());
+		Token token = Token.of(1, "+", TokenType.INFIX_OPERATOR);
 		ASTNode node = ASTNode.of(token, ASTNode.of(variable), ASTNode.of(variable));
 
 		assertThat(node.toJSON())
@@ -56,7 +57,7 @@ class ASTNodeTest {
 
 	@Test
 	void testJSONFunction() {
-		Token token = Token.of(1, "+", TokenType.FUNCTION, new Min());
+		Token token = Token.of(1, "+", TokenType.FUNCTION);
 		ASTNode node =
 			ASTNode.of(token, ASTNode.of(variable), ASTNode.of(variable), ASTNode.of(variable));
 

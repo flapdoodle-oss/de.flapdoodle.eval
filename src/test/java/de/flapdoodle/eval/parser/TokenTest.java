@@ -17,7 +17,7 @@
 package de.flapdoodle.eval.parser;
 
 import de.flapdoodle.eval.config.Configuration;
-import de.flapdoodle.eval.operators.InfixOperator;
+import de.flapdoodle.eval.nparser.Token;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -39,40 +39,6 @@ class TokenTest {
 			assertThat(token.type()).isEqualTo(type);
 			assertThat(token.start()).isEqualTo(counter);
 			assertThat(token.value()).isEqualTo(tokenString);
-			assertThat(token.function()).isNull();
-			assertThat(token.operator()).isNull();
 		}
-	}
-
-	@Test
-	void testFunctionToken() {
-		Token token =
-			Token.of(
-				3,
-				"max",
-				TokenType.FUNCTION,
-				expressionConfiguration.functions().get("max"));
-
-		assertThat(token.start()).isEqualTo(3);
-		assertThat(token.value()).isEqualTo("max");
-		assertThat(token.type()).isEqualTo(TokenType.FUNCTION);
-		assertThat(token.function()).isNotNull();
-		assertThat(token.operator()).isNull();
-	}
-
-	@Test
-	void testOperatorToken() {
-		Token token =
-			Token.of(
-				1,
-				"+",
-				TokenType.INFIX_OPERATOR,
-				expressionConfiguration.getOperatorResolver().get(InfixOperator.class, "+"));
-
-		assertThat(token.start()).isEqualTo(1);
-		assertThat(token.value()).isEqualTo("+");
-		assertThat(token.type()).isEqualTo(TokenType.INFIX_OPERATOR);
-		assertThat(token.function()).isNull();
-		assertThat(token.operator()).isNotNull();
 	}
 }

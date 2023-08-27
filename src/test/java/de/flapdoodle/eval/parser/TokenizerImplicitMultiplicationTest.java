@@ -19,7 +19,6 @@ package de.flapdoodle.eval.parser;
 import de.flapdoodle.eval.config.Configuration;
 import de.flapdoodle.eval.nparser.Token;
 import org.junit.jupiter.api.Test;
-import de.flapdoodle.eval.nparser.Tokenizer;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 

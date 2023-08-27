@@ -18,16 +18,12 @@ package de.flapdoodle.eval.parser;
 
 import de.flapdoodle.eval.Expression;
 import de.flapdoodle.eval.config.ValueResolver;
-import de.flapdoodle.eval.operators.arithmetic.Multiply;
-import de.flapdoodle.eval.operators.arithmetic.PrefixMinus;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
-import de.flapdoodle.eval.nparser.ShuntingYardConverter;
 import de.flapdoodle.eval.nparser.Token;
-import de.flapdoodle.eval.nparser.Tokenizer;
 
 import java.util.Arrays;
 import java.util.List;
