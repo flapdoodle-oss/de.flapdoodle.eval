@@ -278,7 +278,7 @@ public class ShuntingYardConverter {
 			case INFIX_OPERATOR:
 				return configuration.getOperatorResolver().get(InfixOperator.class, token.value());
 		}
-		throw new ParseException(token,"no matching operator found");
+		return null;
 	}
 
 	private boolean isNextOperatorOfHigherPrecedence(

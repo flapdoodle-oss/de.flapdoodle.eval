@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.concurrent.ThreadLocalRandom;
 
 @org.immutables.value.Value.Immutable
 public abstract class Expression {
@@ -72,6 +73,20 @@ public abstract class Expression {
 
 	@org.immutables.value.Value.Derived
 	public Either<ASTNode, ParseException> getAbstractSyntaxTree() {
+		boolean useNew = ThreadLocalRandom.current().nextBoolean();
+		useNew = true;
+		if (useNew) {
+			de.flapdoodle.eval.nparser.Tokenizer tokenizer = new de.flapdoodle.eval.nparser.Tokenizer(raw(), configuration());
+			try {
+				de.flapdoodle.eval.nparser.ShuntingYardConverter converter =
+					new de.flapdoodle.eval.nparser.ShuntingYardConverter(raw(), tokenizer.parse(), configuration());
+				return Either.left(converter.toAbstractSyntaxTree());
+			}
+			catch (ParseException px) {
+				return Either.right(px);
+			}
+		}
+		
 		Tokenizer tokenizer = new Tokenizer(raw(), configuration());
 		try {
 			ShuntingYardConverter converter =
@@ -209,6 +224,9 @@ public abstract class Expression {
 			}
 			throw new IllegalArgumentException("operator definition does not match: " + operatorType + " -> " + def);
 		}
+		if (commonToken instanceof de.flapdoodle.eval.nparser.Token) {
+			return configuration().getOperatorResolver().get(operatorType, commonToken.value());
+		}
 		throw new IllegalArgumentException("no operator for match: " + operatorType + " -> " + commonToken);
 	}
 
@@ -251,6 +269,9 @@ public abstract class Expression {
 	private Evaluateable function(CommonToken commonToken) {
 		if (commonToken instanceof Token) {
 			return ((Token) commonToken).function();
+		}
+		if (commonToken instanceof de.flapdoodle.eval.nparser.Token) {
+			return configuration().functions().get(commonToken.value());
 		}
 		throw new IllegalArgumentException("could not find function for "+commonToken);
 	}
