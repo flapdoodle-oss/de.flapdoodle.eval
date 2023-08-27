@@ -24,7 +24,7 @@ import de.flapdoodle.eval.config.Configuration;
 import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
 import de.flapdoodle.eval.parser.ParseException;
-import de.flapdoodle.eval.nparser.Token;
+import de.flapdoodle.eval.parser.Token;
 import de.flapdoodle.eval.parser.TokenType;
 import org.assertj.core.api.InstanceOfAssertFactories;
 import org.junit.jupiter.api.Test;

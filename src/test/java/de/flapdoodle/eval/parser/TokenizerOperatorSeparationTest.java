@@ -17,7 +17,6 @@
 package de.flapdoodle.eval.parser;
 
 import org.junit.jupiter.api.Test;
-import de.flapdoodle.eval.nparser.Token;
 
 class TokenizerOperatorSeparationTest extends BaseParserTest {
 

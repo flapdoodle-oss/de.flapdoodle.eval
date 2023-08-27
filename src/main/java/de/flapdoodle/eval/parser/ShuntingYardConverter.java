@@ -18,14 +18,10 @@ package de.flapdoodle.eval.parser;
 
 import de.flapdoodle.eval.Evaluateable;
 import de.flapdoodle.eval.config.Configuration;
-import de.flapdoodle.eval.nparser.Token;
 import de.flapdoodle.eval.operators.InfixOperator;
 import de.flapdoodle.eval.operators.Operator;
 import de.flapdoodle.eval.operators.PostfixOperator;
 import de.flapdoodle.eval.operators.PrefixOperator;
-import de.flapdoodle.eval.parser.TokenType;
-import de.flapdoodle.eval.parser.ASTNode;
-import de.flapdoodle.eval.parser.ParseException;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -38,18 +34,18 @@ import java.util.List;
  */
 public class ShuntingYardConverter {
 
-	private final List<de.flapdoodle.eval.nparser.Token> expressionTokens;
+	private final List<Token> expressionTokens;
 
 	private final String originalExpression;
 
 	private final Configuration configuration;
 
-	private final Deque<de.flapdoodle.eval.nparser.Token> operatorStack = new ArrayDeque<>();
+	private final Deque<Token> operatorStack = new ArrayDeque<>();
 	private final Deque<ASTNode> operandStack = new ArrayDeque<>();
 	
 	public ShuntingYardConverter(
 		String originalExpression,
-		List<de.flapdoodle.eval.nparser.Token> expressionTokens,
+		List<Token> expressionTokens,
 		Configuration configuration) {
 		this.originalExpression = originalExpression;
 		this.expressionTokens = expressionTokens;
@@ -58,8 +54,8 @@ public class ShuntingYardConverter {
 
 	public ASTNode toAbstractSyntaxTree() throws ParseException {
 
-		de.flapdoodle.eval.nparser.Token previousToken = null;
-		for (de.flapdoodle.eval.nparser.Token currentToken : expressionTokens) {
+		Token previousToken = null;
+		for (Token currentToken : expressionTokens) {
 			switch (currentToken.type()) {
 				case VARIABLE_OR_CONSTANT:
 				case NUMBER_LITERAL:
@@ -100,7 +96,7 @@ public class ShuntingYardConverter {
 		}
 
 		while (!operatorStack.isEmpty()) {
-			de.flapdoodle.eval.nparser.Token token = operatorStack.pop();
+			Token token = operatorStack.pop();
 			createOperatorNode(token);
 		}
 
@@ -115,21 +111,21 @@ public class ShuntingYardConverter {
 		return operandStack.pop();
 	}
 
-	private void processStructureSeparator(de.flapdoodle.eval.nparser.Token currentToken) throws ParseException {
-		de.flapdoodle.eval.nparser.Token nextToken = operatorStack.isEmpty() ? null : operatorStack.peek();
+	private void processStructureSeparator(Token currentToken) throws ParseException {
+		Token nextToken = operatorStack.isEmpty() ? null : operatorStack.peek();
 		while (nextToken != null && nextToken.type() == TokenType.STRUCTURE_SEPARATOR) {
-			de.flapdoodle.eval.nparser.Token token = operatorStack.pop();
+			Token token = operatorStack.pop();
 			createOperatorNode(token);
 			nextToken = operatorStack.peek();
 		}
 		operatorStack.push(currentToken);
 	}
 
-	private void processBraceOpen(de.flapdoodle.eval.nparser.Token previousToken, de.flapdoodle.eval.nparser.Token currentToken) {
+	private void processBraceOpen(Token previousToken, Token currentToken) {
 		if (previousToken != null && previousToken.type() == TokenType.FUNCTION) {
 			// start of parameter list, marker for variable number of arguments
-			de.flapdoodle.eval.nparser.Token paramStart =
-				de.flapdoodle.eval.nparser.Token.of(
+			Token paramStart =
+				Token.of(
 					currentToken.start(),
 					currentToken.value(),
 					TokenType.FUNCTION_PARAM_START);
@@ -142,7 +138,7 @@ public class ShuntingYardConverter {
 		processOperatorsFromStackUntilTokenType(TokenType.BRACE_OPEN);
 		operatorStack.pop(); // throw away the marker
 		if (!operatorStack.isEmpty() && operatorStack.peek().type() == TokenType.FUNCTION) {
-			de.flapdoodle.eval.nparser.Token functionToken = operatorStack.pop();
+			Token functionToken = operatorStack.pop();
 			ArrayList<ASTNode> parameters = new ArrayList<>();
 			while (true) {
 				// add all parameters in reverse order from stack to the parameter array
@@ -157,7 +153,7 @@ public class ShuntingYardConverter {
 		}
 	}
 
-	private void validateFunctionParameters(de.flapdoodle.eval.nparser.Token functionToken, ArrayList<ASTNode> parameters)
+	private void validateFunctionParameters(Token functionToken, ArrayList<ASTNode> parameters)
 		throws ParseException {
 		Evaluateable function = configuration.functions().get(functionToken.value());
 		if (parameters.size() < function.parameters().min()) {
@@ -187,16 +183,16 @@ public class ShuntingYardConverter {
 	 *
 	 * @param currentToken The current ARRAY_OPEN ("[") token.
 	 */
-	private void processArrayOpen(de.flapdoodle.eval.nparser.Token currentToken) throws ParseException {
-		de.flapdoodle.eval.nparser.Token nextToken = operatorStack.isEmpty() ? null : operatorStack.peek();
+	private void processArrayOpen(Token currentToken) throws ParseException {
+		Token nextToken = operatorStack.isEmpty() ? null : operatorStack.peek();
 		while (nextToken != null && (nextToken.type() == TokenType.STRUCTURE_SEPARATOR)) {
-			de.flapdoodle.eval.nparser.Token token = operatorStack.pop();
+			Token token = operatorStack.pop();
 			createOperatorNode(token);
 			nextToken = operatorStack.isEmpty() ? null : operatorStack.peek();
 		}
 		// create ARRAY_INDEX operator (just like a function name) and push it to the operator stack
-		de.flapdoodle.eval.nparser.Token arrayIndex =
-			de.flapdoodle.eval.nparser.Token.of(currentToken.start(), currentToken.value(), TokenType.ARRAY_INDEX);
+		Token arrayIndex =
+			Token.of(currentToken.start(), currentToken.value(), TokenType.ARRAY_INDEX);
 		operatorStack.push(arrayIndex);
 
 		// push the ARRAY_OPEN to the operators, too (to later match the ARRAY_CLOSE)
@@ -211,7 +207,7 @@ public class ShuntingYardConverter {
 	private void processArrayClose() throws ParseException {
 		processOperatorsFromStackUntilTokenType(TokenType.ARRAY_OPEN);
 		operatorStack.pop(); // throw away the marker
-		de.flapdoodle.eval.nparser.Token arrayToken = operatorStack.pop();
+		Token arrayToken = operatorStack.pop();
 		ArrayList<ASTNode> operands = new ArrayList<>();
 
 		// second parameter of the "ARRAY_INDEX" function is the index (first on stack)
@@ -229,12 +225,12 @@ public class ShuntingYardConverter {
 	private void processOperatorsFromStackUntilTokenType(TokenType untilTokenType)
 		throws ParseException {
 		while (!operatorStack.isEmpty() && operatorStack.peek().type() != untilTokenType) {
-			de.flapdoodle.eval.nparser.Token token = operatorStack.pop();
+			Token token = operatorStack.pop();
 			createOperatorNode(token);
 		}
 	}
 
-	private void createOperatorNode(de.flapdoodle.eval.nparser.Token token) throws ParseException {
+	private void createOperatorNode(Token token) throws ParseException {
 		if (operandStack.isEmpty()) {
 			throw new ParseException(token, "Missing operand for operator");
 		}
@@ -253,24 +249,24 @@ public class ShuntingYardConverter {
 		}
 	}
 
-	private void processOperator(de.flapdoodle.eval.nparser.Token currentToken) throws ParseException {
-		de.flapdoodle.eval.nparser.Token nextToken = operatorStack.isEmpty() ? null : operatorStack.peek();
+	private void processOperator(Token currentToken) throws ParseException {
+		Token nextToken = operatorStack.isEmpty() ? null : operatorStack.peek();
 		while (isOperator(nextToken)
 			&& isNextOperatorOfHigherPrecedence(
 			currentToken, nextToken)) {
-			de.flapdoodle.eval.nparser.Token token = operatorStack.pop();
+			Token token = operatorStack.pop();
 			createOperatorNode(token);
 			nextToken = operatorStack.isEmpty() ? null : operatorStack.peek();
 		}
 		operatorStack.push(currentToken);
 	}
 	private boolean isNextOperatorOfHigherPrecedence(
-			de.flapdoodle.eval.nparser.Token currentOperator, de.flapdoodle.eval.nparser.Token nextOperator
+			Token currentOperator, Token nextOperator
 	) throws ParseException {
 		return isNextOperatorOfHigherPrecedence(operator(currentOperator), operator(nextOperator));
 	}
 
-	private Operator operator(de.flapdoodle.eval.nparser.Token token) throws ParseException {
+	private Operator operator(Token token) throws ParseException {
 		switch (token.type()) {
 			case PREFIX_OPERATOR:
 				return configuration.getOperatorResolver().get(PrefixOperator.class, token.value());

@@ -22,7 +22,6 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import static de.flapdoodle.eval.parser.TokenType.NUMBER_LITERAL;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import de.flapdoodle.eval.nparser.Token;
 
 class TokenizerNumberLiteralTest extends BaseParserTest {
 

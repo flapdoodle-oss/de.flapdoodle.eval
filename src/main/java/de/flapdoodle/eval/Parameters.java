@@ -1,6 +1,5 @@
 package de.flapdoodle.eval;
 
-import de.flapdoodle.eval.parser.Token;
 import org.immutables.value.Value;
 
 import java.util.List;

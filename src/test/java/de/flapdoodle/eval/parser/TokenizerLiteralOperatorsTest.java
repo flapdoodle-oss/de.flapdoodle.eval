@@ -27,7 +27,6 @@ import de.flapdoodle.eval.operators.Precedence;
 import de.flapdoodle.types.Pair;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import de.flapdoodle.eval.nparser.Token;
 
 class TokenizerLiteralOperatorsTest extends BaseParserTest {
 

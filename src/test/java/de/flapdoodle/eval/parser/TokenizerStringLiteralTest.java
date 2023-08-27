@@ -22,7 +22,6 @@ import de.flapdoodle.eval.config.ValueResolver;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import de.flapdoodle.eval.nparser.Token;
 
 class TokenizerStringLiteralTest extends BaseParserTest {
 

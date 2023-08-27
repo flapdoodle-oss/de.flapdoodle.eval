@@ -20,7 +20,6 @@ import de.flapdoodle.eval.config.Configuration;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import de.flapdoodle.eval.nparser.Token;
 
 class TokenizerStructureTest extends BaseParserTest {
 

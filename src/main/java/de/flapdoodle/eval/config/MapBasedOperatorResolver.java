@@ -16,7 +16,10 @@
  */
 package de.flapdoodle.eval.config;
 
-import de.flapdoodle.eval.operators.*;
+import de.flapdoodle.eval.operators.InfixOperator;
+import de.flapdoodle.eval.operators.Operator;
+import de.flapdoodle.eval.operators.PostfixOperator;
+import de.flapdoodle.eval.operators.PrefixOperator;
 import de.flapdoodle.types.Pair;
 import org.immutables.value.Value;
 

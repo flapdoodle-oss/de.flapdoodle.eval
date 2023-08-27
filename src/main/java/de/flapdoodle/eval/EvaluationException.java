@@ -16,8 +16,6 @@
  */
 package de.flapdoodle.eval;
 
-import de.flapdoodle.eval.parser.Token;
-
 /** Exception while evaluating the parsed expression. */
 public class EvaluationException extends BaseException {
 

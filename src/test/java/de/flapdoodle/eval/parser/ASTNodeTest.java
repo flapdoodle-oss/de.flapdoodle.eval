@@ -16,10 +16,6 @@
  */
 package de.flapdoodle.eval.parser;
 
-import de.flapdoodle.eval.functions.basic.Min;
-import de.flapdoodle.eval.nparser.Token;
-import de.flapdoodle.eval.operators.arithmetic.Plus;
-import de.flapdoodle.eval.operators.arithmetic.PrefixMinus;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

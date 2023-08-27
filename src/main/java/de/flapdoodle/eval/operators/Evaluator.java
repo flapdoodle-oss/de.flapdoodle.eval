@@ -3,7 +3,6 @@ package de.flapdoodle.eval.operators;
 import de.flapdoodle.eval.CommonToken;
 import de.flapdoodle.eval.EvaluationException;
 import de.flapdoodle.eval.data.Value;
-import de.flapdoodle.eval.parser.Token;
 
 import java.util.Optional;
 

@@ -20,8 +20,6 @@ import de.flapdoodle.types.Pair;
 import org.immutables.value.Value;
 
 import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 @Value.Immutable
 public abstract class MapBasedEvaluateableResolver implements EvaluateableResolver {

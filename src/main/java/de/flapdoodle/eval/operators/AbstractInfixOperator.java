@@ -21,7 +21,6 @@ import de.flapdoodle.eval.EvaluationContext;
 import de.flapdoodle.eval.EvaluationException;
 import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
-import de.flapdoodle.eval.parser.Token;
 
 public abstract class AbstractInfixOperator extends AbstractBaseOperator implements InfixOperator {
 	protected AbstractInfixOperator(Precedence precedence, boolean leftAssociative) {

@@ -18,7 +18,6 @@ package de.flapdoodle.eval.parser;
 
 import de.flapdoodle.eval.config.Configuration;
 import de.flapdoodle.eval.config.TestConfigurationProvider;
-import de.flapdoodle.eval.nparser.Token;
 import org.assertj.core.api.Assertions;
 
 import java.util.List;
