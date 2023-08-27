@@ -52,15 +52,6 @@ public interface Token extends CommonToken {
 	@Value.Auxiliary
 	Operator operator();
 
-	@Value.Auxiliary
-	default <T extends Operator> T operator(Class<T> operatorType) {
-		Operator def = operator();
-		if (operatorType.isInstance(def)) {
-			return operatorType.cast(def);
-		}
-		throw new IllegalArgumentException("operator definition does not match: " + operatorType + " -> " + def);
-	}
-
 	static Token of(int startPosition, String value, TokenType type) {
 		return ImmutableToken.of(startPosition, value, type);
 	}

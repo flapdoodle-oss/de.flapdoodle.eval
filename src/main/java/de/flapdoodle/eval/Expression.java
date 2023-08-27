@@ -20,6 +20,7 @@ import de.flapdoodle.eval.config.Configuration;
 import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
 import de.flapdoodle.eval.operators.InfixOperator;
+import de.flapdoodle.eval.operators.Operator;
 import de.flapdoodle.eval.operators.PostfixOperator;
 import de.flapdoodle.eval.operators.PrefixOperator;
 import de.flapdoodle.eval.parser.*;
@@ -163,20 +164,17 @@ public abstract class Expression {
 				break;
 			case PREFIX_OPERATOR:
 				result =
-					token
-						.operator(PrefixOperator.class)
+					operator(token, PrefixOperator.class)
 						.evaluate(variableResolver, context, token, evaluateSubtree(variableResolver, startNode.getParameters().get(0)));
 				break;
 			case POSTFIX_OPERATOR:
 				result =
-					token
-						.operator(PostfixOperator.class)
+					operator(token, PostfixOperator.class)
 						.evaluate(variableResolver, context, token, evaluateSubtree(variableResolver, startNode.getParameters().get(0)));
 				break;
 			case INFIX_OPERATOR:
 				result =
-					token
-						.operator(InfixOperator.class)
+					operator(token, InfixOperator.class)
 						.evaluate(
 							variableResolver, context,
 							token,
@@ -198,6 +196,14 @@ public abstract class Expression {
 
 //		return result.isNumberValue() ? roundAndStripZerosIfNeeded(result) : result;
 		return result;
+	}
+	
+	private <T extends Operator> T operator(Token token, Class<T> operatorType) {
+		Operator def = token.operator();
+		if (operatorType.isInstance(def)) {
+			return operatorType.cast(def);
+		}
+		throw new IllegalArgumentException("operator definition does not match: " + operatorType + " -> " + def);
 	}
 
 	// VisibleInTest
@@ -223,20 +229,21 @@ public abstract class Expression {
 
 	private Value<?> evaluateFunction(ValueResolver variableResolver, ASTNode startNode, Token token)
 		throws EvaluationException {
+		Evaluateable function = function(token);
 		List<Value<?>> parameterResults = new ArrayList<>();
 		for (int i = 0; i < startNode.getParameters().size(); i++) {
-			if (token.function().parameterIsLazy(i)) {
+			if (function.parameterIsLazy(i)) {
 				parameterResults.add(Value.of(startNode.getParameters().get(i)));
 			} else {
 				parameterResults.add(evaluateSubtree(variableResolver, startNode.getParameters().get(i)));
 			}
 		}
 
-		Evaluateable function = token.function();
-
-//    function.validatePreEvaluation(token, parameterResults);
-
 		return function.evaluate(variableResolver, context(variableResolver), token, parameterResults);
+	}
+
+	private Evaluateable function(Token token) {
+		return token.function();
 	}
 
 	private Value<?> evaluateArrayIndex(ValueResolver variableResolver, ASTNode startNode) throws EvaluationException {
