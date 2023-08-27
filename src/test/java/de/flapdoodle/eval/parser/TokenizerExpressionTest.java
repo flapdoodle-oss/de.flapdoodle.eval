@@ -19,6 +19,8 @@ package de.flapdoodle.eval.parser;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import de.flapdoodle.eval.nparser.Token;
+import de.flapdoodle.eval.nparser.Tokenizer;
 
 class TokenizerExpressionTest extends BaseParserTest {
 

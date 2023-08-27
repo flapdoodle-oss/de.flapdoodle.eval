@@ -73,24 +73,10 @@ public abstract class Expression {
 
 	@org.immutables.value.Value.Derived
 	public Either<ASTNode, ParseException> getAbstractSyntaxTree() {
-		boolean useNew = ThreadLocalRandom.current().nextBoolean();
-		useNew = true;
-		if (useNew) {
-			de.flapdoodle.eval.nparser.Tokenizer tokenizer = new de.flapdoodle.eval.nparser.Tokenizer(raw(), configuration());
-			try {
-				de.flapdoodle.eval.nparser.ShuntingYardConverter converter =
-					new de.flapdoodle.eval.nparser.ShuntingYardConverter(raw(), tokenizer.parse(), configuration());
-				return Either.left(converter.toAbstractSyntaxTree());
-			}
-			catch (ParseException px) {
-				return Either.right(px);
-			}
-		}
-		
-		Tokenizer tokenizer = new Tokenizer(raw(), configuration());
+		de.flapdoodle.eval.nparser.Tokenizer tokenizer = new de.flapdoodle.eval.nparser.Tokenizer(raw(), configuration());
 		try {
-			ShuntingYardConverter converter =
-				new ShuntingYardConverter(raw(), tokenizer.parse(), configuration());
+			de.flapdoodle.eval.nparser.ShuntingYardConverter converter =
+				new de.flapdoodle.eval.nparser.ShuntingYardConverter(raw(), tokenizer.parse(), configuration());
 			return Either.left(converter.toAbstractSyntaxTree());
 		}
 		catch (ParseException px) {

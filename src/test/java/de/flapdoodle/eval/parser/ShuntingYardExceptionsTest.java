@@ -25,6 +25,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
+import de.flapdoodle.eval.nparser.ShuntingYardConverter;
+import de.flapdoodle.eval.nparser.Token;
+import de.flapdoodle.eval.nparser.Tokenizer;
 
 import java.util.Arrays;
 import java.util.List;
@@ -48,7 +51,7 @@ class ShuntingYardExceptionsTest extends BaseParserTest {
 
 	@Test
 	void testMissingPrefixOperand() {
-		List<Token> tokens = Arrays.asList(Token.of(1, "-", PREFIX_OPERATOR, new PrefixMinus()));
+		List<Token> tokens = Arrays.asList(Token.of(1, "-", PREFIX_OPERATOR));
 		assertThatThrownBy(new ShuntingYardConverter("-", tokens, configuration)::toAbstractSyntaxTree)
 			.isInstanceOf(ParseException.class)
 			.hasMessage("Missing operand for operator");
@@ -59,7 +62,7 @@ class ShuntingYardExceptionsTest extends BaseParserTest {
 		List<Token> tokens =
 			Arrays.asList(
 				Token.of(1, "2", VARIABLE_OR_CONSTANT),
-				Token.of(2, "*", INFIX_OPERATOR, new Multiply()));
+				Token.of(2, "*", INFIX_OPERATOR));
 		assertThatThrownBy(new ShuntingYardConverter("2*", tokens, configuration)::toAbstractSyntaxTree)
 			.isInstanceOf(ParseException.class)
 			.hasMessage("Missing second operand for operator");

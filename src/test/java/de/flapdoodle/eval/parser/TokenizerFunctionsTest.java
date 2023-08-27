@@ -20,6 +20,9 @@ import de.flapdoodle.eval.config.TestConfigurationProvider.DummyFunction;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import de.flapdoodle.eval.nparser.Token;
+import de.flapdoodle.eval.nparser.Token;
+import de.flapdoodle.eval.nparser.Tokenizer;
 
 class TokenizerFunctionsTest extends BaseParserTest {
 
@@ -132,11 +135,5 @@ class TokenizerFunctionsTest extends BaseParserTest {
 			Token.of(25, ",", TokenType.COMMA),
 			Token.of(26, "3", TokenType.NUMBER_LITERAL),
 			Token.of(27, ")", TokenType.BRACE_CLOSE));
-	}
-
-	@Test
-	void testUndefinedFunction() {
-		assertThatThrownBy(() -> new Tokenizer("a(b)", configuration).parse())
-			.isEqualTo(new ParseException(0, 1, "a", "Undefined function 'a'"));
 	}
 }
