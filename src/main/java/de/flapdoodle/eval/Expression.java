@@ -252,7 +252,6 @@ public abstract class Expression {
 		return EvaluationContext.builder()
 			.mathContext(mathContext())
 			.zoneId(zoneId())
-			.subtreeEvaluator(ast -> evaluateSubtree(valueResolver, ast))
 			.build();
 	}
 
@@ -296,13 +295,25 @@ public abstract class Expression {
 		List<Value<?>> parameterResults = new ArrayList<>();
 		for (int i = 0; i < startNode.getParameters().size(); i++) {
 			if (function.parameterIsLazy(i)) {
-				parameterResults.add(Value.of(startNode.getParameters().get(i)));
+				parameterResults.add(evaluateSubtreeOrException(variableResolver, startNode.getParameters().get(i)));
 			} else {
 				parameterResults.add(evaluateSubtree(variableResolver, startNode.getParameters().get(i)));
 			}
 		}
 
-		return function.evaluate(variableResolver, context(variableResolver), token, parameterResults);
+		Value<?> evaluated = function.evaluate(variableResolver, context(variableResolver), token, parameterResults);
+		if (evaluated instanceof Value.FailedWithException) {
+			throw ((Value.FailedWithException<?>) evaluated).exception();
+		}
+		return evaluated;
+	}
+
+	private Value<?> evaluateSubtreeOrException(ValueResolver variableResolver, ASTNode startNode) {
+		try {
+			return evaluateSubtree(variableResolver, startNode);
+		} catch (EvaluationException rx) {
+			return Value.failedWith(rx);
+		}
 	}
 
 	private Evaluateable function(Token token) {

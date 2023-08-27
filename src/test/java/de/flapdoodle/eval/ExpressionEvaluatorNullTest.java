@@ -66,17 +66,24 @@ class ExpressionEvaluatorNullTest extends BaseExpressionEvaluatorTest {
 	@Test
 	void testHandleWithIf() throws EvaluationException, ParseException {
 		Expression expression1 = createExpression("if(a != null, a * 5, 1)");
-		MapBasedValueResolver mapBasedVariableResolver3 = ValueResolver.empty().withNull("a");
-		assertExpressionHasExpectedResult(expression1, mapBasedVariableResolver3, "1");
-		MapBasedValueResolver mapBasedVariableResolver2 = ValueResolver.empty().with("a", 3);
-		assertExpressionHasExpectedResult(expression1, mapBasedVariableResolver2, "15.0");
+		assertExpressionHasExpectedResult(expression1, ValueResolver.empty().withNull("a"), "1");
+		assertExpressionHasExpectedResult(expression1, ValueResolver.empty().with("a", 3), "15.0");
 
 		Expression expression2 =
 			createExpression("if(a == null, \"Unknown name\", \"The name is \" + a)");
-		MapBasedValueResolver mapBasedVariableResolver1 = ValueResolver.empty().withNull("a");
-		assertExpressionHasExpectedResult(expression2, mapBasedVariableResolver1, "Unknown name");
-		MapBasedValueResolver mapBasedVariableResolver = ValueResolver.empty().with("a", "Max");
-		assertExpressionHasExpectedResult(expression2, mapBasedVariableResolver, "The name is Max");
+		assertExpressionHasExpectedResult(expression2, ValueResolver.empty().withNull("a"), "Unknown name");
+		assertExpressionHasExpectedResult(expression2, ValueResolver.empty().with("a", "Max"), "The name is Max");
+	}
+
+	@Test
+	void testHandleWithIfFailCase() throws EvaluationException, ParseException {
+		assertThatThrownBy(() -> evaluate("if(a == null, a * 5, 1)", ValueResolver.empty().withNull("a")))
+			.isInstanceOf(EvaluationException.class)
+			.hasMessageContaining("type missmatch");
+
+		Expression expression2 =
+			createExpression("if(a != null, \"Unknown name\", \"The name is \" + a)");
+		assertExpressionHasExpectedResult(expression2, ValueResolver.empty().withNull("a"), "The name is null");
 	}
 
 	@Test

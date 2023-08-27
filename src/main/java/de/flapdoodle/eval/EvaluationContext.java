@@ -13,8 +13,6 @@ public interface EvaluationContext {
 
 	ZoneId zoneId();
 
-	ThrowingFunction<ASTNode, Value<?>, EvaluationException> subtreeEvaluator();
-
 	static ImmutableEvaluationContext.Builder builder() {
 		return ImmutableEvaluationContext.builder();
 	}

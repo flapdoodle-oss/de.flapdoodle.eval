@@ -27,23 +27,25 @@ import de.flapdoodle.eval.parser.Token;
  * resultIfTrue</code> and <code>resultIfFalse</code> are only evaluated (lazily evaluated),
  * <b>after</b> the condition was evaluated.
  */
-public class Conditional extends Evaluateables.Triple<Value.BooleanValue, Value.ExpressionValue, Value.ExpressionValue> {
+public class Conditional extends Evaluateables.Triple<Value.BooleanValue, Value<?>, Value<?>> {
 
 	public Conditional() {
 		super(
 			Parameter.of(Value.BooleanValue.class),
-			Parameter.lazyWith(Value.ExpressionValue.class),
-			Parameter.lazyWith(Value.ExpressionValue.class)
+			Parameter.anyLazy(),
+			Parameter.anyLazy()
 		);
 	}
 
 	@Override
 	protected Value<?> evaluate(ValueResolver valueResolver, EvaluationContext evaluationContext, Token functionToken, Value.BooleanValue condition,
-		Value.ExpressionValue ifTrue, Value.ExpressionValue ifFalse) throws EvaluationException {
+		Value<?> ifTrue, Value<?> ifFalse) throws EvaluationException {
 		if (condition.wrapped()) {
-			return evaluationContext.subtreeEvaluator().apply(ifTrue.wrapped());
+			return ifTrue;
+//			return evaluationContext.subtreeEvaluator().apply(ifTrue.wrapped());
 		} else {
-			return evaluationContext.subtreeEvaluator().apply(ifFalse.wrapped());
+			return ifFalse;
+//			return evaluationContext.subtreeEvaluator().apply(ifFalse.wrapped());
 		}
 	}
 }

@@ -193,7 +193,6 @@ class BasicFunctionsTest extends BaseEvaluationTest {
 		EvaluationContext context = EvaluationContext.builder()
 			.mathContext(expression.mathContext())
 			.zoneId(expression.zoneId())
-			.subtreeEvaluator(it -> { throw new EvaluationException(it.getToken(),"fail"); })
 			.build();
 		Token token = Token.of(1, "NOT", TokenType.FUNCTION);
 

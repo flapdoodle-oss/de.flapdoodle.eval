@@ -16,6 +16,7 @@
  */
 package de.flapdoodle.eval.data;
 
+import de.flapdoodle.eval.EvaluationException;
 import de.flapdoodle.eval.Nullable;
 import de.flapdoodle.eval.parser.ASTNode;
 
@@ -82,6 +83,14 @@ public abstract class Value<T> {
 	public static abstract class ExpressionValue extends Value<ASTNode> {
 	}
 
+	@org.immutables.value.Value.Immutable
+	public static abstract class FailedWithException<T> extends Value<T> {
+		public abstract EvaluationException exception();
+		@Nullable
+		@Override
+		public abstract T wrapped();
+	}
+
 	public static StringValue of(String value) {
 		return ImmutableStringValue.of(value);
 	}
@@ -144,5 +153,11 @@ public abstract class Value<T> {
 
 	public static ArrayValue of(Value<?>... array) {
 		return of(ValueArray.of(Arrays.asList(array)));
+	}
+
+	public static Value<?> failedWith(EvaluationException rx) {
+		return ImmutableFailedWithException.builder()
+			.exception(rx)
+			.build();
 	}
 }

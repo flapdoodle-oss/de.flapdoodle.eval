@@ -52,6 +52,11 @@ public interface Parameter<T extends de.flapdoodle.eval.data.Value<?>> {
 		return ImmutableParameter.of(type).withIsLazy(true);
 	}
 
+	static ImmutableParameter<de.flapdoodle.eval.data.Value<?>> anyLazy() {
+		return ImmutableParameter.of((Class) de.flapdoodle.eval.data.Value.class)
+			.withIsLazy(true);
+	}
+
 	@Value.Auxiliary
 	default void validate(Token token, de.flapdoodle.eval.data.Value<?> parameterValue) throws EvaluationException {
 		if (type().isInstance(parameterValue)) {
