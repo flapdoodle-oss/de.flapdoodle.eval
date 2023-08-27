@@ -136,10 +136,10 @@ public abstract class Expression {
 	public Value<?> evaluate(ValueResolver variableResolver) throws EvaluationException, ParseException {
 
 		Either<ASTNode, ParseException> ast = getAbstractSyntaxTree();
-		if (false) {
+		if (true) {
 			if (ast.isLeft()) {
 				Node start = fill(ast.left());
-				return start.evaluate(variableResolver);
+				return start.evaluate(variableResolver, context());
 			} else throw ast.right();
 		}
 		if (ast.isLeft()) {
@@ -153,22 +153,22 @@ public abstract class Expression {
 		Token token = startNode.getToken();
 		switch (token.type()) {
 			case NUMBER_LITERAL:
-				result = ComparableValueNode.of(numberOfString(token.value(), configuration().getMathContext()));
+				result = ComparableValueNode.of(token, numberOfString(token.value(), configuration().getMathContext()));
 				break;
 			case STRING_LITERAL:
-				result = ComparableValueNode.of(Value.of(token.value()));
+				result = ComparableValueNode.of(token, Value.of(token.value()));
 				break;
 			case VARIABLE_OR_CONSTANT:
 				result = getVariableOrConstant(token);
 				break;
 			case PREFIX_OPERATOR:
-				result = PrefixOperatorNode.of(operator(token, PrefixOperator.class), fill(startNode.getParameters().get(0)));
+				result = PrefixOperatorNode.of(token, operator(token, PrefixOperator.class), fill(startNode.getParameters().get(0)));
 				break;
 			case POSTFIX_OPERATOR:
-				result = PostfixOperatorNode.of(operator(token, PostfixOperator.class), fill(startNode.getParameters().get(0)));
+				result = PostfixOperatorNode.of(token, operator(token, PostfixOperator.class), fill(startNode.getParameters().get(0)));
 				break;
 			case INFIX_OPERATOR:
-				result = InfixOperatorNode.of(operator(token, InfixOperator.class), fill(startNode.getParameters().get(0)), fill(startNode.getParameters().get(1)));
+				result = InfixOperatorNode.of(token, operator(token, InfixOperator.class), fill(startNode.getParameters().get(0)), fill(startNode.getParameters().get(1)));
 				break;
 			case ARRAY_INDEX:
 				result = evaluateArrayIndex(startNode);
@@ -195,7 +195,7 @@ public abstract class Expression {
 	@org.immutables.value.Value.Auxiliary
 	protected Value<?> evaluateSubtree(ValueResolver variableResolver, ASTNode startNode) throws EvaluationException {
 		Token token = startNode.getToken();
-		EvaluationContext context = context(variableResolver);
+		EvaluationContext context = context();
 		Value<?> result;
 		switch (token.type()) {
 			case NUMBER_LITERAL:
@@ -248,7 +248,7 @@ public abstract class Expression {
 	}
 
 	// VisibleInTest
-	private EvaluationContext context(ValueResolver valueResolver) {
+	private EvaluationContext context() {
 		return EvaluationContext.builder()
 			.mathContext(mathContext())
 			.zoneId(zoneId())
@@ -258,9 +258,9 @@ public abstract class Expression {
 	private Node getVariableOrConstant(Token token) {
 		Value<?> result = constants().get(token.value());
 		if (result!=null) {
-			return ValueNode.of(result);
+			return AnyTypeValueNode.of(token, result);
 		}
-		return ValueLookup.of(token.value());
+		return ValueLookup.of(token);
 	}
 
 	private Value<?> getVariableOrConstant(ValueResolver variableResolver, Token token) throws EvaluationException {
@@ -279,14 +279,10 @@ public abstract class Expression {
 		Evaluateable function = function(token);
 		List<Node> parameterResults = new ArrayList<>();
 		for (int i = 0; i < startNode.getParameters().size(); i++) {
-			if (function.parameterIsLazy(i)) {
-				parameterResults.add(LazyNode.of(fill(startNode.getParameters().get(i))));
-			} else {
-				parameterResults.add(fill(startNode.getParameters().get(i)));
-			}
+			parameterResults.add(fill(startNode.getParameters().get(i)));
 		}
 
-		return FunctionNode.of(function, parameterResults);
+		return FunctionNode.of(token, function, parameterResults);
 	}
 
 	private Value<?> evaluateFunction(ValueResolver variableResolver, ASTNode startNode, Token token)
@@ -301,7 +297,7 @@ public abstract class Expression {
 			}
 		}
 
-		Value<?> evaluated = function.evaluate(variableResolver, context(variableResolver), token, parameterResults);
+		Value<?> evaluated = function.evaluate(variableResolver, context(), token, parameterResults);
 		if (evaluated instanceof Value.FailedWithException) {
 			throw ((Value.FailedWithException<?>) evaluated).exception();
 		}
@@ -321,7 +317,7 @@ public abstract class Expression {
 	}
 
 	private ArrayAccessNode evaluateArrayIndex(ASTNode startNode) throws EvaluationException {
-		return ArrayAccessNode.of(fill(startNode.getParameters().get(0)), fill(startNode.getParameters().get(1)));
+		return ArrayAccessNode.of(startNode.getToken(), fill(startNode.getParameters().get(0)), fill(startNode.getParameters().get(1)));
 	}
 
 	private Value<?> evaluateArrayIndex(ValueResolver variableResolver, ASTNode startNode) throws EvaluationException {
@@ -338,9 +334,7 @@ public abstract class Expression {
 	private StructureAccessNode evaluateStructureSeparator(ASTNode startNode) throws EvaluationException {
 		Node structure = fill(startNode.getParameters().get(0));
 		Token nameToken = startNode.getParameters().get(1).getToken();
-		String name = nameToken.value();
-
-		return StructureAccessNode.of(structure, name);
+		return StructureAccessNode.of(startNode.getToken(), structure, nameToken);
 	}
 
 	private Value<?> evaluateStructureSeparator(ValueResolver variableResolver, ASTNode startNode) throws EvaluationException {
