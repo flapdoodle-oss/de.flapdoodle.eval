@@ -237,13 +237,15 @@ public class Tokenizer {
 			char currentChar=get();
 			tokenValue.append(currentChar);
 			String tokenString = tokenValue.toString();
-			String possibleNextOperator = tokenString + peek(1); // (char) peekNextChar();
+			String possibleNextOperator = tokenString + peek(1);
+			// multi char operators, <= -- etc.
 			boolean possibleNextOperatorFound =
 				(prefixOperatorAllowed() && operatorDictionary.hasOperator(PrefixOperator.class, possibleNextOperator))
 					|| (postfixOperatorAllowed()
 					&& operatorDictionary.hasOperator(PostfixOperator.class, possibleNextOperator))
 					|| (infixOperatorAllowed()
 					&& operatorDictionary.hasOperator(InfixOperator.class, possibleNextOperator));
+
 			next();
 			if (!possibleNextOperatorFound) {
 				break;
