@@ -20,6 +20,7 @@ import de.flapdoodle.eval.operators.InfixOperator;
 import de.flapdoodle.eval.operators.Operator;
 import de.flapdoodle.eval.operators.PostfixOperator;
 import de.flapdoodle.eval.operators.PrefixOperator;
+import de.flapdoodle.eval.parser.OperatorType;
 import de.flapdoodle.types.Pair;
 import org.immutables.value.Value;
 
@@ -46,6 +47,15 @@ public abstract class MapBasedOperatorResolver implements OperatorResolver {
 			return type.cast(postfixOperators().get(operatorString));
 		}
 		throw new IllegalArgumentException("operator type unknown: " + type + "(" + operatorString + ")");
+	}
+
+	@Value.Lazy
+	public Operators operators() {
+		ImmutableOperators.Builder builder = Operators.builder();
+		infixOperators().forEach((label,instance) -> builder.addMap(Pair.of(label, OperatorType.INFIX)));
+		prefixOperators().forEach((label,instance) -> builder.addMap(Pair.of(label, OperatorType.PREFIX)));
+		postfixOperators().forEach((label,instance) -> builder.addMap(Pair.of(label, OperatorType.POSTFIX)));
+		return builder.build();
 	}
 
 	public static ImmutableMapBasedOperatorResolver.Builder builder() {

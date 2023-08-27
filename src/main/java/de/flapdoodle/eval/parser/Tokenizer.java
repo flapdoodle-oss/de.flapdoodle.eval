@@ -18,6 +18,7 @@ package de.flapdoodle.eval.parser;
 
 import de.flapdoodle.eval.config.Configuration;
 import de.flapdoodle.eval.config.OperatorResolver;
+import de.flapdoodle.eval.config.Operators;
 import de.flapdoodle.eval.operators.InfixOperator;
 import de.flapdoodle.eval.operators.PostfixOperator;
 import de.flapdoodle.eval.operators.PrefixOperator;
@@ -35,11 +36,10 @@ public class Tokenizer {
 	private final char[] chars;
 	private final int end;
 
-	private final OperatorResolver operatorDictionary;
-
 	private final Configuration configuration;
 
 	private final List<Token> tokens = new ArrayList<>();
+	private final Operators operators;
 
 	private int index = 0;
 
@@ -53,7 +53,7 @@ public class Tokenizer {
 		this.end = chars.length;
 		
 		this.configuration = configuration;
-		this.operatorDictionary = configuration.getOperatorResolver();
+		this.operators = configuration.operators();
 	}
 
 	/**
@@ -234,63 +234,43 @@ public class Tokenizer {
 			});
 	}
 
-	private Token parseOperatorVarLen() throws ParseException {
-		int tokenStartIndex = index;
-		boolean prefixOperatorAllowed = prefixOperatorAllowed();
-		boolean postfixOperatorAllowed = postfixOperatorAllowed();
-		boolean infixOperatorAllowed = infixOperatorAllowed();
-
-		StringBuilder tokenValue = new StringBuilder();
-
-		int offset=0;
-		char currentChar;
-		while ((currentChar = peek(offset)) != 0) {
-
-		}
-		String tokenString = tokenValue.toString();
-		throw new ParseException(
-			tokenStartIndex,
-			tokenStartIndex + tokenString.length() - 1,
-			tokenString,
-			"Undefined operator '" + tokenString + "'");
-	}
-
-	// TODO .. das funktioniert vermutlich nur für operatoren die zwei lang sind!!
 	private Token parseOperator() throws ParseException {
 		int tokenStartIndex = index;
-
 		boolean prefixOperatorAllowed = prefixOperatorAllowed();
 		boolean postfixOperatorAllowed = postfixOperatorAllowed();
 		boolean infixOperatorAllowed = infixOperatorAllowed();
 
 		StringBuilder tokenValue = new StringBuilder();
 
-		while (true) {
-			char currentChar=get();
+		char currentChar;
+		while ((currentChar = get()) != 0) {
 			tokenValue.append(currentChar);
 			String tokenString = tokenValue.toString();
 			String possibleNextOperator = tokenString + peek(1);
 			// multi char operators, <= -- etc.
 			boolean possibleNextOperatorFound =
-				(prefixOperatorAllowed && operatorDictionary.hasOperator(PrefixOperator.class, possibleNextOperator))
+				(prefixOperatorAllowed && operators.hasStartingWith(OperatorType.PREFIX, possibleNextOperator))
 					|| (postfixOperatorAllowed
-					&& operatorDictionary.hasOperator(PostfixOperator.class, possibleNextOperator))
+					&& operators.hasStartingWith(OperatorType.POSTFIX, possibleNextOperator))
 					|| (infixOperatorAllowed
-					&& operatorDictionary.hasOperator(InfixOperator.class, possibleNextOperator));
+					&& operators.hasStartingWith(OperatorType.INFIX, possibleNextOperator));
 
 			next();
 			if (!possibleNextOperatorFound) {
 				break;
 			}
+
 		}
 		String tokenString = tokenValue.toString();
-		if (prefixOperatorAllowed && operatorDictionary.hasOperator(PrefixOperator.class, tokenString)) {
+
+		if (prefixOperatorAllowed && operators.matching(OperatorType.PREFIX, tokenString)) {
 			return Token.of(tokenStartIndex, tokenString, TokenType.PREFIX_OPERATOR);
-		} else if (postfixOperatorAllowed && operatorDictionary.hasOperator(PostfixOperator.class, tokenString)) {
+		} else if (postfixOperatorAllowed && operators.matching(OperatorType.POSTFIX, tokenString)) {
 			return Token.of(tokenStartIndex, tokenString, TokenType.POSTFIX_OPERATOR);
-		} else if (operatorDictionary.hasOperator(InfixOperator.class, tokenString)) {
+		} else if (operators.matching(OperatorType.INFIX, tokenString)) {
 			return Token.of(tokenStartIndex, tokenString, TokenType.INFIX_OPERATOR);
 		}
+
 		throw new ParseException(
 			tokenStartIndex,
 			tokenStartIndex + tokenString.length() - 1,
@@ -412,17 +392,17 @@ public class Tokenizer {
 		}
 		String tokenName = tokenValue.toString();
 
-		if (prefixOperatorAllowed() && operatorDictionary.hasOperator(PrefixOperator.class, tokenName)) {
+		if (prefixOperatorAllowed() && operators.matching(OperatorType.PREFIX, tokenName)) {
 			return Token.of(
 				tokenStartIndex,
 				tokenName,
 				TokenType.PREFIX_OPERATOR);
-		} else if (postfixOperatorAllowed() && operatorDictionary.hasOperator(PostfixOperator.class, tokenName)) {
+		} else if (postfixOperatorAllowed() && operators.matching(OperatorType.POSTFIX, tokenName)) {
 			return Token.of(
 				tokenStartIndex,
 				tokenName,
 				TokenType.POSTFIX_OPERATOR);
-		} else if (operatorDictionary.hasOperator(InfixOperator.class, tokenName)) {
+		} else if (operators.matching(OperatorType.INFIX, tokenName)) {
 			return Token.of(
 				tokenStartIndex,
 				tokenName,

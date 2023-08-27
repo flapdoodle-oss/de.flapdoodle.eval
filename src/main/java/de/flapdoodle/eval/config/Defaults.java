@@ -43,7 +43,7 @@ public abstract class Defaults {
 	private static final ValueResolver CONSTANTS = ValueResolver.empty().withValues(standardConstants());
 
 	private static final EvaluateableResolver FUNCTIONS = defaultFunctions();
-	private static final OperatorResolver OPERATORS = OperatorResolver.defaults();
+	private static final MapBasedOperatorResolver OPERATORS = OperatorResolver.defaults();
 
 	public static MathContext mathContext() {
 		return MATH_CONTEXT;
@@ -57,7 +57,7 @@ public abstract class Defaults {
 		return FUNCTIONS;
 	}
 
-	public static OperatorResolver operators() {
+	public static MapBasedOperatorResolver operators() {
 		return OPERATORS;
 	}
 

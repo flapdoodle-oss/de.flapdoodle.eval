@@ -38,6 +38,9 @@ public abstract class Configuration {
 	}
 
 	@Value.Default
+	public Operators operators() { return Defaults.operators().operators(); }
+
+	@Value.Default
 	public EvaluateableResolver functions() {
 		return Defaults.functions();
 	}
@@ -75,9 +78,12 @@ public abstract class Configuration {
 	@SafeVarargs
 	@Value.Auxiliary
 	public final ImmutableConfiguration withOperators(Pair<String, Operator>... operators) {
+		ImmutableMapBasedOperatorResolver newOperatorResolver = MapBasedOperatorResolver.of(operators);
 		return ImmutableConfiguration.copyOf(this)
-			.withOperatorResolver(MapBasedOperatorResolver.of(operators)
-				.andThen(getOperatorResolver()));
+			.withOperatorResolver(newOperatorResolver
+				.andThen(getOperatorResolver()))
+			.withOperators(newOperatorResolver.operators()
+				.andThen(operators()));
 	}
 
 	@SafeVarargs

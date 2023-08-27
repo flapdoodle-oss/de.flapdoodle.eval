@@ -42,7 +42,7 @@ public interface OperatorResolver {
 		};
 	}
 
-	static OperatorResolver defaults() {
+	static MapBasedOperatorResolver defaults() {
 		return MapBasedOperatorResolver.builder()
 			// arithmetic
 			.putPrefixOperators("+", new PrefixPlus())
