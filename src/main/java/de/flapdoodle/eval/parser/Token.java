@@ -16,6 +16,7 @@
  */
 package de.flapdoodle.eval.parser;
 
+import de.flapdoodle.eval.CommonToken;
 import de.flapdoodle.eval.Evaluateable;
 import de.flapdoodle.eval.Nullable;
 import de.flapdoodle.eval.operators.Operator;
@@ -29,15 +30,18 @@ import org.immutables.value.Value;
  * <p>For operators and functions, the operator and function definition is also set during parsing.
  */
 @Value.Immutable
-public interface Token {
+public interface Token extends CommonToken {
 
 	@Value.Parameter
+	@Override
 	int start();
 
 	@Value.Parameter
+	@Override
 	String value();
 
 	@Value.Parameter
+	@Override
 	TokenType type();
 
 	@Nullable
