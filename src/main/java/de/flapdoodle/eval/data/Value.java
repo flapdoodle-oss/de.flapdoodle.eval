@@ -82,6 +82,10 @@ public abstract class Value<T> {
 	public static abstract class ExpressionValue extends Value<ASTNode> {
 	}
 
+	@org.immutables.value.Value.Immutable
+	public static abstract class NExpressionValue extends Value<de.flapdoodle.eval.nparser.ASTNode> {
+	}
+
 	public static StringValue of(String value) {
 		return ImmutableStringValue.of(value);
 	}
@@ -128,6 +132,10 @@ public abstract class Value<T> {
 
 	public static ExpressionValue of(ASTNode value) {
 		return ImmutableExpressionValue.of(value);
+	}
+
+	public static NExpressionValue of(de.flapdoodle.eval.nparser.ASTNode value) {
+		return ImmutableNExpressionValue.of(value);
 	}
 
 	public static ArrayValue of(Collection<? extends Value<?>> array) {
