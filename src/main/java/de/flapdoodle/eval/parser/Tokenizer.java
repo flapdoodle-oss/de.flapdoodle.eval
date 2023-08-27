@@ -156,6 +156,10 @@ public class Tokenizer {
 			return parseIdentifier();
 		} else if (isNumberStart(0)) {
 			return parseNumberLiteral();
+		} else if (currentChar == '.' && configuration.isStructuresAllowed()) {
+			Token token = Token.of(index, ".", TokenType.STRUCTURE_SEPARATOR);
+			next();
+			return token;
 		} else {
 			return parseOperator();
 		}
@@ -230,6 +234,7 @@ public class Tokenizer {
 			});
 	}
 
+	// TODO .. das funktioniert vermutlich nur für operatoren die zwei lang sind!!
 	private Token parseOperator() throws ParseException {
 		int tokenStartIndex = index;
 		StringBuilder tokenValue = new StringBuilder();
@@ -258,8 +263,6 @@ public class Tokenizer {
 			return Token.of(tokenStartIndex, tokenString, TokenType.POSTFIX_OPERATOR);
 		} else if (operatorDictionary.hasOperator(InfixOperator.class, tokenString)) {
 			return Token.of(tokenStartIndex, tokenString, TokenType.INFIX_OPERATOR);
-		} else if (tokenString.equals(".") && configuration.isStructuresAllowed()) {
-			return Token.of(tokenStartIndex, tokenString, TokenType.STRUCTURE_SEPARATOR);
 		}
 		throw new ParseException(
 			tokenStartIndex,
