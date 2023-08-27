@@ -75,7 +75,7 @@ public abstract class Expression {
 		Tokenizer tokenizer = new Tokenizer(raw(), configuration().operators());
 		try {
 			ShuntingYardConverter converter =
-				new ShuntingYardConverter(raw(), tokenizer.parse(), configuration());
+				new ShuntingYardConverter(raw(), tokenizer.parse(), configuration().getOperatorResolver(), configuration().functions());
 			return Either.left(converter.toAbstractSyntaxTree());
 		}
 		catch (ParseException px) {

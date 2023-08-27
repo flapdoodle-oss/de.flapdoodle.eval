@@ -28,22 +28,23 @@ import java.util.Optional;
  */
 public class Tokenizer {
 	private final String expressionString;
+	private final Operators operators;
+
 	private final char[] chars;
 	private final int end;
 
 	private final List<Token> tokens = new ArrayList<>();
-	private final Operators operators;
-
+	
 	private int index = 0;
 	private int braceBalance = 0;
 	private int arrayBalance = 0;
 
 	public Tokenizer(String expressionString, Operators operators) {
 		this.expressionString = expressionString;
+		this.operators = operators;
+
 		this.chars = expressionString.toCharArray();
 		this.end = chars.length;
-
-		this.operators = operators;
 	}
 
 	/**

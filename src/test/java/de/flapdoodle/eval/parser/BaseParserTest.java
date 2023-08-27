@@ -45,7 +45,7 @@ public abstract class BaseParserTest {
 
 		List<Token> tokensParsed = new Tokenizer(expression, configuration.operators()).parse();
 		ASTNode root =
-			new ShuntingYardConverter(expression, tokensParsed, configuration).toAbstractSyntaxTree();
+			new ShuntingYardConverter(expression, tokensParsed, configuration.getOperatorResolver(), configuration.functions()).toAbstractSyntaxTree();
 		assertThat(root.toJSON()).isEqualTo(treeJSON);
 	}
 }

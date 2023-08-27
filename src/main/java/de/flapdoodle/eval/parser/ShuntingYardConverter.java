@@ -17,7 +17,8 @@
 package de.flapdoodle.eval.parser;
 
 import de.flapdoodle.eval.Evaluateable;
-import de.flapdoodle.eval.config.Configuration;
+import de.flapdoodle.eval.config.EvaluateableResolver;
+import de.flapdoodle.eval.config.OperatorResolver;
 import de.flapdoodle.eval.operators.InfixOperator;
 import de.flapdoodle.eval.operators.Operator;
 import de.flapdoodle.eval.operators.PostfixOperator;
@@ -33,23 +34,25 @@ import java.util.List;
  * @see <a href="https://en.wikipedia.org/wiki/Abstract_syntax_tree">Abstract syntax tree</a>
  */
 public class ShuntingYardConverter {
-
+	private final String originalExpression;
 	private final List<Token> expressionTokens;
 
-	private final String originalExpression;
-
-	private final Configuration configuration;
+	private final OperatorResolver operatorResolver;
+	private final EvaluateableResolver evaluatableResolver;
 
 	private final Deque<Token> operatorStack = new ArrayDeque<>();
 	private final Deque<ASTNode> operandStack = new ArrayDeque<>();
-	
+
 	public ShuntingYardConverter(
 		String originalExpression,
 		List<Token> expressionTokens,
-		Configuration configuration) {
+		OperatorResolver operatorResolver,
+		EvaluateableResolver evaluatableResolver) {
 		this.originalExpression = originalExpression;
 		this.expressionTokens = expressionTokens;
-		this.configuration = configuration;
+
+		this.operatorResolver = operatorResolver;
+		this.evaluatableResolver = evaluatableResolver;
 	}
 
 	public ASTNode toAbstractSyntaxTree() throws ParseException {
@@ -155,7 +158,7 @@ public class ShuntingYardConverter {
 
 	private void validateFunctionParameters(Token functionToken, ArrayList<ASTNode> parameters)
 		throws ParseException {
-		Evaluateable function = configuration.functions().get(functionToken.value());
+		Evaluateable function = evaluatableResolver.get(functionToken.value());
 		if (parameters.size() < function.parameters().min()) {
 			throw new ParseException(functionToken, "Not enough parameters for function");
 		}
@@ -269,11 +272,11 @@ public class ShuntingYardConverter {
 	private Operator operator(Token token) throws ParseException {
 		switch (token.type()) {
 			case PREFIX_OPERATOR:
-				return configuration.getOperatorResolver().get(PrefixOperator.class, token.value());
+				return operatorResolver.get(PrefixOperator.class, token.value());
 			case POSTFIX_OPERATOR:
-				return configuration.getOperatorResolver().get(PostfixOperator.class, token.value());
+				return operatorResolver.get(PostfixOperator.class, token.value());
 			case INFIX_OPERATOR:
-				return configuration.getOperatorResolver().get(InfixOperator.class, token.value());
+				return operatorResolver.get(InfixOperator.class, token.value());
 		}
 		return null;
 	}
