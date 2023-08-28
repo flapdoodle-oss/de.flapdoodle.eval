@@ -20,14 +20,15 @@ import de.flapdoodle.eval.operators.InfixOperator;
 import de.flapdoodle.eval.operators.Operator;
 import de.flapdoodle.eval.operators.PostfixOperator;
 import de.flapdoodle.eval.operators.PrefixOperator;
-import de.flapdoodle.eval.parser.OperatorType;
 import de.flapdoodle.types.Pair;
 import org.immutables.value.Value;
 
+import java.util.Collections;
 import java.util.Map;
+import java.util.Set;
 
 @Value.Immutable
-public abstract class MapBasedOperatorResolver implements OperatorResolver {
+public abstract class MapBasedOperatorResolver implements OperatorResolver, HasOperator {
 
 	protected abstract Map<String, InfixOperator> infixOperators();
 
@@ -49,13 +50,19 @@ public abstract class MapBasedOperatorResolver implements OperatorResolver {
 		throw new IllegalArgumentException("operator type unknown: " + type + "(" + operatorString + ")");
 	}
 
-	@Value.Lazy
-	public Operators operators() {
-		ImmutableOperators.Builder builder = Operators.builder();
-		infixOperators().forEach((label,instance) -> builder.addMap(Pair.of(label, OperatorType.INFIX)));
-		prefixOperators().forEach((label,instance) -> builder.addMap(Pair.of(label, OperatorType.PREFIX)));
-		postfixOperators().forEach((label,instance) -> builder.addMap(Pair.of(label, OperatorType.POSTFIX)));
-		return builder.build();
+	@Override
+	public boolean hasStartingWith(Class<? extends Operator> type, String value) {
+		Set<String> keys = Collections.emptySet();
+		if (type.isAssignableFrom(InfixOperator.class)) {
+			keys=infixOperators().keySet();
+		}
+		if (type.isAssignableFrom(PrefixOperator.class)) {
+			keys=postfixOperators().keySet();
+		}
+		if (type.isAssignableFrom(PostfixOperator.class)) {
+			keys=postfixOperators().keySet();
+		}
+		return keys.stream().anyMatch(it -> it.startsWith(value));
 	}
 
 	public static ImmutableMapBasedOperatorResolver.Builder builder() {

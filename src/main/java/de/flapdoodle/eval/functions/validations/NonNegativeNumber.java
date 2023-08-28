@@ -16,9 +16,9 @@
  */
 package de.flapdoodle.eval.functions.validations;
 
-import de.flapdoodle.eval.parser.Token;
 import de.flapdoodle.eval.EvaluationException;
 import de.flapdoodle.eval.data.Value;
+import de.flapdoodle.eval.parser.Token;
 
 public class NonNegativeNumber implements ParameterValidator<Value.NumberValue> {
 	@Override

@@ -16,9 +16,9 @@
  */
 package de.flapdoodle.eval.functions.validations;
 
-import de.flapdoodle.eval.parser.Token;
 import de.flapdoodle.eval.EvaluationException;
 import de.flapdoodle.eval.data.Value;
+import de.flapdoodle.eval.parser.Token;
 
 public interface ParameterValidator<T extends Value<?>> {
 	void validate(Token token, T parameterValue) throws EvaluationException;

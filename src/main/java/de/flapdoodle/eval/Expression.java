@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.concurrent.ThreadLocalRandom;
 
 @org.immutables.value.Value.Immutable
 public abstract class Expression {
@@ -73,7 +74,7 @@ public abstract class Expression {
 
 	@org.immutables.value.Value.Derived
 	public Either<ASTNode, ParseException> getAbstractSyntaxTree() {
-		Tokenizer tokenizer = new Tokenizer(raw(), configuration().operators());
+		Tokenizer tokenizer = new Tokenizer(raw(), configuration().getOperatorResolver());
 		try {
 			ShuntingYardConverter converter =
 				new ShuntingYardConverter(raw(), tokenizer.parse(), configuration().getOperatorResolver(), configuration().functions());
@@ -134,15 +135,23 @@ public abstract class Expression {
 	 * @throws ParseException      If there were problems while parsing the expression.
 	 */
 	public Value<?> evaluate(ValueResolver variableResolver) throws EvaluationException, ParseException {
+		// TODO das muss aufgelöst werden
+		if (ThreadLocalRandom.current().nextBoolean()) {
+			return ExpressionFactory.of(configuration())
+				.withConstants(constants())
+				.withMathContext(mathContext())
+				.withZoneId(zoneId())
+				.parse(raw()).evaluate(variableResolver);
+		}
 		Either<ASTNode, ParseException> ast = getAbstractSyntaxTree();
 		if (ast.isLeft()) {
-			Node start = fill(ast.left());
+			Node start = map(ast.left());
 			return start.evaluate(variableResolver, context());
 		} else throw ast.right();
 	}
 
 	@org.immutables.value.Value.Auxiliary
-	protected Node fill(ASTNode startNode) throws EvaluationException {
+	protected Node map(ASTNode startNode) throws EvaluationException {
 		Node result;
 		Token token = startNode.getToken();
 		switch (token.type()) {
@@ -156,13 +165,13 @@ public abstract class Expression {
 				result = getVariableOrConstant(token);
 				break;
 			case PREFIX_OPERATOR:
-				result = PrefixOperatorNode.of(token, operator(token, PrefixOperator.class), fill(startNode.getParameters().get(0)));
+				result = PrefixOperatorNode.of(token, operator(token, PrefixOperator.class), map(startNode.getParameters().get(0)));
 				break;
 			case POSTFIX_OPERATOR:
-				result = PostfixOperatorNode.of(token, operator(token, PostfixOperator.class), fill(startNode.getParameters().get(0)));
+				result = PostfixOperatorNode.of(token, operator(token, PostfixOperator.class), map(startNode.getParameters().get(0)));
 				break;
 			case INFIX_OPERATOR:
-				result = InfixOperatorNode.of(token, operator(token, InfixOperator.class), fill(startNode.getParameters().get(0)), fill(startNode.getParameters().get(1)));
+				result = InfixOperatorNode.of(token, operator(token, InfixOperator.class), map(startNode.getParameters().get(0)), map(startNode.getParameters().get(1)));
 				break;
 			case ARRAY_INDEX:
 				result = evaluateArrayIndex(startNode);
@@ -203,18 +212,18 @@ public abstract class Expression {
 		Evaluateable function = configuration().functions().get(token.value());
 		List<Node> parameterResults = new ArrayList<>();
 		for (int i = 0; i < startNode.getParameters().size(); i++) {
-			parameterResults.add(fill(startNode.getParameters().get(i)));
+			parameterResults.add(map(startNode.getParameters().get(i)));
 		}
 
 		return FunctionNode.of(token, function, parameterResults);
 	}
 
 	private ArrayAccessNode evaluateArrayIndex(ASTNode startNode) throws EvaluationException {
-		return ArrayAccessNode.of(startNode.getToken(), fill(startNode.getParameters().get(0)), fill(startNode.getParameters().get(1)));
+		return ArrayAccessNode.of(startNode.getToken(), map(startNode.getParameters().get(0)), map(startNode.getParameters().get(1)));
 	}
 
 	private StructureAccessNode evaluateStructureSeparator(ASTNode startNode) throws EvaluationException {
-		Node structure = fill(startNode.getParameters().get(0));
+		Node structure = map(startNode.getParameters().get(0));
 		Token nameToken = startNode.getParameters().get(1).getToken();
 		return StructureAccessNode.of(startNode.getToken(), structure, nameToken);
 	}

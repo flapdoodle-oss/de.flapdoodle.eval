@@ -1,9 +1,5 @@
 package de.flapdoodle.eval;
 
-import de.flapdoodle.eval.data.Value;
-import de.flapdoodle.eval.parser.ASTNode;
-import de.flapdoodle.types.ThrowingFunction;
-
 import java.math.MathContext;
 import java.time.ZoneId;
 

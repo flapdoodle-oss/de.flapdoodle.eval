@@ -16,9 +16,9 @@
  */
 package de.flapdoodle.eval.operators;
 
-import de.flapdoodle.eval.parser.Token;
 import de.flapdoodle.eval.EvaluationException;
 import de.flapdoodle.eval.data.Value;
+import de.flapdoodle.eval.parser.Token;
 
 public abstract class AbstractBaseOperator implements Operator {
 

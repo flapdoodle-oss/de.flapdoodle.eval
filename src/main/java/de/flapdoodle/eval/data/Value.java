@@ -18,7 +18,6 @@ package de.flapdoodle.eval.data;
 
 import de.flapdoodle.eval.EvaluationException;
 import de.flapdoodle.eval.Nullable;
-import de.flapdoodle.eval.parser.ASTNode;
 
 import java.math.BigDecimal;
 import java.time.Duration;

@@ -16,12 +16,12 @@
  */
 package de.flapdoodle.eval.operators.arithmetic;
 
-import de.flapdoodle.eval.parser.Token;
 import de.flapdoodle.eval.EvaluationContext;
 import de.flapdoodle.eval.EvaluationException;
 import de.flapdoodle.eval.data.Value;
 import de.flapdoodle.eval.operators.AbstractPrefixOperator;
 import de.flapdoodle.eval.operators.Precedence;
+import de.flapdoodle.eval.parser.Token;
 
 public class PrefixPlus extends AbstractPrefixOperator.Typed<Value.NumberValue> {
 

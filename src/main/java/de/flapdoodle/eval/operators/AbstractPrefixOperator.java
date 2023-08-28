@@ -16,11 +16,11 @@
  */
 package de.flapdoodle.eval.operators;
 
-import de.flapdoodle.eval.parser.Token;
 import de.flapdoodle.eval.EvaluationContext;
 import de.flapdoodle.eval.EvaluationException;
 import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
+import de.flapdoodle.eval.parser.Token;
 
 public abstract class AbstractPrefixOperator extends AbstractBaseOperator implements PrefixOperator {
 	protected AbstractPrefixOperator(Precedence precedence, boolean leftAssociative) {

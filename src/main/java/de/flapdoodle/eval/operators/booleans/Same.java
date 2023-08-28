@@ -23,8 +23,6 @@ import de.flapdoodle.eval.operators.AbstractInfixOperator;
 import de.flapdoodle.eval.operators.Precedence;
 import de.flapdoodle.eval.parser.Token;
 
-import java.util.Objects;
-
 public class Same extends AbstractInfixOperator {
 
 	public Same() {

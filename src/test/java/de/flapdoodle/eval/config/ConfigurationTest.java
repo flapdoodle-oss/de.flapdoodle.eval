@@ -87,6 +87,11 @@ class ConfigurationTest {
 			public <T extends Operator> T get(Class<T> type, String operatorString) {
 				throw new IllegalStateException("dont call this");
 			}
+
+			@Override
+			public boolean hasStartingWith(Class<? extends Operator> type, String value) {
+				throw new IllegalStateException("dont call this");
+			}
 		};
 
 		Configuration configuration =

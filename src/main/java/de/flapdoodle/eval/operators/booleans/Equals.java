@@ -16,12 +16,12 @@
  */
 package de.flapdoodle.eval.operators.booleans;
 
-import de.flapdoodle.eval.parser.Token;
 import de.flapdoodle.eval.EvaluationContext;
 import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
 import de.flapdoodle.eval.operators.AbstractInfixOperator;
 import de.flapdoodle.eval.operators.Precedence;
+import de.flapdoodle.eval.parser.Token;
 
 import java.util.Objects;
 

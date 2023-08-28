@@ -90,14 +90,14 @@ class TokenizerStringLiteralTest extends BaseParserTest {
 
 	@Test
 	void testErrorUnmatchedQuoteStart() {
-		assertThatThrownBy(() -> new Tokenizer("\"hello", configuration.operators()).parse())
+		assertThatThrownBy(() -> new Tokenizer("\"hello", configuration.getOperatorResolver()).parse())
 			.isInstanceOf(ParseException.class)
 			.hasMessage("Closing quote not found");
 	}
 
 	@Test
 	void testErrorUnmatchedQuoteOffset() {
-		assertThatThrownBy(() -> new Tokenizer("test \"hello", configuration.operators()).parse())
+		assertThatThrownBy(() -> new Tokenizer("test \"hello", configuration.getOperatorResolver()).parse())
 			.isInstanceOf(ParseException.class)
 			.hasMessage("Closing quote not found");
 	}

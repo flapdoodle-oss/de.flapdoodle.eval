@@ -16,11 +16,11 @@
  */
 package de.flapdoodle.eval.functions.trigonometric;
 
-import de.flapdoodle.eval.parser.Token;
 import de.flapdoodle.eval.EvaluationContext;
 import de.flapdoodle.eval.EvaluationException;
 import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
+import de.flapdoodle.eval.parser.Token;
 
 /** Returns the co-secant (in radians). */
 public class CscRadians extends NonZeroFunction {

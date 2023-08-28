@@ -31,7 +31,7 @@ public abstract class BaseParserTest {
 		TestConfigurationProvider.StandardConfigurationWithAdditionalTestOperators;
 
 	void assertAllTokensParsedCorrectly(String input, Token... expectedTokens) throws ParseException {
-		List<Token> tokensParsed = new Tokenizer(input, configuration.operators()).parse();
+		List<Token> tokensParsed = new Tokenizer(input, configuration.getOperatorResolver()).parse();
 
 		Assertions.assertThat(tokensParsed).containsExactly(expectedTokens);
 	}
@@ -43,7 +43,7 @@ public abstract class BaseParserTest {
 	 */
 	void assertASTTreeIsEqualTo(String expression, String treeJSON) throws ParseException {
 
-		List<Token> tokensParsed = new Tokenizer(expression, configuration.operators()).parse();
+		List<Token> tokensParsed = new Tokenizer(expression, configuration.getOperatorResolver()).parse();
 		ASTNode root =
 			new ShuntingYardConverter(expression, tokensParsed, configuration.getOperatorResolver(), configuration.functions()).toAbstractSyntaxTree();
 		assertThat(root.toJSON()).isEqualTo(treeJSON);

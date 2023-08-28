@@ -78,13 +78,13 @@ class TokenizerStructureTest extends BaseParserTest {
 
 	@Test
 	void testStructureSeparatorNotAllowedBegin() {
-		assertThatThrownBy(() -> new Tokenizer(".", configuration.operators()).parse())
+		assertThatThrownBy(() -> new Tokenizer(".", configuration.getOperatorResolver()).parse())
 			.isEqualTo(new ParseException(0, 0, ".", "Structure separator not allowed here"));
 	}
 
 	@Test
 	void testStructureSeparatorNotAllowedOperator() {
-		assertThatThrownBy(() -> new Tokenizer("-.", configuration.operators()).parse())
+		assertThatThrownBy(() -> new Tokenizer("-.", configuration.getOperatorResolver()).parse())
 			.isEqualTo(new ParseException(1, 1, ".", "Structure separator not allowed here"));
 	}
 }

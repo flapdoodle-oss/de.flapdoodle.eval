@@ -20,12 +20,17 @@ import de.flapdoodle.eval.operators.Operator;
 import de.flapdoodle.eval.operators.arithmetic.*;
 import de.flapdoodle.eval.operators.booleans.*;
 
-public interface OperatorResolver {
+public interface OperatorResolver extends HasOperator {
 	default <T extends Operator> boolean hasOperator(Class<T> type, String operatorString) {
 		return get(type, operatorString) != null;
 	}
 
 	<T extends Operator> T get(Class<T> type, String operatorString);
+
+	@Override
+	default boolean matching(Class<? extends Operator> type, String value) {
+		return get(type, value) != null;
+	}
 
 	default OperatorResolver andThen(OperatorResolver fallback) {
 		OperatorResolver that = this;
@@ -38,6 +43,11 @@ public interface OperatorResolver {
 					return fallback.get(type, operatorString);
 				}
 				return operator;
+			}
+
+			@Override
+			public boolean hasStartingWith(Class<? extends Operator> type, String value) {
+				return that.hasStartingWith(type, value) || fallback.hasStartingWith(type, value);
 			}
 		};
 	}
