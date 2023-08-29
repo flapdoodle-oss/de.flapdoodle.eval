@@ -187,11 +187,9 @@ class ExpressionTest {
 
 	@Test
 	void testGetUndefinedVariables() throws ParseException {
-		Expression expression1 = Expression.of("a+A+b+B+c+C+E+e+PI+x");
-		Expression expression = expression1;
-		MapBasedValueResolver mapBasedVariableResolver = ValueResolver.empty()
+		Expression expression = Expression.of("a+A+b+B+c+C+E+e+PI+x");
+		ValueResolver variableResolver = ValueResolver.empty()
 			.with("x", Value.of(1));
-		ValueResolver variableResolver = mapBasedVariableResolver;
 		assertThat(expression.getUndefinedVariables(variableResolver)).containsExactlyInAnyOrder("a", "b", "c");
 	}
 }

@@ -116,6 +116,7 @@ public abstract class ExpressionFactory {
 		}
 	}
 
+	// TODO @Deprecated
 	public static ImmutableExpressionFactory of(Configuration configuration) {
 		return ImmutableExpressionFactory.builder()
 			.constants(configuration.getConstantResolver())
