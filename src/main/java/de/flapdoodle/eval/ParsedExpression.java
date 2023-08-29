@@ -7,6 +7,7 @@ import de.flapdoodle.eval.parser.ParseException;
 
 import java.math.MathContext;
 import java.time.ZoneId;
+import java.util.Set;
 
 @org.immutables.value.Value.Immutable
 public abstract class ParsedExpression {
@@ -14,11 +15,17 @@ public abstract class ParsedExpression {
 	protected abstract ZoneId zoneId();
 	protected abstract Node root();
 
+	@org.immutables.value.Value.Auxiliary
 	public Value<?> evaluate(ValueResolver variableResolver) throws EvaluationException, ParseException {
 		return root().evaluate(variableResolver, EvaluationContext.builder()
 			.mathContext(mathContext())
 			.zoneId(zoneId())
 			.build());
+	}
+
+	@org.immutables.value.Value.Derived
+	public Set<String> usedVariables() {
+		return Node.usedVariables(root());
 	}
 
 	public static ImmutableParsedExpression.Builder builder() {
