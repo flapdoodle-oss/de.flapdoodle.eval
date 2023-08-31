@@ -2,7 +2,7 @@ package de.flapdoodle.eval;
 
 import de.flapdoodle.eval.config.*;
 import de.flapdoodle.eval.data.Value;
-import de.flapdoodle.eval.evaluate.*;
+import de.flapdoodle.eval.tree.*;
 import de.flapdoodle.eval.operators.InfixOperator;
 import de.flapdoodle.eval.operators.Operator;
 import de.flapdoodle.eval.operators.PostfixOperator;

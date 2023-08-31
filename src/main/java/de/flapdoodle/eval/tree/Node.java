@@ -1,10 +1,9 @@
-package de.flapdoodle.eval.evaluate;
+package de.flapdoodle.eval.tree;
 
 import de.flapdoodle.eval.EvaluationContext;
 import de.flapdoodle.eval.EvaluationException;
 import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
-import de.flapdoodle.eval.operators.PostfixOperator;
 import de.flapdoodle.eval.parser.Token;
 
 import java.util.*;
@@ -28,9 +27,9 @@ public abstract class Node {
                     ((ArrayAccessNode) node).index()
             );
         } else if (node instanceof StructureAccessNode) {
-            subnodes = Arrays.asList(
-                    ((StructureAccessNode) node).structure()
-            );
+            subnodes = Collections.singletonList(
+							((StructureAccessNode) node).structure()
+						);
         } else if (node instanceof FunctionNode) {
             subnodes = ((FunctionNode) node).parameters();
         } else if (node instanceof InfixOperatorNode) {
@@ -39,13 +38,13 @@ public abstract class Node {
                     ((InfixOperatorNode) node).rightOperand()
             );
         } else if (node instanceof PostfixOperatorNode) {
-            subnodes = Arrays.asList(
-                    ((PostfixOperatorNode) node).operand()
-            );
+            subnodes = Collections.singletonList(
+							((PostfixOperatorNode) node).operand()
+						);
         } else if (node instanceof PrefixOperatorNode) {
-            subnodes = Arrays.asList(
-                    ((PrefixOperatorNode) node).operand()
-            );
+            subnodes = Collections.singletonList(
+							((PrefixOperatorNode) node).operand()
+						);
         }
         subnodes.forEach(subNode -> ret.addAll(allNodes(subNode)));
         return ret;
