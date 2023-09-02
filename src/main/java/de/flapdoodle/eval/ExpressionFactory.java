@@ -8,6 +8,7 @@ import de.flapdoodle.eval.operators.Operator;
 import de.flapdoodle.eval.operators.PostfixOperator;
 import de.flapdoodle.eval.operators.PrefixOperator;
 import de.flapdoodle.eval.parser.*;
+import de.flapdoodle.types.Pair;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -25,6 +26,25 @@ public abstract class ExpressionFactory {
 	protected abstract OperatorResolver operators();
 	protected abstract EvaluateableResolver functions();
 
+	@SafeVarargs
+	@org.immutables.value.Value.Auxiliary
+	public final ImmutableExpressionFactory withFunctions(Pair<String, ? extends Evaluateable>... functions) {
+		return ImmutableExpressionFactory.copyOf(this)
+			.withFunctions(MapBasedEvaluateableResolver.of(functions)
+				.andThen(functions()));
+	}
+
+	@SafeVarargs
+	@org.immutables.value.Value.Auxiliary
+	public final ImmutableExpressionFactory withOperators(Pair<String, Operator>... operators) {
+		ImmutableMapBasedOperatorResolver newOperatorResolver = MapBasedOperatorResolver.of(operators);
+		return ImmutableExpressionFactory.copyOf(this)
+			.withOperators(newOperatorResolver
+				.andThen(operators()));
+	}
+
+
+
 	@org.immutables.value.Value.Auxiliary
 	public ImmutableParsedExpression parse(String expression) throws ParseException, EvaluationException {
 		Tokenizer tokenizer = new Tokenizer(expression, operators());
@@ -36,6 +56,8 @@ public abstract class ExpressionFactory {
 			.root(node)
 			.build();
 	}
+
+
 
 	@org.immutables.value.Value.Auxiliary
 	protected Node map(ASTNode startNode) throws EvaluationException {

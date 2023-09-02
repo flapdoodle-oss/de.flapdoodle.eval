@@ -30,6 +30,7 @@ import java.util.List;
 public class TestConfigurationProvider {
 
 	public static final ImmutableConfiguration StandardConfigurationWithAdditionalTestOperators;
+	public static final ImmutableExpressionFactory StandardFactoryWithAdditionalTestOperators;
 
 	static {
 		Configuration configuration = Configuration.defaultConfiguration()
@@ -40,6 +41,12 @@ public class TestConfigurationProvider {
 			);
 		StandardConfigurationWithAdditionalTestOperators = ImmutableConfiguration.copyOf(configuration)
 			.withFunctions(Pair.of("TEST", new DummyFunction()));
+
+		StandardFactoryWithAdditionalTestOperators = ExpressionFactory.defaults()
+			.withFunctions(Pair.of("TEST", new DummyFunction()))
+			.withOperators(Pair.of("++", new PrefixPlusPlusOperator()),
+				Pair.of("++", new PostfixPlusPlusOperator()),
+				Pair.of("?", new PostfixQuestionOperator()));
 	}
 
 	public static class DummyFunction extends Evaluateables.SingleVararg<Value.StringValue> {

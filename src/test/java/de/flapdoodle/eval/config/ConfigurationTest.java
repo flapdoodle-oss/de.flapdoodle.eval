@@ -43,9 +43,6 @@ class ConfigurationTest {
 			.isSameAs(Defaults.functions());
 		assertThat(configuration.getConstantResolver())
 			.isSameAs(Defaults.constants());
-//    assertThat(configuration.getDecimalPlacesRounding())
-//        .isEqualTo(Configuration.DECIMAL_PLACES_ROUNDING_UNLIMITED);
-//    assertThat(configuration.isStripTrailingZeros()).isTrue();
 		assertThat(configuration.isAllowOverwriteConstants()).isTrue();
 	}
 

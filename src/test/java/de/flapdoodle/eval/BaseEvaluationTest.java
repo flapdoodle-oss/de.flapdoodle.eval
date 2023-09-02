@@ -33,11 +33,19 @@ public abstract class BaseEvaluationTest {
 
 	protected void assertExpressionHasExpectedResult(String expression, String expectedResult)
 		throws EvaluationException, ParseException {
-		assertThat(
-			evaluate(
-				expression,
-				TestConfigurationProvider.StandardConfigurationWithAdditionalTestOperators).wrapped().toString())
-			.isEqualTo(expectedResult);
+		if (true) {
+			assertThat(
+				evaluate(
+					expression,
+					TestConfigurationProvider.StandardConfigurationWithAdditionalTestOperators).wrapped().toString())
+				.isEqualTo(expectedResult);
+		} else {
+			assertThat(
+				TestConfigurationProvider.StandardFactoryWithAdditionalTestOperators.parse(expression)
+					.evaluate(ValueResolver.empty())
+					.wrapped().toString()
+			).isEqualTo(expectedResult);
+		}
 	}
 
 	protected void assertExpressionHasExpectedResult(String expression, Value<?> expectedResult)

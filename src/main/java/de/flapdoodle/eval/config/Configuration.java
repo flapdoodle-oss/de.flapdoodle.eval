@@ -67,6 +67,7 @@ public abstract class Configuration {
 	}
 
 	@SafeVarargs
+	@Value.Auxiliary
 	public final ImmutableConfiguration withFunctions(Pair<String, ? extends Evaluateable>... functions) {
 		return ImmutableConfiguration.copyOf(this)
 			.withFunctions(MapBasedEvaluateableResolver.of(functions)
