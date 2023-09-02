@@ -50,10 +50,15 @@ public abstract class Node {
         return ret;
     }
 
+    // VisibleForTests
+    static Set<String> usedVariables(List<Node> nodes) {
+        return nodes.stream()
+          .filter(it -> it instanceof ValueLookup)
+          .map(it -> it.token().value())
+          .collect(Collectors.toSet());
+    }
+
     public static Set<String> usedVariables(Node node) {
-        return allNodes(node).stream()
-                .filter(it -> it instanceof ValueLookup)
-                .map(it -> it.token().value())
-                .collect(Collectors.toSet());
+        return usedVariables(allNodes(node));
     }
 }
