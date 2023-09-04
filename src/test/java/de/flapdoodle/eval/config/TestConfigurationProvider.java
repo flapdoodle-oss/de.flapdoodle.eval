@@ -32,21 +32,26 @@ public class TestConfigurationProvider {
 	public static final ImmutableConfiguration StandardConfigurationWithAdditionalTestOperators;
 	public static final ImmutableExpressionFactory StandardFactoryWithAdditionalTestOperators;
 
+	public static final OperatorResolver OperatorResolverWithTestOperators = MapBasedOperatorResolver.of(
+			Pair.of("++", new PrefixPlusPlusOperator()),
+			Pair.of("++", new PostfixPlusPlusOperator()),
+			Pair.of("?", new PostfixQuestionOperator()))
+		.andThen(Defaults.operators());
+
+	public static final EvaluateableResolver FunctionResolverWithTestFunctions = MapBasedEvaluateableResolver.of(
+		Pair.of("TEST", new DummyFunction())
+	).andThen(Defaults.functions());
+
 	static {
 		Configuration configuration = Configuration.defaultConfiguration()
-			.withOperators(
-				Pair.of("++", new PrefixPlusPlusOperator()),
-				Pair.of("++", new PostfixPlusPlusOperator()),
-				Pair.of("?", new PostfixQuestionOperator())
-			);
+			.withOperatorResolver(OperatorResolverWithTestOperators);
+
 		StandardConfigurationWithAdditionalTestOperators = ImmutableConfiguration.copyOf(configuration)
-			.withFunctions(Pair.of("TEST", new DummyFunction()));
+			.withFunctions(FunctionResolverWithTestFunctions);
 
 		StandardFactoryWithAdditionalTestOperators = ExpressionFactory.defaults()
-			.withFunctions(Pair.of("TEST", new DummyFunction()))
-			.withOperators(Pair.of("++", new PrefixPlusPlusOperator()),
-				Pair.of("++", new PostfixPlusPlusOperator()),
-				Pair.of("?", new PostfixQuestionOperator()));
+			.withFunctions(FunctionResolverWithTestFunctions)
+			.withOperators(OperatorResolverWithTestOperators);
 	}
 
 	public static class DummyFunction extends Evaluateables.SingleVararg<Value.StringValue> {

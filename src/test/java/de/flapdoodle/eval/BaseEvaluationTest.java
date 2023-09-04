@@ -33,45 +33,43 @@ public abstract class BaseEvaluationTest {
 
 	protected void assertExpressionHasExpectedResult(String expression, String expectedResult)
 		throws EvaluationException, ParseException {
-		if (true) {
-			assertThat(
-				evaluate(
-					expression,
-					TestConfigurationProvider.StandardConfigurationWithAdditionalTestOperators).wrapped().toString())
-				.isEqualTo(expectedResult);
-		} else {
-			assertThat(
-				TestConfigurationProvider.StandardFactoryWithAdditionalTestOperators.parse(expression)
-					.evaluate(ValueResolver.empty())
-					.wrapped().toString()
-			).isEqualTo(expectedResult);
-		}
+		assertThat(
+			TestConfigurationProvider.StandardFactoryWithAdditionalTestOperators.parse(expression)
+				.evaluate(ValueResolver.empty())
+				.wrapped().toString()
+		).isEqualTo(expectedResult);
 	}
 
 	protected void assertExpressionHasExpectedResult(String expression, Value<?> expectedResult)
 		throws EvaluationException, ParseException {
 		assertThat(
-			evaluate(
-				expression,
-				TestConfigurationProvider.StandardConfigurationWithAdditionalTestOperators))
-			.isEqualTo(expectedResult);
+			TestConfigurationProvider.StandardFactoryWithAdditionalTestOperators.parse(expression)
+				.evaluate(ValueResolver.empty())
+		).isEqualTo(expectedResult);
 	}
 
 	protected void assertExpressionHasExpectedResult(String expression, Value.NumberValue expectedResult)
 		throws EvaluationException, ParseException {
 		assertThat(
-			evaluate(
-				expression,
-				TestConfigurationProvider.StandardConfigurationWithAdditionalTestOperators))
+			TestConfigurationProvider.StandardFactoryWithAdditionalTestOperators.parse(expression)
+				.evaluate(ValueResolver.empty()))
 			.isInstanceOf(Value.NumberValue.class)
 			.extracting(Value::wrapped, InstanceOfAssertFactories.BIG_DECIMAL)
 			.isCloseTo(expectedResult.wrapped(), Percentage.withPercentage(0.99999));
 	}
 
+	@Deprecated
 	protected void assertExpressionHasExpectedResult(
 		String expression, String expectedResult, Configuration expressionConfiguration)
 		throws EvaluationException, ParseException {
 		assertThat(evaluate(expression, expressionConfiguration).wrapped().toString())
+			.isEqualTo(expectedResult);
+	}
+
+	protected void assertExpressionHasExpectedResult(
+		String expression, String expectedResult, ExpressionFactory expressionFactory)
+		throws EvaluationException, ParseException {
+		assertThat(evaluate(expression, expressionFactory).wrapped().toString())
 			.isEqualTo(expectedResult);
 	}
 
@@ -82,14 +80,28 @@ public abstract class BaseEvaluationTest {
 			.isEqualTo(expectedResult);
 	}
 
+	@Deprecated
 	protected void assertExpressionThrowsException(
 		String expression, String message, Configuration expressionConfiguration) {
 		assertThatThrownBy(() -> evaluate(expression, expressionConfiguration)).hasMessage(message);
 	}
 
+	protected void assertExpressionThrowsException(
+		String expression, String message, ExpressionFactory factory) {
+		assertThatThrownBy(() -> evaluate(expression, factory)).hasMessage(message);
+	}
+
+	@Deprecated
 	private Value<?> evaluate(String expressionString, Configuration configuration)
 		throws EvaluationException, ParseException {
 		Expression expression = Expression.of(expressionString, configuration);
+
+		return expression.evaluate(ValueResolver.empty());
+	}
+
+	private Value<?> evaluate(String expressionString, ExpressionFactory factory)
+		throws EvaluationException, ParseException {
+		ParsedExpression expression = factory.parse(expressionString);
 
 		return expression.evaluate(ValueResolver.empty());
 	}

@@ -86,7 +86,7 @@ class TokenizerNumberLiteralTest extends BaseParserTest {
 	@ParameterizedTest
 	@ValueSource(strings = { "2e", "2E", "2e+", "2E+", "2e-", "2E-", "2e.", "2E.", "2ex", "2Ex" })
 	void testScientificLiteralsParseException(String expression) {
-		assertThatThrownBy(() -> new Tokenizer(expression, configuration.getOperatorResolver()).parse())
+		assertThatThrownBy(() -> new Tokenizer(expression, operatorResolver).parse())
 			.isInstanceOf(ParseException.class)
 			.hasMessage("Illegal scientific format");
 	}

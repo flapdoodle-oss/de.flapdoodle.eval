@@ -16,7 +16,10 @@
  */
 package de.flapdoodle.eval.parser;
 
+import de.flapdoodle.eval.ExpressionFactory;
 import de.flapdoodle.eval.config.Configuration;
+import de.flapdoodle.eval.config.EvaluateableResolver;
+import de.flapdoodle.eval.config.OperatorResolver;
 import de.flapdoodle.eval.config.TestConfigurationProvider;
 import org.assertj.core.api.Assertions;
 
@@ -27,11 +30,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 /** */
 public abstract class BaseParserTest {
 
-	Configuration configuration =
-		TestConfigurationProvider.StandardConfigurationWithAdditionalTestOperators;
+	ExpressionFactory factory =
+		TestConfigurationProvider.StandardFactoryWithAdditionalTestOperators;
+
+	OperatorResolver operatorResolver =
+		TestConfigurationProvider.OperatorResolverWithTestOperators;
+
+	EvaluateableResolver functionResolver =
+		TestConfigurationProvider.FunctionResolverWithTestFunctions;
 
 	void assertAllTokensParsedCorrectly(String input, Token... expectedTokens) throws ParseException {
-		List<Token> tokensParsed = new Tokenizer(input, configuration.getOperatorResolver()).parse();
+		List<Token> tokensParsed = factory.tokens(input);
 
 		Assertions.assertThat(tokensParsed).containsExactly(expectedTokens);
 	}
@@ -42,10 +51,7 @@ public abstract class BaseParserTest {
 	 * <a href="https://vanya.jp.net/vtree/">Online JSON to Tree Diagram Converter</a>
 	 */
 	void assertASTTreeIsEqualTo(String expression, String treeJSON) throws ParseException {
-
-		List<Token> tokensParsed = new Tokenizer(expression, configuration.getOperatorResolver()).parse();
-		ASTNode root =
-			new ShuntingYardConverter(expression, tokensParsed, configuration.getOperatorResolver(), configuration.functions()).toAbstractSyntaxTree();
+		ASTNode root = factory.abstractSyntaxTree(expression);
 		assertThat(root.toJSON()).isEqualTo(treeJSON);
 	}
 }

@@ -31,8 +31,8 @@ class TokenizerLiteralOperatorsTest extends BaseParserTest {
 
 	@BeforeEach
 	public void setup() {
-		configuration =
-			configuration.withOperators(
+		factory =
+			factory.withOperators(
 				Pair.of("AND", new AndOperator()),
 				Pair.of("OR", new OrOperator()),
 				Pair.of("NOT", new NotOperator()),

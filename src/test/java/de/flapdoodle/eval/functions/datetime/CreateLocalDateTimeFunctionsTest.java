@@ -18,7 +18,7 @@ package de.flapdoodle.eval.functions.datetime;
 
 import de.flapdoodle.eval.BaseEvaluationTest;
 import de.flapdoodle.eval.EvaluationException;
-import de.flapdoodle.eval.config.Configuration;
+import de.flapdoodle.eval.ExpressionFactory;
 import de.flapdoodle.eval.config.TestConfigurationProvider;
 import de.flapdoodle.eval.parser.ParseException;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -28,9 +28,9 @@ import java.time.ZoneId;
 
 class CreateLocalDateTimeFunctionsTest extends BaseEvaluationTest {
 
-	private final Configuration DateTimeTestConfiguration =
-		TestConfigurationProvider.StandardConfigurationWithAdditionalTestOperators
-			.withDefaultZoneId(ZoneId.of("UTC+2"));
+	private final ExpressionFactory DateTimeTestConfiguration =
+		TestConfigurationProvider.StandardFactoryWithAdditionalTestOperators
+			.withZoneId(ZoneId.of("UTC+2"));
 
 	@ParameterizedTest
 	@CsvSource(

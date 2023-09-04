@@ -44,12 +44,9 @@ public abstract class ExpressionFactory {
 	}
 
 
-
 	@org.immutables.value.Value.Auxiliary
 	public ImmutableParsedExpression parse(String expression) throws ParseException, EvaluationException {
-		Tokenizer tokenizer = new Tokenizer(expression, operators());
-		ShuntingYardConverter converter = new ShuntingYardConverter(expression, tokenizer.parse(), operators(), functions());
-		Node node = map(converter.toAbstractSyntaxTree());
+		Node node = map(abstractSyntaxTree(expression));
 		return ParsedExpression.builder()
 			.mathContext(mathContext())
 			.zoneId(zoneId())
@@ -57,7 +54,18 @@ public abstract class ExpressionFactory {
 			.build();
 	}
 
+	// VisibleForTests
+	@org.immutables.value.Value.Auxiliary
+	public ASTNode abstractSyntaxTree(String expression) throws ParseException {
+		return new ShuntingYardConverter(expression, tokens(expression), operators(), functions())
+			.toAbstractSyntaxTree();
+	}
 
+	// VisibleForTests
+	@org.immutables.value.Value.Auxiliary
+	public List<Token> tokens(String expression) throws ParseException {
+		return new Tokenizer(expression, operators()).parse();
+	}
 
 	@org.immutables.value.Value.Auxiliary
 	protected Node map(ASTNode startNode) throws EvaluationException {

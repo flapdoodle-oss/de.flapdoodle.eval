@@ -23,7 +23,6 @@ class TokenizerFunctionsTest extends BaseParserTest {
 
 	@Test
 	void testSimple() throws ParseException {
-		configuration = configuration.withFunction("f", new DummyFunction());
 		assertAllTokensParsedCorrectly(
 			"f(x)",
 			Token.of(0, "f", TokenType.FUNCTION),
@@ -34,7 +33,6 @@ class TokenizerFunctionsTest extends BaseParserTest {
 
 	@Test
 	void testBlanks() throws ParseException {
-		configuration = configuration.withFunction("f", new DummyFunction());
 		assertAllTokensParsedCorrectly(
 			"f (x)",
 			Token.of(0, "f", TokenType.FUNCTION),
@@ -45,7 +43,6 @@ class TokenizerFunctionsTest extends BaseParserTest {
 
 	@Test
 	void testUnderscores() throws ParseException {
-		configuration = configuration.withFunction("_f_x_", new DummyFunction());
 		assertAllTokensParsedCorrectly(
 			"_f_x_(x)",
 			Token.of(0, "_f_x_", TokenType.FUNCTION),
@@ -56,7 +53,6 @@ class TokenizerFunctionsTest extends BaseParserTest {
 
 	@Test
 	void testWithNumbers() throws ParseException {
-		configuration = configuration.withFunction("f1x2", new DummyFunction());
 		assertAllTokensParsedCorrectly(
 			"f1x2(x)",
 			Token.of(0, "f1x2", TokenType.FUNCTION),
