@@ -16,10 +16,7 @@
  */
 package de.flapdoodle.eval.parser;
 
-import de.flapdoodle.eval.config.Configuration;
 import org.junit.jupiter.api.Test;
-
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class TokenizerImplicitMultiplicationTest extends BaseParserTest {
 

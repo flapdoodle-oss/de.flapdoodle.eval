@@ -16,7 +16,6 @@
  */
 package de.flapdoodle.eval;
 
-import de.flapdoodle.eval.config.Configuration;
 import de.flapdoodle.eval.config.MapBasedValueResolver;
 import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
@@ -30,7 +29,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class ExpressionEvaluatorConstantsTest extends BaseExpressionEvaluatorTest {
 
@@ -61,36 +59,26 @@ class ExpressionEvaluatorConstantsTest extends BaseExpressionEvaluatorTest {
 			};
 
 		MapBasedValueResolver mapBasedVariableResolver = ValueResolver.empty().withValues(constants);
-		Configuration configuration =
-			Configuration.builder().constantResolver(mapBasedVariableResolver).build();
+		ExpressionFactory factory = ExpressionFactory.defaults()
+				.withConstants(mapBasedVariableResolver);
 
-		Expression expression = Expression.of("a+B", configuration);
+		ParsedExpression expression = factory.parse("a+B");
 
 		assertThat(expression.evaluate(ValueResolver.empty()).wrapped().toString()).isEqualTo("6.4");
 	}
 
 	@Test
 	void testOverwriteConstantsWith() throws EvaluationException, ParseException {
-		Expression expression = Expression.of("e");
-		Expression expression1 = expression.withConstant("e", Value.of(9));
-		assertThat(expression1.evaluate(ValueResolver.empty()).wrapped().toString()).isEqualTo("9.0");
+		assertThat(factory.withConstant("e", Value.of(9))
+				.parse("e")
+				.evaluate(ValueResolver.empty()).wrapped().toString()).isEqualTo("9.0");
 	}
 
 	@Test
 	void testOverwriteConstantsWithValues() throws EvaluationException, ParseException {
-		Expression expression = Expression.of("e");
-		Expression expression1 = expression.withConstant("E", Value.of(6));
 		MapBasedValueResolver mapBasedVariableResolver = ValueResolver.empty().with("e", Value.of(3));
-		assertThat(expression1.evaluate(mapBasedVariableResolver).wrapped().toString()).isEqualTo("6.0");
-	}
-
-	@Test
-	void testOverwriteConstantsNotAllowed() {
-		Expression expression =
-			Expression.of(
-				"e", Configuration.defaultConfiguration().withIsAllowOverwriteConstants(false));
-		assertThatThrownBy(() -> expression.withConstant("e", Value.of(9)))
-			.isInstanceOf(UnsupportedOperationException.class)
-			.hasMessage("Can't set value for constant 'e'");
+		assertThat(factory.withConstant("E", Value.of(6))
+				.parse("e")
+				.evaluate(mapBasedVariableResolver).wrapped().toString()).isEqualTo("6.0");
 	}
 }

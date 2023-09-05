@@ -16,9 +16,7 @@
  */
 package de.flapdoodle.eval.operators.booleans;
 
-import de.flapdoodle.eval.BaseEvaluationTest;
-import de.flapdoodle.eval.EvaluationException;
-import de.flapdoodle.eval.Expression;
+import de.flapdoodle.eval.*;
 import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
 import de.flapdoodle.eval.parser.ParseException;
@@ -60,7 +58,7 @@ class EqualsTest extends BaseEvaluationTest {
 
 	@Test
 	void testInfixEqualsVariables() throws EvaluationException, ParseException {
-		Expression expression = Expression.of("a=b");
+		ParsedExpression expression = ExpressionFactory.defaults().parse("a=b");
 
 		assertThat(
 			expression.evaluate(ValueResolver.empty()
@@ -96,7 +94,7 @@ class EqualsTest extends BaseEvaluationTest {
 
 	@Test
 	void testInfixEqualsArrays() throws EvaluationException, ParseException {
-		Expression expression = Expression.of("a=b");
+		ParsedExpression expression = ExpressionFactory.defaults().parse("a=b");
 
 		assertThat(
 			expression.evaluate(ValueResolver.empty()

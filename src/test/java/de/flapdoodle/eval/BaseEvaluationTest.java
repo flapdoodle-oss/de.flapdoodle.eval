@@ -16,7 +16,6 @@
  */
 package de.flapdoodle.eval;
 
-import de.flapdoodle.eval.config.Configuration;
 import de.flapdoodle.eval.config.TestConfigurationProvider;
 import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
@@ -58,14 +57,6 @@ public abstract class BaseEvaluationTest {
 			.isCloseTo(expectedResult.wrapped(), Percentage.withPercentage(0.99999));
 	}
 
-	@Deprecated
-	protected void assertExpressionHasExpectedResult(
-		String expression, String expectedResult, Configuration expressionConfiguration)
-		throws EvaluationException, ParseException {
-		assertThat(evaluate(expression, expressionConfiguration).wrapped().toString())
-			.isEqualTo(expectedResult);
-	}
-
 	protected void assertExpressionHasExpectedResult(
 		String expression, String expectedResult, ExpressionFactory expressionFactory)
 		throws EvaluationException, ParseException {
@@ -73,30 +64,9 @@ public abstract class BaseEvaluationTest {
 			.isEqualTo(expectedResult);
 	}
 
-	protected void assertExpressionHasExpectedResult(
-		String expression, Value<?> expectedResult, Configuration expressionConfiguration)
-		throws EvaluationException, ParseException {
-		assertThat(evaluate(expression, expressionConfiguration))
-			.isEqualTo(expectedResult);
-	}
-
-	@Deprecated
-	protected void assertExpressionThrowsException(
-		String expression, String message, Configuration expressionConfiguration) {
-		assertThatThrownBy(() -> evaluate(expression, expressionConfiguration)).hasMessage(message);
-	}
-
 	protected void assertExpressionThrowsException(
 		String expression, String message, ExpressionFactory factory) {
 		assertThatThrownBy(() -> evaluate(expression, factory)).hasMessage(message);
-	}
-
-	@Deprecated
-	private Value<?> evaluate(String expressionString, Configuration configuration)
-		throws EvaluationException, ParseException {
-		Expression expression = Expression.of(expressionString, configuration);
-
-		return expression.evaluate(ValueResolver.empty());
 	}
 
 	private Value<?> evaluate(String expressionString, ExpressionFactory factory)

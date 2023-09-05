@@ -16,9 +16,7 @@
  */
 package de.flapdoodle.eval.operators.booleans;
 
-import de.flapdoodle.eval.BaseEvaluationTest;
-import de.flapdoodle.eval.EvaluationException;
-import de.flapdoodle.eval.Expression;
+import de.flapdoodle.eval.*;
 import de.flapdoodle.eval.config.MapBasedValueResolver;
 import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
@@ -61,7 +59,7 @@ class NotEqualsTest extends BaseEvaluationTest {
 
 	@Test
 	void testInfixNotEqualsVariables() throws EvaluationException, ParseException {
-		Expression expression = Expression.of("a!=b");
+		ParsedExpression expression = ExpressionFactory.defaults().parse("a!=b");
 
 		MapBasedValueResolver mapBasedVariableResolver4 = ValueResolver.empty()
 			.with("a", new BigDecimal("1.4"))
@@ -93,7 +91,7 @@ class NotEqualsTest extends BaseEvaluationTest {
 
 	@Test
 	void testInfixNotEqualsArrays() throws EvaluationException, ParseException {
-		Expression expression = Expression.of("a!=b");
+		ParsedExpression expression = ExpressionFactory.defaults().parse("a!=b");
 
 		MapBasedValueResolver mapBasedVariableResolver1 = ValueResolver.empty()
 			.with("a", Value::of, Arrays.asList("a", "b", "c"))
@@ -114,7 +112,7 @@ class NotEqualsTest extends BaseEvaluationTest {
 
 	@Test
 	void testInfixNotEqualsStructures() throws EvaluationException, ParseException {
-		Expression expression = Expression.of("a!=b");
+		ParsedExpression expression = ExpressionFactory.defaults().parse("a!=b");
 
 		Map<String, BigDecimal> structure1 =
 			new HashMap<String, BigDecimal>() {

@@ -2,12 +2,12 @@ package de.flapdoodle.eval;
 
 import de.flapdoodle.eval.config.*;
 import de.flapdoodle.eval.data.Value;
-import de.flapdoodle.eval.tree.*;
 import de.flapdoodle.eval.operators.InfixOperator;
 import de.flapdoodle.eval.operators.Operator;
 import de.flapdoodle.eval.operators.PostfixOperator;
 import de.flapdoodle.eval.operators.PrefixOperator;
 import de.flapdoodle.eval.parser.*;
+import de.flapdoodle.eval.tree.*;
 import de.flapdoodle.types.Pair;
 
 import java.math.BigDecimal;
@@ -43,9 +43,16 @@ public abstract class ExpressionFactory {
 				.andThen(operators()));
 	}
 
+	@org.immutables.value.Value.Auxiliary
+	public final ImmutableExpressionFactory withConstant(String name, Value<?> value) {
+		return ImmutableExpressionFactory.copyOf(this)
+				.withConstants(MapBasedValueResolver.empty()
+						.with(name, value)
+						.andThen(constants()));
+	}
 
 	@org.immutables.value.Value.Auxiliary
-	public ImmutableParsedExpression parse(String expression) throws ParseException, EvaluationException {
+	public ParsedExpression parse(String expression) throws ParseException, EvaluationException {
 		Node node = map(abstractSyntaxTree(expression));
 		return ParsedExpression.builder()
 			.mathContext(mathContext())
@@ -166,4 +173,5 @@ public abstract class ExpressionFactory {
 			.operators(Defaults.operators())
 			.build();
 	}
+
 }

@@ -19,12 +19,12 @@ package de.flapdoodle.eval;
 import de.flapdoodle.eval.config.Configuration;
 import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
-import de.flapdoodle.eval.tree.*;
 import de.flapdoodle.eval.operators.InfixOperator;
 import de.flapdoodle.eval.operators.Operator;
 import de.flapdoodle.eval.operators.PostfixOperator;
 import de.flapdoodle.eval.operators.PrefixOperator;
 import de.flapdoodle.eval.parser.*;
+import de.flapdoodle.eval.tree.*;
 import de.flapdoodle.types.Either;
 
 import java.math.BigDecimal;

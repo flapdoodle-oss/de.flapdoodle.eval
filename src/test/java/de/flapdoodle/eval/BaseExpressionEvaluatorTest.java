@@ -16,7 +16,6 @@
  */
 package de.flapdoodle.eval;
 
-import de.flapdoodle.eval.config.Configuration;
 import de.flapdoodle.eval.config.TestConfigurationProvider;
 import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
@@ -26,21 +25,21 @@ import java.math.BigDecimal;
 
 public abstract class BaseExpressionEvaluatorTest {
 
-	final Configuration configuration =
-		TestConfigurationProvider.StandardConfigurationWithAdditionalTestOperators;
+	final ExpressionFactory factory =
+			TestConfigurationProvider.StandardFactoryWithAdditionalTestOperators;
 
 	protected String evaluate(String expressionString) throws ParseException, EvaluationException {
-		Expression expression = createExpression(expressionString);
+		ParsedExpression expression = createExpression(expressionString);
 		return expression.evaluate(ValueResolver.empty()).wrapped().toString();
 	}
 
 	protected String evaluate(String expressionString, ValueResolver variableResolver) throws ParseException, EvaluationException {
-		Expression expression = createExpression(expressionString);
+		ParsedExpression expression = createExpression(expressionString);
 		return expression.evaluate(variableResolver).wrapped().toString();
 	}
 
-	Expression createExpression(String expressionString) {
-		return Expression.of(expressionString, configuration);
+	ParsedExpression createExpression(String expressionString) throws ParseException, EvaluationException {
+		return factory.parse(expressionString);
 	}
 
 	protected static Value.NumberValue numberValueOf(String doubleAsString) {

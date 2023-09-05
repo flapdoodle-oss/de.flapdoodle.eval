@@ -16,7 +16,6 @@
  */
 package de.flapdoodle.eval.parser;
 
-import de.flapdoodle.eval.config.TestConfigurationProvider.DummyFunction;
 import org.junit.jupiter.api.Test;
 
 class TokenizerFunctionsTest extends BaseParserTest {

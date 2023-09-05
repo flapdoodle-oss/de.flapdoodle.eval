@@ -109,8 +109,8 @@ class ArithmeticOperatorsTest extends BaseEvaluationTest {
 		assertExpressionHasExpectedResult(
 			expression,
 			expectedResult,
-			TestConfigurationProvider.StandardConfigurationWithAdditionalTestOperators
-				.withDefaultZoneId(ZoneId.of("UTC+2")));
+			TestConfigurationProvider.StandardFactoryWithAdditionalTestOperators
+				.withZoneId(ZoneId.of("UTC+2")));
 	}
 
 	@ParameterizedTest
@@ -202,8 +202,8 @@ class ArithmeticOperatorsTest extends BaseEvaluationTest {
 		assertExpressionHasExpectedResult(
 			expression,
 			expectedResult,
-			TestConfigurationProvider.StandardConfigurationWithAdditionalTestOperators
-				.withDefaultZoneId(ZoneId.of("UTC+2")));
+			TestConfigurationProvider.StandardFactoryWithAdditionalTestOperators
+				.withZoneId(ZoneId.of("UTC+2")));
 	}
 
 	@ParameterizedTest

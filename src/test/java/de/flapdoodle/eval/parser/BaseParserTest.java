@@ -17,7 +17,6 @@
 package de.flapdoodle.eval.parser;
 
 import de.flapdoodle.eval.ExpressionFactory;
-import de.flapdoodle.eval.config.Configuration;
 import de.flapdoodle.eval.config.EvaluateableResolver;
 import de.flapdoodle.eval.config.OperatorResolver;
 import de.flapdoodle.eval.config.TestConfigurationProvider;

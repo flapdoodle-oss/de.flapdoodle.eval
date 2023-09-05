@@ -16,15 +16,11 @@
  */
 package de.flapdoodle.eval.parser;
 
-import de.flapdoodle.eval.config.Configuration;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class TokenTest {
-
-	final Configuration expressionConfiguration =
-		Configuration.defaultConfiguration();
 
 	@Test
 	void testTokenCreation() {

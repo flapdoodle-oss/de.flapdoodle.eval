@@ -17,7 +17,6 @@
 package de.flapdoodle.eval.functions.basic;
 
 import de.flapdoodle.eval.*;
-import de.flapdoodle.eval.config.Configuration;
 import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
 import de.flapdoodle.eval.parser.ParseException;
@@ -123,9 +122,9 @@ class BasicFunctionsTest extends BaseEvaluationTest {
 		})
 	void testRoundUp(String expression, String expectedResult)
 		throws EvaluationException, ParseException {
-		Configuration configuration =
-			Configuration.builder().mathContext(new MathContext(32, RoundingMode.UP)).build();
-		assertExpressionHasExpectedResult(expression, expectedResult, configuration);
+		ImmutableExpressionFactory factory = ExpressionFactory.defaults()
+				.withMathContext(new MathContext(32, RoundingMode.UP));
+		assertExpressionHasExpectedResult(expression, expectedResult, factory);
 	}
 
 	@ParameterizedTest

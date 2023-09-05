@@ -47,7 +47,7 @@ class ExpressionEvaluatorNullTest extends BaseExpressionEvaluatorTest {
 
 	@Test
 	void testNullEquals() throws ParseException, EvaluationException {
-		Expression expression = createExpression("a == null");
+		ParsedExpression expression = createExpression("a == null");
 		MapBasedValueResolver mapBasedVariableResolver1 = ValueResolver.empty().withNull("a");
 		assertExpressionHasExpectedResult(expression, mapBasedVariableResolver1, "true");
 		MapBasedValueResolver mapBasedVariableResolver = ValueResolver.empty().with("a", 99);
@@ -56,7 +56,7 @@ class ExpressionEvaluatorNullTest extends BaseExpressionEvaluatorTest {
 
 	@Test
 	void testNullNotEquals() throws ParseException, EvaluationException {
-		Expression expression = Expression.of("a != null");
+		ParsedExpression expression = createExpression("a != null");
 		MapBasedValueResolver mapBasedVariableResolver1 = ValueResolver.empty().withNull("a");
 		assertExpressionHasExpectedResult(expression, mapBasedVariableResolver1, "false");
 		MapBasedValueResolver mapBasedVariableResolver = ValueResolver.empty().with("a", 99);
@@ -65,11 +65,11 @@ class ExpressionEvaluatorNullTest extends BaseExpressionEvaluatorTest {
 
 	@Test
 	void testHandleWithIf() throws EvaluationException, ParseException {
-		Expression expression1 = createExpression("if(a != null, a * 5, 1)");
+		ParsedExpression expression1 = createExpression("if(a != null, a * 5, 1)");
 		assertExpressionHasExpectedResult(expression1, ValueResolver.empty().withNull("a"), "1");
 		assertExpressionHasExpectedResult(expression1, ValueResolver.empty().with("a", 3), "15.0");
 
-		Expression expression2 =
+		ParsedExpression expression2 =
 			createExpression("if(a == null, \"Unknown name\", \"The name is \" + a)");
 		assertExpressionHasExpectedResult(expression2, ValueResolver.empty().withNull("a"), "Unknown name");
 		assertExpressionHasExpectedResult(expression2, ValueResolver.empty().with("a", "Max"), "The name is Max");
@@ -81,14 +81,14 @@ class ExpressionEvaluatorNullTest extends BaseExpressionEvaluatorTest {
 			.isInstanceOf(EvaluationException.class)
 			.hasMessageContaining("type missmatch");
 
-		Expression expression2 =
+		ParsedExpression expression2 =
 			createExpression("if(a != null, \"Unknown name\", \"The name is \" + a)");
 		assertExpressionHasExpectedResult(expression2, ValueResolver.empty().withNull("a"), "The name is null");
 	}
 
 	@Test
 	void testHandleWithMaps() throws EvaluationException, ParseException {
-		Expression expression = createExpression("a == null && b == null");
+		ParsedExpression expression = createExpression("a == null && b == null");
 		Map<String, Value<?>> values = new HashMap<>();
 		values.put("a", Value.ofNull());
 		values.put("b", Value.ofNull());
@@ -117,7 +117,7 @@ class ExpressionEvaluatorNullTest extends BaseExpressionEvaluatorTest {
 		}).isInstanceOf(EvaluationException.class);
 	}
 
-	private void assertExpressionHasExpectedResult(Expression expression, ValueResolver variableResolver, String expectedResult)
+	private void assertExpressionHasExpectedResult(ParsedExpression expression, ValueResolver variableResolver, String expectedResult)
 		throws EvaluationException, ParseException {
 		assertThat(expression.evaluate(variableResolver).wrapped().toString()).isEqualTo(expectedResult);
 	}

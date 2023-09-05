@@ -34,16 +34,14 @@ class ExpressionEvaluatorPowerOfTest extends BaseExpressionEvaluatorTest {
 
 	@Test
 	void testPrecedenceHigher() throws ParseException, EvaluationException {
-		Configuration config =
-			Configuration.defaultConfiguration()
+		ParsedExpression expression = ExpressionFactory.defaults()
 				.withOperators(Pair.of("^", new PowerOf() {
 					@Override
 					public int getPrecedence() {
 						return 100;
 					}
-				}));
-
-		Expression expression = Expression.of("-2^2", config);
+				}))
+				.parse("-2^2");
 
 		assertThat(expression.evaluate(ValueResolver.empty()).wrapped().toString()).isEqualTo("-4.0");
 	}
