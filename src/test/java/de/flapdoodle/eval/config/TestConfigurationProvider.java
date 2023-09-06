@@ -29,7 +29,6 @@ import java.util.List;
 
 public class TestConfigurationProvider {
 
-	public static final ImmutableConfiguration StandardConfigurationWithAdditionalTestOperators;
 	public static final ImmutableExpressionFactory StandardFactoryWithAdditionalTestOperators;
 
 	public static final OperatorResolver OperatorResolverWithTestOperators = MapBasedOperatorResolver.of(
@@ -43,12 +42,6 @@ public class TestConfigurationProvider {
 	).andThen(Defaults.functions());
 
 	static {
-		Configuration configuration = Configuration.defaultConfiguration()
-			.withOperatorResolver(OperatorResolverWithTestOperators);
-
-		StandardConfigurationWithAdditionalTestOperators = ImmutableConfiguration.copyOf(configuration)
-			.withFunctions(FunctionResolverWithTestFunctions);
-
 		StandardFactoryWithAdditionalTestOperators = ExpressionFactory.defaults()
 			.withFunctions(FunctionResolverWithTestFunctions)
 			.withOperators(OperatorResolverWithTestOperators);

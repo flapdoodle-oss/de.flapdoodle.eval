@@ -153,22 +153,6 @@ public abstract class ExpressionFactory {
 		}
 	}
 
-	@Deprecated
-	public static ParsedExpression of(String expression) throws ParseException, EvaluationException {
-		return defaults().parse(expression);
-	}
-
-	// TODO @Deprecated
-	public static ImmutableExpressionFactory of(Configuration configuration) {
-		return ImmutableExpressionFactory.builder()
-			.constants(configuration.getConstantResolver())
-			.zoneId(configuration.getDefaultZoneId())
-			.mathContext(configuration.getMathContext())
-			.functions(configuration.functions())
-			.operators(configuration.getOperatorResolver())
-			.build();
-	}
-
 	public static ImmutableExpressionFactory defaults() {
 		return ImmutableExpressionFactory.builder()
 			.constants(Defaults.constants())

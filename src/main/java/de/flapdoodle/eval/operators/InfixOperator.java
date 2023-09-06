@@ -25,14 +25,4 @@ import de.flapdoodle.eval.parser.Token;
 // Binary infix operator, like x+y
 public interface InfixOperator extends Operator {
 	Value<?> evaluate(ValueResolver valueResolver, EvaluationContext evaluationContext, Token operatorToken, Value<?> leftOperand, Value<?> rightOperand) throws EvaluationException;
-
-//	static <L extends Value<?>, R extends Value<?>> InfixOperator asOperator(Evaluateables.Tuple<L, R> evaluatable) {
-//		return new AbstractInfixOperator(Precedence.OPERATOR_PRECEDENCE_OR, true) {
-//			@Override
-//			public Value<?> evaluate(Expression expression, Token operatorToken, Value<?> leftOperand, Value<?> rightOperand) throws EvaluationException {
-//
-//				return evaluatable.evaluate(null, expression, operatorToken, Arrays.asList(leftOperand, rightOperand));
-//			}
-//		};
-//	}
 }

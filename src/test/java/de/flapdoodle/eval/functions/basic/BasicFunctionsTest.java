@@ -163,7 +163,7 @@ class BasicFunctionsTest extends BaseEvaluationTest {
 
 	@Test
 	void testSqrtNegative() {
-		assertThatThrownBy(() -> Expression.of("sqrt(-1)").evaluate(ValueResolver.empty()))
+		assertThatThrownBy(() -> ExpressionFactory.defaults().parse("sqrt(-1)").evaluate(ValueResolver.empty()))
 			.isInstanceOf(EvaluationException.class)
 			.hasMessage("Parameter must not be negative");
 	}

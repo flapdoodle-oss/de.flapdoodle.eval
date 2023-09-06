@@ -22,7 +22,6 @@ import de.flapdoodle.eval.data.Value;
 import de.flapdoodle.eval.operators.InfixOperator;
 import de.flapdoodle.eval.operators.PostfixOperator;
 import de.flapdoodle.eval.operators.PrefixOperator;
-import de.flapdoodle.eval.parser.ASTNode;
 import de.flapdoodle.eval.parser.ParseException;
 import de.flapdoodle.eval.tree.Node;
 import org.assertj.core.data.Percentage;
@@ -133,7 +132,7 @@ class ExpressionTest {
 
 	@Test
 	void testGetAllASTNodes() throws ParseException, EvaluationException {
-		ParsedExpression expression = ExpressionFactory.of("1+2/3");
+		ParsedExpression expression = ExpressionFactory.defaults().parse("1+2/3");
 		List<Node> nodes = expression.allNodes();
 		assertThat(nodes.get(0).token().value()).isEqualTo("+");
 		assertThat(nodes.get(1).token().value()).isEqualTo("1");
@@ -144,31 +143,31 @@ class ExpressionTest {
 
 	@Test
 	void testGetUsedVariables() throws ParseException, EvaluationException {
-		ParsedExpression expression = ExpressionFactory.of("a/2*PI+min(e,b)");
+		ParsedExpression expression = ExpressionFactory.defaults().parse("a/2*PI+min(e,b)");
 		assertThat(expression.usedVariables()).containsExactlyInAnyOrder("a", "b");
 	}
 
 	@Test
 	void testGetUsedVariablesLongNames() throws ParseException, EvaluationException {
-		ParsedExpression expression = ExpressionFactory.of("var1/2*PI+min(var2,var3)");
+		ParsedExpression expression = ExpressionFactory.defaults().parse("var1/2*PI+min(var2,var3)");
 		assertThat(expression.usedVariables()).containsExactlyInAnyOrder("var1", "var2", "var3");
 	}
 
 	@Test
 	void testGetUsedVariablesNoVariables() throws ParseException, EvaluationException {
-		ParsedExpression expression = ExpressionFactory.of("1/2");
+		ParsedExpression expression = ExpressionFactory.defaults().parse("1/2");
 		assertThat(expression.usedVariables()).isEmpty();
 	}
 
 	@Test
 	void testGetUsedVariablesCaseSensitivity() throws ParseException, EvaluationException {
-		ParsedExpression expression = ExpressionFactory.of("a+B*b-A/PI*(1/2)*pi+e-E+a");
+		ParsedExpression expression = ExpressionFactory.defaults().parse("a+B*b-A/PI*(1/2)*pi+e-E+a");
 		assertThat(expression.usedVariables()).containsExactlyInAnyOrder("a", "b");
 	}
 
 	@Test
 	void testGetUndefinedVariables() throws ParseException, EvaluationException {
-		ParsedExpression expression = ExpressionFactory.of("a+A+b+B+c+C+E+e+PI+x");
+		ParsedExpression expression = ExpressionFactory.defaults().parse("a+A+b+B+c+C+E+e+PI+x");
 		ValueResolver variableResolver = ValueResolver.empty()
 			.with("x", Value.of(1));
 		assertThat(expression.undefinedVariables(variableResolver)).containsExactlyInAnyOrder("a", "b", "c");

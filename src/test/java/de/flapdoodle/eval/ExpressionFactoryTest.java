@@ -14,8 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.flapdoodle.eval.config;
+package de.flapdoodle.eval;
 
+import de.flapdoodle.eval.config.*;
 import de.flapdoodle.eval.data.Value;
 import de.flapdoodle.eval.operators.InfixOperator;
 import de.flapdoodle.eval.operators.Operator;
@@ -29,52 +30,51 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class ConfigurationTest {
+class ExpressionFactoryTest {
 
 	@Test
 	void testDefaultSetup() {
-		Configuration configuration = Configuration.defaultConfiguration();
+		ExpressionFactory factory = ExpressionFactory.defaults();
 
-		assertThat(configuration.getMathContext())
+		assertThat(factory.mathContext())
 			.isSameAs(Defaults.mathContext());
-		assertThat(configuration.getOperatorResolver())
+		assertThat(factory.operators())
 			.isSameAs(Defaults.operators());
-		assertThat(configuration.functions())
+		assertThat(factory.functions())
 			.isSameAs(Defaults.functions());
-		assertThat(configuration.getConstantResolver())
+		assertThat(factory.constants())
 			.isSameAs(Defaults.constants());
-		assertThat(configuration.isAllowOverwriteConstants()).isTrue();
 	}
 
 	@SuppressWarnings("unchecked")
 	@Test
 	void testWithAdditionalOperators() {
-		Configuration configuration =
-			Configuration.defaultConfiguration()
+		ExpressionFactory factory =
+			ExpressionFactory.defaults()
 				.withOperators(
 					Pair.of("ADDED1", new Plus()),
 					Pair.of("ADDED2", new Plus()));
 
-		assertThat(configuration.getOperatorResolver().hasOperator(InfixOperator.class, "ADDED1")).isTrue();
-		assertThat(configuration.getOperatorResolver().hasOperator(InfixOperator.class, "ADDED2")).isTrue();
+		assertThat(factory.operators().hasOperator(InfixOperator.class, "ADDED1")).isTrue();
+		assertThat(factory.operators().hasOperator(InfixOperator.class, "ADDED2")).isTrue();
 	}
 
 	@Test
 	void testWithAdditionalFunctions() {
-		Configuration configuration = ImmutableConfiguration.copyOf(Configuration.defaultConfiguration())
+		ExpressionFactory factory = ImmutableExpressionFactory.copyOf(ExpressionFactory.defaults())
 			.withFunctions(Pair.of("ADDED1", new TestConfigurationProvider.DummyFunction()),
 				Pair.of("ADDED2", new TestConfigurationProvider.DummyFunction()));
 
-		assertThat(configuration.functions().has("ADDED1")).isTrue();
-		assertThat(configuration.functions().has("ADDED2")).isTrue();
+		assertThat(factory.functions().has("ADDED1")).isTrue();
+		assertThat(factory.functions().has("ADDED2")).isTrue();
 	}
 
 	@Test
 	void testCustomMathContext() {
-		Configuration configuration =
-			Configuration.builder().mathContext(MathContext.DECIMAL32).build();
+		ExpressionFactory factory =
+			ExpressionFactory.defaults().withMathContext(MathContext.DECIMAL32);
 
-		assertThat(configuration.getMathContext()).isEqualTo(MathContext.DECIMAL32);
+		assertThat(factory.mathContext()).isEqualTo(MathContext.DECIMAL32);
 	}
 
 	@Test
@@ -91,10 +91,10 @@ class ConfigurationTest {
 			}
 		};
 
-		Configuration configuration =
-			Configuration.builder().operatorResolver(mockedOperatorDictionary).build();
+		ExpressionFactory factory =
+			ExpressionFactory.defaults().withOperators(mockedOperatorDictionary);
 
-		assertThat(configuration.getOperatorResolver()).isEqualTo(mockedOperatorDictionary);
+		assertThat(factory.operators()).isEqualTo(mockedOperatorDictionary);
 	}
 
 	@Test
@@ -103,12 +103,11 @@ class ConfigurationTest {
 			throw new IllegalStateException("dont call this");
 		};
 
-		Configuration configuration =
-			Configuration.builder()
-				.functions(mockedFunctions)
-				.build();
+		ExpressionFactory factory =
+			ExpressionFactory.defaults()
+				.withFunctions(mockedFunctions);
 
-		assertThat(configuration.functions()).isEqualTo(mockedFunctions);
+		assertThat(factory.functions()).isEqualTo(mockedFunctions);
 	}
 
 	@Test
@@ -120,11 +119,11 @@ class ConfigurationTest {
 					put("B", Value.of("b"));
 				}
 			};
-		MapBasedValueResolver mapBasedVariableResolver = ValueResolver.empty()
+		MapBasedValueResolver valueResolver = ValueResolver.empty()
 			.withValues(constants);
-		Configuration configuration =
-			Configuration.builder().constantResolver(mapBasedVariableResolver).build();
+		ExpressionFactory factory =
+			ExpressionFactory.defaults().withConstants(valueResolver);
 
-		assertThat(configuration.getConstantResolver().get("a")).isEqualTo(Value.of("a"));
+		assertThat(factory.constants().get("a")).isEqualTo(Value.of("a"));
 	}
 }

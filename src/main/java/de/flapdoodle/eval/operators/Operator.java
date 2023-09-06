@@ -35,17 +35,4 @@ public interface Operator {
 	 * @return The associativity.
 	 */
 	boolean isLeftAssociative();
-
-//  /**
-//   * Performs the operator logic and returns an evaluation result.
-//   *
-//   * @param expression The expression, where this function is executed. Can be used to access the
-//   *     expression configuration.
-//   * @param operatorToken The operator token from the parsed expression.
-//   * @param operands The operands, one for prefix and postfix operators, two for infix operators.
-//   * @return The evaluation result in form of a {@link Value}.
-//   * @throws EvaluationException In case there were problems during evaluation.
-//   */
-//  Value<?> evaluate(Expression expression, Token operatorToken, List<Value<?>> operands)
-//      throws EvaluationException;
 }
