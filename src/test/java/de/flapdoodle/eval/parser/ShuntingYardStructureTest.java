@@ -16,7 +16,7 @@
  */
 package de.flapdoodle.eval.parser;
 
-import de.flapdoodle.eval.Expression;
+import de.flapdoodle.eval.ExpressionFactory;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -46,16 +46,14 @@ class ShuntingYardStructureTest extends BaseParserTest {
 
 	@Test
 	void testExceptionStructureEnd() {
-		Expression expression = Expression.of("a.");
-		assertThatThrownBy(expression::validate)
+		assertThatThrownBy(() -> ExpressionFactory.defaults().parse("a."))
 			.isInstanceOf(ParseException.class)
 			.hasMessage("Missing second operand for operator");
 	}
 
 	@Test
 	void testExceptionStructureStart() {
-		Expression expression = Expression.of(".a");
-		assertThatThrownBy(expression::validate)
+		assertThatThrownBy(() -> ExpressionFactory.defaults().parse(".a"))
 			.isInstanceOf(ParseException.class)
 			.hasMessage("Structure separator not allowed here");
 	}

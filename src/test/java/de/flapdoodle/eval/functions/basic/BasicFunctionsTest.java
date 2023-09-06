@@ -17,6 +17,7 @@
 package de.flapdoodle.eval.functions.basic;
 
 import de.flapdoodle.eval.*;
+import de.flapdoodle.eval.config.Defaults;
 import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.data.Value;
 import de.flapdoodle.eval.parser.ParseException;
@@ -188,10 +189,9 @@ class BasicFunctionsTest extends BaseEvaluationTest {
 	@Test
 	void testNotFunctionDirectly() throws EvaluationException {
 		Not not = new Not();
-		Expression expression = Expression.of("ignore");
 		EvaluationContext context = EvaluationContext.builder()
-			.mathContext(expression.mathContext())
-			.zoneId(expression.zoneId())
+			.mathContext(Defaults.mathContext())
+			.zoneId(Defaults.zoneId())
 			.build();
 		Token token = Token.of(1, "NOT", TokenType.FUNCTION);
 
@@ -213,9 +213,9 @@ class BasicFunctionsTest extends BaseEvaluationTest {
 
 	@Test
 	void testRandom() throws EvaluationException, ParseException {
-		Expression expression1 = Expression.of("random()");
+		ParsedExpression expression1 = ExpressionFactory.defaults().parse("random()");
 		Value<?> r1 = expression1.evaluate(ValueResolver.empty());
-		Expression expression = Expression.of("random()");
+		ParsedExpression expression = ExpressionFactory.defaults().parse("random()");
 		Value<?> r2 = expression.evaluate(ValueResolver.empty());
 
 		assertThat(r1.wrapped()).isNotEqualTo(r2.wrapped());
@@ -290,14 +290,14 @@ class BasicFunctionsTest extends BaseEvaluationTest {
 
 	@Test
 	void testLogNegative() {
-		assertThatThrownBy(() -> Expression.of("log(-1)").evaluate(ValueResolver.empty()))
+		assertThatThrownBy(() -> ExpressionFactory.defaults().parse("log(-1)").evaluate(ValueResolver.empty()))
 			.isInstanceOf(EvaluationException.class)
 			.hasMessage("Parameter must not be negative");
 	}
 
 	@Test
 	void testLogZero() {
-		assertThatThrownBy(() -> Expression.of("log(0)").evaluate(ValueResolver.empty()))
+		assertThatThrownBy(() -> ExpressionFactory.defaults().parse("log(0)").evaluate(ValueResolver.empty()))
 			.isInstanceOf(EvaluationException.class)
 			.hasMessage("Parameter must not be zero");
 	}
@@ -318,14 +318,14 @@ class BasicFunctionsTest extends BaseEvaluationTest {
 
 	@Test
 	void testLog10Negative() {
-		assertThatThrownBy(() -> Expression.of("log10(-1)").evaluate(ValueResolver.empty()))
+		assertThatThrownBy(() -> ExpressionFactory.defaults().parse("log10(-1)").evaluate(ValueResolver.empty()))
 			.isInstanceOf(EvaluationException.class)
 			.hasMessage("Parameter must not be negative");
 	}
 
 	@Test
 	void testLog10Zero() {
-		assertThatThrownBy(() -> Expression.of("log10(0)").evaluate(ValueResolver.empty()))
+		assertThatThrownBy(() -> ExpressionFactory.defaults().parse("log10(0)").evaluate(ValueResolver.empty()))
 			.isInstanceOf(EvaluationException.class)
 			.hasMessage("Parameter must not be zero");
 	}

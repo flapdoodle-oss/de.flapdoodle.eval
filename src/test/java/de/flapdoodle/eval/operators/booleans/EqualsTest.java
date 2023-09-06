@@ -113,7 +113,7 @@ class EqualsTest extends BaseEvaluationTest {
 
 	@Test
 	void testInfixEqualsStructures() throws EvaluationException, ParseException {
-		Expression expression = Expression.of("a=b");
+		ParsedExpression expression = ExpressionFactory.defaults().parse("a=b");
 
 		Map<String, BigDecimal> structure1 =
 			new HashMap<String, BigDecimal>() {

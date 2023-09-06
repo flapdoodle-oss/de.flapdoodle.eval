@@ -11,6 +11,7 @@ import de.flapdoodle.eval.functions.trigonometric.*;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
+import java.time.ZoneId;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -45,6 +46,8 @@ public abstract class Defaults {
 	private static final EvaluateableResolver FUNCTIONS = defaultFunctions();
 	private static final MapBasedOperatorResolver OPERATORS = OperatorResolver.defaults();
 
+	private static final ZoneId ZONE_ID=ZoneId.systemDefault();
+
 	public static MathContext mathContext() {
 		return MATH_CONTEXT;
 	}
@@ -59,6 +62,10 @@ public abstract class Defaults {
 
 	public static MapBasedOperatorResolver operators() {
 		return OPERATORS;
+	}
+
+	public static ZoneId zoneId() {
+		return ZONE_ID;
 	}
 
 	private static EvaluateableResolver defaultFunctions() {

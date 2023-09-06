@@ -49,7 +49,7 @@ public abstract class Configuration {
 
 	@Value.Default
 	public ZoneId getDefaultZoneId() {
-		return ZoneId.systemDefault();
+		return Defaults.zoneId();
 	}
 
 	@Value.Default

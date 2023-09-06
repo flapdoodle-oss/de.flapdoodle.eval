@@ -16,7 +16,6 @@
  */
 package de.flapdoodle.eval;
 
-import de.flapdoodle.eval.config.Configuration;
 import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.operators.arithmetic.PowerOf;
 import de.flapdoodle.eval.parser.ParseException;

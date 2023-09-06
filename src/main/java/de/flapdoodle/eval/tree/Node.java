@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 public abstract class Node {
     @org.immutables.value.Value.Parameter
-    protected abstract Token token();
+    public abstract Token token();
 
     @org.immutables.value.Value.Auxiliary
     public abstract Value<?> evaluate(ValueResolver variableResolver, EvaluationContext context) throws EvaluationException;
@@ -55,6 +55,8 @@ public abstract class Node {
         return nodes.stream()
           .filter(it -> it instanceof ValueLookup)
           .map(it -> it.token().value())
+          // TODO change to case sensitive vars
+          .map(String::toLowerCase)
           .collect(Collectors.toSet());
     }
 

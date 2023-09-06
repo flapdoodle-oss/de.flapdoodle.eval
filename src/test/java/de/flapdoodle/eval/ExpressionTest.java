@@ -24,6 +24,7 @@ import de.flapdoodle.eval.operators.PostfixOperator;
 import de.flapdoodle.eval.operators.PrefixOperator;
 import de.flapdoodle.eval.parser.ASTNode;
 import de.flapdoodle.eval.parser.ParseException;
+import de.flapdoodle.eval.tree.Node;
 import org.assertj.core.data.Percentage;
 import org.junit.jupiter.api.Test;
 
@@ -37,159 +38,139 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class ExpressionTest {
 
 	@Test
-	void testExpressionDefaults() {
-		Expression expression = Expression.of("a+b");
+	void testExpressionDefaults() throws ParseException, EvaluationException {
+		ImmutableExpressionFactory expressionFactory = ExpressionFactory.defaults();
+		ParsedExpression expression = expressionFactory.parse("a+b");
 
-		assertThat(expression.raw()).isEqualTo("a+b");
-//    assertThat(expression.getConfiguration().getMathContext())
-//        .isEqualTo(Configuration.DEFAULT_MATH_CONTEXT);
-		assertThat(expression.configuration().functions().has("sum")).isTrue();
-		assertThat(expression.configuration().getOperatorResolver().hasOperator(InfixOperator.class, "+"))
+		assertThat(expressionFactory.functions().has("sum")).isTrue();
+		assertThat(expressionFactory.operators().hasOperator(InfixOperator.class, "+"))
 			.isTrue();
-		assertThat(expression.configuration().getOperatorResolver().hasOperator(PrefixOperator.class, "+"))
+		assertThat(expressionFactory.operators().hasOperator(PrefixOperator.class, "+"))
 			.isTrue();
-		assertThat(expression.configuration().getOperatorResolver().hasOperator(PostfixOperator.class, "+"))
+		assertThat(expressionFactory.operators().hasOperator(PostfixOperator.class, "+"))
 			.isFalse();
 	}
 
 	@Test
-	void testValidateOK() throws ParseException {
-		Expression.of("1+1").validate();
+	void testValidateOK() throws ParseException, EvaluationException {
+		ExpressionFactory.defaults().parse("1+1");
 	}
 
 	@Test
 	void testValidateFail() {
-		assertThatThrownBy(() -> Expression.of("2#3").validate())
+		assertThatThrownBy(() -> ExpressionFactory.defaults().parse("2#3"))
 			.isInstanceOf(ParseException.class)
 			.hasMessage("Undefined operator '#'");
 	}
 
 	@Test
 	void testWithValues() throws ParseException, EvaluationException {
-		Expression expression = Expression.of("(a + b) * (a - b)");
+		ParsedExpression expression = ExpressionFactory.defaults().parse("(a + b) * (a - b)");
 
 		Map<String, Value<?>> values = new HashMap<>();
 		values.put("a", Value.of(3.5));
 		values.put("b", Value.of(2.5));
 
-		Expression expression1 = expression;
 		MapBasedValueResolver mapBasedVariableResolver = ValueResolver.empty()
 			.withValues(values);
-		ValueResolver variableResolver = mapBasedVariableResolver;
-		Value.NumberValue result = (Value.NumberValue) expression1.evaluate(variableResolver);
+		Value.NumberValue result = (Value.NumberValue) expression.evaluate(mapBasedVariableResolver);
 
 		assertThat(result.wrapped()).isCloseTo(Value.of(6).wrapped(), Percentage.withPercentage(0.9999));
 	}
 
 	@Test
 	void testWithValuesDoubleMap() throws ParseException, EvaluationException {
-		Expression expression = Expression.of("a+b");
+		ParsedExpression expression = ExpressionFactory.defaults().parse("a+b");
 
 		Map<String, Value.NumberValue> values = new HashMap<>();
 		values.put("a", Value.of(3.9));
 		values.put("b", Value.of(3.1));
 
-		Expression expression1 = expression;
-		MapBasedValueResolver mapBasedVariableResolver = ValueResolver.empty()
+		MapBasedValueResolver variableResolver = ValueResolver.empty()
 			.withValues(values);
-		ValueResolver variableResolver = mapBasedVariableResolver;
-		Value<?> result = expression1.evaluate(variableResolver);
+		Value<?> result = expression.evaluate(variableResolver);
 
 		assertThat(result).isEqualTo(Value.of(7));
 	}
 
 	@Test
 	void testWithValuesStringMap() throws ParseException, EvaluationException {
-		Expression expression = Expression.of("a+b+c");
+		ParsedExpression expression = ExpressionFactory.defaults().parse("a+b+c");
 
 		Map<String, Value.StringValue> values = new HashMap<>();
 		values.put("a", Value.of("Hello"));
 		values.put("b", Value.of(" "));
 		values.put("c", Value.of("world"));
 
-		Expression expression1 = expression;
 		MapBasedValueResolver mapBasedVariableResolver = ValueResolver.empty()
 			.withValues(values);
-		ValueResolver variableResolver = mapBasedVariableResolver;
-		Value<?> result = expression1.evaluate(variableResolver);
+		Value<?> result = expression.evaluate(mapBasedVariableResolver);
 
 		assertThat(result.wrapped()).isEqualTo("Hello world");
 	}
 
 	@Test
 	void testWithValuesMixedMap() throws ParseException, EvaluationException {
-		Expression expression = Expression.of("a+b+c");
+		ParsedExpression expression = ExpressionFactory.defaults().parse("a+b+c");
 
 		Map<String, Value<?>> values = new HashMap<>();
 		values.put("a", Value.of(true));
 		values.put("b", Value.of(" "));
 		values.put("c", Value.of(24.7));
 
-		Expression expression1 = expression;
-		MapBasedValueResolver mapBasedVariableResolver = ValueResolver.empty()
+		ValueResolver variableResolver = ValueResolver.empty()
 			.withValues(values);
-		ValueResolver variableResolver = mapBasedVariableResolver;
-		Value<?> result = expression1.evaluate(variableResolver);
+		Value<?> result = expression.evaluate(variableResolver);
 
 		assertThat(result.wrapped()).isEqualTo("true 24.7");
 	}
 
 	@Test
 	void testDoubleConverterDefaultMathContext() {
-//    Expression defaultMathContextExpression = Expression.of("1");
 		assertThat(Value.of(1.67987654321).wrapped())
 			.isEqualByComparingTo("1.67987654321");
 	}
 
-//  @Test
-//  void testDoubleConverterLimitedMathContext() {
-//    Expression limitedMathContextExpression =
-//        Expression.of(
-//            "1", Configuration.builder().mathContext(new MathContext(3)).build());
-//    assertThat(limitedMathContextExpression.convertDoubleValue(1.6789).getNumberValue())
-//        .isEqualByComparingTo("1.68");
-//  }
-
 	@Test
-	void testGetAllASTNodes() throws ParseException {
-		Expression expression = Expression.of("1+2/3");
-		List<ASTNode> nodes = expression.getAllASTNodes();
-		assertThat(nodes.get(0).getToken().value()).isEqualTo("+");
-		assertThat(nodes.get(1).getToken().value()).isEqualTo("1");
-		assertThat(nodes.get(2).getToken().value()).isEqualTo("/");
-		assertThat(nodes.get(3).getToken().value()).isEqualTo("2");
-		assertThat(nodes.get(4).getToken().value()).isEqualTo("3");
+	void testGetAllASTNodes() throws ParseException, EvaluationException {
+		ParsedExpression expression = ExpressionFactory.of("1+2/3");
+		List<Node> nodes = expression.allNodes();
+		assertThat(nodes.get(0).token().value()).isEqualTo("+");
+		assertThat(nodes.get(1).token().value()).isEqualTo("1");
+		assertThat(nodes.get(2).token().value()).isEqualTo("/");
+		assertThat(nodes.get(3).token().value()).isEqualTo("2");
+		assertThat(nodes.get(4).token().value()).isEqualTo("3");
 	}
 
 	@Test
-	void testGetUsedVariables() throws ParseException {
-		Expression expression = Expression.of("a/2*PI+min(e,b)");
-		assertThat(expression.getUsedVariables()).containsExactlyInAnyOrder("a", "b");
+	void testGetUsedVariables() throws ParseException, EvaluationException {
+		ParsedExpression expression = ExpressionFactory.of("a/2*PI+min(e,b)");
+		assertThat(expression.usedVariables()).containsExactlyInAnyOrder("a", "b");
 	}
 
 	@Test
-	void testGetUsedVariablesLongNames() throws ParseException {
-		Expression expression = Expression.of("var1/2*PI+min(var2,var3)");
-		assertThat(expression.getUsedVariables()).containsExactlyInAnyOrder("var1", "var2", "var3");
+	void testGetUsedVariablesLongNames() throws ParseException, EvaluationException {
+		ParsedExpression expression = ExpressionFactory.of("var1/2*PI+min(var2,var3)");
+		assertThat(expression.usedVariables()).containsExactlyInAnyOrder("var1", "var2", "var3");
 	}
 
 	@Test
-	void testGetUsedVariablesNoVariables() throws ParseException {
-		Expression expression = Expression.of("1/2");
-		assertThat(expression.getUsedVariables()).isEmpty();
+	void testGetUsedVariablesNoVariables() throws ParseException, EvaluationException {
+		ParsedExpression expression = ExpressionFactory.of("1/2");
+		assertThat(expression.usedVariables()).isEmpty();
 	}
 
 	@Test
-	void testGetUsedVariablesCaseSensitivity() throws ParseException {
-		Expression expression = Expression.of("a+B*b-A/PI*(1/2)*pi+e-E+a");
-		assertThat(expression.getUsedVariables()).containsExactlyInAnyOrder("a", "b");
+	void testGetUsedVariablesCaseSensitivity() throws ParseException, EvaluationException {
+		ParsedExpression expression = ExpressionFactory.of("a+B*b-A/PI*(1/2)*pi+e-E+a");
+		assertThat(expression.usedVariables()).containsExactlyInAnyOrder("a", "b");
 	}
 
 	@Test
-	void testGetUndefinedVariables() throws ParseException {
-		Expression expression = Expression.of("a+A+b+B+c+C+E+e+PI+x");
+	void testGetUndefinedVariables() throws ParseException, EvaluationException {
+		ParsedExpression expression = ExpressionFactory.of("a+A+b+B+c+C+E+e+PI+x");
 		ValueResolver variableResolver = ValueResolver.empty()
 			.with("x", Value.of(1));
-		assertThat(expression.getUndefinedVariables(variableResolver)).containsExactlyInAnyOrder("a", "b", "c");
+		assertThat(expression.undefinedVariables(variableResolver)).containsExactlyInAnyOrder("a", "b", "c");
 	}
 }
