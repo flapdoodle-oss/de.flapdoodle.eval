@@ -39,7 +39,7 @@ class ExpressionTest {
 	@Test
 	void testExpressionDefaults() throws ParseException, EvaluationException {
 		ImmutableExpressionFactory expressionFactory = ExpressionFactory.defaults();
-		ParsedExpression expression = expressionFactory.parse("a+b");
+		Expression expression = expressionFactory.parse("a+b");
 
 		assertThat(expressionFactory.functions().has("sum")).isTrue();
 		assertThat(expressionFactory.operators().hasOperator(InfixOperator.class, "+"))
@@ -64,7 +64,7 @@ class ExpressionTest {
 
 	@Test
 	void testWithValues() throws ParseException, EvaluationException {
-		ParsedExpression expression = ExpressionFactory.defaults().parse("(a + b) * (a - b)");
+		Expression expression = ExpressionFactory.defaults().parse("(a + b) * (a - b)");
 
 		Map<String, Value<?>> values = new HashMap<>();
 		values.put("a", Value.of(3.5));
@@ -79,7 +79,7 @@ class ExpressionTest {
 
 	@Test
 	void testWithValuesDoubleMap() throws ParseException, EvaluationException {
-		ParsedExpression expression = ExpressionFactory.defaults().parse("a+b");
+		Expression expression = ExpressionFactory.defaults().parse("a+b");
 
 		Map<String, Value.NumberValue> values = new HashMap<>();
 		values.put("a", Value.of(3.9));
@@ -94,7 +94,7 @@ class ExpressionTest {
 
 	@Test
 	void testWithValuesStringMap() throws ParseException, EvaluationException {
-		ParsedExpression expression = ExpressionFactory.defaults().parse("a+b+c");
+		Expression expression = ExpressionFactory.defaults().parse("a+b+c");
 
 		Map<String, Value.StringValue> values = new HashMap<>();
 		values.put("a", Value.of("Hello"));
@@ -110,7 +110,7 @@ class ExpressionTest {
 
 	@Test
 	void testWithValuesMixedMap() throws ParseException, EvaluationException {
-		ParsedExpression expression = ExpressionFactory.defaults().parse("a+b+c");
+		Expression expression = ExpressionFactory.defaults().parse("a+b+c");
 
 		Map<String, Value<?>> values = new HashMap<>();
 		values.put("a", Value.of(true));
@@ -132,7 +132,7 @@ class ExpressionTest {
 
 	@Test
 	void testGetAllASTNodes() throws ParseException, EvaluationException {
-		ParsedExpression expression = ExpressionFactory.defaults().parse("1+2/3");
+		Expression expression = ExpressionFactory.defaults().parse("1+2/3");
 		List<Node> nodes = expression.allNodes();
 		assertThat(nodes.get(0).token().value()).isEqualTo("+");
 		assertThat(nodes.get(1).token().value()).isEqualTo("1");
@@ -143,31 +143,31 @@ class ExpressionTest {
 
 	@Test
 	void testGetUsedVariables() throws ParseException, EvaluationException {
-		ParsedExpression expression = ExpressionFactory.defaults().parse("a/2*PI+min(e,b)");
+		Expression expression = ExpressionFactory.defaults().parse("a/2*PI+min(e,b)");
 		assertThat(expression.usedVariables()).containsExactlyInAnyOrder("a", "b");
 	}
 
 	@Test
 	void testGetUsedVariablesLongNames() throws ParseException, EvaluationException {
-		ParsedExpression expression = ExpressionFactory.defaults().parse("var1/2*PI+min(var2,var3)");
+		Expression expression = ExpressionFactory.defaults().parse("var1/2*PI+min(var2,var3)");
 		assertThat(expression.usedVariables()).containsExactlyInAnyOrder("var1", "var2", "var3");
 	}
 
 	@Test
 	void testGetUsedVariablesNoVariables() throws ParseException, EvaluationException {
-		ParsedExpression expression = ExpressionFactory.defaults().parse("1/2");
+		Expression expression = ExpressionFactory.defaults().parse("1/2");
 		assertThat(expression.usedVariables()).isEmpty();
 	}
 
 	@Test
 	void testGetUsedVariablesCaseSensitivity() throws ParseException, EvaluationException {
-		ParsedExpression expression = ExpressionFactory.defaults().parse("a+B*b-A/PI*(1/2)*pi+e-E+a");
+		Expression expression = ExpressionFactory.defaults().parse("a+B*b-A/PI*(1/2)*pi+e-E+a");
 		assertThat(expression.usedVariables()).containsExactlyInAnyOrder("a", "b");
 	}
 
 	@Test
 	void testGetUndefinedVariables() throws ParseException, EvaluationException {
-		ParsedExpression expression = ExpressionFactory.defaults().parse("a+A+b+B+c+C+E+e+PI+x");
+		Expression expression = ExpressionFactory.defaults().parse("a+A+b+B+c+C+E+e+PI+x");
 		ValueResolver variableResolver = ValueResolver.empty()
 			.with("x", Value.of(1));
 		assertThat(expression.undefinedVariables(variableResolver)).containsExactlyInAnyOrder("a", "b", "c");

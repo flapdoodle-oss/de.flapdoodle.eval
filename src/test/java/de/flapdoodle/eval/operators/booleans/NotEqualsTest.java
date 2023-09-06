@@ -59,7 +59,7 @@ class NotEqualsTest extends BaseEvaluationTest {
 
 	@Test
 	void testInfixNotEqualsVariables() throws EvaluationException, ParseException {
-		ParsedExpression expression = ExpressionFactory.defaults().parse("a!=b");
+		Expression expression = ExpressionFactory.defaults().parse("a!=b");
 
 		MapBasedValueResolver mapBasedVariableResolver4 = ValueResolver.empty()
 			.with("a", new BigDecimal("1.4"))
@@ -91,7 +91,7 @@ class NotEqualsTest extends BaseEvaluationTest {
 
 	@Test
 	void testInfixNotEqualsArrays() throws EvaluationException, ParseException {
-		ParsedExpression expression = ExpressionFactory.defaults().parse("a!=b");
+		Expression expression = ExpressionFactory.defaults().parse("a!=b");
 
 		MapBasedValueResolver mapBasedVariableResolver1 = ValueResolver.empty()
 			.with("a", Value::of, Arrays.asList("a", "b", "c"))
@@ -112,7 +112,7 @@ class NotEqualsTest extends BaseEvaluationTest {
 
 	@Test
 	void testInfixNotEqualsStructures() throws EvaluationException, ParseException {
-		ParsedExpression expression = ExpressionFactory.defaults().parse("a!=b");
+		Expression expression = ExpressionFactory.defaults().parse("a!=b");
 
 		Map<String, BigDecimal> structure1 =
 			new HashMap<String, BigDecimal>() {

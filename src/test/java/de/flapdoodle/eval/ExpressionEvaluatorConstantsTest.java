@@ -62,7 +62,7 @@ class ExpressionEvaluatorConstantsTest extends BaseExpressionEvaluatorTest {
 		ExpressionFactory factory = ExpressionFactory.defaults()
 				.withConstants(mapBasedVariableResolver);
 
-		ParsedExpression expression = factory.parse("a+B");
+		Expression expression = factory.parse("a+B");
 
 		assertThat(expression.evaluate(ValueResolver.empty()).wrapped().toString()).isEqualTo("6.4");
 	}

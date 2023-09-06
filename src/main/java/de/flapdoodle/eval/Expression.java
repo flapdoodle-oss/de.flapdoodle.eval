@@ -12,7 +12,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @org.immutables.value.Value.Immutable
-public abstract class ParsedExpression {
+public abstract class Expression {
 	protected abstract MathContext mathContext();
 	protected abstract ZoneId zoneId();
 	protected abstract Node root();
@@ -44,8 +44,8 @@ public abstract class ParsedExpression {
 		return Node.allNodes(root());
 	}
 
-	public static ImmutableParsedExpression.Builder builder() {
-		return ImmutableParsedExpression.builder();
+	public static ImmutableExpression.Builder builder() {
+		return ImmutableExpression.builder();
 	}
 
 }

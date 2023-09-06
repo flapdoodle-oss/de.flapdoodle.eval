@@ -29,16 +29,16 @@ public abstract class BaseExpressionEvaluatorTest {
 			TestConfigurationProvider.StandardFactoryWithAdditionalTestOperators;
 
 	protected String evaluate(String expressionString) throws ParseException, EvaluationException {
-		ParsedExpression expression = createExpression(expressionString);
+		Expression expression = createExpression(expressionString);
 		return expression.evaluate(ValueResolver.empty()).wrapped().toString();
 	}
 
 	protected String evaluate(String expressionString, ValueResolver variableResolver) throws ParseException, EvaluationException {
-		ParsedExpression expression = createExpression(expressionString);
+		Expression expression = createExpression(expressionString);
 		return expression.evaluate(variableResolver).wrapped().toString();
 	}
 
-	ParsedExpression createExpression(String expressionString) throws ParseException, EvaluationException {
+	Expression createExpression(String expressionString) throws ParseException, EvaluationException {
 		return factory.parse(expressionString);
 	}
 

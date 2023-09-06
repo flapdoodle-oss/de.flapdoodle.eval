@@ -58,7 +58,7 @@ class EqualsTest extends BaseEvaluationTest {
 
 	@Test
 	void testInfixEqualsVariables() throws EvaluationException, ParseException {
-		ParsedExpression expression = ExpressionFactory.defaults().parse("a=b");
+		Expression expression = ExpressionFactory.defaults().parse("a=b");
 
 		assertThat(
 			expression.evaluate(ValueResolver.empty()
@@ -94,7 +94,7 @@ class EqualsTest extends BaseEvaluationTest {
 
 	@Test
 	void testInfixEqualsArrays() throws EvaluationException, ParseException {
-		ParsedExpression expression = ExpressionFactory.defaults().parse("a=b");
+		Expression expression = ExpressionFactory.defaults().parse("a=b");
 
 		assertThat(
 			expression.evaluate(ValueResolver.empty()
@@ -113,7 +113,7 @@ class EqualsTest extends BaseEvaluationTest {
 
 	@Test
 	void testInfixEqualsStructures() throws EvaluationException, ParseException {
-		ParsedExpression expression = ExpressionFactory.defaults().parse("a=b");
+		Expression expression = ExpressionFactory.defaults().parse("a=b");
 
 		Map<String, BigDecimal> structure1 =
 			new HashMap<String, BigDecimal>() {

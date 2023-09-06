@@ -2,7 +2,7 @@ package de.flapdoodle.eval.operators.booleans;
 
 import de.flapdoodle.eval.EvaluationException;
 import de.flapdoodle.eval.ExpressionFactory;
-import de.flapdoodle.eval.ParsedExpression;
+import de.flapdoodle.eval.Expression;
 import de.flapdoodle.eval.config.MapBasedOperatorResolver;
 import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.parser.ParseException;
@@ -16,7 +16,7 @@ class SameTest {
 
 	@Test
 	void testInfixEqualsVariables() throws EvaluationException, ParseException {
-		ParsedExpression expression = ExpressionFactory.defaults()
+		Expression expression = ExpressionFactory.defaults()
 				.withOperators(MapBasedOperatorResolver.builder()
 						.putInfixOperators("===", new Same())
 						.build())

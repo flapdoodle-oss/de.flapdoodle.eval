@@ -52,9 +52,9 @@ public abstract class ExpressionFactory {
 	}
 
 	@org.immutables.value.Value.Auxiliary
-	public ParsedExpression parse(String expression) throws ParseException, EvaluationException {
+	public Expression parse(String expression) throws ParseException, EvaluationException {
 		Node node = map(abstractSyntaxTree(expression));
-		return ParsedExpression.builder()
+		return Expression.builder()
 			.mathContext(mathContext())
 			.zoneId(zoneId())
 			.root(node)

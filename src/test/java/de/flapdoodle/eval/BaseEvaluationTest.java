@@ -71,7 +71,7 @@ public abstract class BaseEvaluationTest {
 
 	private Value<?> evaluate(String expressionString, ExpressionFactory factory)
 		throws EvaluationException, ParseException {
-		ParsedExpression expression = factory.parse(expressionString);
+		Expression expression = factory.parse(expressionString);
 
 		return expression.evaluate(ValueResolver.empty());
 	}

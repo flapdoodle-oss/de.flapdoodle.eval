@@ -262,7 +262,7 @@ class TrigonometricFunctionsTest extends BaseEvaluationTest {
 	@ValueSource(doubles = { -1.1, -1.0, 1.0, 1.1 })
 	void testAtanHThrowsException(double d) {
 		assertThatThrownBy(() -> {
-			ParsedExpression expression = ExpressionFactory.defaults().parse("atanH(x)");
+			Expression expression = ExpressionFactory.defaults().parse("atanH(x)");
 			MapBasedValueResolver mapBasedVariableResolver = ValueResolver.empty().with("x", d);
 			expression.evaluate(mapBasedVariableResolver);
 		})

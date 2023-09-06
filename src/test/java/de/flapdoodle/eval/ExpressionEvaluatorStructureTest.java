@@ -100,7 +100,7 @@ class ExpressionEvaluatorStructureTest extends BaseExpressionEvaluatorTest {
 		assertThatThrownBy(() -> {
 			MapBasedValueResolver mapBasedVariableResolver = ValueResolver.empty().with("a", "aString");
 			ValueResolver variableResolver = mapBasedVariableResolver;
-			ParsedExpression expression = createExpression("a.b");
+			Expression expression = createExpression("a.b");
 			expression.evaluate(variableResolver);
 		})
 			.isInstanceOf(EvaluationException.class)
@@ -117,7 +117,7 @@ class ExpressionEvaluatorStructureTest extends BaseExpressionEvaluatorTest {
 				MapBasedValueResolver mapBasedVariableResolver = ValueResolver.empty()
 					.with("a", Value::of, testStructure);
 				ValueResolver variableResolver = mapBasedVariableResolver;
-				ParsedExpression expression = createExpression("a.field1 + a.field2");
+				Expression expression = createExpression("a.field1 + a.field2");
 				expression.evaluate(variableResolver);
 			})
 			.isInstanceOf(EvaluationException.class)
