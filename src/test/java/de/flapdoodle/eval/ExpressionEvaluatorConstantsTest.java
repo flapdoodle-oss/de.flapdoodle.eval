@@ -36,12 +36,11 @@ class ExpressionEvaluatorConstantsTest extends BaseExpressionEvaluatorTest {
 	@CsvSource(
 		delimiter = ':',
 		value = {
-			"TRUE : true",
 			"true : true",
-			"False : false",
+			"false : false",
 			"PI : "
 				+ " 3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679",
-			"e : 2.71828182845904523536028747135266249775724709369995957496696762772407663",
+			"E : 2.71828182845904523536028747135266249775724709369995957496696762772407663",
 		})
 	void testDefaultConstants(String expression, String expectedResult)
 		throws ParseException, EvaluationException {
@@ -53,7 +52,7 @@ class ExpressionEvaluatorConstantsTest extends BaseExpressionEvaluatorTest {
 		Map<String, Value<?>> constants =
 			new HashMap<String, Value<?>>() {
 				{
-					put("A", Value.of(new BigDecimal("2.5")));
+					put("a", Value.of(new BigDecimal("2.5")));
 					put("B", Value.of(new BigDecimal("3.9")));
 				}
 			};
@@ -77,7 +76,7 @@ class ExpressionEvaluatorConstantsTest extends BaseExpressionEvaluatorTest {
 	@Test
 	void testOverwriteConstantsWithValues() throws EvaluationException, ParseException {
 		MapBasedValueResolver mapBasedVariableResolver = ValueResolver.empty().with("e", Value.of(3));
-		assertThat(factory.withConstant("E", Value.of(6))
+		assertThat(factory.withConstant("e", Value.of(6))
 				.parse("e")
 				.evaluate(mapBasedVariableResolver).wrapped().toString()).isEqualTo("6.0");
 	}

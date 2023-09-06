@@ -35,7 +35,7 @@ public abstract class Expression {
 		return usedVariables().stream()
 			.filter(name -> !variableResolver.has(name))
 			// TODO change to case sensitive vars
-			.map(String::toLowerCase)
+//			.map(String::toLowerCase)
 			.collect(Collectors.toSet());
 	}
 

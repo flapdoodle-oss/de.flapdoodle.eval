@@ -56,7 +56,7 @@ public abstract class Node {
           .filter(it -> it instanceof ValueLookup)
           .map(it -> it.token().value())
           // TODO change to case sensitive vars
-          .map(String::toLowerCase)
+//          .map(String::toLowerCase)
           .collect(Collectors.toSet());
     }
 

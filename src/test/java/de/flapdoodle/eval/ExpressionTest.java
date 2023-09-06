@@ -143,7 +143,7 @@ class ExpressionTest {
 
 	@Test
 	void testGetUsedVariables() throws ParseException, EvaluationException {
-		Expression expression = ExpressionFactory.defaults().parse("a/2*PI+min(e,b)");
+		Expression expression = ExpressionFactory.defaults().parse("a/2*PI+min(E,b)");
 		assertThat(expression.usedVariables()).containsExactlyInAnyOrder("a", "b");
 	}
 
@@ -161,8 +161,8 @@ class ExpressionTest {
 
 	@Test
 	void testGetUsedVariablesCaseSensitivity() throws ParseException, EvaluationException {
-		Expression expression = ExpressionFactory.defaults().parse("a+B*b-A/PI*(1/2)*pi+e-E+a");
-		assertThat(expression.usedVariables()).containsExactlyInAnyOrder("a", "b");
+		Expression expression = ExpressionFactory.defaults().parse("a+B*b-A/PI*(1/2)*PI+e-E+a");
+		assertThat(expression.usedVariables()).containsExactlyInAnyOrder("A", "a", "B", "b", "e");
 	}
 
 	@Test
@@ -170,6 +170,6 @@ class ExpressionTest {
 		Expression expression = ExpressionFactory.defaults().parse("a+A+b+B+c+C+E+e+PI+x");
 		ValueResolver variableResolver = ValueResolver.empty()
 			.with("x", Value.of(1));
-		assertThat(expression.undefinedVariables(variableResolver)).containsExactlyInAnyOrder("a", "b", "c");
+		assertThat(expression.undefinedVariables(variableResolver)).containsExactlyInAnyOrder("A", "a", "B", "b", "C", "c", "e");
 	}
 }

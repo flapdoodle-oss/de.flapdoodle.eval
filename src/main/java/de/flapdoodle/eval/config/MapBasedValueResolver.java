@@ -17,15 +17,15 @@ import java.util.stream.Collectors;
 public abstract class MapBasedValueResolver implements ValueResolver {
 	protected abstract Map<String, Value<?>> variables();
 
-	@Lazy
-	protected Map<String, String> lowerCaseToKey() {
-		return variables().keySet().stream().collect(Collectors.toMap(String::toLowerCase, Function.identity()));
-	}
+//	@Lazy
+//	protected Map<String, String> lowerCaseToKey() {
+//		return variables().keySet().stream().collect(Collectors.toMap(String::toLowerCase, Function.identity()));
+//	}
 
 	@Auxiliary
 	@Override
 	public Value<?> get(String variable) {
-		return variables().get(lowerCaseToKey().get(variable.toLowerCase()));
+		return variables().get(variable);
 	}
 
 	@Auxiliary

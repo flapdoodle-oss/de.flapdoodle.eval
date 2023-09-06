@@ -124,6 +124,6 @@ class ExpressionFactoryTest {
 		ExpressionFactory factory =
 			ExpressionFactory.defaults().withConstants(valueResolver);
 
-		assertThat(factory.constants().get("a")).isEqualTo(Value.of("a"));
+		assertThat(factory.constants().get("A")).isEqualTo(Value.of("a"));
 	}
 }

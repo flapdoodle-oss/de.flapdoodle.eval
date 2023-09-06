@@ -24,8 +24,8 @@ public abstract class Defaults {
 	static Map<String, Value<?>> standardConstants() {
 		Map<String, Value<?>> constants = new LinkedHashMap<>();
 
-		constants.put("TRUE", Value.of(true));
-		constants.put("FALSE", Value.of(false));
+		constants.put("true", Value.of(true));
+		constants.put("false", Value.of(false));
 		constants.put(
 			"PI",
 			Value.of(
@@ -36,7 +36,7 @@ public abstract class Defaults {
 			Value.of(
 				new BigDecimal(
 					"2.71828182845904523536028747135266249775724709369995957496696762772407663")));
-		constants.put("NULL", Value.ofNull());
+		constants.put("null", Value.ofNull());
 		return Collections.unmodifiableMap(constants);
 	}
 
