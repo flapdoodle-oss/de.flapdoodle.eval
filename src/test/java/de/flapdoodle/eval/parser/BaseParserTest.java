@@ -16,10 +16,10 @@
  */
 package de.flapdoodle.eval.parser;
 
-import de.flapdoodle.eval.ExpressionFactory;
-import de.flapdoodle.eval.config.EvaluateableResolver;
-import de.flapdoodle.eval.config.OperatorResolver;
+import de.flapdoodle.eval.ImmutableExpressionFactory;
 import de.flapdoodle.eval.config.TestConfigurationProvider;
+import de.flapdoodle.eval.evaluatables.OperatorMap;
+import de.flapdoodle.eval.evaluatables.TypedEvaluatableByName;
 import org.assertj.core.api.Assertions;
 
 import java.util.List;
@@ -29,14 +29,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 /** */
 public abstract class BaseParserTest {
 
-	ExpressionFactory factory =
+	ImmutableExpressionFactory factory =
 		TestConfigurationProvider.StandardFactoryWithAdditionalTestOperators;
 
-	OperatorResolver operatorResolver =
-		TestConfigurationProvider.OperatorResolverWithTestOperators;
+	OperatorMap operatorMap =
+			TestConfigurationProvider.OperatorMapWithTestOperators;
 
-	EvaluateableResolver functionResolver =
-		TestConfigurationProvider.FunctionResolverWithTestFunctions;
+	TypedEvaluatableByName evaluatables =
+			TestConfigurationProvider.EvaluatablesWithTestFunctions;
 
 	void assertAllTokensParsedCorrectly(String input, Token... expectedTokens) throws ParseException {
 		List<Token> tokensParsed = factory.tokens(input);

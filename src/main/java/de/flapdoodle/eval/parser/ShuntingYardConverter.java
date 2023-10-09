@@ -16,18 +16,12 @@
  */
 package de.flapdoodle.eval.parser;
 
-import de.flapdoodle.eval.Evaluateable;
-import de.flapdoodle.eval.config.EvaluateableResolver;
-import de.flapdoodle.eval.config.OperatorResolver;
-import de.flapdoodle.eval.operators.InfixOperator;
-import de.flapdoodle.eval.operators.Operator;
-import de.flapdoodle.eval.operators.PostfixOperator;
-import de.flapdoodle.eval.operators.PrefixOperator;
+import de.flapdoodle.eval.evaluatables.OperatorMap;
+import de.flapdoodle.eval.evaluatables.OperatorMapping;
+import de.flapdoodle.eval.evaluatables.TypedEvaluatableByArguments;
+import de.flapdoodle.eval.evaluatables.TypedEvaluatableByName;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.List;
+import java.util.*;
 
 /**
  * @see <a href="https://en.wikipedia.org/wiki/Shunting_yard_algorithm">Shunting yard algorithm</a>
@@ -37,22 +31,22 @@ public class ShuntingYardConverter {
 	private final String originalExpression;
 	private final List<Token> expressionTokens;
 
-	private final OperatorResolver operatorResolver;
-	private final EvaluateableResolver evaluatableResolver;
+	private final OperatorMap operatorMap;
+	private final TypedEvaluatableByName evaluatables;
 
 	private final Deque<Token> operatorStack = new ArrayDeque<>();
 	private final Deque<ASTNode> operandStack = new ArrayDeque<>();
 
 	public ShuntingYardConverter(
-		String originalExpression,
-		List<Token> expressionTokens,
-		OperatorResolver operatorResolver,
-		EvaluateableResolver evaluatableResolver) {
+			String originalExpression,
+			List<Token> expressionTokens,
+		OperatorMap operatorMap,
+		TypedEvaluatableByName evaluatables) {
 		this.originalExpression = originalExpression;
 		this.expressionTokens = expressionTokens;
 
-		this.operatorResolver = operatorResolver;
-		this.evaluatableResolver = evaluatableResolver;
+		this.operatorMap = operatorMap;
+		this.evaluatables = evaluatables;
 	}
 
 	public ASTNode toAbstractSyntaxTree() throws ParseException {
@@ -158,26 +152,10 @@ public class ShuntingYardConverter {
 
 	private void validateFunctionParameters(Token functionToken, ArrayList<ASTNode> parameters)
 		throws ParseException {
-		Evaluateable function = evaluatableResolver.get(functionToken.value());
-		if (parameters.size() < function.parameters().min()) {
-			throw new ParseException(functionToken, "Not enough parameters for function");
+		Optional<? extends TypedEvaluatableByArguments> evaluatable = evaluatables.find(functionToken.value(), parameters.size());
+		if (!evaluatable.isPresent()) {
+			throw new ParseException(functionToken, "could not find evaluatable '"+functionToken.value()+"' with "+parameters.size()+" arguments");
 		}
-		if (parameters.size() > function.parameters().max()) {
-			throw new ParseException(functionToken, "Too many parameters for function");
-		}
-//    if (function.hasOptional()) {
-//      if (parameters.size() < function.parameterDefinitions().size()-1) {
-//        throw new ParseException(functionToken, "Not enough parameters for function");
-//      }
-//    } else {
-//      if (parameters.size() < function.parameterDefinitions().size()) {
-//        throw new ParseException(functionToken, "Not enough parameters for function");
-//      }
-//    }
-//    if (!function.hasVarArgs()
-//        && parameters.size() > function.parameterDefinitions().size()) {
-//      throw new ParseException(functionToken, "Too many parameters for function");
-//    }
 	}
 
 	/**
@@ -263,37 +241,39 @@ public class ShuntingYardConverter {
 		}
 		operatorStack.push(currentToken);
 	}
+
 	private boolean isNextOperatorOfHigherPrecedence(
 			Token currentOperator, Token nextOperator
 	) throws ParseException {
-		return isNextOperatorOfHigherPrecedence(operator(currentOperator), operator(nextOperator));
+		return isNextOperatorOfHigherPrecedence(operatorMapping(currentOperator), operatorMapping(nextOperator));
 	}
 
-	private Operator operator(Token token) throws ParseException {
+
+	private OperatorMapping operatorMapping(Token token) throws ParseException {
 		switch (token.type()) {
 			case PREFIX_OPERATOR:
-				return operatorResolver.get(PrefixOperator.class, token.value());
+				return operatorMap.prefixOperator(token.value()).orElse(null);
 			case POSTFIX_OPERATOR:
-				return operatorResolver.get(PostfixOperator.class, token.value());
+				return operatorMap.postfixOperator(token.value()).orElse(null);
 			case INFIX_OPERATOR:
-				return operatorResolver.get(InfixOperator.class, token.value());
+				return operatorMap.infixOperator(token.value()).orElse(null);
 		}
 		return null;
 	}
 
 	private boolean isNextOperatorOfHigherPrecedence(
-		Operator currentOperator, Operator nextOperator) {
+			OperatorMapping currentOperator, OperatorMapping nextOperator) {
 		// structure operator (null) has always a higher precedence than other operators
 		if (nextOperator == null) {
 			return true;
 		}
 
 		if (currentOperator.isLeftAssociative()) {
-			return currentOperator.getPrecedence()
-				<= nextOperator.getPrecedence();
+			return currentOperator.precedence()
+					<= nextOperator.precedence();
 		} else {
-			return currentOperator.getPrecedence()
-				< nextOperator.getPrecedence();
+			return currentOperator.precedence()
+					< nextOperator.precedence();
 		}
 	}
 

@@ -16,14 +16,11 @@
  */
 package de.flapdoodle.eval;
 
-import de.flapdoodle.eval.config.MapBasedValueResolver;
-import de.flapdoodle.eval.config.ValueResolver;
-import de.flapdoodle.eval.data.Value;
-import de.flapdoodle.eval.operators.InfixOperator;
-import de.flapdoodle.eval.operators.PostfixOperator;
-import de.flapdoodle.eval.operators.PrefixOperator;
 import de.flapdoodle.eval.parser.ParseException;
 import de.flapdoodle.eval.tree.Node;
+import de.flapdoodle.eval.values.MapBasedValueResolver;
+import de.flapdoodle.eval.values.Value;
+import de.flapdoodle.eval.values.ValueResolver;
 import org.assertj.core.data.Percentage;
 import org.junit.jupiter.api.Test;
 
@@ -41,13 +38,13 @@ class ExpressionTest {
 		ImmutableExpressionFactory expressionFactory = ExpressionFactory.defaults();
 		Expression expression = expressionFactory.parse("a+b");
 
-		assertThat(expressionFactory.functions().has("sum")).isTrue();
-		assertThat(expressionFactory.operators().hasOperator(InfixOperator.class, "+"))
-			.isTrue();
-		assertThat(expressionFactory.operators().hasOperator(PrefixOperator.class, "+"))
-			.isTrue();
-		assertThat(expressionFactory.operators().hasOperator(PostfixOperator.class, "+"))
-			.isFalse();
+		assertThat(expressionFactory.evaluatables().find("sum",2)).isNotEmpty();
+		assertThat(expressionFactory.operatorMap().infixOperator("+"))
+			.isNotEmpty();
+		assertThat(expressionFactory.operatorMap().prefixOperator( "+"))
+			.isNotEmpty();
+		assertThat(expressionFactory.operatorMap().postfixOperator( "+"))
+			.isEmpty();
 	}
 
 	@Test

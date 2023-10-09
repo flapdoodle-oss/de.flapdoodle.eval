@@ -16,10 +16,10 @@
  */
 package de.flapdoodle.eval;
 
-import de.flapdoodle.eval.config.MapBasedValueResolver;
-import de.flapdoodle.eval.config.ValueResolver;
-import de.flapdoodle.eval.data.Value;
 import de.flapdoodle.eval.parser.ParseException;
+import de.flapdoodle.eval.values.MapBasedValueResolver;
+import de.flapdoodle.eval.values.Value;
+import de.flapdoodle.eval.values.ValueResolver;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;

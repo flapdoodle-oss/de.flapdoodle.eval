@@ -17,8 +17,8 @@
 package de.flapdoodle.eval.parser;
 
 import de.flapdoodle.eval.ExpressionFactory;
-import de.flapdoodle.eval.config.MapBasedValueResolver;
-import de.flapdoodle.eval.config.ValueResolver;
+import de.flapdoodle.eval.values.MapBasedValueResolver;
+import de.flapdoodle.eval.values.ValueResolver;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -90,14 +90,14 @@ class TokenizerStringLiteralTest extends BaseParserTest {
 
 	@Test
 	void testErrorUnmatchedQuoteStart() {
-		assertThatThrownBy(() -> new Tokenizer("\"hello", operatorResolver).parse())
+		assertThatThrownBy(() -> new Tokenizer("\"hello", operatorMap).parse())
 			.isInstanceOf(ParseException.class)
 			.hasMessage("Closing quote not found");
 	}
 
 	@Test
 	void testErrorUnmatchedQuoteOffset() {
-		assertThatThrownBy(() -> new Tokenizer("test \"hello", operatorResolver).parse())
+		assertThatThrownBy(() -> new Tokenizer("test \"hello", operatorMap).parse())
 			.isInstanceOf(ParseException.class)
 			.hasMessage("Closing quote not found");
 	}

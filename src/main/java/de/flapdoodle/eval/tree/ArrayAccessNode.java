@@ -2,8 +2,8 @@ package de.flapdoodle.eval.tree;
 
 import de.flapdoodle.eval.EvaluationContext;
 import de.flapdoodle.eval.EvaluationException;
-import de.flapdoodle.eval.config.ValueResolver;
-import de.flapdoodle.eval.data.Value;
+import de.flapdoodle.eval.values.Value;
+import de.flapdoodle.eval.values.ValueResolver;
 import de.flapdoodle.eval.parser.Token;
 
 @org.immutables.value.Value.Immutable

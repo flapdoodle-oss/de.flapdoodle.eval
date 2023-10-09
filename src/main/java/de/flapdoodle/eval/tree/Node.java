@@ -2,8 +2,8 @@ package de.flapdoodle.eval.tree;
 
 import de.flapdoodle.eval.EvaluationContext;
 import de.flapdoodle.eval.EvaluationException;
-import de.flapdoodle.eval.config.ValueResolver;
-import de.flapdoodle.eval.data.Value;
+import de.flapdoodle.eval.values.Value;
+import de.flapdoodle.eval.values.ValueResolver;
 import de.flapdoodle.eval.parser.Token;
 
 import java.util.*;
@@ -30,21 +30,8 @@ public abstract class Node {
             subnodes = Collections.singletonList(
 							((StructureAccessNode) node).structure()
 						);
-        } else if (node instanceof FunctionNode) {
-            subnodes = ((FunctionNode) node).parameters();
-        } else if (node instanceof InfixOperatorNode) {
-            subnodes = Arrays.asList(
-                    ((InfixOperatorNode) node).leftOperand(),
-                    ((InfixOperatorNode) node).rightOperand()
-            );
-        } else if (node instanceof PostfixOperatorNode) {
-            subnodes = Collections.singletonList(
-							((PostfixOperatorNode) node).operand()
-						);
-        } else if (node instanceof PrefixOperatorNode) {
-            subnodes = Collections.singletonList(
-							((PrefixOperatorNode) node).operand()
-						);
+        } else if (node instanceof EvaluatableNode) {
+            subnodes = ((EvaluatableNode) node).parameters();
         }
         subnodes.forEach(subNode -> ret.addAll(allNodes(subNode)));
         return ret;

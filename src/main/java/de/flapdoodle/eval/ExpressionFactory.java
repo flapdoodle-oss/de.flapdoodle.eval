@@ -1,21 +1,24 @@
 package de.flapdoodle.eval;
 
-import de.flapdoodle.eval.config.*;
-import de.flapdoodle.eval.data.Value;
-import de.flapdoodle.eval.operators.InfixOperator;
-import de.flapdoodle.eval.operators.Operator;
-import de.flapdoodle.eval.operators.PostfixOperator;
-import de.flapdoodle.eval.operators.PrefixOperator;
+import de.flapdoodle.eval.config.Defaults;
+import de.flapdoodle.eval.values.MapBasedValueResolver;
+import de.flapdoodle.eval.values.Value;
+import de.flapdoodle.eval.values.ValueResolver;
+import de.flapdoodle.eval.evaluatables.OperatorMap;
+import de.flapdoodle.eval.evaluatables.OperatorMapping;
+import de.flapdoodle.eval.evaluatables.TypedEvaluatableByArguments;
+import de.flapdoodle.eval.evaluatables.TypedEvaluatableByName;
 import de.flapdoodle.eval.parser.*;
 import de.flapdoodle.eval.tree.*;
-import de.flapdoodle.types.Pair;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.MathContext;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @org.immutables.value.Value.Immutable
 public abstract class ExpressionFactory {
@@ -23,25 +26,9 @@ public abstract class ExpressionFactory {
 	protected abstract ZoneId zoneId();
 
 	protected abstract ValueResolver constants();
-	protected abstract OperatorResolver operators();
-	protected abstract EvaluateableResolver functions();
+	protected abstract TypedEvaluatableByName evaluatables();
 
-	@SafeVarargs
-	@org.immutables.value.Value.Auxiliary
-	public final ImmutableExpressionFactory withFunctions(Pair<String, ? extends Evaluateable>... functions) {
-		return ImmutableExpressionFactory.copyOf(this)
-			.withFunctions(MapBasedEvaluateableResolver.of(functions)
-				.andThen(functions()));
-	}
-
-	@SafeVarargs
-	@org.immutables.value.Value.Auxiliary
-	public final ImmutableExpressionFactory withOperators(Pair<String, Operator>... operators) {
-		ImmutableMapBasedOperatorResolver newOperatorResolver = MapBasedOperatorResolver.of(operators);
-		return ImmutableExpressionFactory.copyOf(this)
-			.withOperators(newOperatorResolver
-				.andThen(operators()));
-	}
+	protected abstract OperatorMap operatorMap();
 
 	@org.immutables.value.Value.Auxiliary
 	public final ImmutableExpressionFactory withConstant(String name, Value<?> value) {
@@ -64,14 +51,14 @@ public abstract class ExpressionFactory {
 	// VisibleForTests
 	@org.immutables.value.Value.Auxiliary
 	public ASTNode abstractSyntaxTree(String expression) throws ParseException {
-		return new ShuntingYardConverter(expression, tokens(expression), operators(), functions())
+		return new ShuntingYardConverter(expression, tokens(expression), operatorMap(), evaluatables())
 			.toAbstractSyntaxTree();
 	}
 
 	// VisibleForTests
 	@org.immutables.value.Value.Auxiliary
 	public List<Token> tokens(String expression) throws ParseException {
-		return new Tokenizer(expression, operators()).parse();
+		return new Tokenizer(expression, operatorMap()).parse();
 	}
 
 	@org.immutables.value.Value.Auxiliary
@@ -89,13 +76,13 @@ public abstract class ExpressionFactory {
 				result = getVariableOrConstant(token);
 				break;
 			case PREFIX_OPERATOR:
-				result = PrefixOperatorNode.of(token, operator(token, PrefixOperator.class), map(startNode.getParameters().get(0)));
+				result = prefixOperator(startNode, token);
 				break;
 			case POSTFIX_OPERATOR:
-				result = PostfixOperatorNode.of(token, operator(token, PostfixOperator.class), map(startNode.getParameters().get(0)));
+				result = postfixOperator(startNode, token);
 				break;
 			case INFIX_OPERATOR:
-				result = InfixOperatorNode.of(token, operator(token, InfixOperator.class), map(startNode.getParameters().get(0)), map(startNode.getParameters().get(1)));
+				result = infixOperator(startNode, token);
 				break;
 			case ARRAY_INDEX:
 				result = evaluateArrayIndex(startNode);
@@ -112,8 +99,42 @@ public abstract class ExpressionFactory {
 		return result;
 	}
 
-	private <T extends Operator> T operator(Token token, Class<T> operatorType) {
-		return operators().get(operatorType, token.value());
+	private Node postfixOperator(ASTNode startNode, Token token) throws EvaluationException {
+		List<Node> parameters = Arrays.asList(map(startNode.getParameters().get(0)));
+		Optional<OperatorMapping> operatorMapping = operatorMap().postfixOperator(token.value());
+
+		if (!operatorMapping.isPresent()) throw new EvaluationException(token, "could not find postfix operator");
+
+		return evaluatableNode(token, operatorMapping.get(), parameters);
+	}
+
+	private EvaluatableNode evaluatableNode(Token token, OperatorMapping operatorMapping, List<Node> parameters) {
+		Optional<? extends TypedEvaluatableByArguments> evaluatable = evaluatables().find(operatorMapping.evaluatable(), parameters.size());
+		if (evaluatable.isPresent()) {
+			return EvaluatableNode.of(token, evaluatable.get(), parameters);
+		} else {
+			throw new RuntimeException("could not find evaluatable for "+ operatorMapping);
+		}
+	}
+
+	private Node infixOperator(ASTNode startNode, Token token) throws EvaluationException {
+		Node first = map(startNode.getParameters().get(0));
+		Node second = map(startNode.getParameters().get(1));
+		List<Node> parameters = Arrays.asList(first, second);
+		Optional<OperatorMapping> operatorMapping = operatorMap().infixOperator(token.value());
+
+		if (!operatorMapping.isPresent()) throw new EvaluationException(token, "could not find infix operator");
+
+		return evaluatableNode(token, operatorMapping.get(), parameters);
+	}
+
+	private Node prefixOperator(ASTNode startNode, Token token) throws EvaluationException {
+		List<Node> parameters = Arrays.asList(map(startNode.getParameters().get(0)));
+		Optional<OperatorMapping> operatorMapping = operatorMap().prefixOperator(token.value());
+
+		if (!operatorMapping.isPresent()) throw new EvaluationException(token, "could not find prefix operator");
+
+		return evaluatableNode(token, operatorMapping.get(), parameters);
 	}
 
 	private Node getVariableOrConstant(Token token) {
@@ -124,14 +145,18 @@ public abstract class ExpressionFactory {
 		return ValueLookup.of(token);
 	}
 
-	private FunctionNode evaluateFunction(ASTNode startNode, Token token) throws EvaluationException {
-		Evaluateable function = functions().get(token.value());
+	private Node evaluateFunction(ASTNode startNode, Token token) throws EvaluationException {
 		List<Node> parameterResults = new ArrayList<>();
 		for (int i = 0; i < startNode.getParameters().size(); i++) {
 			parameterResults.add(map(startNode.getParameters().get(i)));
 		}
 
-		return FunctionNode.of(token, function, parameterResults);
+		Optional<? extends TypedEvaluatableByArguments> evaluatable = evaluatables().find(token.value(),
+			startNode.getParameters().size());
+
+		if (!evaluatable.isPresent()) throw new EvaluationException(token, "could not find evaluatable");
+
+		return EvaluatableNode.of(token, evaluatable.get(), parameterResults);
 	}
 
 	private ArrayAccessNode evaluateArrayIndex(ASTNode startNode) throws EvaluationException {
@@ -158,8 +183,8 @@ public abstract class ExpressionFactory {
 			.constants(Defaults.constants())
 			.zoneId(ZoneId.systemDefault())
 			.mathContext(Defaults.mathContext())
-			.functions(Defaults.functions())
-			.operators(Defaults.operators())
+			.evaluatables(Defaults.evaluatables())
+			.operatorMap(Defaults.operatorMap())
 			.build();
 	}
 

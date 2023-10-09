@@ -16,12 +16,10 @@
  */
 package de.flapdoodle.eval;
 
-import de.flapdoodle.eval.config.*;
-import de.flapdoodle.eval.data.Value;
-import de.flapdoodle.eval.operators.InfixOperator;
-import de.flapdoodle.eval.operators.Operator;
-import de.flapdoodle.eval.operators.arithmetic.Plus;
-import de.flapdoodle.types.Pair;
+import de.flapdoodle.eval.config.Defaults;
+import de.flapdoodle.eval.values.MapBasedValueResolver;
+import de.flapdoodle.eval.values.Value;
+import de.flapdoodle.eval.values.ValueResolver;
 import org.junit.jupiter.api.Test;
 
 import java.math.MathContext;
@@ -38,35 +36,12 @@ class ExpressionFactoryTest {
 
 		assertThat(factory.mathContext())
 			.isSameAs(Defaults.mathContext());
-		assertThat(factory.operators())
-			.isSameAs(Defaults.operators());
-		assertThat(factory.functions())
-			.isSameAs(Defaults.functions());
+		assertThat(factory.operatorMap())
+			.isSameAs(Defaults.operatorMap());
+		assertThat(factory.evaluatables())
+			.isSameAs(Defaults.evaluatables());
 		assertThat(factory.constants())
 			.isSameAs(Defaults.constants());
-	}
-
-	@SuppressWarnings("unchecked")
-	@Test
-	void testWithAdditionalOperators() {
-		ExpressionFactory factory =
-			ExpressionFactory.defaults()
-				.withOperators(
-					Pair.of("ADDED1", new Plus()),
-					Pair.of("ADDED2", new Plus()));
-
-		assertThat(factory.operators().hasOperator(InfixOperator.class, "ADDED1")).isTrue();
-		assertThat(factory.operators().hasOperator(InfixOperator.class, "ADDED2")).isTrue();
-	}
-
-	@Test
-	void testWithAdditionalFunctions() {
-		ExpressionFactory factory = ImmutableExpressionFactory.copyOf(ExpressionFactory.defaults())
-			.withFunctions(Pair.of("ADDED1", new TestConfigurationProvider.DummyFunction()),
-				Pair.of("ADDED2", new TestConfigurationProvider.DummyFunction()));
-
-		assertThat(factory.functions().has("ADDED1")).isTrue();
-		assertThat(factory.functions().has("ADDED2")).isTrue();
 	}
 
 	@Test
@@ -75,39 +50,6 @@ class ExpressionFactoryTest {
 			ExpressionFactory.defaults().withMathContext(MathContext.DECIMAL32);
 
 		assertThat(factory.mathContext()).isEqualTo(MathContext.DECIMAL32);
-	}
-
-	@Test
-	void testCustomOperatorDictionary() {
-		OperatorResolver mockedOperatorDictionary = new OperatorResolver() {
-			@Override
-			public <T extends Operator> T get(Class<T> type, String operatorString) {
-				throw new IllegalStateException("dont call this");
-			}
-
-			@Override
-			public boolean hasStartingWith(Class<? extends Operator> type, String value) {
-				throw new IllegalStateException("dont call this");
-			}
-		};
-
-		ExpressionFactory factory =
-			ExpressionFactory.defaults().withOperators(mockedOperatorDictionary);
-
-		assertThat(factory.operators()).isEqualTo(mockedOperatorDictionary);
-	}
-
-	@Test
-	void testCustomFunctionDictionary() {
-		EvaluateableResolver mockedFunctions = name -> {
-			throw new IllegalStateException("dont call this");
-		};
-
-		ExpressionFactory factory =
-			ExpressionFactory.defaults()
-				.withFunctions(mockedFunctions);
-
-		assertThat(factory.functions()).isEqualTo(mockedFunctions);
 	}
 
 	@Test

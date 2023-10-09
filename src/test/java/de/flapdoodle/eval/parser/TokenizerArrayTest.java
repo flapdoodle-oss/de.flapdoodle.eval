@@ -52,43 +52,43 @@ class TokenizerArrayTest extends BaseParserTest {
 
 	@Test
 	void testMissingClosingArray() {
-		assertThatThrownBy(() -> new Tokenizer("a[2+4", operatorResolver).parse())
+		assertThatThrownBy(() -> new Tokenizer("a[2+4", operatorMap).parse())
 			.isEqualTo(new ParseException(1, 5, "a[2+4", "Closing array not found"));
 	}
 
 	@Test
 	void testUnexpectedClosingArray() {
-		assertThatThrownBy(() -> new Tokenizer("a[2+4]]", operatorResolver).parse())
+		assertThatThrownBy(() -> new Tokenizer("a[2+4]]", operatorMap).parse())
 			.isEqualTo(new ParseException(6, 6, "]", "Unexpected closing array"));
 	}
 
 	@Test
 	void testOpenArrayNotAllowedBeginning() {
-		assertThatThrownBy(() -> new Tokenizer("[1]", operatorResolver).parse())
+		assertThatThrownBy(() -> new Tokenizer("[1]", operatorMap).parse())
 			.isEqualTo(new ParseException(0, 0, "[", "Array open not allowed here"));
 	}
 
 	@Test
 	void testOpenArrayNotAllowedAfterOperator() {
-		assertThatThrownBy(() -> new Tokenizer("1+[1]", operatorResolver).parse())
+		assertThatThrownBy(() -> new Tokenizer("1+[1]", operatorMap).parse())
 			.isEqualTo(new ParseException(2, 2, "[", "Array open not allowed here"));
 	}
 
 	@Test
 	void testOpenArrayNotAllowedAfterBrace() {
-		assertThatThrownBy(() -> new Tokenizer("([1]", operatorResolver).parse())
+		assertThatThrownBy(() -> new Tokenizer("([1]", operatorMap).parse())
 			.isEqualTo(new ParseException(1, 1, "[", "Array open not allowed here"));
 	}
 
 	@Test
 	void testCloseArrayNotAllowedBeginning() {
-		assertThatThrownBy(() -> new Tokenizer("]", operatorResolver).parse())
+		assertThatThrownBy(() -> new Tokenizer("]", operatorMap).parse())
 			.isEqualTo(new ParseException(0, 0, "]", "Array close not allowed here"));
 	}
 
 	@Test
 	void testCloseArrayNotAllowedAfterBrace() {
-		assertThatThrownBy(() -> new Tokenizer("(]", operatorResolver).parse())
+		assertThatThrownBy(() -> new Tokenizer("(]", operatorMap).parse())
 			.isEqualTo(new ParseException(1, 1, "]", "Array close not allowed here"));
 	}
 }

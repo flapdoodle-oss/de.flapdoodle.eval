@@ -1,7 +1,7 @@
 package de.flapdoodle.eval;
 
-import de.flapdoodle.eval.config.ValueResolver;
-import de.flapdoodle.eval.data.Value;
+import de.flapdoodle.eval.values.Value;
+import de.flapdoodle.eval.values.ValueResolver;
 import de.flapdoodle.eval.parser.ParseException;
 import de.flapdoodle.eval.tree.Node;
 

@@ -18,6 +18,8 @@ package de.flapdoodle.eval;
 
 import de.flapdoodle.eval.parser.Token;
 
+import java.util.List;
+
 /** Exception while evaluating the parsed expression. */
 public class EvaluationException extends BaseException {
 
@@ -29,7 +31,37 @@ public class EvaluationException extends BaseException {
 			message);
 	}
 
+	public EvaluationException(Token token, EvaluatableException cause) {
+		super(
+			token.start(),
+			token.start() + token.value().length(),
+			token.value(),
+			cause);
+	}
+
+	public EvaluationException of(Token token, List<? extends EvaluatableException> causes) {
+		EvaluatableException cause = causes.get(0);
+		for (int i = 1; i < causes.size(); i++) {
+			EvaluatableException c = causes.get(i);
+			cause.addSuppressed(c);
+		}
+		return new EvaluationException(token, cause);
+	}
+
 	public static EvaluationException ofUnsupportedDataTypeInOperation(Token token) {
 		return new EvaluationException(token, "Unsupported data types in operation");
+	}
+
+	public static class AsRuntimeException extends RuntimeException {
+
+		private final EvaluationException wrapped;
+
+		public AsRuntimeException(EvaluationException wrapped) {
+			this.wrapped = wrapped;
+		}
+
+		public EvaluationException wrapped() {
+			return wrapped;
+		}
 	}
 }

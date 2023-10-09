@@ -1,24 +1,16 @@
 package de.flapdoodle.eval.tree;
 
-import de.flapdoodle.eval.Evaluateable;
-import de.flapdoodle.eval.EvaluationContext;
-import de.flapdoodle.eval.EvaluationException;
-import de.flapdoodle.eval.Parameters;
-import de.flapdoodle.eval.config.ValueResolver;
-import de.flapdoodle.eval.data.Value;
-import de.flapdoodle.eval.data.ValueArray;
-import de.flapdoodle.eval.operators.InfixOperator;
-import de.flapdoodle.eval.operators.PostfixOperator;
-import de.flapdoodle.eval.operators.PrefixOperator;
+import de.flapdoodle.eval.evaluatables.TypedEvaluatableByArguments;
 import de.flapdoodle.eval.parser.Token;
 import de.flapdoodle.eval.parser.TokenType;
+import de.flapdoodle.eval.values.Value;
+import de.flapdoodle.eval.values.ValueArray;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -55,11 +47,11 @@ class NodeTest {
 		}
 
 		@Test
-		void function() {
+		void evaluatable() {
 			ComparableValueNode<String> parameterA = valueNode("a");
 			ComparableValueNode<BigDecimal> parameterB = valueNode(BigDecimal.ONE);
 
-			FunctionNode node = functionNode("noop", failOnEverythingFunction(), parameterA, parameterB);
+			EvaluatableNode node = evaluatableNode("noop", failOnEverythingEvaluatable(), parameterA, parameterB);
 			assertThat(Node.allNodes(node))
 				.containsExactly(node, parameterA, parameterB);
 		}
@@ -70,34 +62,6 @@ class NodeTest {
 			StructureAccessNode node = structureAccessNode("noop", structure, "property");
 			assertThat(Node.allNodes(node))
 				.containsExactly(node, structure);
-		}
-
-		@Test
-		void infix() {
-			ComparableValueNode<String> left = valueNode("a");
-			ComparableValueNode<BigDecimal> right = valueNode(BigDecimal.ONE);
-
-			InfixOperatorNode node = infixNode("noop", failOnEverythingInfix(), left, right);
-			assertThat(Node.allNodes(node))
-				.containsExactly(node, left, right);
-		}
-
-		@Test
-		void prefix() {
-			ComparableValueNode<String> operand = valueNode("a");
-
-			PrefixOperatorNode node = prefixNode("noop", failOnEverythingPrefix(), operand);
-			assertThat(Node.allNodes(node))
-				.containsExactly(node, operand);
-		}
-
-		@Test
-		void postfix() {
-			ComparableValueNode<String> operand = valueNode("a");
-
-			PostfixOperatorNode node = postfixNode("noop", failOnEverythingPostfix(), operand);
-			assertThat(Node.allNodes(node))
-				.containsExactly(node, operand);
 		}
 	}
 
@@ -111,71 +75,9 @@ class NodeTest {
 			.containsExactly("var");
 	}
 
-	private InfixOperator failOnEverythingInfix() {
-		return new InfixOperator() {
-			@Override
-			public Value<?> evaluate(ValueResolver valueResolver, EvaluationContext evaluationContext, Token operatorToken, Value<?> leftOperand,
-				Value<?> rightOperand) throws EvaluationException {
-				throw new RuntimeException("fail");
-			}
-			@Override
-			public int getPrecedence() {
-				return 0;
-			}
-			@Override
-			public boolean isLeftAssociative() {
-				return false;
-			}
-		};
-	}
-
-	private PrefixOperator failOnEverythingPrefix() {
-		return new PrefixOperator() {
-			@Override
-			public Value<?> evaluate(ValueResolver valueResolver, EvaluationContext evaluationContext, Token operatorToken, Value<?> operand)
-				throws EvaluationException {
-				throw new RuntimeException("fail");
-			}
-			@Override
-			public int getPrecedence() {
-				return 0;
-			}
-			@Override
-			public boolean isLeftAssociative() {
-				return false;
-			}
-		};
-	}
-
-	private PostfixOperator failOnEverythingPostfix() {
-		return new PostfixOperator() {
-			@Override
-			public Value<?> evaluate(ValueResolver valueResolver, EvaluationContext evaluationContext, Token operatorToken, Value<?> operand)
-				throws EvaluationException {
-				throw new RuntimeException("fail");
-			}
-			@Override
-			public int getPrecedence() {
-				return 0;
-			}
-			@Override
-			public boolean isLeftAssociative() {
-				return false;
-			}
-		};
-	}
-
-	protected static Evaluateable failOnEverythingFunction() {
-		return new Evaluateable() {
-			@Override
-			public Parameters parameters() {
-				return Parameters.of();
-			}
-			@Override
-			public Value<?> evaluate(ValueResolver valueResolver, EvaluationContext evaluationContext, Token token, List<Value<?>> arguments)
-				throws EvaluationException {
-				throw new RuntimeException("fail");
-			}
+	protected static TypedEvaluatableByArguments failOnEverythingEvaluatable() {
+		return values -> {
+			throw new RuntimeException("fail");
 		};
 	}
 
@@ -191,20 +93,8 @@ class NodeTest {
 		return ComparableValueNode.of(token(value, TokenType.NUMBER_LITERAL), Value.of(value));
 	}
 
-	protected static FunctionNode functionNode(String value, Evaluateable function, Node... parameters) {
-		return FunctionNode.of(token(value, TokenType.FUNCTION), function, Arrays.asList(parameters));
-	}
-
-	protected static InfixOperatorNode infixNode(String value, InfixOperator operator, Node left, Node right) {
-		return InfixOperatorNode.of(token(value, TokenType.FUNCTION), operator, left, right);
-	}
-
-	protected static PrefixOperatorNode prefixNode(String value, PrefixOperator operator, Node operand) {
-		return PrefixOperatorNode.of(token(value, TokenType.FUNCTION), operator, operand);
-	}
-
-	protected static PostfixOperatorNode postfixNode(String value, PostfixOperator operator, Node operand) {
-		return PostfixOperatorNode.of(token(value, TokenType.FUNCTION), operator, operand);
+	protected static EvaluatableNode evaluatableNode(String value, TypedEvaluatableByArguments function, Node... parameters) {
+		return EvaluatableNode.of(token(value, TokenType.FUNCTION), function, Arrays.asList(parameters));
 	}
 
 	protected static StructureAccessNode structureAccessNode(String value, Node structure, String property) {

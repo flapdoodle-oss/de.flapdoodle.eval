@@ -16,10 +16,10 @@
  */
 package de.flapdoodle.eval;
 
-import de.flapdoodle.eval.config.ValueResolver;
-import de.flapdoodle.eval.operators.arithmetic.PowerOf;
+import de.flapdoodle.eval.evaluatables.OperatorMap;
+import de.flapdoodle.eval.evaluatables.OperatorMapping;
 import de.flapdoodle.eval.parser.ParseException;
-import de.flapdoodle.types.Pair;
+import de.flapdoodle.eval.values.ValueResolver;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -34,12 +34,10 @@ class ExpressionEvaluatorPowerOfTest extends BaseExpressionEvaluatorTest {
 	@Test
 	void testPrecedenceHigher() throws ParseException, EvaluationException {
 		Expression expression = ExpressionFactory.defaults()
-				.withOperators(Pair.of("^", new PowerOf() {
-					@Override
-					public int getPrecedence() {
-						return 100;
-					}
-				}))
+				.withOperatorMap(OperatorMap.builder()
+					.putInfix("^", OperatorMapping.of(100,false,"power"))
+					.build()
+						.andThen(ExpressionFactory.defaults().operatorMap()))
 				.parse("-2^2");
 
 		assertThat(expression.evaluate(ValueResolver.empty()).wrapped().toString()).isEqualTo("-4.0");

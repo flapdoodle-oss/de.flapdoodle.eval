@@ -16,14 +16,9 @@
  */
 package de.flapdoodle.eval.parser;
 
-import de.flapdoodle.eval.EvaluationContext;
-import de.flapdoodle.eval.EvaluationException;
-import de.flapdoodle.eval.data.Value;
-import de.flapdoodle.eval.operators.AbstractInfixOperator;
-import de.flapdoodle.eval.operators.AbstractPostfixOperator;
-import de.flapdoodle.eval.operators.AbstractPrefixOperator;
-import de.flapdoodle.eval.operators.Precedence;
-import de.flapdoodle.types.Pair;
+import de.flapdoodle.eval.evaluatables.OperatorMap;
+import de.flapdoodle.eval.evaluatables.OperatorMapping;
+import de.flapdoodle.eval.evaluatables.Precedence;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -32,11 +27,12 @@ class TokenizerLiteralOperatorsTest extends BaseParserTest {
 	@BeforeEach
 	public void setup() {
 		factory =
-			factory.withOperators(
-				Pair.of("AND", new AndOperator()),
-				Pair.of("OR", new OrOperator()),
-				Pair.of("NOT", new NotOperator()),
-				Pair.of("DENIED", new DeniedOperator()));
+			factory.withOperatorMap(OperatorMap.builder()
+				.putInfix("AND", OperatorMapping.of(Precedence.OPERATOR_PRECEDENCE_AND,"--and--"))
+				.putInfix("OR", OperatorMapping.of(Precedence.OPERATOR_PRECEDENCE_OR,"--or--"))
+				.putPrefix("NOT", OperatorMapping.of(Precedence.OPERATOR_PRECEDENCE_UNARY,"--not--"))
+				.putPostfix("DENIED", OperatorMapping.of(Precedence.OPERATOR_PRECEDENCE_UNARY,"--denied--"))
+				.build());
 	}
 
 	@Test
@@ -55,49 +51,4 @@ class TokenizerLiteralOperatorsTest extends BaseParserTest {
 			Token.of(27, ")", TokenType.BRACE_CLOSE));
 	}
 
-	static class AndOperator extends AbstractInfixOperator.Typed<Value.BooleanValue, Value.BooleanValue> {
-		protected AndOperator() {
-			super(Precedence.OPERATOR_PRECEDENCE_AND, Value.BooleanValue.class, Value.BooleanValue.class);
-		}
-
-		@Override
-		protected Value<?> evaluateTyped(EvaluationContext evaluationContext, Token operatorToken, Value.BooleanValue leftOperand, Value.BooleanValue rightOperand)
-			throws EvaluationException {
-			return Value.of(leftOperand.wrapped() && rightOperand.wrapped());
-		}
-	}
-
-	static class OrOperator extends AbstractInfixOperator.Typed<Value.BooleanValue, Value.BooleanValue> {
-		protected OrOperator() {
-			super(Precedence.OPERATOR_PRECEDENCE_OR, Value.BooleanValue.class, Value.BooleanValue.class);
-		}
-
-		@Override
-		protected Value<?> evaluateTyped(EvaluationContext evaluationContext, Token operatorToken, Value.BooleanValue leftOperand, Value.BooleanValue rightOperand)
-			throws EvaluationException {
-			return Value.of(leftOperand.wrapped() || rightOperand.wrapped());
-		}
-	}
-
-	static class NotOperator extends AbstractPrefixOperator.Typed<Value.BooleanValue> {
-		protected NotOperator() {
-			super(Precedence.OPERATOR_PRECEDENCE_UNARY, false, Value.BooleanValue.class);
-		}
-
-		@Override
-		protected Value<?> evaluateTyped(EvaluationContext evaluationContext, Token operatorToken, Value.BooleanValue operand) throws EvaluationException {
-			return Value.of(!operand.wrapped());
-		}
-	}
-
-	static class DeniedOperator extends AbstractPostfixOperator.Typed<Value.BooleanValue> {
-		protected DeniedOperator() {
-			super(Precedence.OPERATOR_PRECEDENCE_UNARY, Value.BooleanValue.class);
-		}
-
-		@Override
-		protected Value<?> evaluateTyped(EvaluationContext evaluationContext, Token operatorToken, Value.BooleanValue operand) throws EvaluationException {
-			return Value.of(!operand.wrapped());
-		}
-	}
 }

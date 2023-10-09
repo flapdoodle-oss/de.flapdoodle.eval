@@ -17,7 +17,7 @@
 package de.flapdoodle.eval.parser;
 
 import de.flapdoodle.eval.ExpressionFactory;
-import de.flapdoodle.eval.config.ValueResolver;
+import de.flapdoodle.eval.values.ValueResolver;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -39,7 +39,7 @@ class ShuntingYardExceptionsTest extends BaseParserTest {
 	@Test
 	void testUnexpectedToken() {
 		List<Token> tokens = Arrays.asList(Token.of(1, "x", FUNCTION_PARAM_START));
-		assertThatThrownBy(new ShuntingYardConverter("x", tokens, operatorResolver, functionResolver)::toAbstractSyntaxTree)
+		assertThatThrownBy(new ShuntingYardConverter("x", tokens, operatorMap, evaluatables)::toAbstractSyntaxTree)
 			.isInstanceOf(ParseException.class)
 			.hasMessage("Unexpected token of type 'FUNCTION_PARAM_START'");
 	}
@@ -47,7 +47,7 @@ class ShuntingYardExceptionsTest extends BaseParserTest {
 	@Test
 	void testMissingPrefixOperand() {
 		List<Token> tokens = Arrays.asList(Token.of(1, "-", PREFIX_OPERATOR));
-		assertThatThrownBy(new ShuntingYardConverter("-", tokens, operatorResolver, functionResolver)::toAbstractSyntaxTree)
+		assertThatThrownBy(new ShuntingYardConverter("-", tokens, operatorMap, evaluatables)::toAbstractSyntaxTree)
 			.isInstanceOf(ParseException.class)
 			.hasMessage("Missing operand for operator");
 	}
@@ -58,7 +58,7 @@ class ShuntingYardExceptionsTest extends BaseParserTest {
 			Arrays.asList(
 				Token.of(1, "2", VARIABLE_OR_CONSTANT),
 				Token.of(2, "*", INFIX_OPERATOR));
-		assertThatThrownBy(new ShuntingYardConverter("2*", tokens, operatorResolver, functionResolver)::toAbstractSyntaxTree)
+		assertThatThrownBy(new ShuntingYardConverter("2*", tokens, operatorMap, evaluatables)::toAbstractSyntaxTree)
 			.isInstanceOf(ParseException.class)
 			.hasMessage("Missing second operand for operator");
 	}
@@ -88,7 +88,7 @@ class ShuntingYardExceptionsTest extends BaseParserTest {
 	void testDoubleStructureOperator() {
 		List<Token> tokens =
 			Arrays.asList(Token.of(1, ".", STRUCTURE_SEPARATOR), Token.of(2, ".", STRUCTURE_SEPARATOR));
-		assertThatThrownBy(new ShuntingYardConverter("..", tokens, operatorResolver, functionResolver)::toAbstractSyntaxTree)
+		assertThatThrownBy(new ShuntingYardConverter("..", tokens, operatorMap, evaluatables)::toAbstractSyntaxTree)
 			.isInstanceOf(ParseException.class)
 			.hasMessage("Missing operand for operator");
 	}
@@ -97,7 +97,7 @@ class ShuntingYardExceptionsTest extends BaseParserTest {
 	void testStructureFollowsPostfixOperator() {
 		List<Token> tokens =
 			Arrays.asList(Token.of(1, ".", STRUCTURE_SEPARATOR), Token.of(2, "!", POSTFIX_OPERATOR));
-		assertThatThrownBy(new ShuntingYardConverter("..", tokens, operatorResolver, functionResolver)::toAbstractSyntaxTree)
+		assertThatThrownBy(new ShuntingYardConverter("..", tokens, operatorMap, evaluatables)::toAbstractSyntaxTree)
 			.isInstanceOf(ParseException.class)
 			.hasMessage("Missing operand for operator");
 	}
@@ -109,30 +109,30 @@ class ShuntingYardExceptionsTest extends BaseParserTest {
 				Token.of(1, ".", STRUCTURE_SEPARATOR),
 				Token.of(2, "!", POSTFIX_OPERATOR),
 				Token.of(2, "!", POSTFIX_OPERATOR));
-		assertThatThrownBy(new ShuntingYardConverter("..", tokens, operatorResolver, functionResolver)::toAbstractSyntaxTree)
+		assertThatThrownBy(new ShuntingYardConverter("..", tokens, operatorMap, evaluatables)::toAbstractSyntaxTree)
 			.isInstanceOf(ParseException.class)
 			.hasMessage("Missing operand for operator");
 	}
 
 	@Test
 	void testFunctionNotEnoughParameters() {
-		assertThatThrownBy(() -> ExpressionFactory.defaults().parse("round(2)").evaluate(ValueResolver.empty()))
+		assertThatThrownBy(() -> ExpressionFactory.defaults().parse("round()").evaluate(ValueResolver.empty()))
 			.isInstanceOf(ParseException.class)
-			.hasMessage("Not enough parameters for function");
+			.hasMessage("could not find evaluatable 'round' with 0 arguments");
 	}
 
 	@Test
 	void testFunctionNotEnoughParametersForVarArgs() {
 		assertThatThrownBy(() -> ExpressionFactory.defaults().parse("min()").evaluate(ValueResolver.empty()))
 			.isInstanceOf(ParseException.class)
-			.hasMessage("Not enough parameters for function");
+			.hasMessage("could not find evaluatable 'min' with 0 arguments");
 	}
 
 	@Test
 	void testFunctionTooManyParameters() {
-		assertThatThrownBy(() -> ExpressionFactory.defaults().parse("round(1,2,3)").evaluate(ValueResolver.empty()))
+		assertThatThrownBy(() -> ExpressionFactory.defaults().parse("round(1,2,3,4)").evaluate(ValueResolver.empty()))
 			.isInstanceOf(ParseException.class)
-			.hasMessage("Too many parameters for function");
+			.hasMessage("could not find evaluatable 'round' with 4 arguments");
 	}
 
 	@ParameterizedTest

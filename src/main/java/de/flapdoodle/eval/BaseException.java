@@ -36,6 +36,14 @@ public class BaseException extends Exception {
 		this.message = super.getMessage();
 	}
 
+	public BaseException(int startPosition, int endPosition, String tokenString, Throwable cause) {
+		super(cause);
+		this.startPosition = startPosition;
+		this.endPosition = endPosition;
+		this.tokenString = tokenString;
+		this.message = cause.getMessage();
+	}
+
 	public String toString() {
 		return "BaseException(startPosition=" + this.startPosition + ", endPosition=" + this.endPosition + ", tokenString=" + this.tokenString + ", message="
 			+ this.message + ")";

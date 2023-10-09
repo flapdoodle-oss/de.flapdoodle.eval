@@ -31,10 +31,10 @@
 */
 package de.flapdoodle.eval;
 
-import de.flapdoodle.eval.config.MapBasedValueResolver;
-import de.flapdoodle.eval.config.ValueResolver;
-import de.flapdoodle.eval.data.Value;
 import de.flapdoodle.eval.parser.ParseException;
+import de.flapdoodle.eval.values.MapBasedValueResolver;
+import de.flapdoodle.eval.values.Value;
+import de.flapdoodle.eval.values.ValueResolver;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
@@ -79,7 +79,7 @@ class ExpressionEvaluatorNullTest extends BaseExpressionEvaluatorTest {
 	void testHandleWithIfFailCase() throws EvaluationException, ParseException {
 		assertThatThrownBy(() -> evaluate("if(a == null, a * 5, 1)", ValueResolver.empty().withNull("a")))
 			.isInstanceOf(EvaluationException.class)
-			.hasMessageContaining("type missmatch");
+			.hasMessageContaining("wrong type");
 
 		Expression expression2 =
 			createExpression("if(a != null, \"Unknown name\", \"The name is \" + a)");
@@ -104,7 +104,7 @@ class ExpressionEvaluatorNullTest extends BaseExpressionEvaluatorTest {
 			evaluate("a * 5", mapBasedVariableResolver);
 		})
 			.isInstanceOf(EvaluationException.class)
-			.hasMessageContaining("type missmatch");
+			.hasMessageContaining("wrong type");
 
 		assertThatThrownBy(() -> {
 			MapBasedValueResolver mapBasedVariableResolver = ValueResolver.empty().withNull("a");

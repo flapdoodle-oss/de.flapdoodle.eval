@@ -16,84 +16,40 @@
  */
 package de.flapdoodle.eval.config;
 
-import de.flapdoodle.eval.*;
-import de.flapdoodle.eval.data.Value;
-import de.flapdoodle.eval.operators.AbstractPostfixOperator;
-import de.flapdoodle.eval.operators.AbstractPrefixOperator;
-import de.flapdoodle.eval.operators.Precedence;
-import de.flapdoodle.eval.parser.Token;
-import de.flapdoodle.types.Pair;
+import de.flapdoodle.eval.ExpressionFactory;
+import de.flapdoodle.eval.ImmutableExpressionFactory;
+import de.flapdoodle.eval.evaluatables.*;
+import de.flapdoodle.eval.values.Value;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 public class TestConfigurationProvider {
 
 	public static final ImmutableExpressionFactory StandardFactoryWithAdditionalTestOperators;
 
-	public static final OperatorResolver OperatorResolverWithTestOperators = MapBasedOperatorResolver.of(
-			Pair.of("++", new PrefixPlusPlusOperator()),
-			Pair.of("++", new PostfixPlusPlusOperator()),
-			Pair.of("?", new PostfixQuestionOperator()))
-		.andThen(Defaults.operators());
+	public static final OperatorMap OperatorMapWithTestOperators = OperatorMap.builder()
+			.putPrefix("++", OperatorMapping.of(Precedence.OPERATOR_PRECEDENCE_UNARY, false, "plusOne"))
+			.putPostfix("++", OperatorMapping.of(Precedence.OPERATOR_PRECEDENCE_UNARY, true, "plusOne"))
+			.putPostfix("?", OperatorMapping.of(Precedence.OPERATOR_PRECEDENCE_UNARY, false, "question"))
+			.build()
+			.andThen(Defaults.operatorMap());
 
-	public static final EvaluateableResolver FunctionResolverWithTestFunctions = MapBasedEvaluateableResolver.of(
-		Pair.of("TEST", new DummyFunction())
-	).andThen(Defaults.functions());
+	public static final TypedEvaluatableByName EvaluatablesWithTestFunctions = TypedEvaluatablesMap.builder()
+			.putMap("TEST", TypedEvaluatables.builder()
+					.addList(TypedEvaluatable.ofVarArg(Value.StringValue.class, Value.StringValue.class, (valueResolver, evaluationContext, token, arguments) -> Value.of("OK")))
+					.build())
+			.putMap("plusOne", TypedEvaluatables.builder()
+					.addList(TypedEvaluatable.of(Value.NumberValue.class, Value.NumberValue.class, (valueResolver, evaluationContext, token, argument) -> Value.of(argument.wrapped().add(BigDecimal.ONE))))
+					.build())
+			.putMap("question", TypedEvaluatables.builder()
+					.addList(TypedEvaluatable.of(Value.StringValue.class, Value.NullValue.class, (valueResolver, evaluationContext, token, argument) -> Value.of("?")))
+					.build())
+			.build()
+			.andThen(Defaults.evaluatables());
 
 	static {
 		StandardFactoryWithAdditionalTestOperators = ExpressionFactory.defaults()
-			.withFunctions(FunctionResolverWithTestFunctions)
-			.withOperators(OperatorResolverWithTestOperators);
-	}
-
-	public static class DummyFunction extends Evaluateables.SingleVararg<Value.StringValue> {
-
-		public DummyFunction() {
-			super(Parameter.of(Value.StringValue.class));
-		}
-
-		@Override
-		protected Value<?> evaluateVarArg(ValueResolver variableResolver, EvaluationContext evaluationContext, Token functionToken,
-			List<Value.StringValue> parameterValues) {
-			// dummy implementation
-			return Value.of("OK");
-		}
-	}
-
-	public static class PrefixPlusPlusOperator extends AbstractPrefixOperator.Typed<Value.NumberValue> {
-
-		public PrefixPlusPlusOperator() {
-			super(Precedence.OPERATOR_PRECEDENCE_UNARY, false, Value.NumberValue.class);
-		}
-
-		@Override
-		protected Value<?> evaluateTyped(EvaluationContext evaluationContext, Token operatorToken, Value.NumberValue operand) throws EvaluationException {
-			return Value.of(operand.wrapped().add(BigDecimal.ONE));
-		}
-	}
-
-	public static class PostfixPlusPlusOperator extends AbstractPostfixOperator.Typed<Value.NumberValue> {
-
-		protected PostfixPlusPlusOperator() {
-			super(Value.NumberValue.class);
-		}
-
-		@Override
-		protected Value<?> evaluateTyped(EvaluationContext evaluationContext, Token operatorToken, Value.NumberValue operand) throws EvaluationException {
-			return Value.of(operand.wrapped().add(BigDecimal.ONE));
-		}
-	}
-
-	public static class PostfixQuestionOperator extends AbstractPostfixOperator.Typed<Value.NullValue> {
-
-		public PostfixQuestionOperator() {
-			super(Precedence.OPERATOR_PRECEDENCE_UNARY, false, Value.NullValue.class);
-		}
-
-		@Override
-		protected Value<?> evaluateTyped(EvaluationContext evaluationContext, Token operatorToken, Value.NullValue operand) throws EvaluationException {
-			return Value.of("?");
-		}
+			.withEvaluatables(EvaluatablesWithTestFunctions)
+			.withOperatorMap(OperatorMapWithTestOperators);
 	}
 }

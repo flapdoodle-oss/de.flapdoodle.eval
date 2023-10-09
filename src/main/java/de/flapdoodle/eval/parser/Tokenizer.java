@@ -16,10 +16,8 @@
  */
 package de.flapdoodle.eval.parser;
 
-import de.flapdoodle.eval.config.HasOperator;
-import de.flapdoodle.eval.operators.InfixOperator;
-import de.flapdoodle.eval.operators.PostfixOperator;
-import de.flapdoodle.eval.operators.PrefixOperator;
+import de.flapdoodle.eval.evaluatables.HasOperator;
+import de.flapdoodle.eval.evaluatables.OperatorType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -237,11 +235,11 @@ public class Tokenizer {
 			String possibleNextOperator = tokenString + peek(1);
 			// multi char operators, <= -- etc.
 			boolean possibleNextOperatorFound =
-				(prefixOperatorAllowed && operators.hasStartingWith(PrefixOperator.class, possibleNextOperator))
+				(prefixOperatorAllowed && operators.hasStartingWith(OperatorType.Prefix, possibleNextOperator))
 					|| (postfixOperatorAllowed
-					&& operators.hasStartingWith(PostfixOperator.class, possibleNextOperator))
+					&& operators.hasStartingWith(OperatorType.Postfix, possibleNextOperator))
 					|| (infixOperatorAllowed
-					&& operators.hasStartingWith(InfixOperator.class, possibleNextOperator));
+					&& operators.hasStartingWith(OperatorType.Infix, possibleNextOperator));
 
 			next();
 			if (!possibleNextOperatorFound) {
@@ -251,11 +249,11 @@ public class Tokenizer {
 		}
 		String tokenString = tokenValue.toString();
 
-		if (prefixOperatorAllowed && operators.matching(PrefixOperator.class, tokenString)) {
+		if (prefixOperatorAllowed && operators.matching(OperatorType.Prefix, tokenString)) {
 			return Token.of(tokenStartIndex, tokenString, TokenType.PREFIX_OPERATOR);
-		} else if (postfixOperatorAllowed && operators.matching(PostfixOperator.class, tokenString)) {
+		} else if (postfixOperatorAllowed && operators.matching(OperatorType.Postfix, tokenString)) {
 			return Token.of(tokenStartIndex, tokenString, TokenType.POSTFIX_OPERATOR);
-		} else if (operators.matching(InfixOperator.class, tokenString)) {
+		} else if (operators.matching(OperatorType.Infix, tokenString)) {
 			return Token.of(tokenStartIndex, tokenString, TokenType.INFIX_OPERATOR);
 		}
 
@@ -380,17 +378,17 @@ public class Tokenizer {
 		}
 		String tokenName = tokenValue.toString();
 
-		if (prefixOperatorAllowed() && operators.matching(PrefixOperator.class, tokenName)) {
+		if (prefixOperatorAllowed() && operators.matching(OperatorType.Prefix, tokenName)) {
 			return Token.of(
 				tokenStartIndex,
 				tokenName,
 				TokenType.PREFIX_OPERATOR);
-		} else if (postfixOperatorAllowed() && operators.matching(PostfixOperator.class, tokenName)) {
+		} else if (postfixOperatorAllowed() && operators.matching(OperatorType.Postfix, tokenName)) {
 			return Token.of(
 				tokenStartIndex,
 				tokenName,
 				TokenType.POSTFIX_OPERATOR);
-		} else if (operators.matching(InfixOperator.class, tokenName)) {
+		} else if (operators.matching(OperatorType.Infix, tokenName)) {
 			return Token.of(
 				tokenStartIndex,
 				tokenName,

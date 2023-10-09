@@ -16,8 +16,8 @@
  */
 package de.flapdoodle.eval;
 
-import de.flapdoodle.eval.config.ValueResolver;
 import de.flapdoodle.eval.parser.ParseException;
+import de.flapdoodle.eval.values.ValueResolver;
 import org.assertj.core.api.InstanceOfAssertFactories;
 import org.assertj.core.data.Percentage;
 import org.junit.jupiter.params.ParameterizedTest;
