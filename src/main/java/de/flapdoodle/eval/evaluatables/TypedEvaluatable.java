@@ -12,10 +12,6 @@ import java.util.stream.Collectors;
 public interface TypedEvaluatable<T extends Value<?>> extends Evaluatable<T> {
     Signature<T> signature();
 
-    default boolean parameterIsLazy(int index) {
-        return signature().get(index).isLazy();
-    }
-
     interface Arg0<T extends Value<?>> {
         T evaluate(ValueResolver valueResolver, EvaluationContext evaluationContext, Token token) throws EvaluationException;
     }

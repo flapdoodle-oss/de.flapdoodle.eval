@@ -4,7 +4,7 @@ import de.flapdoodle.eval.evaluatables.TypedEvaluatableByArguments;
 import de.flapdoodle.eval.parser.Token;
 import de.flapdoodle.eval.parser.TokenType;
 import de.flapdoodle.eval.values.Value;
-import de.flapdoodle.eval.values.ValueArray;
+import de.flapdoodle.eval.values.Values;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -27,15 +27,6 @@ class NodeTest {
 			assertThat(Node.allNodes(node))
 				.singleElement()
 				.isEqualTo(node);
-		}
-
-		@Test
-		void arrayAccess() {
-			Node array = anyValueNode("array", Value.of(ValueArray.of(Value.of("foo"))));
-			Node index = valueNode(BigDecimal.ZERO);
-			ArrayAccessNode node = ArrayAccessNode.of(token("noop", TokenType.ARRAY_INDEX), array, index);
-			assertThat(Node.allNodes(node))
-				.containsExactly(node, array, index);
 		}
 
 		@Test

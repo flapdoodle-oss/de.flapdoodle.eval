@@ -21,12 +21,7 @@ public abstract class Node {
         ret.add(node);
         List<Node> subnodes = Collections.emptyList();
 
-        if (node instanceof ArrayAccessNode) {
-            subnodes = Arrays.asList(
-                    ((ArrayAccessNode) node).array(),
-                    ((ArrayAccessNode) node).index()
-            );
-        } else if (node instanceof StructureAccessNode) {
+        if (node instanceof StructureAccessNode) {
             subnodes = Collections.singletonList(
 							((StructureAccessNode) node).structure()
 						);

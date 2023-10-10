@@ -135,7 +135,7 @@ class ExpressionEvaluatorStructureTest extends BaseExpressionEvaluatorTest {
 	@Test
 	void testTripleStructureWithSpaces() throws ParseException, EvaluationException {
 		ImmutableValueMap structure = ValueMap.builder()
-			.putValues("prop b", Value.of(ValueArray.of(
+			.putValues("prop b", Value.of(Values.of(
 				Value.of(ValueMap.builder()
 					.putValues("prop c", Value.of(99))
 					.build())
@@ -151,7 +151,7 @@ class ExpressionEvaluatorStructureTest extends BaseExpressionEvaluatorTest {
 	@Test
 	void testStructureWithSpaceInNameAndArrayAccess() throws EvaluationException, ParseException {
 		ImmutableValueMap structure = ValueMap.builder()
-			.putValues("b prop", Value.of(ValueArray.of(
+			.putValues("b prop", Value.of(Values.of(
 				Value.of(1), Value.of(2), Value.of(3)
 			)))
 			.build();

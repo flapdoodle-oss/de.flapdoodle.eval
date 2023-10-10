@@ -71,7 +71,7 @@ public abstract class Value<T> {
 	}
 
 	@org.immutables.value.Value.Immutable
-	public static abstract class ArrayValue extends Value<ValueArray> {
+	public static abstract class ArrayValue extends Value<Values> {
 	}
 
 	@org.immutables.value.Value.Immutable
@@ -122,7 +122,7 @@ public abstract class Value<T> {
 		return ImmutableDurationValue.of(value);
 	}
 
-	public static ArrayValue of(ValueArray value) {
+	public static ArrayValue of(Values value) {
 		return ImmutableArrayValue.of(value);
 	}
 
@@ -136,7 +136,7 @@ public abstract class Value<T> {
 	}
 
 	public static ArrayValue of(Collection<? extends Value<?>> array) {
-		return ImmutableArrayValue.of(ValueArray.of(array));
+		return ImmutableArrayValue.of(Values.of(array));
 	}
 
 	public static <T> ArrayValue of(Function<T, Value<?>> mapper, Collection<? extends T> array) {
@@ -148,7 +148,7 @@ public abstract class Value<T> {
 	}
 
 	public static ArrayValue of(Value<?>... array) {
-		return of(ValueArray.of(Arrays.asList(array)));
+		return of(Values.of(Arrays.asList(array)));
 	}
 
 	public static Value<?> failedWith(EvaluationException rx) {

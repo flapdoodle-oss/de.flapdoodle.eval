@@ -43,7 +43,7 @@ public abstract class MapBasedValueResolver implements ValueResolver {
 
 	@Auxiliary
 	@Deprecated
-	public ImmutableMapBasedValueResolver with(String variable, ValueArray value) {
+	public ImmutableMapBasedValueResolver with(String variable, Values value) {
 		return with(variable, Value.of(value));
 	}
 

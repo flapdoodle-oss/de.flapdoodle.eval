@@ -6,6 +6,7 @@ import de.flapdoodle.eval.values.Value;
 import de.flapdoodle.eval.values.ValueResolver;
 import de.flapdoodle.eval.parser.Token;
 
+// TODO replace with evaluatable?
 @org.immutables.value.Value.Immutable
 public abstract class StructureAccessNode extends Node {
 	@org.immutables.value.Value.Parameter
