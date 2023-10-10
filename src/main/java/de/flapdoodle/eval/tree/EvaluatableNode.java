@@ -3,11 +3,11 @@ package de.flapdoodle.eval.tree;
 import de.flapdoodle.eval.EvaluatableException;
 import de.flapdoodle.eval.EvaluationContext;
 import de.flapdoodle.eval.EvaluationException;
-import de.flapdoodle.eval.values.Value;
-import de.flapdoodle.eval.values.ValueResolver;
 import de.flapdoodle.eval.evaluatables.TypedEvaluatable;
 import de.flapdoodle.eval.evaluatables.TypedEvaluatableByArguments;
 import de.flapdoodle.eval.parser.Token;
+import de.flapdoodle.eval.values.Value;
+import de.flapdoodle.eval.values.ValueResolver;
 import de.flapdoodle.types.Either;
 
 import java.util.ArrayList;

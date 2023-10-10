@@ -2,9 +2,9 @@ package de.flapdoodle.eval.evaluatables;
 
 import de.flapdoodle.eval.EvaluationContext;
 import de.flapdoodle.eval.EvaluationException;
+import de.flapdoodle.eval.parser.Token;
 import de.flapdoodle.eval.values.Value;
 import de.flapdoodle.eval.values.ValueResolver;
-import de.flapdoodle.eval.parser.Token;
 
 import java.util.List;
 import java.util.stream.Collectors;

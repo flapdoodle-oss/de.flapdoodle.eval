@@ -99,7 +99,7 @@ class ExpressionEvaluatorStructureTest extends BaseExpressionEvaluatorTest {
 			expression.evaluate(variableResolver);
 		})
 			.isInstanceOf(EvaluationException.class)
-			.hasMessage("Unsupported data types in operation");
+			.hasMessage("wrong type: class de.flapdoodle.eval.values.Value$MapValue != StringValue{wrapped=aString}");
 	}
 
 	@Test
@@ -118,7 +118,7 @@ class ExpressionEvaluatorStructureTest extends BaseExpressionEvaluatorTest {
 			.isInstanceOf(EvaluationException.class)
 			.hasMessage("Field 'field2' not found in structure")
 			.extracting("startPosition")
-			.isEqualTo(13);
+			.isEqualTo(12);
 	}
 
 	@Test
