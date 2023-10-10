@@ -105,13 +105,19 @@ class ExpressionEvaluatorArrayTest extends BaseExpressionEvaluatorTest {
 	}
 
 	@Test
+	void stringDataTypeForArray() throws ParseException, EvaluationException {
+		MapBasedValueResolver mapBasedVariableResolver = ValueResolver.empty().with("a", Value.of("aString"));
+		assertThat(evaluate("a[1]", mapBasedVariableResolver)).isEqualTo("S");
+	}
+
+	@Test
 	void testThrowsUnsupportedDataTypeForArray() {
 		assertThatThrownBy(() -> {
-			MapBasedValueResolver mapBasedVariableResolver = ValueResolver.empty().with("a", Value.of("aString"));
+			MapBasedValueResolver mapBasedVariableResolver = ValueResolver.empty().with("a", Value.of(123));
 			evaluate("a[0]", mapBasedVariableResolver);
 		})
 			.isInstanceOf(EvaluationException.class)
-			.hasMessage("Unsupported data types in operation");
+			.hasMessage("wrong type: class de.flapdoodle.eval.values.Value$ArrayValue != NumberValue{wrapped=123.0}");
 	}
 
 	@Test
@@ -123,6 +129,6 @@ class ExpressionEvaluatorArrayTest extends BaseExpressionEvaluatorTest {
 				evaluate("a[b]", mapBasedVariableResolver);
 			})
 			.isInstanceOf(EvaluationException.class)
-			.hasMessage("Unsupported data types in operation");
+			.hasMessage("wrong type: class de.flapdoodle.eval.values.Value$NumberValue != StringValue{wrapped=anotherString}");
 	}
 }

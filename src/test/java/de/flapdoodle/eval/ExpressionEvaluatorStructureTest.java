@@ -77,6 +77,21 @@ class ExpressionEvaluatorStructureTest extends BaseExpressionEvaluatorTest {
 	}
 
 	@Test
+	void testSimpleStructureWithIndexAccess() throws ParseException, EvaluationException {
+		Map<String, BigDecimal> structure =
+			new HashMap<String, BigDecimal>() {
+				{
+					put("b", new BigDecimal(99));
+				}
+			};
+
+		MapBasedValueResolver mapBasedVariableResolver = ValueResolver.empty()
+			.with("a", Value::of, structure);
+		ValueResolver variableResolver = mapBasedVariableResolver;
+		assertThat(evaluate("a[\"b\"]", variableResolver)).isEqualTo("99");
+	}
+
+	@Test
 	void testTripleStructure() throws ParseException, EvaluationException {
 		ImmutableValueMap structure = ValueMap.builder()
 			.putValues("b", Value.of(ValueMap.builder()
@@ -99,7 +114,7 @@ class ExpressionEvaluatorStructureTest extends BaseExpressionEvaluatorTest {
 			expression.evaluate(variableResolver);
 		})
 			.isInstanceOf(EvaluationException.class)
-			.hasMessage("Unsupported data types in operation");
+			.hasMessage("wrong type: class de.flapdoodle.eval.values.Value$MapValue != StringValue{wrapped=aString}");
 	}
 
 	@Test
@@ -118,7 +133,7 @@ class ExpressionEvaluatorStructureTest extends BaseExpressionEvaluatorTest {
 			.isInstanceOf(EvaluationException.class)
 			.hasMessage("Field 'field2' not found in structure")
 			.extracting("startPosition")
-			.isEqualTo(13);
+			.isEqualTo(12);
 	}
 
 	@Test
@@ -135,7 +150,7 @@ class ExpressionEvaluatorStructureTest extends BaseExpressionEvaluatorTest {
 	@Test
 	void testTripleStructureWithSpaces() throws ParseException, EvaluationException {
 		ImmutableValueMap structure = ValueMap.builder()
-			.putValues("prop b", Value.of(ValueArray.of(
+			.putValues("prop b", Value.of(Values.of(
 				Value.of(ValueMap.builder()
 					.putValues("prop c", Value.of(99))
 					.build())
@@ -151,7 +166,7 @@ class ExpressionEvaluatorStructureTest extends BaseExpressionEvaluatorTest {
 	@Test
 	void testStructureWithSpaceInNameAndArrayAccess() throws EvaluationException, ParseException {
 		ImmutableValueMap structure = ValueMap.builder()
-			.putValues("b prop", Value.of(ValueArray.of(
+			.putValues("b prop", Value.of(Values.of(
 				Value.of(1), Value.of(2), Value.of(3)
 			)))
 			.build();

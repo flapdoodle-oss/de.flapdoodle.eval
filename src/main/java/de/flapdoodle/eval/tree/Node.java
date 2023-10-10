@@ -2,11 +2,14 @@ package de.flapdoodle.eval.tree;
 
 import de.flapdoodle.eval.EvaluationContext;
 import de.flapdoodle.eval.EvaluationException;
+import de.flapdoodle.eval.parser.Token;
 import de.flapdoodle.eval.values.Value;
 import de.flapdoodle.eval.values.ValueResolver;
-import de.flapdoodle.eval.parser.Token;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public abstract class Node {
@@ -21,16 +24,7 @@ public abstract class Node {
         ret.add(node);
         List<Node> subnodes = Collections.emptyList();
 
-        if (node instanceof ArrayAccessNode) {
-            subnodes = Arrays.asList(
-                    ((ArrayAccessNode) node).array(),
-                    ((ArrayAccessNode) node).index()
-            );
-        } else if (node instanceof StructureAccessNode) {
-            subnodes = Collections.singletonList(
-							((StructureAccessNode) node).structure()
-						);
-        } else if (node instanceof EvaluatableNode) {
+        if (node instanceof EvaluatableNode) {
             subnodes = ((EvaluatableNode) node).parameters();
         }
         subnodes.forEach(subNode -> ret.addAll(allNodes(subNode)));

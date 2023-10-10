@@ -1,15 +1,13 @@
 package de.flapdoodle.eval.config;
 
-import de.flapdoodle.eval.values.Value;
-import de.flapdoodle.eval.values.ValueResolver;
-import de.flapdoodle.eval.evaluatables.OperatorMap;
-import de.flapdoodle.eval.evaluatables.OperatorMapping;
-import de.flapdoodle.eval.evaluatables.TypedEvaluatableByName;
-import de.flapdoodle.eval.evaluatables.TypedEvaluatablesMap;
+import de.flapdoodle.eval.evaluatables.*;
 import de.flapdoodle.eval.evaluatables.arithmetic.Trigonometric;
+import de.flapdoodle.eval.evaluatables.basic.IndexedAccess;
+import de.flapdoodle.eval.evaluatables.basic.PropertyAccess;
 import de.flapdoodle.eval.evaluatables.datetime.Legacy;
 import de.flapdoodle.eval.evaluatables.string.Contains;
-import de.flapdoodle.eval.evaluatables.Precedence;
+import de.flapdoodle.eval.values.Value;
+import de.flapdoodle.eval.values.ValueResolver;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
@@ -47,6 +45,8 @@ public abstract class Defaults {
     private static final ValueResolver CONSTANTS = ValueResolver.empty().withValues(standardConstants());
 
     private static final TypedEvaluatableByName EVALUATABLES = defaultEvaluatablesMap();
+    private static final TypedEvaluatableByNumberOfArguments ARRAY_ACCESS = new IndexedAccess();
+    private static final TypedEvaluatableByNumberOfArguments PROPERTY_ACCESS = new PropertyAccess();
     private static final OperatorMap OPERATOR_MAP = defaultOperatorMap();
 
     private static final ZoneId ZONE_ID = ZoneId.systemDefault();
@@ -97,6 +97,13 @@ public abstract class Defaults {
           .putInfix("||", OperatorMapping.of(Precedence.OPERATOR_PRECEDENCE_OR, "or"))
           .putPrefix("!", OperatorMapping.of(Precedence.OPERATOR_PRECEDENCE_UNARY, "not"))
           .build();
+    }
+
+    public static final TypedEvaluatableByNumberOfArguments arrayAccess() {
+        return ARRAY_ACCESS;
+    }
+    public static final TypedEvaluatableByNumberOfArguments propertyAccess() {
+        return PROPERTY_ACCESS;
     }
 
     private static TypedEvaluatableByName defaultEvaluatablesMap() {

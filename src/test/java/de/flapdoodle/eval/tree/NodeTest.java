@@ -4,7 +4,6 @@ import de.flapdoodle.eval.evaluatables.TypedEvaluatableByArguments;
 import de.flapdoodle.eval.parser.Token;
 import de.flapdoodle.eval.parser.TokenType;
 import de.flapdoodle.eval.values.Value;
-import de.flapdoodle.eval.values.ValueArray;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -30,15 +29,6 @@ class NodeTest {
 		}
 
 		@Test
-		void arrayAccess() {
-			Node array = anyValueNode("array", Value.of(ValueArray.of(Value.of("foo"))));
-			Node index = valueNode(BigDecimal.ZERO);
-			ArrayAccessNode node = ArrayAccessNode.of(token("noop", TokenType.ARRAY_INDEX), array, index);
-			assertThat(Node.allNodes(node))
-				.containsExactly(node, array, index);
-		}
-
-		@Test
 		void comparableValue() {
 			ComparableValueNode<String> node = valueNode("noop");
 			assertThat(Node.allNodes(node))
@@ -54,14 +44,6 @@ class NodeTest {
 			EvaluatableNode node = evaluatableNode("noop", failOnEverythingEvaluatable(), parameterA, parameterB);
 			assertThat(Node.allNodes(node))
 				.containsExactly(node, parameterA, parameterB);
-		}
-
-		@Test
-		void structureAccess() {
-			AnyTypeValueNode<String> structure = anyValueNode("foo", Value.of("bar"));
-			StructureAccessNode node = structureAccessNode("noop", structure, "property");
-			assertThat(Node.allNodes(node))
-				.containsExactly(node, structure);
 		}
 	}
 
@@ -95,10 +77,6 @@ class NodeTest {
 
 	protected static EvaluatableNode evaluatableNode(String value, TypedEvaluatableByArguments function, Node... parameters) {
 		return EvaluatableNode.of(token(value, TokenType.FUNCTION), function, Arrays.asList(parameters));
-	}
-
-	protected static StructureAccessNode structureAccessNode(String value, Node structure, String property) {
-		return StructureAccessNode.of(token(value, TokenType.STRUCTURE_SEPARATOR), structure, token(property, TokenType.VARIABLE_OR_CONSTANT));
 	}
 
 	protected static Token token(String value, TokenType type) {

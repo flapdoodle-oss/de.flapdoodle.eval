@@ -1,15 +1,12 @@
 package de.flapdoodle.eval;
 
 import de.flapdoodle.eval.config.Defaults;
+import de.flapdoodle.eval.evaluatables.*;
+import de.flapdoodle.eval.parser.*;
+import de.flapdoodle.eval.tree.*;
 import de.flapdoodle.eval.values.MapBasedValueResolver;
 import de.flapdoodle.eval.values.Value;
 import de.flapdoodle.eval.values.ValueResolver;
-import de.flapdoodle.eval.evaluatables.OperatorMap;
-import de.flapdoodle.eval.evaluatables.OperatorMapping;
-import de.flapdoodle.eval.evaluatables.TypedEvaluatableByArguments;
-import de.flapdoodle.eval.evaluatables.TypedEvaluatableByName;
-import de.flapdoodle.eval.parser.*;
-import de.flapdoodle.eval.tree.*;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -27,6 +24,8 @@ public abstract class ExpressionFactory {
 
 	protected abstract ValueResolver constants();
 	protected abstract TypedEvaluatableByName evaluatables();
+	protected abstract TypedEvaluatableByNumberOfArguments arrayAccess();
+	protected abstract TypedEvaluatableByNumberOfArguments propertyAccess();
 
 	protected abstract OperatorMap operatorMap();
 
@@ -159,14 +158,26 @@ public abstract class ExpressionFactory {
 		return EvaluatableNode.of(token, evaluatable.get(), parameterResults);
 	}
 
-	private ArrayAccessNode evaluateArrayIndex(ASTNode startNode) throws EvaluationException {
-		return ArrayAccessNode.of(startNode.getToken(), map(startNode.getParameters().get(0)), map(startNode.getParameters().get(1)));
+	private Node evaluateArrayIndex(ASTNode startNode) throws EvaluationException {
+		Node objectNode = map(startNode.getParameters().get(0));
+		Node indexNode = map(startNode.getParameters().get(1));
+		Optional<? extends TypedEvaluatableByArguments> arrayAccess = arrayAccess().filterByNumberOfArguments(2);
+
+		if (!arrayAccess.isPresent()) throw new EvaluationException(startNode.getToken(), "could not find array access");
+
+		return EvaluatableNode.of(startNode.getToken(), arrayAccess.get(), Arrays.asList(objectNode, indexNode));
 	}
 
-	private StructureAccessNode evaluateStructureSeparator(ASTNode startNode) throws EvaluationException {
+	private Node evaluateStructureSeparator(ASTNode startNode) throws EvaluationException {
 		Node structure = map(startNode.getParameters().get(0));
 		Token nameToken = startNode.getParameters().get(1).getToken();
-		return StructureAccessNode.of(startNode.getToken(), structure, nameToken);
+		Node name = AnyTypeValueNode.of(nameToken, Value.of(nameToken.value()));
+
+		Optional<? extends TypedEvaluatableByArguments> propertyAccess = propertyAccess().filterByNumberOfArguments(2);
+
+		if (!propertyAccess.isPresent()) throw new EvaluationException(startNode.getToken(), "could not find property access");
+
+		return EvaluatableNode.of(startNode.getToken(), propertyAccess.get(), Arrays.asList(structure, name));
 	}
 
 	private static Value.NumberValue numberOfString(String value, MathContext mathContext) {
@@ -184,6 +195,8 @@ public abstract class ExpressionFactory {
 			.zoneId(ZoneId.systemDefault())
 			.mathContext(Defaults.mathContext())
 			.evaluatables(Defaults.evaluatables())
+			.arrayAccess(Defaults.arrayAccess())
+			.propertyAccess(Defaults.propertyAccess())
 			.operatorMap(Defaults.operatorMap())
 			.build();
 	}

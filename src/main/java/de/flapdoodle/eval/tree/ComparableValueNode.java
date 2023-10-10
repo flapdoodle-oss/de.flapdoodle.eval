@@ -1,9 +1,9 @@
 package de.flapdoodle.eval.tree;
 
 import de.flapdoodle.eval.EvaluationContext;
+import de.flapdoodle.eval.parser.Token;
 import de.flapdoodle.eval.values.Value;
 import de.flapdoodle.eval.values.ValueResolver;
-import de.flapdoodle.eval.parser.Token;
 
 @org.immutables.value.Value.Immutable
 public abstract class ComparableValueNode<T extends Comparable<T>> extends ValueNode<T> {

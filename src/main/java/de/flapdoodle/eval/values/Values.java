@@ -20,7 +20,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @org.immutables.value.Value.Immutable
-public abstract class ValueArray {
+public abstract class Values {
 	protected abstract List<Value<?>> values();
 
 	@org.immutables.value.Value.Auxiliary
@@ -28,19 +28,19 @@ public abstract class ValueArray {
 		return values().get(index);
 	}
 
-	public static ValueArray of(Iterable<? extends Value<?>> values) {
-		return ImmutableValueArray.builder()
+	public static Values of(Iterable<? extends Value<?>> values) {
+		return ImmutableValues.builder()
 			.values(values)
 			.build();
 	}
 
-	public static ValueArray of(Value<?>... values) {
+	public static Values of(Value<?>... values) {
 		return builder()
 			.values(Arrays.asList(values))
 			.build();
 	}
 
-	public static ImmutableValueArray.Builder builder() {
-		return ImmutableValueArray.builder();
+	public static ImmutableValues.Builder builder() {
+		return ImmutableValues.builder();
 	}
 }
