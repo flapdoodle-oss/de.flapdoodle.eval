@@ -77,6 +77,21 @@ class ExpressionEvaluatorStructureTest extends BaseExpressionEvaluatorTest {
 	}
 
 	@Test
+	void testSimpleStructureWithIndexAccess() throws ParseException, EvaluationException {
+		Map<String, BigDecimal> structure =
+			new HashMap<String, BigDecimal>() {
+				{
+					put("b", new BigDecimal(99));
+				}
+			};
+
+		MapBasedValueResolver mapBasedVariableResolver = ValueResolver.empty()
+			.with("a", Value::of, structure);
+		ValueResolver variableResolver = mapBasedVariableResolver;
+		assertThat(evaluate("a[\"b\"]", variableResolver)).isEqualTo("99");
+	}
+
+	@Test
 	void testTripleStructure() throws ParseException, EvaluationException {
 		ImmutableValueMap structure = ValueMap.builder()
 			.putValues("b", Value.of(ValueMap.builder()

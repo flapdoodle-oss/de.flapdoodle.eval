@@ -32,6 +32,7 @@ public class IndexedAccess extends TypedEvaluatables.Wrapper {
 		super(TypedEvaluatables.builder()
 			.addList(TypedEvaluatable.of((Class) Value.class, Parameter.of(Value.ArrayValue.class), Parameter.of(Value.NumberValue.class), new ValueArrayAccess()))
 			.addList(TypedEvaluatable.of((Class) Value.class, Parameter.of(Value.StringValue.class), Parameter.of(Value.NumberValue.class), new StringAccess()))
+			.addList(TypedEvaluatable.of((Class) Value.class, Parameter.of(Value.MapValue.class), Parameter.of(Value.StringValue.class), new PropertyAccess.MapAccess()))
 			.build());
 	}
 }
