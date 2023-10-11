@@ -16,8 +16,8 @@
  */
 package de.flapdoodle.eval;
 
-import de.flapdoodle.eval.evaluatables.OperatorMap;
-import de.flapdoodle.eval.evaluatables.OperatorMapping;
+import de.flapdoodle.eval.evaluables.OperatorMap;
+import de.flapdoodle.eval.evaluables.OperatorMapping;
 import de.flapdoodle.eval.parser.ParseException;
 import de.flapdoodle.eval.values.ValueResolver;
 import org.junit.jupiter.api.Test;

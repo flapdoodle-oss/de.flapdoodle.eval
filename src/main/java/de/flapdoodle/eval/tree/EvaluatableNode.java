@@ -1,10 +1,10 @@
 package de.flapdoodle.eval.tree;
 
-import de.flapdoodle.eval.EvaluatableException;
+import de.flapdoodle.eval.EvaluableException;
 import de.flapdoodle.eval.EvaluationContext;
 import de.flapdoodle.eval.EvaluationException;
-import de.flapdoodle.eval.evaluatables.TypedEvaluatable;
-import de.flapdoodle.eval.evaluatables.TypedEvaluatableByArguments;
+import de.flapdoodle.eval.evaluables.TypedEvaluable;
+import de.flapdoodle.eval.evaluables.TypedEvaluableByArguments;
 import de.flapdoodle.eval.parser.Token;
 import de.flapdoodle.eval.values.Value;
 import de.flapdoodle.eval.values.ValueResolver;
@@ -16,7 +16,7 @@ import java.util.List;
 @org.immutables.value.Value.Immutable
 public abstract class EvaluatableNode extends Node {
 	@org.immutables.value.Value.Parameter
-	protected abstract TypedEvaluatableByArguments evaluatable();
+	protected abstract TypedEvaluableByArguments evaluatable();
 	@org.immutables.value.Value.Parameter
 	protected abstract List<Node> parameters();
 
@@ -31,7 +31,7 @@ public abstract class EvaluatableNode extends Node {
 				parameterResults.add(Value.failedWith(ex));
 			}
 		}
-		Either<TypedEvaluatable<?>, List<EvaluatableException>> evaluatable = evaluatable().find(parameterResults);
+		Either<TypedEvaluable<?>, List<EvaluableException>> evaluatable = evaluatable().find(parameterResults);
 		if (evaluatable.isLeft()) {
 			try {
 				Value<?> evaluated = evaluatable.left().evaluate(variableResolver, context, token(), parameterResults);
@@ -47,7 +47,7 @@ public abstract class EvaluatableNode extends Node {
 		}
 	}
 	
-	public static EvaluatableNode of(Token token, TypedEvaluatableByArguments function, List<Node> parameters) {
+	public static EvaluatableNode of(Token token, TypedEvaluableByArguments function, List<Node> parameters) {
 		return ImmutableEvaluatableNode.builder()
 			.token(token)
 			.evaluatable(function)

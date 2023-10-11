@@ -16,8 +16,8 @@
  */
 package de.flapdoodle.eval.parser;
 
-import de.flapdoodle.eval.evaluatables.HasOperator;
-import de.flapdoodle.eval.evaluatables.OperatorType;
+import de.flapdoodle.eval.evaluables.HasOperator;
+import de.flapdoodle.eval.evaluables.OperatorType;
 
 import java.util.ArrayList;
 import java.util.List;
