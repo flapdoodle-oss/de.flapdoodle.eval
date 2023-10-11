@@ -190,8 +190,12 @@ public abstract class ExpressionFactory {
 		}
 	}
 
+	public static ImmutableExpressionFactory.Builder builder() {
+		return ImmutableExpressionFactory.builder();
+	}
+
 	public static ImmutableExpressionFactory defaults() {
-		return ImmutableExpressionFactory.builder()
+		return builder()
 			.constants(Defaults.constants())
 			.zoneId(ZoneId.systemDefault())
 			.mathContext(Defaults.mathContext())
