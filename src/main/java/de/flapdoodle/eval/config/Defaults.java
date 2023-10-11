@@ -1,11 +1,11 @@
 package de.flapdoodle.eval.config;
 
-import de.flapdoodle.eval.evaluatables.*;
-import de.flapdoodle.eval.evaluatables.arithmetic.Trigonometric;
-import de.flapdoodle.eval.evaluatables.basic.IndexedAccess;
-import de.flapdoodle.eval.evaluatables.basic.PropertyAccess;
-import de.flapdoodle.eval.evaluatables.datetime.Legacy;
-import de.flapdoodle.eval.evaluatables.string.Contains;
+import de.flapdoodle.eval.evaluables.*;
+import de.flapdoodle.eval.evaluables.arithmetic.Trigonometric;
+import de.flapdoodle.eval.evaluables.basic.IndexedAccess;
+import de.flapdoodle.eval.evaluables.basic.PropertyAccess;
+import de.flapdoodle.eval.evaluables.datetime.Legacy;
+import de.flapdoodle.eval.evaluables.string.Contains;
 import de.flapdoodle.eval.values.Value;
 import de.flapdoodle.eval.values.ValueResolver;
 
@@ -44,9 +44,9 @@ public abstract class Defaults {
     private static final MathContext MATH_CONTEXT = new MathContext(68, RoundingMode.HALF_EVEN);
     private static final ValueResolver CONSTANTS = ValueResolver.empty().withValues(standardConstants());
 
-    private static final TypedEvaluatableByName EVALUATABLES = defaultEvaluatablesMap();
-    private static final TypedEvaluatableByNumberOfArguments ARRAY_ACCESS = new IndexedAccess();
-    private static final TypedEvaluatableByNumberOfArguments PROPERTY_ACCESS = new PropertyAccess();
+    private static final TypedEvaluableByName EVALUATABLES = defaultEvaluatablesMap();
+    private static final TypedEvaluableByNumberOfArguments ARRAY_ACCESS = new IndexedAccess();
+    private static final TypedEvaluableByNumberOfArguments PROPERTY_ACCESS = new PropertyAccess();
     private static final OperatorMap OPERATOR_MAP = defaultOperatorMap();
 
     private static final ZoneId ZONE_ID = ZoneId.systemDefault();
@@ -59,7 +59,7 @@ public abstract class Defaults {
         return CONSTANTS;
     }
 
-    public static TypedEvaluatableByName evaluatables() {
+    public static TypedEvaluableByName evaluatables() {
         return EVALUATABLES;
     }
 
@@ -99,31 +99,31 @@ public abstract class Defaults {
           .build();
     }
 
-    public static final TypedEvaluatableByNumberOfArguments arrayAccess() {
+    public static final TypedEvaluableByNumberOfArguments arrayAccess() {
         return ARRAY_ACCESS;
     }
-    public static final TypedEvaluatableByNumberOfArguments propertyAccess() {
+    public static final TypedEvaluableByNumberOfArguments propertyAccess() {
         return PROPERTY_ACCESS;
     }
 
-    private static TypedEvaluatableByName defaultEvaluatablesMap() {
-        return TypedEvaluatablesMap.builder()
-                .putMap("abs", new de.flapdoodle.eval.evaluatables.arithmetic.Abs())
-                .putMap("ceiling", de.flapdoodle.eval.evaluatables.basic.Round.ceiling()) // deprecated
-                .putMap("factorial", new de.flapdoodle.eval.evaluatables.arithmetic.Factorial())
-                .putMap("floor", de.flapdoodle.eval.evaluatables.basic.Round.floor()) // deprecated
+    private static TypedEvaluableByName defaultEvaluatablesMap() {
+        return TypedEvaluableMap.builder()
+                .putMap("abs", new de.flapdoodle.eval.evaluables.arithmetic.Abs())
+                .putMap("ceiling", de.flapdoodle.eval.evaluables.basic.Round.ceiling()) // deprecated
+                .putMap("factorial", new de.flapdoodle.eval.evaluables.arithmetic.Factorial())
+                .putMap("floor", de.flapdoodle.eval.evaluables.basic.Round.floor()) // deprecated
 
-                .putMap("if", new de.flapdoodle.eval.evaluatables.basic.Conditional())
+                .putMap("if", new de.flapdoodle.eval.evaluables.basic.Conditional())
 
-                .putMap("log", new de.flapdoodle.eval.evaluatables.arithmetic.Log())
-                .putMap("log10", new de.flapdoodle.eval.evaluatables.arithmetic.Log10())
-                .putMap("max", new de.flapdoodle.eval.evaluatables.arithmetic.Max())
-                .putMap("min", new de.flapdoodle.eval.evaluatables.arithmetic.Min())
-                .putMap("not", new de.flapdoodle.eval.evaluatables.booleans.Not())
-                .putMap("random", new de.flapdoodle.eval.evaluatables.arithmetic.Random())
-                .putMap("round", new de.flapdoodle.eval.evaluatables.basic.Round())
-                .putMap("sum", new de.flapdoodle.eval.evaluatables.arithmetic.Plus())
-                .putMap("sqrt", new de.flapdoodle.eval.evaluatables.arithmetic.Sqrt())
+                .putMap("log", new de.flapdoodle.eval.evaluables.arithmetic.Log())
+                .putMap("log10", new de.flapdoodle.eval.evaluables.arithmetic.Log10())
+                .putMap("max", new de.flapdoodle.eval.evaluables.arithmetic.Max())
+                .putMap("min", new de.flapdoodle.eval.evaluables.arithmetic.Min())
+                .putMap("not", new de.flapdoodle.eval.evaluables.booleans.Not())
+                .putMap("random", new de.flapdoodle.eval.evaluables.arithmetic.Random())
+                .putMap("round", new de.flapdoodle.eval.evaluables.basic.Round())
+                .putMap("sum", new de.flapdoodle.eval.evaluables.arithmetic.Plus())
+                .putMap("sqrt", new de.flapdoodle.eval.evaluables.arithmetic.Sqrt())
                 // trigonometric
                 .putMap("acos", Trigonometric.acos())
                 .putMap("acosH", Trigonometric.acosH())
@@ -161,34 +161,34 @@ public abstract class Defaults {
                 .putMap("tanR", Trigonometric.tanR())
                 // string functions
                 .putMap("contains", new Contains())
-                .putMap("toLower", new de.flapdoodle.eval.evaluatables.string.ToLowerCase())
-                .putMap("toUpper", new de.flapdoodle.eval.evaluatables.string.ToUpperCase())
+                .putMap("toLower", new de.flapdoodle.eval.evaluables.string.ToLowerCase())
+                .putMap("toUpper", new de.flapdoodle.eval.evaluables.string.ToUpperCase())
                 // date time functions
-                .putMap("localDateTime", new de.flapdoodle.eval.evaluatables.datetime.CreateLocalDateTime())
-                .putMap("parseLocalDateTime", new de.flapdoodle.eval.evaluatables.datetime.DateTimeParser())
-                .putMap("parseZonedDateTime", new de.flapdoodle.eval.evaluatables.datetime.ZonedDateTimeParser())
-                .putMap("formatLocalDateTime", new de.flapdoodle.eval.evaluatables.datetime.FormatDateTime())
+                .putMap("localDateTime", new de.flapdoodle.eval.evaluables.datetime.CreateLocalDateTime())
+                .putMap("parseLocalDateTime", new de.flapdoodle.eval.evaluables.datetime.DateTimeParser())
+                .putMap("parseZonedDateTime", new de.flapdoodle.eval.evaluables.datetime.ZonedDateTimeParser())
+                .putMap("formatLocalDateTime", new de.flapdoodle.eval.evaluables.datetime.FormatDateTime())
                 .putMap("localDateTime2EpochMilli", Legacy.dateTime2Epoch())
                 .putMap("localDateTimeOfEpochMilli", Legacy.epochFromNumber())
-                .putMap("durationOfMillis", de.flapdoodle.eval.evaluatables.datetime.DurationParser.ofMillis())
-                .putMap("durationOfDays", de.flapdoodle.eval.evaluatables.datetime.DurationParser.ofDays())
-                .putMap("parseDuration", de.flapdoodle.eval.evaluatables.datetime.DurationParser.parseDuration())
+                .putMap("durationOfMillis", de.flapdoodle.eval.evaluables.datetime.DurationParser.ofMillis())
+                .putMap("durationOfDays", de.flapdoodle.eval.evaluables.datetime.DurationParser.ofDays())
+                .putMap("parseDuration", de.flapdoodle.eval.evaluables.datetime.DurationParser.parseDuration())
 
                 // operators only
-                .putMap("minus", new de.flapdoodle.eval.evaluatables.arithmetic.Minus())
-                .putMap("multiply", new de.flapdoodle.eval.evaluatables.arithmetic.Multiply())
-                .putMap("divide", new de.flapdoodle.eval.evaluatables.arithmetic.Divide())
-                .putMap("power", new de.flapdoodle.eval.evaluatables.arithmetic.PowerOf())
-                .putMap("modulo", new de.flapdoodle.eval.evaluatables.arithmetic.Modulo())
-                .putMap("equal", new de.flapdoodle.eval.evaluatables.basic.Equals())
-                .putMap("same", new de.flapdoodle.eval.evaluatables.basic.Same())
-                .putMap("notequal", de.flapdoodle.eval.evaluatables.basic.Equals.not())
-                .putMap("greater", de.flapdoodle.eval.evaluatables.basic.Comparables.greater())
-                .putMap("greaterOrEqual", de.flapdoodle.eval.evaluatables.basic.Comparables.greaterOrEqual())
-                .putMap("less", de.flapdoodle.eval.evaluatables.basic.Comparables.less())
-                .putMap("lessOrEqual", de.flapdoodle.eval.evaluatables.basic.Comparables.lessOrEqual())
-                .putMap("and", de.flapdoodle.eval.evaluatables.booleans.Combine.and())
-                .putMap("or", de.flapdoodle.eval.evaluatables.booleans.Combine.or())
+                .putMap("minus", new de.flapdoodle.eval.evaluables.arithmetic.Minus())
+                .putMap("multiply", new de.flapdoodle.eval.evaluables.arithmetic.Multiply())
+                .putMap("divide", new de.flapdoodle.eval.evaluables.arithmetic.Divide())
+                .putMap("power", new de.flapdoodle.eval.evaluables.arithmetic.PowerOf())
+                .putMap("modulo", new de.flapdoodle.eval.evaluables.arithmetic.Modulo())
+                .putMap("equal", new de.flapdoodle.eval.evaluables.basic.Equals())
+                .putMap("same", new de.flapdoodle.eval.evaluables.basic.Same())
+                .putMap("notequal", de.flapdoodle.eval.evaluables.basic.Equals.not())
+                .putMap("greater", de.flapdoodle.eval.evaluables.basic.Comparables.greater())
+                .putMap("greaterOrEqual", de.flapdoodle.eval.evaluables.basic.Comparables.greaterOrEqual())
+                .putMap("less", de.flapdoodle.eval.evaluables.basic.Comparables.less())
+                .putMap("lessOrEqual", de.flapdoodle.eval.evaluables.basic.Comparables.lessOrEqual())
+                .putMap("and", de.flapdoodle.eval.evaluables.booleans.Combine.and())
+                .putMap("or", de.flapdoodle.eval.evaluables.booleans.Combine.or())
                 .build();
     }
 }

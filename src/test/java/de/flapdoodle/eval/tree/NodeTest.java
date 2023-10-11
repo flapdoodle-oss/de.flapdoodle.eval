@@ -1,6 +1,6 @@
 package de.flapdoodle.eval.tree;
 
-import de.flapdoodle.eval.evaluatables.TypedEvaluatableByArguments;
+import de.flapdoodle.eval.evaluables.TypedEvaluableByArguments;
 import de.flapdoodle.eval.parser.Token;
 import de.flapdoodle.eval.parser.TokenType;
 import de.flapdoodle.eval.values.Value;
@@ -57,7 +57,7 @@ class NodeTest {
 			.containsExactly("var");
 	}
 
-	protected static TypedEvaluatableByArguments failOnEverythingEvaluatable() {
+	protected static TypedEvaluableByArguments failOnEverythingEvaluatable() {
 		return values -> {
 			throw new RuntimeException("fail");
 		};
@@ -75,7 +75,7 @@ class NodeTest {
 		return ComparableValueNode.of(token(value, TokenType.NUMBER_LITERAL), Value.of(value));
 	}
 
-	protected static EvaluatableNode evaluatableNode(String value, TypedEvaluatableByArguments function, Node... parameters) {
+	protected static EvaluatableNode evaluatableNode(String value, TypedEvaluableByArguments function, Node... parameters) {
 		return EvaluatableNode.of(token(value, TokenType.FUNCTION), function, Arrays.asList(parameters));
 	}
 

@@ -16,10 +16,10 @@
  */
 package de.flapdoodle.eval.parser;
 
-import de.flapdoodle.eval.evaluatables.OperatorMap;
-import de.flapdoodle.eval.evaluatables.OperatorMapping;
-import de.flapdoodle.eval.evaluatables.TypedEvaluatableByArguments;
-import de.flapdoodle.eval.evaluatables.TypedEvaluatableByName;
+import de.flapdoodle.eval.evaluables.OperatorMap;
+import de.flapdoodle.eval.evaluables.OperatorMapping;
+import de.flapdoodle.eval.evaluables.TypedEvaluableByArguments;
+import de.flapdoodle.eval.evaluables.TypedEvaluableByName;
 
 import java.util.*;
 
@@ -32,7 +32,7 @@ public class ShuntingYardConverter {
 	private final List<Token> expressionTokens;
 
 	private final OperatorMap operatorMap;
-	private final TypedEvaluatableByName evaluatables;
+	private final TypedEvaluableByName evaluatables;
 
 	private final Deque<Token> operatorStack = new ArrayDeque<>();
 	private final Deque<ASTNode> operandStack = new ArrayDeque<>();
@@ -41,7 +41,7 @@ public class ShuntingYardConverter {
 			String originalExpression,
 			List<Token> expressionTokens,
 		OperatorMap operatorMap,
-		TypedEvaluatableByName evaluatables) {
+		TypedEvaluableByName evaluatables) {
 		this.originalExpression = originalExpression;
 		this.expressionTokens = expressionTokens;
 
@@ -152,7 +152,7 @@ public class ShuntingYardConverter {
 
 	private void validateFunctionParameters(Token functionToken, ArrayList<ASTNode> parameters)
 		throws ParseException {
-		Optional<? extends TypedEvaluatableByArguments> evaluatable = evaluatables.find(functionToken.value(), parameters.size());
+		Optional<? extends TypedEvaluableByArguments> evaluatable = evaluatables.find(functionToken.value(), parameters.size());
 		if (!evaluatable.isPresent()) {
 			throw new ParseException(functionToken, "could not find evaluatable '"+functionToken.value()+"' with "+parameters.size()+" arguments");
 		}

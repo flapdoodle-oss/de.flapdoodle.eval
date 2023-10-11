@@ -31,7 +31,7 @@ public class EvaluationException extends BaseException {
 			message);
 	}
 
-	public EvaluationException(Token token, EvaluatableException cause) {
+	public EvaluationException(Token token, EvaluableException cause) {
 		super(
 			token.start(),
 			token.start() + token.value().length(),
@@ -39,10 +39,10 @@ public class EvaluationException extends BaseException {
 			cause);
 	}
 
-	public EvaluationException of(Token token, List<? extends EvaluatableException> causes) {
-		EvaluatableException cause = causes.get(0);
+	public EvaluationException of(Token token, List<? extends EvaluableException> causes) {
+		EvaluableException cause = causes.get(0);
 		for (int i = 1; i < causes.size(); i++) {
-			EvaluatableException c = causes.get(i);
+			EvaluableException c = causes.get(i);
 			cause.addSuppressed(c);
 		}
 		return new EvaluationException(token, cause);

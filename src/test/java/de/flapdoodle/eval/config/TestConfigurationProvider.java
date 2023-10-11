@@ -18,7 +18,7 @@ package de.flapdoodle.eval.config;
 
 import de.flapdoodle.eval.ExpressionFactory;
 import de.flapdoodle.eval.ImmutableExpressionFactory;
-import de.flapdoodle.eval.evaluatables.*;
+import de.flapdoodle.eval.evaluables.*;
 import de.flapdoodle.eval.values.Value;
 
 import java.math.BigDecimal;
@@ -34,15 +34,15 @@ public class TestConfigurationProvider {
 			.build()
 			.andThen(Defaults.operatorMap());
 
-	public static final TypedEvaluatableByName EvaluatablesWithTestFunctions = TypedEvaluatablesMap.builder()
-			.putMap("TEST", TypedEvaluatables.builder()
-					.addList(TypedEvaluatable.ofVarArg(Value.StringValue.class, Value.StringValue.class, (valueResolver, evaluationContext, token, arguments) -> Value.of("OK")))
+	public static final TypedEvaluableByName EvaluatablesWithTestFunctions = TypedEvaluableMap.builder()
+			.putMap("TEST", TypedEvaluables.builder()
+					.addList(TypedEvaluable.ofVarArg(Value.StringValue.class, Value.StringValue.class, (valueResolver, evaluationContext, token, arguments) -> Value.of("OK")))
 					.build())
-			.putMap("plusOne", TypedEvaluatables.builder()
-					.addList(TypedEvaluatable.of(Value.NumberValue.class, Value.NumberValue.class, (valueResolver, evaluationContext, token, argument) -> Value.of(argument.wrapped().add(BigDecimal.ONE))))
+			.putMap("plusOne", TypedEvaluables.builder()
+					.addList(TypedEvaluable.of(Value.NumberValue.class, Value.NumberValue.class, (valueResolver, evaluationContext, token, argument) -> Value.of(argument.wrapped().add(BigDecimal.ONE))))
 					.build())
-			.putMap("question", TypedEvaluatables.builder()
-					.addList(TypedEvaluatable.of(Value.StringValue.class, Value.NullValue.class, (valueResolver, evaluationContext, token, argument) -> Value.of("?")))
+			.putMap("question", TypedEvaluables.builder()
+					.addList(TypedEvaluable.of(Value.StringValue.class, Value.NullValue.class, (valueResolver, evaluationContext, token, argument) -> Value.of("?")))
 					.build())
 			.build()
 			.andThen(Defaults.evaluatables());

@@ -18,8 +18,8 @@ package de.flapdoodle.eval.parser;
 
 import de.flapdoodle.eval.ImmutableExpressionFactory;
 import de.flapdoodle.eval.config.TestConfigurationProvider;
-import de.flapdoodle.eval.evaluatables.OperatorMap;
-import de.flapdoodle.eval.evaluatables.TypedEvaluatableByName;
+import de.flapdoodle.eval.evaluables.OperatorMap;
+import de.flapdoodle.eval.evaluables.TypedEvaluableByName;
 import org.assertj.core.api.Assertions;
 
 import java.util.List;
@@ -35,7 +35,7 @@ public abstract class BaseParserTest {
 	OperatorMap operatorMap =
 			TestConfigurationProvider.OperatorMapWithTestOperators;
 
-	TypedEvaluatableByName evaluatables =
+	TypedEvaluableByName evaluatables =
 			TestConfigurationProvider.EvaluatablesWithTestFunctions;
 
 	void assertAllTokensParsedCorrectly(String input, Token... expectedTokens) throws ParseException {

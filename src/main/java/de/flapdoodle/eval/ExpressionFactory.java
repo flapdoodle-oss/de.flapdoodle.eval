@@ -1,7 +1,7 @@
 package de.flapdoodle.eval;
 
 import de.flapdoodle.eval.config.Defaults;
-import de.flapdoodle.eval.evaluatables.*;
+import de.flapdoodle.eval.evaluables.*;
 import de.flapdoodle.eval.parser.*;
 import de.flapdoodle.eval.tree.*;
 import de.flapdoodle.eval.values.MapBasedValueResolver;
@@ -23,9 +23,9 @@ public abstract class ExpressionFactory {
 	protected abstract ZoneId zoneId();
 
 	protected abstract ValueResolver constants();
-	protected abstract TypedEvaluatableByName evaluatables();
-	protected abstract TypedEvaluatableByNumberOfArguments arrayAccess();
-	protected abstract TypedEvaluatableByNumberOfArguments propertyAccess();
+	protected abstract TypedEvaluableByName evaluatables();
+	protected abstract TypedEvaluableByNumberOfArguments arrayAccess();
+	protected abstract TypedEvaluableByNumberOfArguments propertyAccess();
 
 	protected abstract OperatorMap operatorMap();
 
@@ -108,7 +108,7 @@ public abstract class ExpressionFactory {
 	}
 
 	private EvaluatableNode evaluatableNode(Token token, OperatorMapping operatorMapping, List<Node> parameters) {
-		Optional<? extends TypedEvaluatableByArguments> evaluatable = evaluatables().find(operatorMapping.evaluatable(), parameters.size());
+		Optional<? extends TypedEvaluableByArguments> evaluatable = evaluatables().find(operatorMapping.evaluatable(), parameters.size());
 		if (evaluatable.isPresent()) {
 			return EvaluatableNode.of(token, evaluatable.get(), parameters);
 		} else {
@@ -150,7 +150,7 @@ public abstract class ExpressionFactory {
 			parameterResults.add(map(startNode.getParameters().get(i)));
 		}
 
-		Optional<? extends TypedEvaluatableByArguments> evaluatable = evaluatables().find(token.value(),
+		Optional<? extends TypedEvaluableByArguments> evaluatable = evaluatables().find(token.value(),
 			startNode.getParameters().size());
 
 		if (!evaluatable.isPresent()) throw new EvaluationException(token, "could not find evaluatable");
@@ -161,7 +161,7 @@ public abstract class ExpressionFactory {
 	private Node evaluateArrayIndex(ASTNode startNode) throws EvaluationException {
 		Node objectNode = map(startNode.getParameters().get(0));
 		Node indexNode = map(startNode.getParameters().get(1));
-		Optional<? extends TypedEvaluatableByArguments> arrayAccess = arrayAccess().filterByNumberOfArguments(2);
+		Optional<? extends TypedEvaluableByArguments> arrayAccess = arrayAccess().filterByNumberOfArguments(2);
 
 		if (!arrayAccess.isPresent()) throw new EvaluationException(startNode.getToken(), "could not find array access");
 
@@ -173,7 +173,7 @@ public abstract class ExpressionFactory {
 		Token nameToken = startNode.getParameters().get(1).getToken();
 		Node name = AnyTypeValueNode.of(nameToken, Value.of(nameToken.value()));
 
-		Optional<? extends TypedEvaluatableByArguments> propertyAccess = propertyAccess().filterByNumberOfArguments(2);
+		Optional<? extends TypedEvaluableByArguments> propertyAccess = propertyAccess().filterByNumberOfArguments(2);
 
 		if (!propertyAccess.isPresent()) throw new EvaluationException(startNode.getToken(), "could not find property access");
 
