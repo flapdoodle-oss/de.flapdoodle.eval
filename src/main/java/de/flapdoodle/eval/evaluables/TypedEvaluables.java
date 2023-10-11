@@ -1,6 +1,6 @@
 package de.flapdoodle.eval.evaluables;
 
-import de.flapdoodle.eval.EvaluableException;
+import de.flapdoodle.eval.exceptions.EvaluableException;
 import de.flapdoodle.types.Either;
 import org.immutables.value.Value;
 

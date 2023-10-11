@@ -16,6 +16,7 @@
  */
 package de.flapdoodle.eval;
 
+import de.flapdoodle.eval.exceptions.EvaluationException;
 import de.flapdoodle.eval.parser.ParseException;
 import de.flapdoodle.eval.values.ValueResolver;
 import org.assertj.core.api.InstanceOfAssertFactories;

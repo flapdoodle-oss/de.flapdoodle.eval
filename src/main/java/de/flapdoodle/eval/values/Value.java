@@ -16,7 +16,7 @@
  */
 package de.flapdoodle.eval.values;
 
-import de.flapdoodle.eval.EvaluationException;
+import de.flapdoodle.eval.exceptions.EvaluationException;
 import de.flapdoodle.eval.Nullable;
 
 import java.math.BigDecimal;

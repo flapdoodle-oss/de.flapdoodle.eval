@@ -17,7 +17,7 @@
 package de.flapdoodle.eval.evaluables.trigonometric;
 
 import de.flapdoodle.eval.BaseEvaluationTest;
-import de.flapdoodle.eval.EvaluationException;
+import de.flapdoodle.eval.exceptions.EvaluationException;
 import de.flapdoodle.eval.Expression;
 import de.flapdoodle.eval.ExpressionFactory;
 import de.flapdoodle.eval.parser.ParseException;

@@ -16,8 +16,8 @@
  */
 package de.flapdoodle.eval.evaluables;
 
-import de.flapdoodle.eval.EvaluableException;
-import de.flapdoodle.eval.EvaluationException;
+import de.flapdoodle.eval.exceptions.EvaluableException;
+import de.flapdoodle.eval.exceptions.EvaluationException;
 import de.flapdoodle.eval.evaluables.validation.ParameterValidator;
 import de.flapdoodle.eval.parser.ASTNode;
 import de.flapdoodle.eval.parser.Token;

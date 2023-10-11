@@ -1,6 +1,6 @@
 package de.flapdoodle.eval.evaluables.booleans;
 
-import de.flapdoodle.eval.EvaluationException;
+import de.flapdoodle.eval.exceptions.EvaluationException;
 import de.flapdoodle.eval.Expression;
 import de.flapdoodle.eval.ExpressionFactory;
 import de.flapdoodle.eval.parser.ParseException;

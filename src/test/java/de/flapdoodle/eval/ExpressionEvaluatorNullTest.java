@@ -31,6 +31,7 @@
 */
 package de.flapdoodle.eval;
 
+import de.flapdoodle.eval.exceptions.EvaluationException;
 import de.flapdoodle.eval.parser.ParseException;
 import de.flapdoodle.eval.values.MapBasedValueResolver;
 import de.flapdoodle.eval.values.Value;

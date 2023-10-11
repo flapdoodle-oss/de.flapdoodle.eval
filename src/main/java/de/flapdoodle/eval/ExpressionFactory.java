@@ -2,6 +2,7 @@ package de.flapdoodle.eval;
 
 import de.flapdoodle.eval.config.Defaults;
 import de.flapdoodle.eval.evaluables.*;
+import de.flapdoodle.eval.exceptions.EvaluationException;
 import de.flapdoodle.eval.parser.*;
 import de.flapdoodle.eval.tree.*;
 import de.flapdoodle.eval.values.MapBasedValueResolver;

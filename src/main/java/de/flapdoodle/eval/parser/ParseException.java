@@ -16,7 +16,7 @@
  */
 package de.flapdoodle.eval.parser;
 
-import de.flapdoodle.eval.BaseException;
+import de.flapdoodle.eval.exceptions.BaseException;
 
 /**
  * Exception while parsing the expression.
