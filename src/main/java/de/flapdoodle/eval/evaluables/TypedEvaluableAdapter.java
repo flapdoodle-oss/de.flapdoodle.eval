@@ -24,13 +24,13 @@ class TypedEvaluableAdapter<T extends Value<?>> implements TypedEvaluable<T> {
 	}
 
 	@Override
-	public T evaluate(ValueResolver valueResolver, EvaluationContext evaluationContext, Token token, List<? extends Value<?>> arguments)
+	public T evaluate(ValueResolver valueResolver, EvaluationContext evaluationContext, Token token, List<?> arguments)
 		throws EvaluationException {
 		checkArguments(token, arguments);
 		return delegate.evaluate(valueResolver, evaluationContext, token, arguments);
 	}
 
-	protected void checkArguments(Token token, List<? extends Value<?>> arguments) throws EvaluationException {
+	protected void checkArguments(Token token, List<?> arguments) throws EvaluationException {
 		Optional<EvaluableException> error = signature().validateArguments(arguments);
 		if (error.isPresent()) {
 			throw new EvaluationException(token, error.get());

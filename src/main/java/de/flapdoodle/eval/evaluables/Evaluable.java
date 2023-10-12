@@ -8,14 +8,14 @@ import de.flapdoodle.eval.values.ValueResolver;
 
 import java.util.List;
 
-public interface Evaluable<T extends Value<?>> {
-    T evaluate(ValueResolver valueResolver, EvaluationContext evaluationContext, Token token, List<? extends Value<?>> arguments) throws EvaluationException;
+public interface Evaluable<T> {
+    T evaluate(ValueResolver valueResolver, EvaluationContext evaluationContext, Token token, List<?> arguments) throws EvaluationException;
 
     default Evaluable<T> named(String name) {
         Evaluable<T> that = this;
         return new Evaluable<T>() {
             @Override
-            public T evaluate(ValueResolver valueResolver, EvaluationContext evaluationContext, Token token, List<? extends Value<?>> arguments)
+            public T evaluate(ValueResolver valueResolver, EvaluationContext evaluationContext, Token token, List<?> arguments)
               throws EvaluationException {
                 return that.evaluate(valueResolver,evaluationContext,token,arguments);
             }

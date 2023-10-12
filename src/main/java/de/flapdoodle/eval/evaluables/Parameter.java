@@ -69,7 +69,7 @@ public interface Parameter<T extends de.flapdoodle.eval.values.Value<?>> {
 	}
 
 	@Value.Auxiliary
-	default Optional<EvaluableException> validationError(de.flapdoodle.eval.values.Value<?> parameterValue) {
+	default Optional<EvaluableException> validationError(Object parameterValue) {
 		if (type().isInstance(parameterValue)) {
 			T value = type().cast(parameterValue);
 			for (ParameterValidator<T> validator : validators()) {

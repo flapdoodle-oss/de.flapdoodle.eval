@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 @org.immutables.value.Value.Immutable
-public abstract class Signature<T extends Value<?>> {
+public abstract class Signature<T> {
 	public abstract List<Parameter<?>> parameters();
 
 	// vararg is at least ONE value, zero values are not allowed
@@ -41,12 +41,12 @@ public abstract class Signature<T extends Value<?>> {
 	}
 
 	@org.immutables.value.Value.Auxiliary
-	public Optional<EvaluableException> validateArguments(List<? extends Value<?>> arguments) {
+	public Optional<EvaluableException> validateArguments(List<?> arguments) {
 		if (minNumberOfArguments() > arguments.size()) return Optional.of(EvaluableException.of("not enough(<%s) arguments: %s", minNumberOfArguments(), arguments.size()));
 		if (arguments.size() > maxNumberOfArguments()) return Optional.of(EvaluableException.of("to many(>%s) arguments: ", maxNumberOfArguments(), arguments.size()));
 
 		for (int i = 0; i < minNumberOfArguments(); i++) {
-			Value<?> value = arguments.get(i);
+			Object value = arguments.get(i);
 			Parameter<?> parameter = get(i);
 			Class<?> type = parameter.type();
 
@@ -58,7 +58,7 @@ public abstract class Signature<T extends Value<?>> {
 			Parameter<?> parameter = get(minNumberOfArguments() - 1);
 			Class<?> type = parameter.type();
 			for (int i = minNumberOfArguments() + 1; i < arguments.size(); i++) {
-				Value<?> value = arguments.get(i);
+				Object value = arguments.get(i);
 				if (!type.isInstance(value)) return Optional.of(EvaluableException.of("wrong type: %s != %s", type, value));
 				Optional<EvaluableException> error = parameter.validationError(value);
 				if (error.isPresent()) return error;
