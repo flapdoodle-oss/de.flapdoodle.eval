@@ -12,39 +12,39 @@ import java.util.stream.Collectors;
 public interface TypedEvaluable<T extends Value<?>> extends Evaluable<T> {
     Signature<T> signature();
 
-    interface Arg0<T extends Value<?>> {
+    interface Arg0<T> {
         T evaluate(ValueResolver valueResolver, EvaluationContext evaluationContext, Token token) throws EvaluationException;
     }
 
-    interface Arg1<S extends Value<?>, T extends Value<?>> {
+    interface Arg1<S, T> {
         T evaluate(ValueResolver valueResolver, EvaluationContext evaluationContext, Token token, S argument) throws EvaluationException;
     }
 
-    interface VarArg1<S extends Value<?>, T extends Value<?>> {
+    interface VarArg1<S, T> {
         T evaluate(ValueResolver valueResolver, EvaluationContext evaluationContext, Token token, List<S> arguments) throws EvaluationException;
     }
 
-    interface Arg2<A extends Value<?>, B extends Value<?>, T extends Value<?>> {
+    interface Arg2<A, B, T> {
         T evaluate(ValueResolver valueResolver, EvaluationContext evaluationContext, Token token, A first, B second) throws EvaluationException;
     }
 
-    interface Arg3<A extends Value<?>, B extends Value<?>, C extends Value<?>, T extends Value<?>> {
+    interface Arg3<A, B, C, T> {
         T evaluate(ValueResolver valueResolver, EvaluationContext evaluationContext, Token token, A first, B second, C third) throws EvaluationException;
     }
 
-    interface Arg4<A extends Value<?>, B extends Value<?>, C extends Value<?>, D extends Value<?>, T extends Value<?>> {
+    interface Arg4<A, B, C, D, T> {
         T evaluate(ValueResolver valueResolver, EvaluationContext evaluationContext, Token token, A first, B second, C third, D fourth) throws EvaluationException;
     }
 
-    interface Arg5<A extends Value<?>, B extends Value<?>, C extends Value<?>, D extends Value<?>, E extends Value<?>, T extends Value<?>> {
+    interface Arg5<A, B, C, D, E, T> {
         T evaluate(ValueResolver valueResolver, EvaluationContext evaluationContext, Token token, A first, B second, C third, D fourth, E fifth) throws EvaluationException;
     }
 
-    interface Arg6<A extends Value<?>, B extends Value<?>, C extends Value<?>, D extends Value<?>, E extends Value<?>, F extends Value<?>, T extends Value<?>> {
+    interface Arg6<A, B, C, D, E, F, T> {
         T evaluate(ValueResolver valueResolver, EvaluationContext evaluationContext, Token token, A first, B second, C third, D fourth, E fifth, F sixth) throws EvaluationException;
     }
 
-    interface Arg7<A extends Value<?>, B extends Value<?>, C extends Value<?>, D extends Value<?>, E extends Value<?>, F extends Value<?>, G extends Value<?>, T extends Value<?>> {
+    interface Arg7<A, B, C, D, E, F, G, T> {
         T evaluate(ValueResolver valueResolver, EvaluationContext evaluationContext, Token token, A first, B second, C third, D fourth, E fifth, F sixth, G seventh) throws EvaluationException;
     }
 
