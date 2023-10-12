@@ -12,6 +12,7 @@ import de.flapdoodle.eval.values.ValueResolver;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.MathContext;
+import java.math.RoundingMode;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,8 +21,15 @@ import java.util.Optional;
 
 @org.immutables.value.Value.Immutable
 public abstract class ExpressionFactory {
-	protected abstract MathContext mathContext();
-	protected abstract ZoneId zoneId();
+	@org.immutables.value.Value.Default
+	protected MathContext mathContext() {
+		return MathContext.DECIMAL128;
+	}
+
+	@org.immutables.value.Value.Default
+	protected ZoneId zoneId() {
+		return ZoneId.systemDefault();
+	}
 
 	protected abstract ValueResolver constants();
 	protected abstract TypedEvaluableByName evaluatables();
@@ -197,8 +205,6 @@ public abstract class ExpressionFactory {
 	public static ImmutableExpressionFactory defaults() {
 		return builder()
 			.constants(Defaults.constants())
-			.zoneId(ZoneId.systemDefault())
-			.mathContext(Defaults.mathContext())
 			.evaluatables(Defaults.evaluatables())
 			.arrayAccess(Defaults.arrayAccess())
 			.propertyAccess(Defaults.propertyAccess())

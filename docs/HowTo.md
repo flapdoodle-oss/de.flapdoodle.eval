@@ -18,8 +18,6 @@ assertThat(expression.usedVariables())
 
 ```java
 ExpressionFactory expressionFactory = ExpressionFactory.builder()
-  .mathContext(MathContext.DECIMAL64)
-  .zoneId(ZoneId.systemDefault())
   .constants(ValueResolver.empty().with("pi", Value.of(3.1415)))
   .evaluatables(TypedEvaluableMap.builder()
     .putMap("add", TypedEvaluables.builder()

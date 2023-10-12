@@ -34,8 +34,6 @@ class ExpressionFactoryTest {
 	void testDefaultSetup() {
 		ExpressionFactory factory = ExpressionFactory.defaults();
 
-		assertThat(factory.mathContext())
-			.isSameAs(Defaults.mathContext());
 		assertThat(factory.operatorMap())
 			.isSameAs(Defaults.operatorMap());
 		assertThat(factory.evaluatables())

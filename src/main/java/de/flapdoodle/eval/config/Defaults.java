@@ -41,19 +41,12 @@ public abstract class Defaults {
         return Collections.unmodifiableMap(constants);
     }
 
-    private static final MathContext MATH_CONTEXT = new MathContext(68, RoundingMode.HALF_EVEN);
     private static final ValueResolver CONSTANTS = ValueResolver.empty().withValues(standardConstants());
 
     private static final TypedEvaluableByName EVALUATABLES = defaultEvaluatablesMap();
     private static final TypedEvaluableByNumberOfArguments ARRAY_ACCESS = new IndexedAccess();
     private static final TypedEvaluableByNumberOfArguments PROPERTY_ACCESS = new PropertyAccess();
     private static final OperatorMap OPERATOR_MAP = defaultOperatorMap();
-
-    private static final ZoneId ZONE_ID = ZoneId.systemDefault();
-
-    public static MathContext mathContext() {
-        return MATH_CONTEXT;
-    }
 
     public static ValueResolver constants() {
         return CONSTANTS;
@@ -65,10 +58,6 @@ public abstract class Defaults {
 
     public static OperatorMap operatorMap() {
         return OPERATOR_MAP;
-    }
-
-    public static ZoneId zoneId() {
-        return ZONE_ID;
     }
 
     private static OperatorMap defaultOperatorMap() {

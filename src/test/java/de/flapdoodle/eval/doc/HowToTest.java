@@ -47,11 +47,9 @@ public class HowToTest {
 	}
 
 	@Test
-	public void customization() throws ParseException, EvaluationException {
+	public void minimalCustomSetup() throws ParseException, EvaluationException {
 		recording.begin();
 		ExpressionFactory expressionFactory = ExpressionFactory.builder()
-			.mathContext(MathContext.DECIMAL64)
-			.zoneId(ZoneId.systemDefault())
 			.constants(ValueResolver.empty().with("pi", Value.of(3.1415)))
 			.evaluatables(TypedEvaluableMap.builder()
 				.putMap("add", TypedEvaluables.builder()

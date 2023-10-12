@@ -9,5 +9,5 @@ ${usedVariables}
 ```
 
 ```java
-${customization}
+${minimalCustomSetup}
 ```
