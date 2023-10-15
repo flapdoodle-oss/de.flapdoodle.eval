@@ -52,15 +52,6 @@ public abstract class BaseEvaluationTest {
 		return Value.of(value);
 	}
 	
-//	protected void assertExpressionHasExpectedResult(String expression, Value<?> expectedResult)
-//		throws EvaluationException, ParseException {
-//		assertThat(
-//			TestConfigurationProvider.StandardFactoryWithAdditionalTestOperators.parse(expression)
-//				.evaluate(ValueResolver.empty())
-//				.wrapped().toString()
-//		).isEqualTo(expectedResult);
-//	}
-
 	protected void assertExpressionHasExpectedResult(String expression, Value<?> expectedResult)
 		throws EvaluationException, ParseException {
 		assertThat(
@@ -82,7 +73,7 @@ public abstract class BaseEvaluationTest {
 	protected void assertExpressionHasExpectedResult(
 		String expression, String expectedResult, ExpressionFactory expressionFactory)
 		throws EvaluationException, ParseException {
-		assertThat(evaluate(expression, expressionFactory).wrapped().toString())
+		assertThat(evaluate(expression, expressionFactory).toString())
 			.isEqualTo(expectedResult);
 	}
 

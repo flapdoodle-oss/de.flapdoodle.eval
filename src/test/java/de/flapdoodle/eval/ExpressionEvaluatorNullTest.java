@@ -120,6 +120,6 @@ class ExpressionEvaluatorNullTest extends BaseExpressionEvaluatorTest {
 
 	private void assertExpressionHasExpectedResult(Expression expression, ValueResolver variableResolver, String expectedResult)
 		throws EvaluationException, ParseException {
-		assertThat(expression.evaluate(variableResolver).wrapped().toString()).isEqualTo(expectedResult);
+		assertThat(expression.evaluate(variableResolver).toString()).isEqualTo(expectedResult);
 	}
 }

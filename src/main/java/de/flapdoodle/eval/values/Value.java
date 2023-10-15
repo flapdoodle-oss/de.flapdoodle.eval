@@ -30,6 +30,11 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public abstract class Value<T> {
+	@Deprecated
+	public static final Value.BooleanValue TRUE = Value.of(Boolean.TRUE);
+	@Deprecated
+	public static final Value.BooleanValue FALSE = Value.of(Boolean.FALSE);
+
 	@org.immutables.value.Value.Parameter
 	public abstract T wrapped();
 

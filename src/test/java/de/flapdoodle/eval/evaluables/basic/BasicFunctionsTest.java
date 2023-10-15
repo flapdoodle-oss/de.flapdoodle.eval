@@ -220,7 +220,7 @@ class BasicFunctionsTest extends BaseEvaluationTest {
 		Expression expression = ExpressionFactory.defaults().parse("random()");
 		Value<?> r2 = expression.evaluate(ValueResolver.empty());
 
-		assertThat(r1.wrapped()).isNotEqualTo(r2.wrapped());
+		assertThat(r1).isNotEqualTo(r2);
 	}
 
 	@Test
@@ -228,8 +228,8 @@ class BasicFunctionsTest extends BaseEvaluationTest {
 		Expression expression1 = ExpressionFactory.defaults().parse("random(1.0, 2.0)");
 		Value.NumberValue r1 = (Value.NumberValue) expression1.evaluate(ValueResolver.empty());
 
-		assertThat(r1.wrapped()).isGreaterThanOrEqualTo(BigDecimal.ONE);
-		assertThat(r1.wrapped()).isLessThanOrEqualTo(BigDecimal.valueOf(2.0));
+		assertThat(r1).isGreaterThanOrEqualTo(Value.of(BigDecimal.ONE));
+		assertThat(r1).isLessThanOrEqualTo(Value.of(BigDecimal.valueOf(2.0)));
 	}
 
 	@ParameterizedTest

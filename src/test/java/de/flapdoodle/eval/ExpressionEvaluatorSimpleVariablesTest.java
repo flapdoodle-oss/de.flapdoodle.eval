@@ -32,52 +32,47 @@ class ExpressionEvaluatorSimpleVariablesTest extends BaseExpressionEvaluatorTest
 
 	@Test
 	void testSingleStringVariable() throws ParseException, EvaluationException {
-		MapBasedValueResolver mapBasedVariableResolver = ValueResolver.empty()
+		ValueResolver variableResolver = ValueResolver.empty()
 			.with("a", "hello");
-		ValueResolver variableResolver = mapBasedVariableResolver;
 		Value<?> result = createExpression("a").evaluate(variableResolver);
 		assertThat(result.wrapped()).isEqualTo("hello");
 	}
 
 	@Test
 	void testSingleNumberVariable() throws ParseException, EvaluationException {
-		MapBasedValueResolver mapBasedVariableResolver = ValueResolver.empty()
+		ValueResolver variableResolver = ValueResolver.empty()
 			.with("a", BigDecimal.valueOf(9));
-		ValueResolver variableResolver = mapBasedVariableResolver;
 		Value<?> result = createExpression("a").evaluate(variableResolver);
-		assertThat(result.wrapped()).isEqualTo(BigDecimal.valueOf(9));
+		assertThat(result).isEqualTo(Value.of(BigDecimal.valueOf(9)));
 	}
 
 	@Test
 	void testNumbers() throws ParseException, EvaluationException {
-		MapBasedValueResolver mapBasedVariableResolver = ValueResolver.empty()
+		ValueResolver variableResolver = ValueResolver.empty()
 			.with("a", BigDecimal.valueOf(9))
 			.with("b", BigDecimal.valueOf(5));
-		ValueResolver variableResolver = mapBasedVariableResolver;
 		Value<?> result = createExpression("(a+b)*(a-b)").evaluate(variableResolver);
-		assertThat(result.wrapped()).isEqualTo(BigDecimal.valueOf(56));
+		assertThat(result).isEqualTo(Value.of(BigDecimal.valueOf(56)));
 	}
 
 	@Test
 	void testStrings() throws ParseException, EvaluationException {
-		MapBasedValueResolver mapBasedVariableResolver = ValueResolver.empty()
+		ValueResolver variableResolver = ValueResolver.empty()
 			.with("prefix", "Hello")
 			.with("infix", " ")
 			.with("postfix", "world");
-		ValueResolver variableResolver = mapBasedVariableResolver;
 		Value<?> result = createExpression("prefix+infix+postfix").evaluate(variableResolver);
-		assertThat(result.wrapped()).isEqualTo("Hello world");
+		assertThat(result).isEqualTo(Value.of("Hello world"));
 	}
 
 	@Test
 	void testStringNumberCombined() throws ParseException, EvaluationException {
-		MapBasedValueResolver mapBasedVariableResolver = ValueResolver.empty()
+		ValueResolver variableResolver = ValueResolver.empty()
 			.with("prefix", "Hello")
 			.with("infix", BigDecimal.valueOf(2))
 			.with("postfix", "world");
-		ValueResolver variableResolver = mapBasedVariableResolver;
 		Value<?> result = createExpression("prefix+infix+postfix").evaluate(variableResolver);
-		assertThat(result.wrapped()).isEqualTo("Hello2world");
+		assertThat(result).isEqualTo(Value.of("Hello2world"));
 	}
 
 	@Test

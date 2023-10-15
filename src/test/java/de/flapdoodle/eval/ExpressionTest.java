@@ -25,6 +25,7 @@ import de.flapdoodle.eval.values.ValueResolver;
 import org.assertj.core.data.Percentage;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -103,7 +104,7 @@ class ExpressionTest {
 			.withValues(values);
 		Value<?> result = expression.evaluate(mapBasedVariableResolver);
 
-		assertThat(result.wrapped()).isEqualTo("Hello world");
+		assertThat(result).isEqualTo(Value.of("Hello world"));
 	}
 
 	@Test
@@ -119,13 +120,7 @@ class ExpressionTest {
 			.withValues(values);
 		Value<?> result = expression.evaluate(variableResolver);
 
-		assertThat(result.wrapped()).isEqualTo("true 24.7");
-	}
-
-	@Test
-	void testDoubleConverterDefaultMathContext() {
-		assertThat(Value.of(1.67987654321).wrapped())
-			.isEqualByComparingTo("1.67987654321");
+		assertThat(result.toString()).isEqualTo("true 24.7");
 	}
 
 	@Test

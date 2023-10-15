@@ -67,32 +67,32 @@ class EqualsTest extends BaseEvaluationTest {
 			expression.evaluate(ValueResolver.empty()
 					.with("a", new BigDecimal("1.4"))
 					.with("b", new BigDecimal("1.4")))
-				.wrapped())
-			.isEqualTo(Boolean.TRUE);
+				)
+			.isEqualTo(Value.TRUE);
 
 		assertThat(expression.evaluate(ValueResolver.empty()
 				.with("a", "Hello")
 				.with("b", "Hello"))
-			.wrapped())
-			.isEqualTo(Boolean.TRUE);
+			)
+			.isEqualTo(Value.TRUE);
 
 		assertThat(expression.evaluate(ValueResolver.empty()
 				.with("a", "Hello")
 				.with("b", "Goodbye"))
-			.wrapped())
-			.isEqualTo(Boolean.FALSE);
+			)
+			.isEqualTo(Value.FALSE);
 
 		assertThat(expression.evaluate(ValueResolver.empty()
 				.with("a", true)
 				.with("b", true))
-			.wrapped())
-			.isEqualTo(Boolean.TRUE);
+			)
+			.isEqualTo(Value.TRUE);
 
 		assertThat(expression.evaluate(ValueResolver.empty()
 				.with("a", false)
 				.with("b", true))
-			.wrapped())
-			.isEqualTo(Boolean.FALSE);
+			)
+			.isEqualTo(Value.FALSE);
 	}
 
 	@Test
@@ -103,15 +103,15 @@ class EqualsTest extends BaseEvaluationTest {
 			expression.evaluate(ValueResolver.empty()
 					.with("a", Value::of, Arrays.asList("a", "b", "c"))
 					.with("b", Value::of, Arrays.asList("a", "b", "c")))
-				.wrapped())
-			.isEqualTo(Boolean.TRUE);
+				)
+			.isEqualTo(Value.TRUE);
 
 		assertThat(
 			expression.evaluate(ValueResolver.empty()
 					.with("a", Value::of, Arrays.asList("a", "b", "c"))
 					.with("b", Value::of, Arrays.asList("c", "b", "a")))
-				.wrapped())
-			.isEqualTo(false);
+				)
+			.isEqualTo(Value.FALSE);
 	}
 
 	@Test
@@ -145,13 +145,13 @@ class EqualsTest extends BaseEvaluationTest {
 		assertThat(expression.evaluate(ValueResolver.empty()
 				.with("a", Value::of, structure1)
 				.with("b", Value::of, structure2))
-			.wrapped())
-			.isEqualTo(true);
+			)
+			.isEqualTo(Value.TRUE);
 
 		assertThat(expression.evaluate(ValueResolver.empty()
 				.with("a", Value::of, structure1)
 				.with("b", Value::of, structure3))
-			.wrapped())
-			.isEqualTo(false);
+			)
+			.isEqualTo(Value.FALSE);
 	}
 }
