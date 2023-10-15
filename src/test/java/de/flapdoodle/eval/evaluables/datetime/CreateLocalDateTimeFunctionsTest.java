@@ -134,7 +134,7 @@ class CreateLocalDateTimeFunctionsTest extends BaseEvaluationTest {
 		})
 	void testDurationFromMillis(String expression, String expectedResult)
 		throws EvaluationException, ParseException {
-		assertExpressionHasExpectedResult(expression, expectedResult);
+		assertExpressionHasExpectedResult(expression, asDuration(expectedResult));
 	}
 
 	@ParameterizedTest
@@ -143,7 +143,7 @@ class CreateLocalDateTimeFunctionsTest extends BaseEvaluationTest {
 		value = { "durationOfDays(53216) | PT1277184H", "durationOfDays(1) | PT24H" })
 	void testDurationFromDays(String expression, String expectedResult)
 		throws EvaluationException, ParseException {
-		assertExpressionHasExpectedResult(expression, expectedResult);
+		assertExpressionHasExpectedResult(expression, asDuration(expectedResult));
 	}
 
 	@ParameterizedTest
@@ -155,6 +155,6 @@ class CreateLocalDateTimeFunctionsTest extends BaseEvaluationTest {
 		})
 	void testDurationParse(String expression, String expectedResult)
 		throws EvaluationException, ParseException {
-		assertExpressionHasExpectedResult(expression, expectedResult);
+		assertExpressionHasExpectedResult(expression, asDuration(expectedResult));
 	}
 }

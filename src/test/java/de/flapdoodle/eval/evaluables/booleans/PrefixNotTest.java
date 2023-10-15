@@ -41,6 +41,6 @@ class PrefixNotTest extends BaseEvaluationTest {
 		})
 	void testInfixLessLiterals(String expression, String expectedResult)
 		throws EvaluationException, ParseException {
-		assertExpressionHasExpectedResult(expression, expectedResult);
+		assertExpressionHasExpectedResult(expression, asBoolean(expectedResult));
 	}
 }

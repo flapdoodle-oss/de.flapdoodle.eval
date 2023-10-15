@@ -45,6 +45,6 @@ class GreaterTest extends BaseEvaluationTest {
 		})
 	void testInfixGreaterLiterals(String expression, String expectedResult)
 		throws EvaluationException, ParseException {
-		assertExpressionHasExpectedResult(expression, expectedResult);
+		assertExpressionHasExpectedResult(expression, asBoolean(expectedResult));
 	}
 }

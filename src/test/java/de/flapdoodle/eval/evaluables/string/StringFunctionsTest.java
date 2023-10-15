@@ -37,7 +37,7 @@ class StringFunctionsTest extends BaseEvaluationTest {
 		})
 	void testUpper(String expression, String expectedResult)
 		throws EvaluationException, ParseException {
-		assertExpressionHasExpectedResult(expression, expectedResult);
+		assertExpressionHasExpectedResult(expression, asString(expectedResult));
 	}
 
 	@ParameterizedTest
@@ -53,7 +53,7 @@ class StringFunctionsTest extends BaseEvaluationTest {
 		})
 	void testLower(String expression, String expectedResult)
 		throws EvaluationException, ParseException {
-		assertExpressionHasExpectedResult(expression, expectedResult);
+		assertExpressionHasExpectedResult(expression, asString(expectedResult));
 	}
 
 	@ParameterizedTest
@@ -70,6 +70,6 @@ class StringFunctionsTest extends BaseEvaluationTest {
 		})
 	void testContains(String expression, String expectedResult)
 		throws EvaluationException, ParseException {
-		assertExpressionHasExpectedResult(expression, expectedResult);
+		assertExpressionHasExpectedResult(expression, asBoolean(expectedResult));
 	}
 }

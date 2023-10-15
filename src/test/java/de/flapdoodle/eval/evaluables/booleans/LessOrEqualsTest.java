@@ -49,6 +49,6 @@ class LessOrEqualsTest extends BaseEvaluationTest {
 		})
 	void testInfixLessEqualsLiterals(String expression, String expectedResult)
 		throws EvaluationException, ParseException {
-		assertExpressionHasExpectedResult(expression, expectedResult);
+		assertExpressionHasExpectedResult(expression, asBoolean(expectedResult));
 	}
 }

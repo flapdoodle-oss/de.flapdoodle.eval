@@ -49,6 +49,6 @@ class GreaterOrEqualsTest extends BaseEvaluationTest {
 		})
 	void testInfixGreaterEqualsLiterals(String expression, String expectedResult)
 		throws EvaluationException, ParseException {
-		assertExpressionHasExpectedResult(expression, expectedResult);
+		assertExpressionHasExpectedResult(expression, asBoolean(expectedResult));
 	}
 }

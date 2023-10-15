@@ -57,7 +57,7 @@ class NotEqualsTest extends BaseEvaluationTest {
 		})
 	void testInfixNotEqualsLiterals(String expression, String expectedResult)
 		throws EvaluationException, ParseException {
-		assertExpressionHasExpectedResult(expression, expectedResult);
+		assertExpressionHasExpectedResult(expression, asBoolean(expectedResult));
 	}
 
 	@Test

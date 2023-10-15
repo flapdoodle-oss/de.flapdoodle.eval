@@ -25,20 +25,41 @@ import org.assertj.core.api.InstanceOfAssertFactories;
 import org.assertj.core.data.Percentage;
 
 import java.math.BigDecimal;
+import java.time.Duration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public abstract class BaseEvaluationTest {
 
-	protected void assertExpressionHasExpectedResult(String expression, String expectedResult)
-		throws EvaluationException, ParseException {
-		assertThat(
-			TestConfigurationProvider.StandardFactoryWithAdditionalTestOperators.parse(expression)
-				.evaluate(ValueResolver.empty())
-				.wrapped().toString()
-		).isEqualTo(expectedResult);
+	protected static Value.BooleanValue asBoolean(String value) {
+		switch (value) {
+			case "true": return Value.of(true);
+			case "false": return Value.of(false);
+		}
+		throw new IllegalArgumentException("is not a boolean: "+value);
 	}
+
+	protected static Value.NumberValue asNumber(String value) {
+		return Value.of(new BigDecimal(value));
+	}
+
+	protected static Value.DurationValue asDuration(String value) {
+		return Value.of(Duration.parse(value));
+	}
+
+	protected static Value.StringValue asString(String value) {
+		return Value.of(value);
+	}
+	
+//	protected void assertExpressionHasExpectedResult(String expression, Value<?> expectedResult)
+//		throws EvaluationException, ParseException {
+//		assertThat(
+//			TestConfigurationProvider.StandardFactoryWithAdditionalTestOperators.parse(expression)
+//				.evaluate(ValueResolver.empty())
+//				.wrapped().toString()
+//		).isEqualTo(expectedResult);
+//	}
 
 	protected void assertExpressionHasExpectedResult(String expression, Value<?> expectedResult)
 		throws EvaluationException, ParseException {
@@ -78,6 +99,6 @@ public abstract class BaseEvaluationTest {
 	}
 
 	protected static Value.NumberValue numberValueOf(String doubleAsString) {
-		return Value.of(new BigDecimal(doubleAsString));
+		return asNumber(doubleAsString);
 	}
 }

@@ -48,7 +48,7 @@ class BasicFunctionsTest extends BaseEvaluationTest {
 		})
 	void testFactorial(String expression, String expectedResult)
 		throws EvaluationException, ParseException {
-		assertExpressionHasExpectedResult(expression, expectedResult);
+		assertExpressionHasExpectedResult(expression, asNumber(expectedResult));
 	}
 
 	@ParameterizedTest
@@ -60,7 +60,7 @@ class BasicFunctionsTest extends BaseEvaluationTest {
 			"if(true, 6/if(false, 5/0, 2*if(true, 3, 6/0)), 4/0) : 1"
 		})
 	void testIf(String expression, String expectedResult) throws EvaluationException, ParseException {
-		assertExpressionHasExpectedResult(expression, expectedResult);
+		assertExpressionHasExpectedResult(expression, asNumber(expectedResult));
 	}
 
 	@ParameterizedTest
@@ -74,7 +74,7 @@ class BasicFunctionsTest extends BaseEvaluationTest {
 		})
 	void testMax(String expression, String expectedResult)
 		throws EvaluationException, ParseException {
-		assertExpressionHasExpectedResult(expression, expectedResult);
+		assertExpressionHasExpectedResult(expression, asNumber(expectedResult));
 	}
 
 	@ParameterizedTest
@@ -88,7 +88,7 @@ class BasicFunctionsTest extends BaseEvaluationTest {
 		})
 	void testMin(String expression, String expectedResult)
 		throws EvaluationException, ParseException {
-		assertExpressionHasExpectedResult(expression, expectedResult);
+		assertExpressionHasExpectedResult(expression, asNumber(expectedResult));
 	}
 
 	@ParameterizedTest
@@ -104,7 +104,7 @@ class BasicFunctionsTest extends BaseEvaluationTest {
 		})
 	void testRoundHalfEven(String expression, String expectedResult)
 		throws EvaluationException, ParseException {
-		assertExpressionHasExpectedResult(expression, expectedResult);
+		assertExpressionHasExpectedResult(expression, asNumber(expectedResult));
 	}
 
 	@ParameterizedTest
@@ -120,7 +120,7 @@ class BasicFunctionsTest extends BaseEvaluationTest {
 			})
 	void testRound(String expression, String expectedResult)
 			throws EvaluationException, ParseException {
-		assertExpressionHasExpectedResult(expression, expectedResult);
+		assertExpressionHasExpectedResult(expression, asNumber(expectedResult));
 	}
 
 	@ParameterizedTest
@@ -134,7 +134,7 @@ class BasicFunctionsTest extends BaseEvaluationTest {
 			})
 	void testPrecisionRound(String expression, String expectedResult)
 			throws EvaluationException, ParseException {
-		assertExpressionHasExpectedResult(expression, expectedResult);
+		assertExpressionHasExpectedResult(expression, asNumber(expectedResult));
 	}
 
 	@ParameterizedTest
@@ -167,7 +167,7 @@ class BasicFunctionsTest extends BaseEvaluationTest {
 		})
 	void testSum(String expression, String expectedResult)
 		throws EvaluationException, ParseException {
-		assertExpressionHasExpectedResult(expression, expectedResult);
+		assertExpressionHasExpectedResult(expression, asNumber(expectedResult));
 	}
 
 	@ParameterizedTest
@@ -210,7 +210,7 @@ class BasicFunctionsTest extends BaseEvaluationTest {
 		})
 	void testBooleanNegation(String expression, String expectedResult)
 		throws EvaluationException, ParseException {
-		assertExpressionHasExpectedResult(expression, expectedResult);
+		assertExpressionHasExpectedResult(expression, asBoolean(expectedResult));
 	}
 
 	@Test
@@ -246,7 +246,7 @@ class BasicFunctionsTest extends BaseEvaluationTest {
 		})
 	void testAbs(String expression, String expectedResult)
 		throws EvaluationException, ParseException {
-		assertExpressionHasExpectedResult(expression, expectedResult);
+		assertExpressionHasExpectedResult(expression, asNumber(expectedResult));
 	}
 
 	@ParameterizedTest
@@ -264,7 +264,7 @@ class BasicFunctionsTest extends BaseEvaluationTest {
 		})
 	void testFloor(String expression, String expectedResult)
 		throws EvaluationException, ParseException {
-		assertExpressionHasExpectedResult(expression, expectedResult);
+		assertExpressionHasExpectedResult(expression, asNumber(expectedResult));
 	}
 
 	@ParameterizedTest
@@ -282,7 +282,7 @@ class BasicFunctionsTest extends BaseEvaluationTest {
 		})
 	void testCeiling(String expression, String expectedResult)
 		throws EvaluationException, ParseException {
-		assertExpressionHasExpectedResult(expression, expectedResult);
+		assertExpressionHasExpectedResult(expression, asNumber(expectedResult));
 	}
 
 	@ParameterizedTest
