@@ -18,6 +18,7 @@ package de.flapdoodle.eval;
 
 import de.flapdoodle.eval.exceptions.EvaluationException;
 import de.flapdoodle.eval.parser.ParseException;
+import de.flapdoodle.eval.values.Value;
 import de.flapdoodle.eval.values.ValueResolver;
 import org.assertj.core.api.InstanceOfAssertFactories;
 import org.assertj.core.data.Percentage;
@@ -52,7 +53,9 @@ class ExpressionEvaluatorScientificTest extends BaseExpressionEvaluatorTest {
 		})
 	void testScientificLiteralsEvaluation(String expression, String expectedResult)
 		throws ParseException, EvaluationException {
-		assertThat(createExpression(expression).evaluate(ValueResolver.empty()).wrapped())
+		assertThat(createExpression(expression).evaluate(ValueResolver.empty()))
+			.asInstanceOf(InstanceOfAssertFactories.type(Value.class))
+			.extracting(Value::wrapped)
 			.asInstanceOf(InstanceOfAssertFactories.BIG_DECIMAL)
 			.isCloseTo(numberValueOf(expectedResult).wrapped(), Percentage.withPercentage(0.9999));
 	}

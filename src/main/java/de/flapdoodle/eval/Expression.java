@@ -19,7 +19,7 @@ public abstract class Expression {
 	protected abstract Node root();
 
 	@org.immutables.value.Value.Auxiliary
-	public Value<?> evaluate(ValueResolver variableResolver) throws EvaluationException, ParseException {
+	public Object evaluate(ValueResolver variableResolver) throws EvaluationException, ParseException {
 		return root().evaluate(variableResolver, EvaluationContext.builder()
 			.mathContext(mathContext())
 			.zoneId(zoneId())

@@ -216,9 +216,9 @@ class BasicFunctionsTest extends BaseEvaluationTest {
 	@Test
 	void testRandom() throws EvaluationException, ParseException {
 		Expression expression1 = ExpressionFactory.defaults().parse("random()");
-		Value<?> r1 = expression1.evaluate(ValueResolver.empty());
+		Object r1 = expression1.evaluate(ValueResolver.empty());
 		Expression expression = ExpressionFactory.defaults().parse("random()");
-		Value<?> r2 = expression.evaluate(ValueResolver.empty());
+		Object r2 = expression.evaluate(ValueResolver.empty());
 
 		assertThat(r1).isNotEqualTo(r2);
 	}

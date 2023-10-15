@@ -26,7 +26,7 @@ public abstract class TypedEvaluables implements TypedEvaluableByArguments, Type
 
 	@Override
 	@Value.Auxiliary
-	public Either<TypedEvaluable<?>, List<EvaluableException>> find(List<? extends de.flapdoodle.eval.values.Value<?>> values) {
+	public Either<TypedEvaluable<?>, List<EvaluableException>> find(List<?> values) {
 		List<EvaluableException> errors = new ArrayList<>();
 		for (TypedEvaluable<?> evaluatable : list()) {
 			Optional<EvaluableException> error = evaluatable.signature().validateArguments(values);

@@ -29,7 +29,7 @@ public class HowToTest {
 		recording.begin();
 		ExpressionFactory expressionFactory = ExpressionFactory.defaults();
 		Expression expression = expressionFactory.parse("a*2");
-		Value<?> result = expression.evaluate(ValueResolver.empty()
+		Object result = expression.evaluate(ValueResolver.empty()
 			.with("a", Value.of(2)));
 
 		assertThat(result).isEqualTo(Value.of(4.0));

@@ -34,15 +34,15 @@ class ExpressionEvaluatorSimpleVariablesTest extends BaseExpressionEvaluatorTest
 	void testSingleStringVariable() throws ParseException, EvaluationException {
 		ValueResolver variableResolver = ValueResolver.empty()
 			.with("a", "hello");
-		Value<?> result = createExpression("a").evaluate(variableResolver);
-		assertThat(result.wrapped()).isEqualTo("hello");
+		Object result = createExpression("a").evaluate(variableResolver);
+		assertThat(result).isEqualTo(Value.of("hello"));
 	}
 
 	@Test
 	void testSingleNumberVariable() throws ParseException, EvaluationException {
 		ValueResolver variableResolver = ValueResolver.empty()
 			.with("a", BigDecimal.valueOf(9));
-		Value<?> result = createExpression("a").evaluate(variableResolver);
+		Object result = createExpression("a").evaluate(variableResolver);
 		assertThat(result).isEqualTo(Value.of(BigDecimal.valueOf(9)));
 	}
 
@@ -51,7 +51,7 @@ class ExpressionEvaluatorSimpleVariablesTest extends BaseExpressionEvaluatorTest
 		ValueResolver variableResolver = ValueResolver.empty()
 			.with("a", BigDecimal.valueOf(9))
 			.with("b", BigDecimal.valueOf(5));
-		Value<?> result = createExpression("(a+b)*(a-b)").evaluate(variableResolver);
+		Object result = createExpression("(a+b)*(a-b)").evaluate(variableResolver);
 		assertThat(result).isEqualTo(Value.of(BigDecimal.valueOf(56)));
 	}
 
@@ -61,7 +61,7 @@ class ExpressionEvaluatorSimpleVariablesTest extends BaseExpressionEvaluatorTest
 			.with("prefix", "Hello")
 			.with("infix", " ")
 			.with("postfix", "world");
-		Value<?> result = createExpression("prefix+infix+postfix").evaluate(variableResolver);
+		Object result = createExpression("prefix+infix+postfix").evaluate(variableResolver);
 		assertThat(result).isEqualTo(Value.of("Hello world"));
 	}
 
@@ -71,7 +71,7 @@ class ExpressionEvaluatorSimpleVariablesTest extends BaseExpressionEvaluatorTest
 			.with("prefix", "Hello")
 			.with("infix", BigDecimal.valueOf(2))
 			.with("postfix", "world");
-		Value<?> result = createExpression("prefix+infix+postfix").evaluate(variableResolver);
+		Object result = createExpression("prefix+infix+postfix").evaluate(variableResolver);
 		assertThat(result).isEqualTo(Value.of("Hello2world"));
 	}
 

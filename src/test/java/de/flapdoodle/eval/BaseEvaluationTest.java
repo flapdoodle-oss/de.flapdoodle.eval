@@ -66,6 +66,7 @@ public abstract class BaseEvaluationTest {
 			TestConfigurationProvider.StandardFactoryWithAdditionalTestOperators.parse(expression)
 				.evaluate(ValueResolver.empty()))
 			.isInstanceOf(Value.NumberValue.class)
+			.asInstanceOf(InstanceOfAssertFactories.type(Value.NumberValue.class))
 			.extracting(Value::wrapped, InstanceOfAssertFactories.BIG_DECIMAL)
 			.isCloseTo(expectedResult.wrapped(), Percentage.withPercentage(0.99999));
 	}
@@ -82,7 +83,7 @@ public abstract class BaseEvaluationTest {
 		assertThatThrownBy(() -> evaluate(expression, factory)).hasMessage(message);
 	}
 
-	private Value<?> evaluate(String expressionString, ExpressionFactory factory)
+	private Object evaluate(String expressionString, ExpressionFactory factory)
 		throws EvaluationException, ParseException {
 		Expression expression = factory.parse(expressionString);
 

@@ -60,7 +60,7 @@ class MinusTest {
 		Either<TypedEvaluable<?>, List<EvaluableException>> byArguments = byNumberOfArguments.get().find(values);
 		assertThat(byArguments).isLeft();
 
-		Value<?> result = byArguments.left()
+		Object result = byArguments.left()
 			.evaluate(ValueResolver.empty(), evaluationContext, token, values);
 
 		assertThat(result).isEqualTo(expected);
@@ -76,7 +76,7 @@ class MinusTest {
 		Either<TypedEvaluable<?>, List<EvaluableException>> byArguments = byNumberOfArguments.get().find(values);
 		assertThat(byArguments).isLeft();
 
-		Value<?> result = byArguments.left()
+		Object result = byArguments.left()
 			.evaluate(ValueResolver.empty(), evaluationContext, token, values);
 
 		assertThat(result).isEqualTo(Value.of(-123.0));

@@ -9,7 +9,7 @@ import de.flapdoodle.eval.values.ValueResolver;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public interface TypedEvaluable<T extends Value<?>> extends Evaluable<T> {
+public interface TypedEvaluable<T> extends Evaluable<T> {
     Signature<T> signature();
 
     interface Arg0<T> {

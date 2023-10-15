@@ -86,7 +86,7 @@ class ExpressionTest {
 
 		MapBasedValueResolver variableResolver = ValueResolver.empty()
 			.withValues(values);
-		Value<?> result = expression.evaluate(variableResolver);
+		Object result = expression.evaluate(variableResolver);
 
 		assertThat(result).isEqualTo(Value.of(7));
 	}
@@ -102,7 +102,7 @@ class ExpressionTest {
 
 		MapBasedValueResolver mapBasedVariableResolver = ValueResolver.empty()
 			.withValues(values);
-		Value<?> result = expression.evaluate(mapBasedVariableResolver);
+		Object result = expression.evaluate(mapBasedVariableResolver);
 
 		assertThat(result).isEqualTo(Value.of("Hello world"));
 	}
@@ -118,7 +118,7 @@ class ExpressionTest {
 
 		ValueResolver variableResolver = ValueResolver.empty()
 			.withValues(values);
-		Value<?> result = expression.evaluate(variableResolver);
+		Object result = expression.evaluate(variableResolver);
 
 		assertThat(result.toString()).isEqualTo("true 24.7");
 	}

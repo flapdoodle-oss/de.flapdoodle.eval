@@ -21,8 +21,8 @@ public abstract class EvaluatableNode extends Node {
 	protected abstract List<Node> parameters();
 
 	@Override
-	public Value<?> evaluate(ValueResolver variableResolver, EvaluationContext context) throws EvaluationException {
-		List<Value<?>> parameterResults = new ArrayList<>();
+	public Object evaluate(ValueResolver variableResolver, EvaluationContext context) throws EvaluationException {
+		List<Object> parameterResults = new ArrayList<>();
 		for (int i = 0; i < parameters().size(); i++) {
 			Node parameter = parameters().get(i);
 			try {
@@ -34,7 +34,7 @@ public abstract class EvaluatableNode extends Node {
 		Either<TypedEvaluable<?>, List<EvaluableException>> evaluatable = evaluatable().find(parameterResults);
 		if (evaluatable.isLeft()) {
 			try {
-				Value<?> evaluated = evaluatable.left().evaluate(variableResolver, context, token(), parameterResults);
+				Object evaluated = evaluatable.left().evaluate(variableResolver, context, token(), parameterResults);
 				if (evaluated instanceof Value.FailedWithException) {
 					throw ((Value.FailedWithException<?>) evaluated).exception();
 				}

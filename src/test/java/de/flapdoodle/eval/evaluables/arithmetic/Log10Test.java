@@ -43,7 +43,7 @@ class Log10Test {
 		Either<TypedEvaluable<?>, List<EvaluableException>> byArguments = byNumberOfArguments.get().find(values);
 		assertThat(byArguments).isLeft();
 
-		Value<?> result = byArguments.left()
+		Object result = byArguments.left()
 			.evaluate(ValueResolver.empty(), evaluationContext, token, values);
 
 		assertThat(result).isEqualTo(Value.of(0.47712125471966244));

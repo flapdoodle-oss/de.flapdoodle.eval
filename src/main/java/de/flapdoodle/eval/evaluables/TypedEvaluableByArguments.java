@@ -7,5 +7,5 @@ import de.flapdoodle.types.Either;
 import java.util.List;
 
 public interface TypedEvaluableByArguments {
-    Either<TypedEvaluable<?>, List<EvaluableException>> find(List<? extends Value<?>> values);
+    Either<TypedEvaluable<?>, List<EvaluableException>> find(List<?> values);
 }
