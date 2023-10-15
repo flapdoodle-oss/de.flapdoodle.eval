@@ -115,7 +115,7 @@ class ExpressionEvaluatorStructureTest extends BaseExpressionEvaluatorTest {
 			expression.evaluate(variableResolver);
 		})
 			.isInstanceOf(EvaluationException.class)
-			.hasMessage("wrong type: class de.flapdoodle.eval.values.Value$MapValue != StringValue{wrapped=aString}");
+			.hasMessage("wrong type: class de.flapdoodle.eval.values.Value$MapValue != class de.flapdoodle.eval.values.ImmutableStringValue (aString)");
 	}
 
 	@Test

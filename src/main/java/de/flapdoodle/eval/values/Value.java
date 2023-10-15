@@ -33,6 +33,12 @@ public abstract class Value<T> {
 	@org.immutables.value.Value.Parameter
 	public abstract T wrapped();
 
+	@Override
+	@org.immutables.value.Value.Auxiliary
+	public String toString() {
+		return wrapped().toString();
+	}
+
 	@org.immutables.value.Value.Immutable
 	public static abstract class NullValue extends Value<Void> {
 
@@ -40,6 +46,10 @@ public abstract class Value<T> {
 		@Nullable
 		public abstract Void wrapped();
 
+		@Override
+		public String toString() {
+			return getClass().getSimpleName();
+		}
 	}
 
 	public static abstract class ComparableValue<T extends Comparable<T>> extends Value<T> implements Comparable<Value<T>> {
@@ -86,6 +96,12 @@ public abstract class Value<T> {
 		@org.immutables.value.Value.Lazy
 		public T wrapped() {
 			throw new EvaluationException.AsRuntimeException(exception());
+		}
+
+		@Override
+		@org.immutables.value.Value.Auxiliary
+		public String toString() {
+			return "FailedWithException(exception="+exception()+")";
 		}
 	}
 

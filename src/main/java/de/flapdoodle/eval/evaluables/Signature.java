@@ -50,7 +50,7 @@ public abstract class Signature<T> {
 			Parameter<?> parameter = get(i);
 			Class<?> type = parameter.type();
 
-			if (!type.isInstance(value)) return Optional.of(EvaluableException.of("wrong type: %s != %s", type, value));
+			if (!type.isInstance(value)) return Optional.of(EvaluableException.of("wrong type: %s != %s (%s)", type, value.getClass(), value));
 			Optional<EvaluableException> error = parameter.validationError(value);
 			if (error.isPresent()) return error;
 		}
@@ -59,7 +59,7 @@ public abstract class Signature<T> {
 			Class<?> type = parameter.type();
 			for (int i = minNumberOfArguments() + 1; i < arguments.size(); i++) {
 				Object value = arguments.get(i);
-				if (!type.isInstance(value)) return Optional.of(EvaluableException.of("wrong type: %s != %s", type, value));
+				if (!type.isInstance(value)) return Optional.of(EvaluableException.of("wrong type: %s != %s (%s)", type, value.getClass(), value));
 				Optional<EvaluableException> error = parameter.validationError(value);
 				if (error.isPresent()) return error;
 			}
