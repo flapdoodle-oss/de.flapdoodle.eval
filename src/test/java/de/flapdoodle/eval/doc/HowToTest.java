@@ -5,9 +5,7 @@ import de.flapdoodle.eval.ExpressionFactory;
 import de.flapdoodle.eval.evaluables.*;
 import de.flapdoodle.eval.exceptions.EvaluationException;
 import de.flapdoodle.eval.parser.ParseException;
-import de.flapdoodle.eval.values.Value;
-import de.flapdoodle.eval.values.ValueMap;
-import de.flapdoodle.eval.values.ValueResolver;
+import de.flapdoodle.eval.values.*;
 import de.flapdoodle.testdoc.Recorder;
 import de.flapdoodle.testdoc.Recording;
 import de.flapdoodle.testdoc.TabSize;
@@ -15,8 +13,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
 import java.math.BigDecimal;
-import java.math.MathContext;
-import java.time.ZoneId;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -78,10 +74,12 @@ public class HowToTest {
 			.isEqualTo(Value.of(BigDecimal.valueOf(5L)));
 		assertThat(expressionFactory.parse("\"fun\"[1]").evaluate(ValueResolver.empty()))
 			.isEqualTo(Value.of("u"));
-		assertThat(expressionFactory.parse("map.key")
-			.evaluate(ValueResolver.empty().with("map", ValueMap.builder()
-				.putValues("key", Value.of("stuff"))
-				.build())))
+        MapBasedValueResolver mapBasedValueResolver = ValueResolver.empty();
+        ValueMap value = ValueMap.builder()
+            .putValues("key", Value.of("stuff"))
+            .build();
+        assertThat(expressionFactory.parse("map.key")
+			.evaluate(mapBasedValueResolver.with("map", Value.of(value))))
 			.isEqualTo(Value.of("stuff"));
 		recording.end();
 	}

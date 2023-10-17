@@ -3,14 +3,11 @@ package de.flapdoodle.eval.values;
 import org.immutables.value.Value.Auxiliary;
 import org.immutables.value.Value.Immutable;
 
-import java.math.BigDecimal;
-import java.util.Collection;
 import java.util.Map;
-import java.util.function.Function;
 
 @Immutable
 public abstract class MapBasedValueResolver implements ValueResolver {
-	protected abstract Map<String, Value<?>> variables();
+	protected abstract Map<String, Object> variables();
 
 //	@Lazy
 //	protected Map<String, String> lowerCaseToKey() {
@@ -19,7 +16,7 @@ public abstract class MapBasedValueResolver implements ValueResolver {
 
 	@Auxiliary
 	@Override
-	public Value<?> get(String variable) {
+	public Object get(String variable) {
 		return variables().get(variable);
 	}
 
@@ -31,67 +28,14 @@ public abstract class MapBasedValueResolver implements ValueResolver {
 	}
 
 	@Auxiliary
-	public ImmutableMapBasedValueResolver withNull(String variable) {
-		return with(variable, Value.ofNull());
-	}
-
-	@Auxiliary
-	@Deprecated
-	public ImmutableMapBasedValueResolver with(String variable, ValueMap value) {
-		return with(variable, Value.of(value));
-	}
-
-	@Auxiliary
-	@Deprecated
-	public ImmutableMapBasedValueResolver with(String variable, Values value) {
-		return with(variable, Value.of(value));
-	}
-
-	@Auxiliary
-	@Deprecated
-	public ImmutableMapBasedValueResolver with(String variable, BigDecimal value) {
-		return with(variable, Value.of(value));
-	}
-
-	@Auxiliary
-	@Deprecated
-	public ImmutableMapBasedValueResolver with(String variable, boolean value) {
-		return with(variable, Value.of(value));
-	}
-
-	@Auxiliary
-	@Deprecated
-	public ImmutableMapBasedValueResolver with(String variable, double value) {
-		return with(variable, Value.of(value));
-	}
-
-	@Auxiliary
-	@Deprecated
-	public ImmutableMapBasedValueResolver with(String variable, String value) {
-		return with(variable, Value.of(value));
-	}
-
-	@Auxiliary
-	@Deprecated
-	public <T> ImmutableMapBasedValueResolver with(String variable, Function<T, Value<?>> mapper, Collection<T> collection) {
-		return with(variable, Value.of(mapper, collection));
-	}
-
-	@Auxiliary
-	@Deprecated
-	public <T> ImmutableMapBasedValueResolver with(String variable, Function<T, Value<?>> mapper, Map<String, T> collection) {
-		return with(variable, Value.of(mapper, collection));
-	}
-
-	@Auxiliary
 	public ImmutableMapBasedValueResolver and(String variable, Value<?> value) {
 		return with(variable, value);
 	}
 
 	@Auxiliary
-	public ImmutableMapBasedValueResolver withValues(Map<String, ? extends Value<?>> values) {
+	public ImmutableMapBasedValueResolver withValues(Map<String, ?> values) {
 		ImmutableMapBasedValueResolver.Builder builder = builder().from(this);
-		for (Map.Entry<String, ? extends Value<?>> entry : values.entrySet()) {
+		for (Map.Entry<String, ?> entry : values.entrySet()) {
 			builder.putVariables(entry.getKey(), entry.getValue());
 		}
 		return builder.build();

@@ -22,6 +22,7 @@ import de.flapdoodle.eval.Expression;
 import de.flapdoodle.eval.ExpressionFactory;
 import de.flapdoodle.eval.parser.ParseException;
 import de.flapdoodle.eval.values.MapBasedValueResolver;
+import de.flapdoodle.eval.values.Value;
 import de.flapdoodle.eval.values.ValueResolver;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -62,7 +63,8 @@ class TrigonometricFunctionsTest extends BaseEvaluationTest {
 	@ValueSource(doubles = { -1, -0.5, 0, 0.5, 0.9 })
 	void testAcosHThrowsException(double d) {
 		assertThatThrownBy(() -> {
-			MapBasedValueResolver mapBasedVariableResolver = ValueResolver.empty().with("x", d);
+            MapBasedValueResolver mapBasedValueResolver = ValueResolver.empty();
+            MapBasedValueResolver mapBasedVariableResolver = mapBasedValueResolver.with("x", Value.of(d));
 			ExpressionFactory.defaults().parse("acosH(x)")
 							.evaluate(mapBasedVariableResolver);
 		})
@@ -266,7 +268,8 @@ class TrigonometricFunctionsTest extends BaseEvaluationTest {
 	void testAtanHThrowsException(double d) {
 		assertThatThrownBy(() -> {
 			Expression expression = ExpressionFactory.defaults().parse("atanH(x)");
-			MapBasedValueResolver mapBasedVariableResolver = ValueResolver.empty().with("x", d);
+            MapBasedValueResolver mapBasedValueResolver = ValueResolver.empty();
+            MapBasedValueResolver mapBasedVariableResolver = mapBasedValueResolver.with("x", Value.of(d));
 			expression.evaluate(mapBasedVariableResolver);
 		})
 			.isInstanceOf(EvaluationException.class)

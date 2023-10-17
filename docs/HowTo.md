@@ -46,9 +46,11 @@ assertThat(expressionFactory.parse("2+3").evaluate(ValueResolver.empty()))
   .isEqualTo(Value.of(BigDecimal.valueOf(5L)));
 assertThat(expressionFactory.parse("\"fun\"[1]").evaluate(ValueResolver.empty()))
   .isEqualTo(Value.of("u"));
-assertThat(expressionFactory.parse("map.key")
-  .evaluate(ValueResolver.empty().with("map", ValueMap.builder()
-    .putValues("key", Value.of("stuff"))
-    .build())))
+    MapBasedValueResolver mapBasedValueResolver = ValueResolver.empty();
+    ValueMap value = ValueMap.builder()
+        .putValues("key", Value.of("stuff"))
+        .build();
+    assertThat(expressionFactory.parse("map.key")
+  .evaluate(mapBasedValueResolver.with("map", Value.of(value))))
   .isEqualTo(Value.of("stuff"));
 ```

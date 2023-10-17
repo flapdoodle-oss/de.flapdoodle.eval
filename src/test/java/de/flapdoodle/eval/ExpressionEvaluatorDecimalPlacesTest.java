@@ -24,10 +24,7 @@ import de.flapdoodle.eval.values.ValueResolver;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -64,8 +61,8 @@ class ExpressionEvaluatorDecimalPlacesTest extends BaseExpressionEvaluatorTest {
 	@Test
 	void testDefaultNoRoundingArray() throws ParseException, EvaluationException {
 		List<BigDecimal> array = Arrays.asList(new BigDecimal("1.12345"));
-		MapBasedValueResolver mapBasedVariableResolver = ValueResolver.empty()
-			.with("a", Value::of, array);
+        MapBasedValueResolver mapBasedValueResolver = ValueResolver.empty();
+        MapBasedValueResolver mapBasedVariableResolver = mapBasedValueResolver.with("a", Value.of(Value::of, array));
 		ValueResolver variableResolver = mapBasedVariableResolver;
 		assertThat(evaluate("a[0]", variableResolver)).isEqualTo("1.12345");
 	}
@@ -79,8 +76,8 @@ class ExpressionEvaluatorDecimalPlacesTest extends BaseExpressionEvaluatorTest {
 				}
 			};
 
-		MapBasedValueResolver mapBasedVariableResolver = ValueResolver.empty()
-			.with("a", Value::of, structure);
+		MapBasedValueResolver mapBasedValueResolver = ValueResolver.empty();
+		MapBasedValueResolver mapBasedVariableResolver = mapBasedValueResolver.with("a", Value.of(Value::of, structure));
 		ValueResolver variableResolver = mapBasedVariableResolver;
 		assertThat(evaluate("a.b", variableResolver)).isEqualTo("1.12345");
 	}

@@ -4,6 +4,7 @@ import de.flapdoodle.eval.exceptions.EvaluationException;
 import de.flapdoodle.eval.Expression;
 import de.flapdoodle.eval.ExpressionFactory;
 import de.flapdoodle.eval.parser.ParseException;
+import de.flapdoodle.eval.values.MapBasedValueResolver;
 import de.flapdoodle.eval.values.Value;
 import de.flapdoodle.eval.values.ValueResolver;
 import org.junit.jupiter.api.Test;
@@ -21,33 +22,33 @@ class SameTest {
 
 		BigDecimal value = new BigDecimal("1.4");
 
-		assertThat(expression.evaluate(ValueResolver.empty()
-				.with("a", value)
-				.with("b", value))
+		MapBasedValueResolver mapBasedValueResolver8 = ValueResolver.empty();
+		MapBasedValueResolver mapBasedValueResolver9 = mapBasedValueResolver8.with("a", Value.of(value));
+		assertThat(expression.evaluate(mapBasedValueResolver9.with("b", Value.of(value)))
 			)
 			.isEqualTo(Value.TRUE);
 
-		assertThat(expression.evaluate(ValueResolver.empty()
-				.with("a", "Hello")
-				.with("b", "Hello"))
+		MapBasedValueResolver mapBasedValueResolver6 = ValueResolver.empty();
+		MapBasedValueResolver mapBasedValueResolver7 = mapBasedValueResolver6.with("a", Value.of("Hello"));
+		assertThat(expression.evaluate(mapBasedValueResolver7.with("b", Value.of("Hello")))
 			)
 			.isEqualTo(Value.TRUE);
 
-		assertThat(expression.evaluate(ValueResolver.empty()
-				.with("a", "Hello")
-				.with("b", "Goodbye"))
+		MapBasedValueResolver mapBasedValueResolver4 = ValueResolver.empty();
+		MapBasedValueResolver mapBasedValueResolver5 = mapBasedValueResolver4.with("a", Value.of("Hello"));
+		assertThat(expression.evaluate(mapBasedValueResolver5.with("b", Value.of("Goodbye")))
 			)
 			.isEqualTo(Value.FALSE);
 
-		assertThat(expression.evaluate(ValueResolver.empty()
-				.with("a", true)
-				.with("b", true))
+        MapBasedValueResolver mapBasedValueResolver2 = ValueResolver.empty();
+        MapBasedValueResolver mapBasedValueResolver3 = mapBasedValueResolver2.with("a", Value.of(true));
+        assertThat(expression.evaluate(mapBasedValueResolver3.with("b", Value.of(true)))
 			)
 			.isEqualTo(Value.TRUE);
 
-		assertThat(expression.evaluate(ValueResolver.empty()
-				.with("a", false)
-				.with("b", true))
+        MapBasedValueResolver mapBasedValueResolver = ValueResolver.empty();
+        MapBasedValueResolver mapBasedValueResolver1 = mapBasedValueResolver.with("a", Value.of(false));
+        assertThat(expression.evaluate(mapBasedValueResolver1.with("b", Value.of(true)))
 			)
 			.isEqualTo(Value.FALSE);
 	}

@@ -49,42 +49,54 @@ class ExpressionEvaluatorNullTest extends BaseExpressionEvaluatorTest {
 	@Test
 	void testNullEquals() throws ParseException, EvaluationException {
 		Expression expression = createExpression("a == null");
-		MapBasedValueResolver mapBasedVariableResolver1 = ValueResolver.empty().withNull("a");
+		MapBasedValueResolver mapBasedValueResolver1 = ValueResolver.empty();
+		MapBasedValueResolver mapBasedVariableResolver1 = mapBasedValueResolver1.with("a", Value.ofNull());
 		assertExpressionHasExpectedResult(expression, mapBasedVariableResolver1, "true");
-		MapBasedValueResolver mapBasedVariableResolver = ValueResolver.empty().with("a", 99);
+        MapBasedValueResolver mapBasedValueResolver = ValueResolver.empty();
+        MapBasedValueResolver mapBasedVariableResolver = mapBasedValueResolver.with("a", Value.of(99));
 		assertExpressionHasExpectedResult(expression, mapBasedVariableResolver, "false");
 	}
 
 	@Test
 	void testNullNotEquals() throws ParseException, EvaluationException {
 		Expression expression = createExpression("a != null");
-		MapBasedValueResolver mapBasedVariableResolver1 = ValueResolver.empty().withNull("a");
+		MapBasedValueResolver mapBasedValueResolver1 = ValueResolver.empty();
+		MapBasedValueResolver mapBasedVariableResolver1 = mapBasedValueResolver1.with("a", Value.ofNull());
 		assertExpressionHasExpectedResult(expression, mapBasedVariableResolver1, "false");
-		MapBasedValueResolver mapBasedVariableResolver = ValueResolver.empty().with("a", 99);
+        MapBasedValueResolver mapBasedValueResolver = ValueResolver.empty();
+        MapBasedValueResolver mapBasedVariableResolver = mapBasedValueResolver.with("a", Value.of(99));
 		assertExpressionHasExpectedResult(expression, mapBasedVariableResolver, "true");
 	}
 
 	@Test
 	void testHandleWithIf() throws EvaluationException, ParseException {
 		Expression expression1 = createExpression("if(a != null, a * 5, 1)");
-		assertExpressionHasExpectedResult(expression1, ValueResolver.empty().withNull("a"), "1");
-		assertExpressionHasExpectedResult(expression1, ValueResolver.empty().with("a", 3), "15.0");
+		MapBasedValueResolver mapBasedValueResolver3 = ValueResolver.empty();
+		assertExpressionHasExpectedResult(expression1, mapBasedValueResolver3.with("a", Value.ofNull()), "1");
+        MapBasedValueResolver mapBasedValueResolver = ValueResolver.empty();
+        assertExpressionHasExpectedResult(expression1, mapBasedValueResolver.with("a", Value.of(3)), "15.0");
 
 		Expression expression2 =
 			createExpression("if(a == null, \"Unknown name\", \"The name is \" + a)");
-		assertExpressionHasExpectedResult(expression2, ValueResolver.empty().withNull("a"), "Unknown name");
-		assertExpressionHasExpectedResult(expression2, ValueResolver.empty().with("a", "Max"), "The name is Max");
+		MapBasedValueResolver mapBasedValueResolver2 = ValueResolver.empty();
+		assertExpressionHasExpectedResult(expression2, mapBasedValueResolver2.with("a", Value.ofNull()), "Unknown name");
+		MapBasedValueResolver mapBasedValueResolver1 = ValueResolver.empty();
+		assertExpressionHasExpectedResult(expression2, mapBasedValueResolver1.with("a", Value.of("Max")), "The name is Max");
 	}
 
 	@Test
 	void testHandleWithIfFailCase() throws EvaluationException, ParseException {
-		assertThatThrownBy(() -> evaluate("if(a == null, a * 5, 1)", ValueResolver.empty().withNull("a")))
+		assertThatThrownBy(() -> {
+			MapBasedValueResolver mapBasedValueResolver = ValueResolver.empty();
+			evaluate("if(a == null, a * 5, 1)", mapBasedValueResolver.with("a", Value.ofNull()));
+		})
 			.isInstanceOf(EvaluationException.class)
 			.hasMessageContaining("wrong type");
 
 		Expression expression2 =
 			createExpression("if(a != null, \"Unknown name\", \"The name is \" + a)");
-		assertExpressionHasExpectedResult(expression2, ValueResolver.empty().withNull("a"), "The name is null");
+		MapBasedValueResolver mapBasedValueResolver = ValueResolver.empty();
+		assertExpressionHasExpectedResult(expression2, mapBasedValueResolver.with("a", Value.ofNull()), "The name is null");
 	}
 
 	@Test
@@ -101,19 +113,22 @@ class ExpressionEvaluatorNullTest extends BaseExpressionEvaluatorTest {
 	@Test
 	void testFailWithNoHandling() {
 		assertThatThrownBy(() -> {
-			MapBasedValueResolver mapBasedVariableResolver = ValueResolver.empty().withNull("a");
+			MapBasedValueResolver mapBasedValueResolver = ValueResolver.empty();
+			MapBasedValueResolver mapBasedVariableResolver = mapBasedValueResolver.with("a", Value.ofNull());
 			evaluate("a * 5", mapBasedVariableResolver);
 		})
 			.isInstanceOf(EvaluationException.class)
 			.hasMessageContaining("wrong type");
 
 		assertThatThrownBy(() -> {
-			MapBasedValueResolver mapBasedVariableResolver = ValueResolver.empty().withNull("a");
+			MapBasedValueResolver mapBasedValueResolver = ValueResolver.empty();
+			MapBasedValueResolver mapBasedVariableResolver = mapBasedValueResolver.with("a", Value.ofNull());
 			evaluate("floor(a)", mapBasedVariableResolver);
 		}).isInstanceOf(EvaluationException.class);
 
 		assertThatThrownBy(() -> {
-			MapBasedValueResolver mapBasedVariableResolver = ValueResolver.empty().withNull("a");
+			MapBasedValueResolver mapBasedValueResolver = ValueResolver.empty();
+			MapBasedValueResolver mapBasedVariableResolver = mapBasedValueResolver.with("a", Value.ofNull());
 			evaluate("a > 5", mapBasedVariableResolver);
 		}).isInstanceOf(EvaluationException.class);
 	}
