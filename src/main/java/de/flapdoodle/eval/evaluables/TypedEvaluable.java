@@ -4,7 +4,7 @@ import de.flapdoodle.eval.EvaluationContext;
 import de.flapdoodle.eval.exceptions.EvaluationException;
 import de.flapdoodle.eval.parser.Token;
 import de.flapdoodle.eval.values.Value;
-import de.flapdoodle.eval.values.ValueResolver;
+import de.flapdoodle.eval.VariableResolver;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -13,39 +13,39 @@ public interface TypedEvaluable<T> extends Evaluable<T> {
     Signature<T> signature();
 
     interface Arg0<T> {
-        T evaluate(ValueResolver valueResolver, EvaluationContext evaluationContext, Token token) throws EvaluationException;
+        T evaluate(VariableResolver variableResolver, EvaluationContext evaluationContext, Token token) throws EvaluationException;
     }
 
     interface Arg1<S, T> {
-        T evaluate(ValueResolver valueResolver, EvaluationContext evaluationContext, Token token, S argument) throws EvaluationException;
+        T evaluate(VariableResolver variableResolver, EvaluationContext evaluationContext, Token token, S argument) throws EvaluationException;
     }
 
     interface VarArg1<S, T> {
-        T evaluate(ValueResolver valueResolver, EvaluationContext evaluationContext, Token token, List<S> arguments) throws EvaluationException;
+        T evaluate(VariableResolver variableResolver, EvaluationContext evaluationContext, Token token, List<S> arguments) throws EvaluationException;
     }
 
     interface Arg2<A, B, T> {
-        T evaluate(ValueResolver valueResolver, EvaluationContext evaluationContext, Token token, A first, B second) throws EvaluationException;
+        T evaluate(VariableResolver variableResolver, EvaluationContext evaluationContext, Token token, A first, B second) throws EvaluationException;
     }
 
     interface Arg3<A, B, C, T> {
-        T evaluate(ValueResolver valueResolver, EvaluationContext evaluationContext, Token token, A first, B second, C third) throws EvaluationException;
+        T evaluate(VariableResolver variableResolver, EvaluationContext evaluationContext, Token token, A first, B second, C third) throws EvaluationException;
     }
 
     interface Arg4<A, B, C, D, T> {
-        T evaluate(ValueResolver valueResolver, EvaluationContext evaluationContext, Token token, A first, B second, C third, D fourth) throws EvaluationException;
+        T evaluate(VariableResolver variableResolver, EvaluationContext evaluationContext, Token token, A first, B second, C third, D fourth) throws EvaluationException;
     }
 
     interface Arg5<A, B, C, D, E, T> {
-        T evaluate(ValueResolver valueResolver, EvaluationContext evaluationContext, Token token, A first, B second, C third, D fourth, E fifth) throws EvaluationException;
+        T evaluate(VariableResolver variableResolver, EvaluationContext evaluationContext, Token token, A first, B second, C third, D fourth, E fifth) throws EvaluationException;
     }
 
     interface Arg6<A, B, C, D, E, F, T> {
-        T evaluate(ValueResolver valueResolver, EvaluationContext evaluationContext, Token token, A first, B second, C third, D fourth, E fifth, F sixth) throws EvaluationException;
+        T evaluate(VariableResolver variableResolver, EvaluationContext evaluationContext, Token token, A first, B second, C third, D fourth, E fifth, F sixth) throws EvaluationException;
     }
 
     interface Arg7<A, B, C, D, E, F, G, T> {
-        T evaluate(ValueResolver valueResolver, EvaluationContext evaluationContext, Token token, A first, B second, C third, D fourth, E fifth, F sixth, G seventh) throws EvaluationException;
+        T evaluate(VariableResolver variableResolver, EvaluationContext evaluationContext, Token token, A first, B second, C third, D fourth, E fifth, F sixth, G seventh) throws EvaluationException;
     }
 
     static <T extends Value<?>> TypedEvaluable<T> of(Class<T> returnType, TypedEvaluable.Arg0<T> function) {

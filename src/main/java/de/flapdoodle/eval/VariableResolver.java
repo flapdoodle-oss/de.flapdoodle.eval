@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.flapdoodle.eval.values;
+package de.flapdoodle.eval;
 
-public interface ValueResolver {
+public interface VariableResolver {
 	Object get(String variable);
 
-	default ValueResolver andThen(ValueResolver fallback) {
-		ValueResolver that = this;
+	default VariableResolver andThen(VariableResolver fallback) {
+		VariableResolver that = this;
 		return variable -> {
 			Object ret = that.get(variable);
 			return ret != null ? ret : fallback.get(variable);
@@ -31,7 +31,7 @@ public interface ValueResolver {
 		return get(name) != null;
 	}
 
-	static ImmutableMapBasedValueResolver empty() {
-		return MapBasedValueResolver.empty();
+	static ImmutableMapBasedVariableResolver empty() {
+		return MapBasedVariableResolver.empty();
 	}
 }

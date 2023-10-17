@@ -20,7 +20,6 @@ import de.flapdoodle.eval.evaluables.OperatorMap;
 import de.flapdoodle.eval.evaluables.OperatorMapping;
 import de.flapdoodle.eval.exceptions.EvaluationException;
 import de.flapdoodle.eval.parser.ParseException;
-import de.flapdoodle.eval.values.ValueResolver;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -41,6 +40,6 @@ class ExpressionEvaluatorPowerOfTest extends BaseExpressionEvaluatorTest {
 						.andThen(ExpressionFactory.defaults().operatorMap()))
 				.parse("-2^2");
 
-		assertThat(expression.evaluate(ValueResolver.empty()).toString()).isEqualTo("-4.0");
+		assertThat(expression.evaluate(VariableResolver.empty()).toString()).isEqualTo("-4.0");
 	}
 }

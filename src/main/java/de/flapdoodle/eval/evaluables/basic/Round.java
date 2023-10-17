@@ -1,12 +1,12 @@
 package de.flapdoodle.eval.evaluables.basic;
 
 import de.flapdoodle.eval.EvaluationContext;
+import de.flapdoodle.eval.VariableResolver;
 import de.flapdoodle.eval.exceptions.EvaluationException;
 import de.flapdoodle.eval.evaluables.TypedEvaluable;
 import de.flapdoodle.eval.evaluables.TypedEvaluables;
 import de.flapdoodle.eval.parser.Token;
 import de.flapdoodle.eval.values.Value;
-import de.flapdoodle.eval.values.ValueResolver;
 
 import java.math.RoundingMode;
 
@@ -16,7 +16,7 @@ public class Round  extends TypedEvaluables.Wrapper {
     public static class Ceiling implements TypedEvaluable.Arg1<Value.NumberValue, Value.NumberValue> {
 
         @Override
-        public Value.NumberValue evaluate(ValueResolver valueResolver, EvaluationContext evaluationContext, Token token, Value.NumberValue first) throws EvaluationException {
+        public Value.NumberValue evaluate(VariableResolver variableResolver, EvaluationContext evaluationContext, Token token, Value.NumberValue first) throws EvaluationException {
             return Value.of(first.wrapped().setScale(0, RoundingMode.CEILING));
         }
     }
@@ -25,7 +25,7 @@ public class Round  extends TypedEvaluables.Wrapper {
     public static class Floor implements TypedEvaluable.Arg1<Value.NumberValue, Value.NumberValue> {
 
         @Override
-        public Value.NumberValue evaluate(ValueResolver valueResolver, EvaluationContext evaluationContext, Token token, Value.NumberValue first) throws EvaluationException {
+        public Value.NumberValue evaluate(VariableResolver variableResolver, EvaluationContext evaluationContext, Token token, Value.NumberValue first) throws EvaluationException {
             return Value.of(first.wrapped().setScale(0, RoundingMode.FLOOR));
         }
     }
@@ -33,7 +33,7 @@ public class Round  extends TypedEvaluables.Wrapper {
     public static class Number implements TypedEvaluable.Arg2<Value.NumberValue, Value.NumberValue, Value.NumberValue> {
 
         @Override
-        public Value.NumberValue evaluate(ValueResolver valueResolver, EvaluationContext evaluationContext, Token token, Value.NumberValue first, Value.NumberValue second) throws EvaluationException {
+        public Value.NumberValue evaluate(VariableResolver variableResolver, EvaluationContext evaluationContext, Token token, Value.NumberValue first, Value.NumberValue second) throws EvaluationException {
             return Value.of(
                     first
                             .wrapped()
@@ -47,7 +47,7 @@ public class Round  extends TypedEvaluables.Wrapper {
     public static class NumberMode implements TypedEvaluable.Arg2<Value.NumberValue, Value.StringValue, Value.NumberValue> {
 
         @Override
-        public Value.NumberValue evaluate(ValueResolver valueResolver, EvaluationContext evaluationContext, Token token, Value.NumberValue first, Value.StringValue second) throws EvaluationException {
+        public Value.NumberValue evaluate(VariableResolver variableResolver, EvaluationContext evaluationContext, Token token, Value.NumberValue first, Value.StringValue second) throws EvaluationException {
             return Value.of(first.wrapped().setScale(0, roundingMode(token, second)));
         }
     }
@@ -55,7 +55,7 @@ public class Round  extends TypedEvaluables.Wrapper {
     public static class NumberScaleMode implements TypedEvaluable.Arg3<Value.NumberValue, Value.NumberValue, Value.StringValue, Value.NumberValue> {
 
         @Override
-        public Value.NumberValue evaluate(ValueResolver valueResolver, EvaluationContext evaluationContext, Token token, Value.NumberValue first, Value.NumberValue second, Value.StringValue third) throws EvaluationException {
+        public Value.NumberValue evaluate(VariableResolver variableResolver, EvaluationContext evaluationContext, Token token, Value.NumberValue first, Value.NumberValue second, Value.StringValue third) throws EvaluationException {
             return Value.of(
                     first
                             .wrapped()

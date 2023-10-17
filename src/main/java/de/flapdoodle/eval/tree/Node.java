@@ -3,8 +3,7 @@ package de.flapdoodle.eval.tree;
 import de.flapdoodle.eval.EvaluationContext;
 import de.flapdoodle.eval.exceptions.EvaluationException;
 import de.flapdoodle.eval.parser.Token;
-import de.flapdoodle.eval.values.Value;
-import de.flapdoodle.eval.values.ValueResolver;
+import de.flapdoodle.eval.VariableResolver;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -17,7 +16,7 @@ public abstract class Node {
     public abstract Token token();
 
     @org.immutables.value.Value.Auxiliary
-    public abstract Object evaluate(ValueResolver variableResolver, EvaluationContext context) throws EvaluationException;
+    public abstract Object evaluate(VariableResolver variableResolver, EvaluationContext context) throws EvaluationException;
 
     public static List<Node> allNodes(Node node) {
         ArrayList<Node> ret = new ArrayList<>();

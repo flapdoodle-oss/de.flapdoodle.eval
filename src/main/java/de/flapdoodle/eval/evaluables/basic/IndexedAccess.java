@@ -1,20 +1,20 @@
 package de.flapdoodle.eval.evaluables.basic;
 
 import de.flapdoodle.eval.EvaluationContext;
+import de.flapdoodle.eval.VariableResolver;
 import de.flapdoodle.eval.exceptions.EvaluationException;
 import de.flapdoodle.eval.evaluables.Parameter;
 import de.flapdoodle.eval.evaluables.TypedEvaluable;
 import de.flapdoodle.eval.evaluables.TypedEvaluables;
 import de.flapdoodle.eval.parser.Token;
 import de.flapdoodle.eval.values.Value;
-import de.flapdoodle.eval.values.ValueResolver;
 
 public class IndexedAccess extends TypedEvaluables.Wrapper {
 
 	public static class ValueArrayAccess implements TypedEvaluable.Arg2<Value.ArrayValue, Value.NumberValue, Value<?>> {
 
 		@Override
-		public Value<?> evaluate(ValueResolver valueResolver, EvaluationContext evaluationContext, Token token, Value.ArrayValue first, Value.NumberValue second)
+		public Value<?> evaluate(VariableResolver variableResolver, EvaluationContext evaluationContext, Token token, Value.ArrayValue first, Value.NumberValue second)
 			throws EvaluationException {
 			return first.wrapped().get(second.wrapped().intValue());
 		}
@@ -22,7 +22,7 @@ public class IndexedAccess extends TypedEvaluables.Wrapper {
 
 	public static class StringAccess implements TypedEvaluable.Arg2<Value.StringValue, Value.NumberValue, Value<?>> {
 		@Override
-		public Value<?> evaluate(ValueResolver valueResolver, EvaluationContext evaluationContext, Token token, Value.StringValue first, Value.NumberValue second)
+		public Value<?> evaluate(VariableResolver variableResolver, EvaluationContext evaluationContext, Token token, Value.StringValue first, Value.NumberValue second)
 			throws EvaluationException {
 			return Value.of(""+first.wrapped().charAt(second.wrapped().intValue()));
 		}

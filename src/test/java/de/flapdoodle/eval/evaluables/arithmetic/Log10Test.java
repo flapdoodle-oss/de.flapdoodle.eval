@@ -8,7 +8,7 @@ import de.flapdoodle.eval.evaluables.TypedEvaluableByArguments;
 import de.flapdoodle.eval.parser.Token;
 import de.flapdoodle.eval.parser.TokenType;
 import de.flapdoodle.eval.values.Value;
-import de.flapdoodle.eval.values.ValueResolver;
+import de.flapdoodle.eval.VariableResolver;
 import de.flapdoodle.types.Either;
 import org.assertj.core.api.InstanceOfAssertFactories;
 import org.junit.jupiter.api.Test;
@@ -44,7 +44,7 @@ class Log10Test {
 		assertThat(byArguments).isLeft();
 
 		Object result = byArguments.left()
-			.evaluate(ValueResolver.empty(), evaluationContext, token, values);
+			.evaluate(VariableResolver.empty(), evaluationContext, token, values);
 
 		assertThat(result).isEqualTo(Value.of(0.47712125471966244));
 	}
@@ -64,7 +64,7 @@ class Log10Test {
 		assertThat(byArguments).isLeft();
 
 		assertThatThrownBy(() -> byArguments.left()
-			.evaluate(ValueResolver.empty(), evaluationContext, token, Arrays.asList(Value.of(-1.0))))
+			.evaluate(VariableResolver.empty(), evaluationContext, token, Arrays.asList(Value.of(-1.0))))
 			.isInstanceOf(EvaluationException.class)
 			.hasMessage("value is not > 0: -1.0");
 	}
@@ -84,7 +84,7 @@ class Log10Test {
 		assertThat(byArguments).isLeft();
 
 		assertThatThrownBy(() -> byArguments.left()
-			.evaluate(ValueResolver.empty(), evaluationContext, token, Arrays.asList(Value.of(0.0))))
+			.evaluate(VariableResolver.empty(), evaluationContext, token, Arrays.asList(Value.of(0.0))))
 			.isInstanceOf(EvaluationException.class)
 			.hasMessage("value is not > 0: 0.0");
 	}

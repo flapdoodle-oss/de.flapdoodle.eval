@@ -1,9 +1,8 @@
 package de.flapdoodle.eval.tree;
 
 import de.flapdoodle.eval.EvaluationContext;
+import de.flapdoodle.eval.VariableResolver;
 import de.flapdoodle.eval.parser.Token;
-import de.flapdoodle.eval.values.Value;
-import de.flapdoodle.eval.values.ValueResolver;
 
 @org.immutables.value.Value.Immutable
 public abstract class ComparableValueNode<T extends Comparable<T>> extends ValueNode<T> {
@@ -11,7 +10,7 @@ public abstract class ComparableValueNode<T extends Comparable<T>> extends Value
 	protected abstract T value();
 
 	@Override
-	public T evaluate(ValueResolver variableResolver, EvaluationContext context) {
+	public T evaluate(VariableResolver variableResolver, EvaluationContext context) {
 		return value();
 	}
 

@@ -3,7 +3,7 @@
 ```java
 ExpressionFactory expressionFactory = ExpressionFactory.defaults();
 Expression expression = expressionFactory.parse("a*2");
-Object result = expression.evaluate(ValueResolver.empty()
+Object result = expression.evaluate(VariableResolver.empty()
   .with("a", Value.of(2)));
 
 assertThat(result).isEqualTo(Value.of(4.0));
@@ -18,7 +18,7 @@ assertThat(expression.usedVariables())
 
 ```java
 ExpressionFactory expressionFactory = ExpressionFactory.builder()
-  .constants(ValueResolver.empty().with("pi", Value.of(3.1415)))
+  .constants(VariableResolver.empty().with("pi", Value.of(3.1415)))
   .evaluatables(TypedEvaluableMap.builder()
     .putMap("add", TypedEvaluables.builder()
       .addList(TypedEvaluable.of(Value.NumberValue.class, Value.NumberValue.class, Value.NumberValue.class,
@@ -38,15 +38,15 @@ ExpressionFactory expressionFactory = ExpressionFactory.builder()
     .build())
   .build();
 
-assertThat(expressionFactory.parse("pi").evaluate(ValueResolver.empty()))
+assertThat(expressionFactory.parse("pi").evaluate(VariableResolver.empty()))
   .isEqualTo(Value.of(3.1415));
-assertThat(expressionFactory.parse("add(2,3)").evaluate(ValueResolver.empty()))
+assertThat(expressionFactory.parse("add(2,3)").evaluate(VariableResolver.empty()))
   .isEqualTo(Value.of(BigDecimal.valueOf(5L)));
-assertThat(expressionFactory.parse("2+3").evaluate(ValueResolver.empty()))
+assertThat(expressionFactory.parse("2+3").evaluate(VariableResolver.empty()))
   .isEqualTo(Value.of(BigDecimal.valueOf(5L)));
-assertThat(expressionFactory.parse("\"fun\"[1]").evaluate(ValueResolver.empty()))
+assertThat(expressionFactory.parse("\"fun\"[1]").evaluate(VariableResolver.empty()))
   .isEqualTo(Value.of("u"));
-    MapBasedValueResolver mapBasedValueResolver = ValueResolver.empty();
+    MapBasedVariableResolver mapBasedValueResolver = VariableResolver.empty();
     ValueMap value = ValueMap.builder()
         .putValues("key", Value.of("stuff"))
         .build();

@@ -1,4 +1,4 @@
-package de.flapdoodle.eval.values;
+package de.flapdoodle.eval;
 
 import org.immutables.value.Value.Auxiliary;
 import org.immutables.value.Value.Immutable;
@@ -6,7 +6,7 @@ import org.immutables.value.Value.Immutable;
 import java.util.Map;
 
 @Immutable
-public abstract class MapBasedValueResolver implements ValueResolver {
+public abstract class MapBasedVariableResolver implements VariableResolver {
 	protected abstract Map<String, Object> variables();
 
 //	@Lazy
@@ -21,31 +21,31 @@ public abstract class MapBasedValueResolver implements ValueResolver {
 	}
 
 	@Auxiliary
-	public ImmutableMapBasedValueResolver with(String variable, Object value) {
+	public ImmutableMapBasedVariableResolver with(String variable, Object value) {
 		return builder().from(this)
 			.putVariables(variable, value)
 			.build();
 	}
 
 	@Auxiliary
-	public ImmutableMapBasedValueResolver and(String variable, Object value) {
+	public ImmutableMapBasedVariableResolver and(String variable, Object value) {
 		return with(variable, value);
 	}
 
 	@Auxiliary
-	public ImmutableMapBasedValueResolver withValues(Map<String, ?> values) {
-		ImmutableMapBasedValueResolver.Builder builder = builder().from(this);
+	public ImmutableMapBasedVariableResolver withValues(Map<String, ?> values) {
+		ImmutableMapBasedVariableResolver.Builder builder = builder().from(this);
 		for (Map.Entry<String, ?> entry : values.entrySet()) {
 			builder.putVariables(entry.getKey(), entry.getValue());
 		}
 		return builder.build();
 	}
 
-	public static ImmutableMapBasedValueResolver.Builder builder() {
-		return ImmutableMapBasedValueResolver.builder();
+	public static ImmutableMapBasedVariableResolver.Builder builder() {
+		return ImmutableMapBasedVariableResolver.builder();
 	}
 
-	public static ImmutableMapBasedValueResolver empty() {
+	public static ImmutableMapBasedVariableResolver empty() {
 		return builder().build();
 	}
 }

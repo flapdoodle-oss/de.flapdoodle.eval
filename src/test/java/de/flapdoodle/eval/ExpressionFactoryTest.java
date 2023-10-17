@@ -17,9 +17,7 @@
 package de.flapdoodle.eval;
 
 import de.flapdoodle.eval.config.Defaults;
-import de.flapdoodle.eval.values.MapBasedValueResolver;
 import de.flapdoodle.eval.values.Value;
-import de.flapdoodle.eval.values.ValueResolver;
 import org.junit.jupiter.api.Test;
 
 import java.math.MathContext;
@@ -59,7 +57,7 @@ class ExpressionFactoryTest {
 					put("B", Value.of("b"));
 				}
 			};
-		MapBasedValueResolver valueResolver = ValueResolver.empty()
+		MapBasedVariableResolver valueResolver = VariableResolver.empty()
 			.withValues(constants);
 		ExpressionFactory factory =
 			ExpressionFactory.defaults().withConstants(valueResolver);

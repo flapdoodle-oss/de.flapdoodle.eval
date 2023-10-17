@@ -5,14 +5,11 @@ import de.flapdoodle.eval.evaluables.*;
 import de.flapdoodle.eval.exceptions.EvaluationException;
 import de.flapdoodle.eval.parser.*;
 import de.flapdoodle.eval.tree.*;
-import de.flapdoodle.eval.values.MapBasedValueResolver;
 import de.flapdoodle.eval.values.Value;
-import de.flapdoodle.eval.values.ValueResolver;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.MathContext;
-import java.math.RoundingMode;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,7 +28,7 @@ public abstract class ExpressionFactory {
 		return ZoneId.systemDefault();
 	}
 
-	protected abstract ValueResolver constants();
+	protected abstract VariableResolver constants();
 	protected abstract TypedEvaluableByName evaluatables();
 	protected abstract TypedEvaluableByNumberOfArguments arrayAccess();
 	protected abstract TypedEvaluableByNumberOfArguments propertyAccess();
@@ -41,7 +38,7 @@ public abstract class ExpressionFactory {
 	@org.immutables.value.Value.Auxiliary
 	public final ImmutableExpressionFactory withConstant(String name, Value<?> value) {
 		return ImmutableExpressionFactory.copyOf(this)
-				.withConstants(MapBasedValueResolver.empty()
+				.withConstants(MapBasedVariableResolver.empty()
 						.with(name, value)
 						.andThen(constants()));
 	}

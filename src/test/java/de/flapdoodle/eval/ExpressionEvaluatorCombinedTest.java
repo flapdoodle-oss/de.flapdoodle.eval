@@ -41,10 +41,10 @@ class ExpressionEvaluatorCombinedTest extends BaseExpressionEvaluatorTest {
 			.putValues("positions", Value.of(Value::of, position))
 			.build();
 
-		MapBasedValueResolver mapBasedVariableResolver = ValueResolver.empty()
+		MapBasedVariableResolver mapBasedVariableResolver = VariableResolver.empty()
 			.with("order", Value.of(order))
 			.and("x", Value.of(0));
-		ValueResolver variableResolver = mapBasedVariableResolver;
+		VariableResolver variableResolver = mapBasedVariableResolver;
 		assertThat(evaluate("order.positions[x].amount * order.positions[x].price", variableResolver)).isEqualTo("44.850");
 	}
 }

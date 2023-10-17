@@ -7,7 +7,7 @@ import de.flapdoodle.eval.evaluables.TypedEvaluable;
 import de.flapdoodle.eval.evaluables.TypedEvaluableByArguments;
 import de.flapdoodle.eval.parser.Token;
 import de.flapdoodle.eval.values.Value;
-import de.flapdoodle.eval.values.ValueResolver;
+import de.flapdoodle.eval.VariableResolver;
 import de.flapdoodle.types.Either;
 
 import java.util.ArrayList;
@@ -21,7 +21,7 @@ public abstract class EvaluatableNode extends Node {
 	protected abstract List<Node> parameters();
 
 	@Override
-	public Object evaluate(ValueResolver variableResolver, EvaluationContext context) throws EvaluationException {
+	public Object evaluate(VariableResolver variableResolver, EvaluationContext context) throws EvaluationException {
 		List<Object> parameterResults = new ArrayList<>();
 		for (int i = 0; i < parameters().size(); i++) {
 			Node parameter = parameters().get(i);

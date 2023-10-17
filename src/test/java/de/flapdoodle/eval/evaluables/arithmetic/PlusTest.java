@@ -8,7 +8,7 @@ import de.flapdoodle.eval.evaluables.TypedEvaluableByArguments;
 import de.flapdoodle.eval.parser.Token;
 import de.flapdoodle.eval.parser.TokenType;
 import de.flapdoodle.eval.values.Value;
-import de.flapdoodle.eval.values.ValueResolver;
+import de.flapdoodle.eval.VariableResolver;
 import de.flapdoodle.types.Either;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -61,7 +61,7 @@ class PlusTest {
 		assertThat(byArguments).isLeft();
 
 		Object result = byArguments.left()
-			.evaluate(ValueResolver.empty(), evaluationContext, token, values);
+			.evaluate(VariableResolver.empty(), evaluationContext, token, values);
 
 		assertThat(result).isEqualTo(expected);
 	}
@@ -77,7 +77,7 @@ class PlusTest {
 		assertThat(byArguments).isLeft();
 
 		Object result = byArguments.left()
-			.evaluate(ValueResolver.empty(), evaluationContext, token, values);
+			.evaluate(VariableResolver.empty(), evaluationContext, token, values);
 
 		assertThat(result).isEqualTo(Value.of(-123.0));
 	}
@@ -93,7 +93,7 @@ class PlusTest {
 		assertThat(byArguments).isLeft();
 
 		Object result = byArguments.left()
-			.evaluate(ValueResolver.empty(), evaluationContext, token, values);
+			.evaluate(VariableResolver.empty(), evaluationContext, token, values);
 
 		assertThat(result).isEqualTo(Value.of(6.0));
 	}

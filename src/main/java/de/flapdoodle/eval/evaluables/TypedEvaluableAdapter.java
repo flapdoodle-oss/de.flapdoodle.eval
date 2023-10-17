@@ -5,7 +5,7 @@ import de.flapdoodle.eval.EvaluationContext;
 import de.flapdoodle.eval.exceptions.EvaluationException;
 import de.flapdoodle.eval.parser.Token;
 import de.flapdoodle.eval.values.Value;
-import de.flapdoodle.eval.values.ValueResolver;
+import de.flapdoodle.eval.VariableResolver;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,10 +24,10 @@ class TypedEvaluableAdapter<T extends Value<?>> implements TypedEvaluable<T> {
 	}
 
 	@Override
-	public T evaluate(ValueResolver valueResolver, EvaluationContext evaluationContext, Token token, List<?> arguments)
+	public T evaluate(VariableResolver variableResolver, EvaluationContext evaluationContext, Token token, List<?> arguments)
 		throws EvaluationException {
 		checkArguments(token, arguments);
-		return delegate.evaluate(valueResolver, evaluationContext, token, arguments);
+		return delegate.evaluate(variableResolver, evaluationContext, token, arguments);
 	}
 
 	protected void checkArguments(Token token, List<?> arguments) throws EvaluationException {

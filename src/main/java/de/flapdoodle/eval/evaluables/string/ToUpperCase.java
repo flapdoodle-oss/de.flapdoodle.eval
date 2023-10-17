@@ -6,13 +6,13 @@ import de.flapdoodle.eval.evaluables.TypedEvaluable;
 import de.flapdoodle.eval.evaluables.TypedEvaluables;
 import de.flapdoodle.eval.parser.Token;
 import de.flapdoodle.eval.values.Value;
-import de.flapdoodle.eval.values.ValueResolver;
+import de.flapdoodle.eval.VariableResolver;
 
 public class ToUpperCase extends TypedEvaluables.Wrapper {
 
     public static class Strings implements TypedEvaluable.Arg1<Value.StringValue, Value.StringValue> {
         @Override
-        public Value.StringValue evaluate(ValueResolver valueResolver, EvaluationContext evaluationContext, Token token, Value.StringValue argument) throws EvaluationException {
+        public Value.StringValue evaluate(VariableResolver variableResolver, EvaluationContext evaluationContext, Token token, Value.StringValue argument) throws EvaluationException {
             return Value.of(argument.wrapped().toUpperCase());
         }
     }

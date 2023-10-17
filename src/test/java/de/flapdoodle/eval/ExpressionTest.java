@@ -19,13 +19,10 @@ package de.flapdoodle.eval;
 import de.flapdoodle.eval.exceptions.EvaluationException;
 import de.flapdoodle.eval.parser.ParseException;
 import de.flapdoodle.eval.tree.Node;
-import de.flapdoodle.eval.values.MapBasedValueResolver;
 import de.flapdoodle.eval.values.Value;
-import de.flapdoodle.eval.values.ValueResolver;
 import org.assertj.core.data.Percentage;
 import org.junit.jupiter.api.Test;
 
-import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -69,7 +66,7 @@ class ExpressionTest {
 		values.put("a", Value.of(3.5));
 		values.put("b", Value.of(2.5));
 
-		MapBasedValueResolver mapBasedVariableResolver = ValueResolver.empty()
+		MapBasedVariableResolver mapBasedVariableResolver = VariableResolver.empty()
 			.withValues(values);
 		Value.NumberValue result = (Value.NumberValue) expression.evaluate(mapBasedVariableResolver);
 
@@ -84,7 +81,7 @@ class ExpressionTest {
 		values.put("a", Value.of(3.9));
 		values.put("b", Value.of(3.1));
 
-		MapBasedValueResolver variableResolver = ValueResolver.empty()
+		MapBasedVariableResolver variableResolver = VariableResolver.empty()
 			.withValues(values);
 		Object result = expression.evaluate(variableResolver);
 
@@ -100,7 +97,7 @@ class ExpressionTest {
 		values.put("b", Value.of(" "));
 		values.put("c", Value.of("world"));
 
-		MapBasedValueResolver mapBasedVariableResolver = ValueResolver.empty()
+		MapBasedVariableResolver mapBasedVariableResolver = VariableResolver.empty()
 			.withValues(values);
 		Object result = expression.evaluate(mapBasedVariableResolver);
 
@@ -116,7 +113,7 @@ class ExpressionTest {
 		values.put("b", Value.of(" "));
 		values.put("c", Value.of(24.7));
 
-		ValueResolver variableResolver = ValueResolver.empty()
+		VariableResolver variableResolver = VariableResolver.empty()
 			.withValues(values);
 		Object result = expression.evaluate(variableResolver);
 
@@ -161,7 +158,7 @@ class ExpressionTest {
 	@Test
 	void testGetUndefinedVariables() throws ParseException, EvaluationException {
 		Expression expression = ExpressionFactory.defaults().parse("a+A+b+B+c+C+E+e+PI+x");
-		ValueResolver variableResolver = ValueResolver.empty()
+		VariableResolver variableResolver = VariableResolver.empty()
 			.with("x", Value.of(1));
 		assertThat(expression.undefinedVariables(variableResolver)).containsExactlyInAnyOrder("A", "a", "B", "b", "C", "c", "e");
 	}

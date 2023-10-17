@@ -33,9 +33,7 @@ package de.flapdoodle.eval;
 
 import de.flapdoodle.eval.exceptions.EvaluationException;
 import de.flapdoodle.eval.parser.ParseException;
-import de.flapdoodle.eval.values.MapBasedValueResolver;
 import de.flapdoodle.eval.values.Value;
-import de.flapdoodle.eval.values.ValueResolver;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
@@ -49,45 +47,45 @@ class ExpressionEvaluatorNullTest extends BaseExpressionEvaluatorTest {
 	@Test
 	void testNullEquals() throws ParseException, EvaluationException {
 		Expression expression = createExpression("a == null");
-		MapBasedValueResolver mapBasedValueResolver1 = ValueResolver.empty();
-		MapBasedValueResolver mapBasedVariableResolver1 = mapBasedValueResolver1.with("a", Value.ofNull());
+		MapBasedVariableResolver mapBasedValueResolver1 = VariableResolver.empty();
+		MapBasedVariableResolver mapBasedVariableResolver1 = mapBasedValueResolver1.with("a", Value.ofNull());
 		assertExpressionHasExpectedResult(expression, mapBasedVariableResolver1, "true");
-        MapBasedValueResolver mapBasedValueResolver = ValueResolver.empty();
-        MapBasedValueResolver mapBasedVariableResolver = mapBasedValueResolver.with("a", Value.of(99));
+        MapBasedVariableResolver mapBasedValueResolver = VariableResolver.empty();
+        MapBasedVariableResolver mapBasedVariableResolver = mapBasedValueResolver.with("a", Value.of(99));
 		assertExpressionHasExpectedResult(expression, mapBasedVariableResolver, "false");
 	}
 
 	@Test
 	void testNullNotEquals() throws ParseException, EvaluationException {
 		Expression expression = createExpression("a != null");
-		MapBasedValueResolver mapBasedValueResolver1 = ValueResolver.empty();
-		MapBasedValueResolver mapBasedVariableResolver1 = mapBasedValueResolver1.with("a", Value.ofNull());
+		MapBasedVariableResolver mapBasedValueResolver1 = VariableResolver.empty();
+		MapBasedVariableResolver mapBasedVariableResolver1 = mapBasedValueResolver1.with("a", Value.ofNull());
 		assertExpressionHasExpectedResult(expression, mapBasedVariableResolver1, "false");
-        MapBasedValueResolver mapBasedValueResolver = ValueResolver.empty();
-        MapBasedValueResolver mapBasedVariableResolver = mapBasedValueResolver.with("a", Value.of(99));
+        MapBasedVariableResolver mapBasedValueResolver = VariableResolver.empty();
+        MapBasedVariableResolver mapBasedVariableResolver = mapBasedValueResolver.with("a", Value.of(99));
 		assertExpressionHasExpectedResult(expression, mapBasedVariableResolver, "true");
 	}
 
 	@Test
 	void testHandleWithIf() throws EvaluationException, ParseException {
 		Expression expression1 = createExpression("if(a != null, a * 5, 1)");
-		MapBasedValueResolver mapBasedValueResolver3 = ValueResolver.empty();
+		MapBasedVariableResolver mapBasedValueResolver3 = VariableResolver.empty();
 		assertExpressionHasExpectedResult(expression1, mapBasedValueResolver3.with("a", Value.ofNull()), "1");
-        MapBasedValueResolver mapBasedValueResolver = ValueResolver.empty();
+        MapBasedVariableResolver mapBasedValueResolver = VariableResolver.empty();
         assertExpressionHasExpectedResult(expression1, mapBasedValueResolver.with("a", Value.of(3)), "15.0");
 
 		Expression expression2 =
 			createExpression("if(a == null, \"Unknown name\", \"The name is \" + a)");
-		MapBasedValueResolver mapBasedValueResolver2 = ValueResolver.empty();
+		MapBasedVariableResolver mapBasedValueResolver2 = VariableResolver.empty();
 		assertExpressionHasExpectedResult(expression2, mapBasedValueResolver2.with("a", Value.ofNull()), "Unknown name");
-		MapBasedValueResolver mapBasedValueResolver1 = ValueResolver.empty();
+		MapBasedVariableResolver mapBasedValueResolver1 = VariableResolver.empty();
 		assertExpressionHasExpectedResult(expression2, mapBasedValueResolver1.with("a", Value.of("Max")), "The name is Max");
 	}
 
 	@Test
 	void testHandleWithIfFailCase() throws EvaluationException, ParseException {
 		assertThatThrownBy(() -> {
-			MapBasedValueResolver mapBasedValueResolver = ValueResolver.empty();
+			MapBasedVariableResolver mapBasedValueResolver = VariableResolver.empty();
 			evaluate("if(a == null, a * 5, 1)", mapBasedValueResolver.with("a", Value.ofNull()));
 		})
 			.isInstanceOf(EvaluationException.class)
@@ -95,7 +93,7 @@ class ExpressionEvaluatorNullTest extends BaseExpressionEvaluatorTest {
 
 		Expression expression2 =
 			createExpression("if(a != null, \"Unknown name\", \"The name is \" + a)");
-		MapBasedValueResolver mapBasedValueResolver = ValueResolver.empty();
+		MapBasedVariableResolver mapBasedValueResolver = VariableResolver.empty();
 		assertExpressionHasExpectedResult(expression2, mapBasedValueResolver.with("a", Value.ofNull()), "The name is null");
 	}
 
@@ -106,34 +104,34 @@ class ExpressionEvaluatorNullTest extends BaseExpressionEvaluatorTest {
 		values.put("a", Value.ofNull());
 		values.put("b", Value.ofNull());
 
-		MapBasedValueResolver mapBasedVariableResolver = ValueResolver.empty().withValues(values);
+		MapBasedVariableResolver mapBasedVariableResolver = VariableResolver.empty().withValues(values);
 		assertExpressionHasExpectedResult(expression, mapBasedVariableResolver, "true");
 	}
 
 	@Test
 	void testFailWithNoHandling() {
 		assertThatThrownBy(() -> {
-			MapBasedValueResolver mapBasedValueResolver = ValueResolver.empty();
-			MapBasedValueResolver mapBasedVariableResolver = mapBasedValueResolver.with("a", Value.ofNull());
+			MapBasedVariableResolver mapBasedValueResolver = VariableResolver.empty();
+			MapBasedVariableResolver mapBasedVariableResolver = mapBasedValueResolver.with("a", Value.ofNull());
 			evaluate("a * 5", mapBasedVariableResolver);
 		})
 			.isInstanceOf(EvaluationException.class)
 			.hasMessageContaining("wrong type");
 
 		assertThatThrownBy(() -> {
-			MapBasedValueResolver mapBasedValueResolver = ValueResolver.empty();
-			MapBasedValueResolver mapBasedVariableResolver = mapBasedValueResolver.with("a", Value.ofNull());
+			MapBasedVariableResolver mapBasedValueResolver = VariableResolver.empty();
+			MapBasedVariableResolver mapBasedVariableResolver = mapBasedValueResolver.with("a", Value.ofNull());
 			evaluate("floor(a)", mapBasedVariableResolver);
 		}).isInstanceOf(EvaluationException.class);
 
 		assertThatThrownBy(() -> {
-			MapBasedValueResolver mapBasedValueResolver = ValueResolver.empty();
-			MapBasedValueResolver mapBasedVariableResolver = mapBasedValueResolver.with("a", Value.ofNull());
+			MapBasedVariableResolver mapBasedValueResolver = VariableResolver.empty();
+			MapBasedVariableResolver mapBasedVariableResolver = mapBasedValueResolver.with("a", Value.ofNull());
 			evaluate("a > 5", mapBasedVariableResolver);
 		}).isInstanceOf(EvaluationException.class);
 	}
 
-	private void assertExpressionHasExpectedResult(Expression expression, ValueResolver variableResolver, String expectedResult)
+	private void assertExpressionHasExpectedResult(Expression expression, VariableResolver variableResolver, String expectedResult)
 		throws EvaluationException, ParseException {
 		assertThat(expression.evaluate(variableResolver).toString()).isEqualTo(expectedResult);
 	}

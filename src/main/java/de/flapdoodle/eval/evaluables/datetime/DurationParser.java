@@ -1,12 +1,12 @@
 package de.flapdoodle.eval.evaluables.datetime;
 
 import de.flapdoodle.eval.EvaluationContext;
+import de.flapdoodle.eval.VariableResolver;
 import de.flapdoodle.eval.exceptions.EvaluationException;
 import de.flapdoodle.eval.evaluables.TypedEvaluable;
 import de.flapdoodle.eval.evaluables.TypedEvaluables;
 import de.flapdoodle.eval.parser.Token;
 import de.flapdoodle.eval.values.Value;
-import de.flapdoodle.eval.values.ValueResolver;
 
 import java.time.Duration;
 
@@ -14,21 +14,21 @@ public class DurationParser extends TypedEvaluables.Wrapper {
 
     public static class Strings implements TypedEvaluable.Arg1<Value.StringValue, Value.DurationValue> {
         @Override
-        public Value.DurationValue evaluate(ValueResolver valueResolver, EvaluationContext evaluationContext, Token token, Value.StringValue argument) throws EvaluationException {
+        public Value.DurationValue evaluate(VariableResolver variableResolver, EvaluationContext evaluationContext, Token token, Value.StringValue argument) throws EvaluationException {
             return Value.of(Duration.parse(argument.wrapped()));
         }
     }
 
     public static class OfDays implements TypedEvaluable.Arg1<Value.NumberValue, Value.DurationValue> {
         @Override
-        public Value.DurationValue evaluate(ValueResolver valueResolver, EvaluationContext evaluationContext, Token token, Value.NumberValue argument) throws EvaluationException {
+        public Value.DurationValue evaluate(VariableResolver variableResolver, EvaluationContext evaluationContext, Token token, Value.NumberValue argument) throws EvaluationException {
             return Value.of(Duration.ofDays(argument.wrapped().longValue()));
         }
     }
 
     public static class OfMillis implements TypedEvaluable.Arg1<Value.NumberValue, Value.DurationValue> {
         @Override
-        public Value.DurationValue evaluate(ValueResolver valueResolver, EvaluationContext evaluationContext, Token token, Value.NumberValue argument) throws EvaluationException {
+        public Value.DurationValue evaluate(VariableResolver variableResolver, EvaluationContext evaluationContext, Token token, Value.NumberValue argument) throws EvaluationException {
             return Value.of(Duration.ofMillis(argument.wrapped().longValue()));
         }
     }

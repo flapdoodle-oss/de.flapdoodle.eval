@@ -3,8 +3,6 @@ package de.flapdoodle.eval;
 import de.flapdoodle.eval.exceptions.EvaluationException;
 import de.flapdoodle.eval.parser.ParseException;
 import de.flapdoodle.eval.tree.Node;
-import de.flapdoodle.eval.values.Value;
-import de.flapdoodle.eval.values.ValueResolver;
 
 import java.math.MathContext;
 import java.time.ZoneId;
@@ -19,7 +17,7 @@ public abstract class Expression {
 	protected abstract Node root();
 
 	@org.immutables.value.Value.Auxiliary
-	public Object evaluate(ValueResolver variableResolver) throws EvaluationException, ParseException {
+	public Object evaluate(VariableResolver variableResolver) throws EvaluationException, ParseException {
 		return root().evaluate(variableResolver, EvaluationContext.builder()
 			.mathContext(mathContext())
 			.zoneId(zoneId())
@@ -32,7 +30,7 @@ public abstract class Expression {
 	}
 
 	@org.immutables.value.Value.Auxiliary
-	public Set<String> undefinedVariables(ValueResolver variableResolver) {
+	public Set<String> undefinedVariables(VariableResolver variableResolver) {
 		return usedVariables().stream()
 			.filter(name -> !variableResolver.has(name))
 			.collect(Collectors.toSet());

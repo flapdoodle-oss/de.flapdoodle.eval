@@ -20,7 +20,6 @@ import de.flapdoodle.eval.config.TestConfigurationProvider;
 import de.flapdoodle.eval.exceptions.EvaluationException;
 import de.flapdoodle.eval.parser.ParseException;
 import de.flapdoodle.eval.values.Value;
-import de.flapdoodle.eval.values.ValueResolver;
 import org.assertj.core.api.InstanceOfAssertFactories;
 import org.assertj.core.data.Percentage;
 
@@ -56,7 +55,7 @@ public abstract class BaseEvaluationTest {
 		throws EvaluationException, ParseException {
 		assertThat(
 			TestConfigurationProvider.StandardFactoryWithAdditionalTestOperators.parse(expression)
-				.evaluate(ValueResolver.empty())
+				.evaluate(VariableResolver.empty())
 		).isEqualTo(expectedResult);
 	}
 
@@ -64,7 +63,7 @@ public abstract class BaseEvaluationTest {
 		throws EvaluationException, ParseException {
 		assertThat(
 			TestConfigurationProvider.StandardFactoryWithAdditionalTestOperators.parse(expression)
-				.evaluate(ValueResolver.empty()))
+				.evaluate(VariableResolver.empty()))
 			.isInstanceOf(Value.NumberValue.class)
 			.asInstanceOf(InstanceOfAssertFactories.type(Value.NumberValue.class))
 			.extracting(Value::wrapped, InstanceOfAssertFactories.BIG_DECIMAL)
@@ -87,7 +86,7 @@ public abstract class BaseEvaluationTest {
 		throws EvaluationException, ParseException {
 		Expression expression = factory.parse(expressionString);
 
-		return expression.evaluate(ValueResolver.empty());
+		return expression.evaluate(VariableResolver.empty());
 	}
 
 	protected static Value.NumberValue numberValueOf(String doubleAsString) {

@@ -1,12 +1,12 @@
 package de.flapdoodle.eval.evaluables.datetime;
 
 import de.flapdoodle.eval.EvaluationContext;
+import de.flapdoodle.eval.VariableResolver;
 import de.flapdoodle.eval.exceptions.EvaluationException;
 import de.flapdoodle.eval.evaluables.TypedEvaluable;
 import de.flapdoodle.eval.evaluables.TypedEvaluables;
 import de.flapdoodle.eval.parser.Token;
 import de.flapdoodle.eval.values.Value;
-import de.flapdoodle.eval.values.ValueResolver;
 
 import java.time.*;
 import java.time.format.DateTimeFormatter;
@@ -18,7 +18,7 @@ public class DateTimeParser extends TypedEvaluables.Wrapper {
     public static class FromString implements TypedEvaluable.Arg1<Value.StringValue, Value.DateTimeValue> {
 
         @Override
-        public Value.DateTimeValue evaluate(ValueResolver valueResolver, EvaluationContext evaluationContext, Token token, Value.StringValue argument) throws EvaluationException {
+        public Value.DateTimeValue evaluate(VariableResolver variableResolver, EvaluationContext evaluationContext, Token token, Value.StringValue argument) throws EvaluationException {
             return Value.of(parse(argument.wrapped(), null, evaluationContext.zoneId()));
         }
     }
@@ -26,7 +26,7 @@ public class DateTimeParser extends TypedEvaluables.Wrapper {
     public static class WithFormat implements TypedEvaluable.Arg2<Value.StringValue, Value.StringValue, Value.DateTimeValue> {
 
         @Override
-        public Value.DateTimeValue evaluate(ValueResolver valueResolver, EvaluationContext evaluationContext, Token token, Value.StringValue argument, Value.StringValue format) throws EvaluationException {
+        public Value.DateTimeValue evaluate(VariableResolver variableResolver, EvaluationContext evaluationContext, Token token, Value.StringValue argument, Value.StringValue format) throws EvaluationException {
             return Value.of(parse(argument.wrapped(), format.wrapped(), evaluationContext.zoneId()));
         }
     }

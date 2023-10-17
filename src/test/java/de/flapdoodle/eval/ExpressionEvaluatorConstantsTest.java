@@ -18,9 +18,7 @@ package de.flapdoodle.eval;
 
 import de.flapdoodle.eval.exceptions.EvaluationException;
 import de.flapdoodle.eval.parser.ParseException;
-import de.flapdoodle.eval.values.MapBasedValueResolver;
 import de.flapdoodle.eval.values.Value;
-import de.flapdoodle.eval.values.ValueResolver;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -58,25 +56,25 @@ class ExpressionEvaluatorConstantsTest extends BaseExpressionEvaluatorTest {
 				}
 			};
 
-		MapBasedValueResolver mapBasedVariableResolver = ValueResolver.empty().withValues(constants);
+		MapBasedVariableResolver mapBasedVariableResolver = VariableResolver.empty().withValues(constants);
 		ExpressionFactory factory = ExpressionFactory.defaults()
 				.withConstants(mapBasedVariableResolver);
 
 		Expression expression = factory.parse("a+B");
 
-		assertThat(expression.evaluate(ValueResolver.empty()).toString()).isEqualTo("6.4");
+		assertThat(expression.evaluate(VariableResolver.empty()).toString()).isEqualTo("6.4");
 	}
 
 	@Test
 	void testOverwriteConstantsWith() throws EvaluationException, ParseException {
 		assertThat(factory.withConstant("e", Value.of(9))
 				.parse("e")
-				.evaluate(ValueResolver.empty()).toString()).isEqualTo("9.0");
+				.evaluate(VariableResolver.empty()).toString()).isEqualTo("9.0");
 	}
 
 	@Test
 	void testOverwriteConstantsWithValues() throws EvaluationException, ParseException {
-		MapBasedValueResolver mapBasedVariableResolver = ValueResolver.empty().with("e", Value.of(3));
+		MapBasedVariableResolver mapBasedVariableResolver = VariableResolver.empty().with("e", Value.of(3));
 		assertThat(factory.withConstant("e", Value.of(6))
 				.parse("e")
 				.evaluate(mapBasedVariableResolver).toString()).isEqualTo("6.0");

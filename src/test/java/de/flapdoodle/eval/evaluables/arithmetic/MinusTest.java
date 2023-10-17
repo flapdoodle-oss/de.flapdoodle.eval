@@ -1,5 +1,6 @@
 package de.flapdoodle.eval.evaluables.arithmetic;
 
+import de.flapdoodle.eval.VariableResolver;
 import de.flapdoodle.eval.exceptions.EvaluableException;
 import de.flapdoodle.eval.EvaluationContext;
 import de.flapdoodle.eval.exceptions.EvaluationException;
@@ -8,7 +9,6 @@ import de.flapdoodle.eval.evaluables.TypedEvaluableByArguments;
 import de.flapdoodle.eval.parser.Token;
 import de.flapdoodle.eval.parser.TokenType;
 import de.flapdoodle.eval.values.Value;
-import de.flapdoodle.eval.values.ValueResolver;
 import de.flapdoodle.types.Either;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -61,7 +61,7 @@ class MinusTest {
 		assertThat(byArguments).isLeft();
 
 		Object result = byArguments.left()
-			.evaluate(ValueResolver.empty(), evaluationContext, token, values);
+			.evaluate(VariableResolver.empty(), evaluationContext, token, values);
 
 		assertThat(result).isEqualTo(expected);
 	}
@@ -77,7 +77,7 @@ class MinusTest {
 		assertThat(byArguments).isLeft();
 
 		Object result = byArguments.left()
-			.evaluate(ValueResolver.empty(), evaluationContext, token, values);
+			.evaluate(VariableResolver.empty(), evaluationContext, token, values);
 
 		assertThat(result).isEqualTo(Value.of(-123.0));
 	}

@@ -1,6 +1,7 @@
 package de.flapdoodle.eval.evaluables.arithmetic;
 
 import de.flapdoodle.eval.EvaluationContext;
+import de.flapdoodle.eval.VariableResolver;
 import de.flapdoodle.eval.exceptions.EvaluationException;
 import de.flapdoodle.eval.evaluables.Parameter;
 import de.flapdoodle.eval.evaluables.TypedEvaluable;
@@ -9,7 +10,6 @@ import de.flapdoodle.eval.evaluables.validation.NumberValidator;
 import de.flapdoodle.eval.evaluables.validation.ParameterValidator;
 import de.flapdoodle.eval.parser.Token;
 import de.flapdoodle.eval.values.Value;
-import de.flapdoodle.eval.values.ValueResolver;
 
 import java.math.BigDecimal;
 import java.util.function.BiFunction;
@@ -29,7 +29,7 @@ public class Trigonometric extends TypedEvaluables.Wrapper {
         }
 
         @Override
-        public final Value.NumberValue evaluate(ValueResolver valueResolver, EvaluationContext evaluationContext, Token token, Value.NumberValue argument) throws EvaluationException {
+        public final Value.NumberValue evaluate(VariableResolver variableResolver, EvaluationContext evaluationContext, Token token, Value.NumberValue argument) throws EvaluationException {
             return Value.of(transformation.apply(argument.wrapped().doubleValue()));
         }
     }
@@ -42,7 +42,7 @@ public class Trigonometric extends TypedEvaluables.Wrapper {
         }
 
         @Override
-        public final Value.NumberValue evaluate(ValueResolver valueResolver, EvaluationContext evaluationContext, Token token, Value.NumberValue first, Value.NumberValue second) throws EvaluationException {
+        public final Value.NumberValue evaluate(VariableResolver variableResolver, EvaluationContext evaluationContext, Token token, Value.NumberValue first, Value.NumberValue second) throws EvaluationException {
             return Value.of(merge.apply(first.wrapped().doubleValue(), second.wrapped().doubleValue()));
         }
     }

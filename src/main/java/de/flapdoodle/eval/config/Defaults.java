@@ -1,5 +1,6 @@
 package de.flapdoodle.eval.config;
 
+import de.flapdoodle.eval.VariableResolver;
 import de.flapdoodle.eval.evaluables.*;
 import de.flapdoodle.eval.evaluables.arithmetic.Trigonometric;
 import de.flapdoodle.eval.evaluables.basic.IndexedAccess;
@@ -7,12 +8,8 @@ import de.flapdoodle.eval.evaluables.basic.PropertyAccess;
 import de.flapdoodle.eval.evaluables.datetime.Legacy;
 import de.flapdoodle.eval.evaluables.string.Contains;
 import de.flapdoodle.eval.values.Value;
-import de.flapdoodle.eval.values.ValueResolver;
 
 import java.math.BigDecimal;
-import java.math.MathContext;
-import java.math.RoundingMode;
-import java.time.ZoneId;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -41,14 +38,14 @@ public abstract class Defaults {
         return Collections.unmodifiableMap(constants);
     }
 
-    private static final ValueResolver CONSTANTS = ValueResolver.empty().withValues(standardConstants());
+    private static final VariableResolver CONSTANTS = VariableResolver.empty().withValues(standardConstants());
 
     private static final TypedEvaluableByName EVALUATABLES = defaultEvaluatablesMap();
     private static final TypedEvaluableByNumberOfArguments ARRAY_ACCESS = new IndexedAccess();
     private static final TypedEvaluableByNumberOfArguments PROPERTY_ACCESS = new PropertyAccess();
     private static final OperatorMap OPERATOR_MAP = defaultOperatorMap();
 
-    public static ValueResolver constants() {
+    public static VariableResolver constants() {
         return CONSTANTS;
     }
 
