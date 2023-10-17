@@ -7,6 +7,7 @@ import de.flapdoodle.eval.evaluables.basic.IndexedAccess;
 import de.flapdoodle.eval.evaluables.basic.PropertyAccess;
 import de.flapdoodle.eval.evaluables.datetime.Legacy;
 import de.flapdoodle.eval.evaluables.string.Contains;
+import de.flapdoodle.eval.exceptions.EvaluationException;
 import de.flapdoodle.eval.values.Value;
 
 import java.math.BigDecimal;
@@ -15,7 +16,7 @@ import java.math.MathContext;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.function.BiFunction;
+import java.util.Optional;
 
 public abstract class Defaults {
     private Defaults() {
@@ -192,5 +193,15 @@ public abstract class Defaults {
 
     public static Value.StringValue valueFromString(String s) {
         return Value.of(s);
+    }
+    
+    public static Value<?> exceptionAsParameter(EvaluationException exception) {
+        return Value.failedWith(exception);
+    }
+
+    public static Optional<EvaluationException> matchException(Object value) {
+        return value instanceof Value.FailedWithException
+          ? Optional.of(((Value.FailedWithException<?>) value).exception())
+          : Optional.empty();
     }
 }

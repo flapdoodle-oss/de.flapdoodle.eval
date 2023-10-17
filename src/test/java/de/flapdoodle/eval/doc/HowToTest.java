@@ -7,6 +7,7 @@ import de.flapdoodle.eval.VariableResolver;
 import de.flapdoodle.eval.evaluables.*;
 import de.flapdoodle.eval.exceptions.EvaluationException;
 import de.flapdoodle.eval.parser.ParseException;
+import de.flapdoodle.eval.tree.EvalFailedWithException;
 import de.flapdoodle.eval.values.Value;
 import de.flapdoodle.testdoc.Recorder;
 import de.flapdoodle.testdoc.Recording;
@@ -17,6 +18,7 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 import java.math.BigDecimal;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -70,6 +72,10 @@ public class HowToTest {
 				.build())
 			.parseNumber((s, m) -> new BigDecimal(s))
 			.stringAsValue(s -> s)
+			.exceptionAsParameter(EvalFailedWithException::of)
+			.matchException(it -> it instanceof EvalFailedWithException
+				? Optional.of(((EvalFailedWithException) it).exception())
+				: Optional.empty())
 			.build();
 
 		assertThat(expressionFactory.parse("pi").evaluate(VariableResolver.empty()))

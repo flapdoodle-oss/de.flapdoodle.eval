@@ -38,6 +38,10 @@ ExpressionFactory expressionFactory = ExpressionFactory.builder()
     .build())
   .parseNumber((s, m) -> new BigDecimal(s))
   .stringAsValue(s -> s)
+  .exceptionAsParameter(EvalFailedWithException::of)
+  .matchException(it -> it instanceof EvalFailedWithException
+    ? Optional.of(((EvalFailedWithException) it).exception())
+    : Optional.empty())
   .build();
 
 assertThat(expressionFactory.parse("pi").evaluate(VariableResolver.empty()))

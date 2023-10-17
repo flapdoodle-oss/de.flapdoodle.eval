@@ -1,5 +1,6 @@
 package de.flapdoodle.eval.tree;
 
+import de.flapdoodle.eval.config.Defaults;
 import de.flapdoodle.eval.evaluables.TypedEvaluableByArguments;
 import de.flapdoodle.eval.parser.Token;
 import de.flapdoodle.eval.parser.TokenType;
@@ -76,7 +77,7 @@ class NodeTest {
 	}
 
 	protected static EvaluatableNode evaluatableNode(String value, TypedEvaluableByArguments function, Node... parameters) {
-		return EvaluatableNode.of(token(value, TokenType.FUNCTION), function, Arrays.asList(parameters));
+		return EvaluatableNode.of(token(value, TokenType.FUNCTION), function, Arrays.asList(parameters), Defaults::exceptionAsParameter, Defaults::matchException);
 	}
 
 	protected static Token token(String value, TokenType type) {
