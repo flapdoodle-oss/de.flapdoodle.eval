@@ -51,13 +51,15 @@ public class HowToTest {
 	@Test
 	public void minimalCustomSetup() throws ParseException, EvaluationException {
 		recording.begin();
+		ImmutableTypedEvaluables add = TypedEvaluables.builder()
+			.addList(TypedEvaluable.of(BigDecimal.class, BigDecimal.class, BigDecimal.class,
+				(valueResolver, evaluationContext, token, first, second) -> first.add(second)))
+			.build();
+
 		ExpressionFactory expressionFactory = ExpressionFactory.builder()
 			.constants(VariableResolver.empty().with("pi", BigDecimal.valueOf(3.1415)))
 			.evaluatables(TypedEvaluableMap.builder()
-				.putMap("add", TypedEvaluables.builder()
-					.addList(TypedEvaluable.of(BigDecimal.class, BigDecimal.class, BigDecimal.class,
-						(valueResolver, evaluationContext, token, first, second) -> first.add(second)))
-					.build())
+				.putMap("add", add)
 				.build())
 			.operatorMap(OperatorMap.builder()
 				.putInfix("+", OperatorMapping.of(Precedence.OPERATOR_PRECEDENCE_UNARY, "add"))
