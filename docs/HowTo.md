@@ -17,16 +17,18 @@ assertThat(expression.usedVariables())
 ```
 
 ```java
+ImmutableTypedEvaluables add = TypedEvaluables.builder()
+  .addList(TypedEvaluable.of(BigDecimal.class, BigDecimal.class, BigDecimal.class,
+    (valueResolver, evaluationContext, token, first, second) -> first.add(second)))
+  .build();
+
 ExpressionFactory expressionFactory = ExpressionFactory.builder()
   .constants(VariableResolver.empty().with("pi", BigDecimal.valueOf(3.1415)))
   .evaluatables(TypedEvaluableMap.builder()
-    .putMap("add", TypedEvaluables.builder()
-      .addList(TypedEvaluable.of(BigDecimal.class, BigDecimal.class, BigDecimal.class,
-        (valueResolver, evaluationContext, token, first, second) -> first.add(second)))
-      .build())
+    .putMap("add", add)
     .build())
   .operatorMap(OperatorMap.builder()
-    .putInfix("+", OperatorMapping.of(Precedence.OPERATOR_PRECEDENCE_UNARY, "add"))
+    .putInfix("+", OperatorMapping.of(Precedence.OPERATOR_PRECEDENCE_ADDITIVE, "add"))
     .build())
   .arrayAccess(TypedEvaluables.builder()
     .addList(TypedEvaluable.of(String.class, String.class, BigDecimal.class,
@@ -36,7 +38,7 @@ ExpressionFactory expressionFactory = ExpressionFactory.builder()
     .addList(TypedEvaluable.of(String.class, Map.class, String.class,
       (valueResolver, evaluationContext, token, first, second) -> "" + first.get(second)))
     .build())
-  .parseNumber((s, m) -> new BigDecimal(s))
+  .numberAsValue((s, m) -> new BigDecimal(s))
   .stringAsValue(s -> s)
   .exceptionMapper(EvalFailedWithException.mapper())
   .build();

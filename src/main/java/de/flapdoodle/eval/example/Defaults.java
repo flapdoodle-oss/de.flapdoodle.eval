@@ -221,7 +221,7 @@ public abstract class Defaults {
 			.evaluatables(evaluatables())
 			.arrayAccess(arrayAccess())
 			.propertyAccess(propertyAccess())
-			.parseNumber(Defaults::numberFromString)
+			.numberAsValue(Defaults::numberFromString)
 			.stringAsValue(Defaults::valueFromString)
 			.operatorMap(operatorMap())
 			.exceptionMapper(exceptionMapper())

@@ -62,7 +62,7 @@ public class HowToTest {
 				.putMap("add", add)
 				.build())
 			.operatorMap(OperatorMap.builder()
-				.putInfix("+", OperatorMapping.of(Precedence.OPERATOR_PRECEDENCE_UNARY, "add"))
+				.putInfix("+", OperatorMapping.of(Precedence.OPERATOR_PRECEDENCE_ADDITIVE, "add"))
 				.build())
 			.arrayAccess(TypedEvaluables.builder()
 				.addList(TypedEvaluable.of(String.class, String.class, BigDecimal.class,
@@ -72,7 +72,7 @@ public class HowToTest {
 				.addList(TypedEvaluable.of(String.class, Map.class, String.class,
 					(valueResolver, evaluationContext, token, first, second) -> "" + first.get(second)))
 				.build())
-			.parseNumber((s, m) -> new BigDecimal(s))
+			.numberAsValue((s, m) -> new BigDecimal(s))
 			.stringAsValue(s -> s)
 			.exceptionMapper(EvalFailedWithException.mapper())
 			.build();

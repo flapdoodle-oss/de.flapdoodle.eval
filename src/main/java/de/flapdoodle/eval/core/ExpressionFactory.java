@@ -15,8 +15,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.BiFunction;
-import java.util.function.Function;
 
 @org.immutables.value.Value.Immutable
 public abstract class ExpressionFactory {
@@ -34,8 +32,8 @@ public abstract class ExpressionFactory {
 	public  abstract TypedEvaluableByName evaluatables();
 	protected abstract TypedEvaluableByNumberOfArguments arrayAccess();
 	protected abstract TypedEvaluableByNumberOfArguments propertyAccess();
-	protected abstract BiFunction<String, MathContext, Object> parseNumber();
-	protected abstract Function<String, Object> stringAsValue();
+	protected abstract NumberAsValue numberAsValue();
+	protected abstract StringAsValue stringAsValue();
 	protected abstract EvaluableExceptionMapper exceptionMapper();
 
 	public abstract OperatorMap operatorMap();
@@ -77,10 +75,10 @@ public abstract class ExpressionFactory {
 		Token token = startNode.getToken();
 		switch (token.type()) {
 			case NUMBER_LITERAL:
-				result = ValueNode.of(token, parseNumber().apply(token.value(), mathContext()));
+				result = ValueNode.of(token, numberAsValue().parse(token.value(), mathContext()));
 				break;
 			case STRING_LITERAL:
-				result = ValueNode.of(token, stringAsValue().apply(token.value()));
+				result = ValueNode.of(token, stringAsValue().parse(token.value()));
 				break;
 			case VARIABLE_OR_CONSTANT:
 				result = getVariableOrConstant(token);
@@ -182,7 +180,7 @@ public abstract class ExpressionFactory {
 	private Node evaluateStructureSeparator(ASTNode startNode) throws EvaluationException {
 		Node structure = map(startNode.getParameters().get(0));
 		Token nameToken = startNode.getParameters().get(1).getToken();
-		Node name = ValueNode.of(nameToken, stringAsValue().apply(nameToken.value()));
+		Node name = ValueNode.of(nameToken, stringAsValue().parse(nameToken.value()));
 
 		Optional<? extends TypedEvaluableByArguments> propertyAccess = propertyAccess().filterByNumberOfArguments(2);
 
