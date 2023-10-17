@@ -77,7 +77,7 @@ class NodeTest {
 	}
 
 	protected static EvaluatableNode evaluatableNode(String value, TypedEvaluableByArguments function, Node... parameters) {
-		return EvaluatableNode.of(token(value, TokenType.FUNCTION), function, Arrays.asList(parameters), Defaults::exceptionAsParameter, Defaults::matchException);
+		return EvaluatableNode.of(token(value, TokenType.FUNCTION), function, Arrays.asList(parameters), Defaults.exceptionMapper());
 	}
 
 	protected static Token token(String value, TokenType type) {

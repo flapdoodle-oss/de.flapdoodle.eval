@@ -4,10 +4,7 @@ import de.flapdoodle.eval.config.Defaults;
 import de.flapdoodle.eval.evaluables.*;
 import de.flapdoodle.eval.exceptions.EvaluationException;
 import de.flapdoodle.eval.parser.*;
-import de.flapdoodle.eval.tree.EvaluatableNode;
-import de.flapdoodle.eval.tree.LookupNode;
-import de.flapdoodle.eval.tree.Node;
-import de.flapdoodle.eval.tree.ValueNode;
+import de.flapdoodle.eval.tree.*;
 
 import java.math.MathContext;
 import java.time.ZoneId;
@@ -36,8 +33,7 @@ public abstract class ExpressionFactory {
 	protected abstract TypedEvaluableByNumberOfArguments propertyAccess();
 	protected abstract BiFunction<String, MathContext, Object> parseNumber();
 	protected abstract Function<String, Object> stringAsValue();
-	protected abstract Function<EvaluationException, Object> exceptionAsParameter();
-	protected abstract Function<Object, Optional<EvaluationException>> matchException();
+	protected abstract EvaluableExceptionMapper exceptionMapper();
 
 	protected abstract OperatorMap operatorMap();
 
@@ -122,7 +118,7 @@ public abstract class ExpressionFactory {
 	private EvaluatableNode evaluatableNode(Token token, OperatorMapping operatorMapping, List<Node> parameters) {
 		Optional<? extends TypedEvaluableByArguments> evaluatable = evaluatables().find(operatorMapping.evaluatable(), parameters.size());
 		if (evaluatable.isPresent()) {
-			return EvaluatableNode.of(token, evaluatable.get(), parameters, exceptionAsParameter(), matchException());
+			return EvaluatableNode.of(token, evaluatable.get(), parameters, exceptionMapper());
 		} else {
 			throw new RuntimeException("could not find evaluatable for "+ operatorMapping);
 		}
@@ -167,7 +163,7 @@ public abstract class ExpressionFactory {
 
 		if (!evaluatable.isPresent()) throw new EvaluationException(token, "could not find evaluatable");
 
-		return EvaluatableNode.of(token, evaluatable.get(), parameterResults, exceptionAsParameter(), matchException());
+		return EvaluatableNode.of(token, evaluatable.get(), parameterResults, exceptionMapper());
 	}
 
 	private Node evaluateArrayIndex(ASTNode startNode) throws EvaluationException {
@@ -177,7 +173,7 @@ public abstract class ExpressionFactory {
 
 		if (!arrayAccess.isPresent()) throw new EvaluationException(startNode.getToken(), "could not find array access");
 
-		return EvaluatableNode.of(startNode.getToken(), arrayAccess.get(), Arrays.asList(objectNode, indexNode), exceptionAsParameter(), matchException());
+		return EvaluatableNode.of(startNode.getToken(), arrayAccess.get(), Arrays.asList(objectNode, indexNode), exceptionMapper());
 	}
 
 	private Node evaluateStructureSeparator(ASTNode startNode) throws EvaluationException {
@@ -189,7 +185,7 @@ public abstract class ExpressionFactory {
 
 		if (!propertyAccess.isPresent()) throw new EvaluationException(startNode.getToken(), "could not find property access");
 
-		return EvaluatableNode.of(startNode.getToken(), propertyAccess.get(), Arrays.asList(structure, name), exceptionAsParameter(), matchException());
+		return EvaluatableNode.of(startNode.getToken(), propertyAccess.get(), Arrays.asList(structure, name), exceptionMapper());
 	}
 
 	public static ImmutableExpressionFactory.Builder builder() {
@@ -205,8 +201,7 @@ public abstract class ExpressionFactory {
 			.parseNumber(Defaults::numberFromString)
 			.stringAsValue(Defaults::valueFromString)
 			.operatorMap(Defaults.operatorMap())
-			.exceptionAsParameter(Defaults::exceptionAsParameter)
-			.matchException(Defaults::matchException)
+			.exceptionMapper(Defaults.exceptionMapper())
 			.build();
 	}
 

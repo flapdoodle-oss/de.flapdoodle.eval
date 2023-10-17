@@ -72,10 +72,7 @@ public class HowToTest {
 				.build())
 			.parseNumber((s, m) -> new BigDecimal(s))
 			.stringAsValue(s -> s)
-			.exceptionAsParameter(EvalFailedWithException::of)
-			.matchException(it -> it instanceof EvalFailedWithException
-				? Optional.of(((EvalFailedWithException) it).exception())
-				: Optional.empty())
+			.exceptionMapper(EvalFailedWithException.mapper())
 			.build();
 
 		assertThat(expressionFactory.parse("pi").evaluate(VariableResolver.empty()))

@@ -8,6 +8,7 @@ import de.flapdoodle.eval.evaluables.basic.PropertyAccess;
 import de.flapdoodle.eval.evaluables.datetime.Legacy;
 import de.flapdoodle.eval.evaluables.string.Contains;
 import de.flapdoodle.eval.exceptions.EvaluationException;
+import de.flapdoodle.eval.tree.EvaluableExceptionMapper;
 import de.flapdoodle.eval.values.Value;
 
 import java.math.BigDecimal;
@@ -195,13 +196,18 @@ public abstract class Defaults {
         return Value.of(s);
     }
     
-    public static Value<?> exceptionAsParameter(EvaluationException exception) {
-        return Value.failedWith(exception);
-    }
-
-    public static Optional<EvaluationException> matchException(Object value) {
-        return value instanceof Value.FailedWithException
-          ? Optional.of(((Value.FailedWithException<?>) value).exception())
-          : Optional.empty();
+    public static EvaluableExceptionMapper exceptionMapper() {
+        return new EvaluableExceptionMapper() {
+            @Override
+            public Object map(EvaluationException ex) {
+                return Value.failedWith(ex);
+            }
+            @Override
+            public Optional<EvaluationException> match(Object value) {
+                return value instanceof Value.FailedWithException
+                  ? Optional.of(((Value.FailedWithException<?>) value).exception())
+                  : Optional.empty();
+            }
+        };
     }
 }

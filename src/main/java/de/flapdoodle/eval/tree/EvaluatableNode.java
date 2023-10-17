@@ -12,7 +12,6 @@ import de.flapdoodle.types.Either;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
 
 @org.immutables.value.Value.Immutable
 public abstract class EvaluatableNode extends Node {
@@ -21,9 +20,7 @@ public abstract class EvaluatableNode extends Node {
 	@org.immutables.value.Value.Parameter
 	protected abstract List<Node> parameters();
 	@org.immutables.value.Value.Parameter
-	protected abstract Function<EvaluationException, Object> exceptionAsParameter();
-	@org.immutables.value.Value.Parameter
-	protected abstract Function<Object, Optional<EvaluationException>> matchException();
+	protected abstract EvaluableExceptionMapper exceptionMapper();
 
 	@Override
 	public Object evaluate(VariableResolver variableResolver, EvaluationContext context) throws EvaluationException {
@@ -33,14 +30,14 @@ public abstract class EvaluatableNode extends Node {
 			try {
 				parameterResults.add(parameter.evaluate(variableResolver, context));
 			} catch (EvaluationException ex) {
-				parameterResults.add(exceptionAsParameter().apply(ex));
+				parameterResults.add(exceptionMapper().map(ex));
 			}
 		}
 		Either<TypedEvaluable<?>, List<EvaluableException>> evaluatable = evaluatable().find(parameterResults);
 		if (evaluatable.isLeft()) {
 			try {
 				Object evaluated = evaluatable.left().evaluate(variableResolver, context, token(), parameterResults);
-				Optional<EvaluationException> matchedException = matchException().apply(evaluated);
+				Optional<EvaluationException> matchedException = exceptionMapper().match(evaluated);
 				if (matchedException.isPresent()) {
 					throw matchedException.get();
 				}
@@ -57,14 +54,12 @@ public abstract class EvaluatableNode extends Node {
 		Token token,
 		TypedEvaluableByArguments function,
 		List<Node> parameters,
-		Function<EvaluationException, Object> exceptionAsParameter,
-		Function<Object, Optional<EvaluationException>> matchException) {
+		EvaluableExceptionMapper exceptionMapper) {
 		return ImmutableEvaluatableNode.builder()
 			.token(token)
 			.evaluatable(function)
 			.parameters(parameters)
-			.exceptionAsParameter(exceptionAsParameter)
-			.matchException(matchException)
+			.exceptionMapper(exceptionMapper)
 			.build();
 	}
 }
