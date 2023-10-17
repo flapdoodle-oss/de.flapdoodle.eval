@@ -1,8 +1,8 @@
 package de.flapdoodle.eval.config;
 
 import de.flapdoodle.eval.core.VariableResolver;
+import de.flapdoodle.eval.core.evaluables.*;
 import de.flapdoodle.eval.core.tree.EvaluableExceptionMapper;
-import de.flapdoodle.eval.evaluables.*;
 import de.flapdoodle.eval.evaluables.arithmetic.Trigonometric;
 import de.flapdoodle.eval.evaluables.basic.IndexedAccess;
 import de.flapdoodle.eval.evaluables.basic.PropertyAccess;

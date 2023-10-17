@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.flapdoodle.eval;
+package de.flapdoodle.eval.core;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

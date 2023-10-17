@@ -1,4 +1,4 @@
-package de.flapdoodle.eval.evaluables;
+package de.flapdoodle.eval.core.evaluables;
 
 import de.flapdoodle.eval.core.exceptions.EvaluableException;
 import de.flapdoodle.types.Either;

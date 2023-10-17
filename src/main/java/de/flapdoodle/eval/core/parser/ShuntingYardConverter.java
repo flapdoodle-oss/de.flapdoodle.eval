@@ -16,10 +16,10 @@
  */
 package de.flapdoodle.eval.core.parser;
 
-import de.flapdoodle.eval.evaluables.OperatorMap;
-import de.flapdoodle.eval.evaluables.OperatorMapping;
-import de.flapdoodle.eval.evaluables.TypedEvaluableByArguments;
-import de.flapdoodle.eval.evaluables.TypedEvaluableByName;
+import de.flapdoodle.eval.core.evaluables.OperatorMap;
+import de.flapdoodle.eval.core.evaluables.OperatorMapping;
+import de.flapdoodle.eval.core.evaluables.TypedEvaluableByArguments;
+import de.flapdoodle.eval.core.evaluables.TypedEvaluableByName;
 
 import java.util.*;
 

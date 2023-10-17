@@ -16,12 +16,12 @@
  */
 package de.flapdoodle.eval.parser;
 
+import de.flapdoodle.eval.core.evaluables.OperatorMap;
+import de.flapdoodle.eval.core.evaluables.OperatorMapping;
+import de.flapdoodle.eval.core.evaluables.Precedence;
 import de.flapdoodle.eval.core.parser.ParseException;
 import de.flapdoodle.eval.core.parser.Token;
 import de.flapdoodle.eval.core.parser.TokenType;
-import de.flapdoodle.eval.evaluables.OperatorMap;
-import de.flapdoodle.eval.evaluables.OperatorMapping;
-import de.flapdoodle.eval.evaluables.Precedence;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

@@ -1,5 +1,8 @@
 package de.flapdoodle.eval.evaluables;
 
+import de.flapdoodle.eval.core.evaluables.TypedEvaluable;
+import de.flapdoodle.eval.core.evaluables.TypedEvaluableMap;
+import de.flapdoodle.eval.core.evaluables.TypedEvaluables;
 import de.flapdoodle.eval.values.Value;
 import org.junit.jupiter.api.Test;
 

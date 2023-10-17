@@ -20,10 +20,10 @@ import de.flapdoodle.eval.config.Defaults;
 import de.flapdoodle.eval.core.Expression;
 import de.flapdoodle.eval.core.ExpressionFactory;
 import de.flapdoodle.eval.core.VariableResolver;
+import de.flapdoodle.eval.core.evaluables.OperatorMap;
+import de.flapdoodle.eval.core.evaluables.OperatorMapping;
 import de.flapdoodle.eval.core.exceptions.EvaluationException;
 import de.flapdoodle.eval.core.parser.ParseException;
-import de.flapdoodle.eval.evaluables.OperatorMap;
-import de.flapdoodle.eval.evaluables.OperatorMapping;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

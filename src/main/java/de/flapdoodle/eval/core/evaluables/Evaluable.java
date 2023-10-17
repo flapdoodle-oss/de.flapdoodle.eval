@@ -1,9 +1,9 @@
-package de.flapdoodle.eval.evaluables;
+package de.flapdoodle.eval.core.evaluables;
 
 import de.flapdoodle.eval.core.EvaluationContext;
 import de.flapdoodle.eval.core.VariableResolver;
-import de.flapdoodle.eval.core.parser.Token;
 import de.flapdoodle.eval.core.exceptions.EvaluationException;
+import de.flapdoodle.eval.core.parser.Token;
 
 import java.util.List;
 
