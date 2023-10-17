@@ -1,6 +1,5 @@
 package de.flapdoodle.eval.core;
 
-import de.flapdoodle.eval.config.Defaults;
 import de.flapdoodle.eval.core.evaluables.*;
 import de.flapdoodle.eval.core.exceptions.EvaluationException;
 import de.flapdoodle.eval.core.parser.*;
@@ -191,18 +190,4 @@ public abstract class ExpressionFactory {
 	public static ImmutableExpressionFactory.Builder builder() {
 		return ImmutableExpressionFactory.builder();
 	}
-
-	public static ImmutableExpressionFactory defaults() {
-		return builder()
-			.constants(Defaults.constants())
-			.evaluatables(Defaults.evaluatables())
-			.arrayAccess(Defaults.arrayAccess())
-			.propertyAccess(Defaults.propertyAccess())
-			.parseNumber(Defaults::numberFromString)
-			.stringAsValue(Defaults::valueFromString)
-			.operatorMap(Defaults.operatorMap())
-			.exceptionMapper(Defaults.exceptionMapper())
-			.build();
-	}
-
 }

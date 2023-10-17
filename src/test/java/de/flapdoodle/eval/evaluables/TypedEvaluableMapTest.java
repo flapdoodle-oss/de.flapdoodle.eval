@@ -3,7 +3,7 @@ package de.flapdoodle.eval.evaluables;
 import de.flapdoodle.eval.core.evaluables.TypedEvaluable;
 import de.flapdoodle.eval.core.evaluables.TypedEvaluableMap;
 import de.flapdoodle.eval.core.evaluables.TypedEvaluables;
-import de.flapdoodle.eval.values.Value;
+import de.flapdoodle.eval.example.Value;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;

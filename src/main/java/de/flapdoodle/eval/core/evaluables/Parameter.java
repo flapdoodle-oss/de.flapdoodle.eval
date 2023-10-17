@@ -20,7 +20,8 @@ import de.flapdoodle.eval.core.exceptions.EvaluableException;
 import de.flapdoodle.eval.core.exceptions.EvaluationException;
 import de.flapdoodle.eval.core.parser.ASTNode;
 import de.flapdoodle.eval.core.parser.Token;
-import de.flapdoodle.eval.evaluables.validation.ParameterValidator;
+import de.flapdoodle.eval.example.evaluables.basic.Conditional;
+import de.flapdoodle.eval.example.evaluables.validation.ParameterValidator;
 import org.immutables.value.Value;
 
 import java.util.List;
@@ -37,7 +38,7 @@ public interface Parameter<T> {
 	 * Set to true, the parameter will not be evaluated in advance, but the corresponding {@link
 	 * ASTNode} will be passed as a parameter value.
 	 *
-	 * @see de.flapdoodle.eval.evaluables.basic.Conditional for an example.
+	 * @see Conditional for an example.
 	 */
 	@Value.Default
 	default boolean isLazy() {

@@ -16,10 +16,10 @@
  */
 package de.flapdoodle.eval.config;
 
-import de.flapdoodle.eval.core.ExpressionFactory;
 import de.flapdoodle.eval.core.ImmutableExpressionFactory;
 import de.flapdoodle.eval.core.evaluables.*;
-import de.flapdoodle.eval.values.Value;
+import de.flapdoodle.eval.example.Defaults;
+import de.flapdoodle.eval.example.Value;
 
 import java.math.BigDecimal;
 
@@ -48,7 +48,7 @@ public class TestConfigurationProvider {
 			.andThen(Defaults.evaluatables());
 
 	static {
-		StandardFactoryWithAdditionalTestOperators = ExpressionFactory.defaults()
+		StandardFactoryWithAdditionalTestOperators = Defaults.expressionFactory()
 			.withEvaluatables(EvaluatablesWithTestFunctions)
 			.withOperatorMap(OperatorMapWithTestOperators);
 	}

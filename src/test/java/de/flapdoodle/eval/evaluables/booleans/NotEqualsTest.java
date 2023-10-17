@@ -18,12 +18,12 @@ package de.flapdoodle.eval.evaluables.booleans;
 
 import de.flapdoodle.eval.BaseEvaluationTest;
 import de.flapdoodle.eval.core.Expression;
-import de.flapdoodle.eval.core.ExpressionFactory;
 import de.flapdoodle.eval.core.MapBasedVariableResolver;
 import de.flapdoodle.eval.core.VariableResolver;
 import de.flapdoodle.eval.core.exceptions.EvaluationException;
 import de.flapdoodle.eval.core.parser.ParseException;
-import de.flapdoodle.eval.values.Value;
+import de.flapdoodle.eval.example.Defaults;
+import de.flapdoodle.eval.example.Value;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -62,7 +62,7 @@ class NotEqualsTest extends BaseEvaluationTest {
 
 	@Test
 	void testInfixNotEqualsVariables() throws EvaluationException, ParseException {
-		Expression expression = ExpressionFactory.defaults().parse("a!=b");
+		Expression expression = Defaults.expressionFactory().parse("a!=b");
 
 		MapBasedVariableResolver mapBasedValueResolver8 = VariableResolver.empty();
 		MapBasedVariableResolver mapBasedValueResolver9 = mapBasedValueResolver8.with("a", Value.of(new BigDecimal("1.4")));
@@ -96,7 +96,7 @@ class NotEqualsTest extends BaseEvaluationTest {
 
 	@Test
 	void testInfixNotEqualsArrays() throws EvaluationException, ParseException {
-		Expression expression = ExpressionFactory.defaults().parse("a!=b");
+		Expression expression = Defaults.expressionFactory().parse("a!=b");
 
 		MapBasedVariableResolver mapBasedValueResolver2 = VariableResolver.empty();
 		MapBasedVariableResolver mapBasedValueResolver3 = mapBasedValueResolver2.with("a", Value.of(Value::of, Arrays.asList("a", "b", "c")));
@@ -112,7 +112,7 @@ class NotEqualsTest extends BaseEvaluationTest {
 
 	@Test
 	void testInfixNotEqualsStructures() throws EvaluationException, ParseException {
-		Expression expression = ExpressionFactory.defaults().parse("a!=b");
+		Expression expression = Defaults.expressionFactory().parse("a!=b");
 
 		Map<String, BigDecimal> structure1 =
 			new HashMap<String, BigDecimal>() {

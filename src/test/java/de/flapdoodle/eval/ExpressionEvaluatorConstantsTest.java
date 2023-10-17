@@ -22,7 +22,8 @@ import de.flapdoodle.eval.core.MapBasedVariableResolver;
 import de.flapdoodle.eval.core.VariableResolver;
 import de.flapdoodle.eval.core.exceptions.EvaluationException;
 import de.flapdoodle.eval.core.parser.ParseException;
-import de.flapdoodle.eval.values.Value;
+import de.flapdoodle.eval.example.Defaults;
+import de.flapdoodle.eval.example.Value;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -61,7 +62,7 @@ class ExpressionEvaluatorConstantsTest extends BaseExpressionEvaluatorTest {
 			};
 
 		MapBasedVariableResolver mapBasedVariableResolver = VariableResolver.empty().withValues(constants);
-		ExpressionFactory factory = ExpressionFactory.defaults()
+		ExpressionFactory factory = Defaults.expressionFactory()
 				.withConstants(mapBasedVariableResolver);
 
 		Expression expression = factory.parse("a+B");

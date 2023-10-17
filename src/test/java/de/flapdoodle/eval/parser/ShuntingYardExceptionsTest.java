@@ -16,11 +16,11 @@
  */
 package de.flapdoodle.eval.parser;
 
-import de.flapdoodle.eval.core.ExpressionFactory;
 import de.flapdoodle.eval.core.VariableResolver;
 import de.flapdoodle.eval.core.parser.ParseException;
 import de.flapdoodle.eval.core.parser.ShuntingYardConverter;
 import de.flapdoodle.eval.core.parser.Token;
+import de.flapdoodle.eval.example.Defaults;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -68,21 +68,21 @@ class ShuntingYardExceptionsTest extends BaseParserTest {
 
 	@Test
 	void testEmptyExpression() {
-		assertThatThrownBy(() -> ExpressionFactory.defaults().parse("").evaluate(VariableResolver.empty()))
+		assertThatThrownBy(() -> Defaults.expressionFactory().parse("").evaluate(VariableResolver.empty()))
 			.isInstanceOf(ParseException.class)
 			.hasMessage("Empty expression");
 	}
 
 	@Test
 	void testEmptyExpressionBraces() {
-		assertThatThrownBy(() -> ExpressionFactory.defaults().parse("()").evaluate(VariableResolver.empty()))
+		assertThatThrownBy(() -> Defaults.expressionFactory().parse("()").evaluate(VariableResolver.empty()))
 			.isInstanceOf(ParseException.class)
 			.hasMessage("Empty expression");
 	}
 
 	@Test
 	void testComma() {
-		assertThatThrownBy(() -> ExpressionFactory.defaults().parse(",").evaluate(VariableResolver.empty()))
+		assertThatThrownBy(() -> Defaults.expressionFactory().parse(",").evaluate(VariableResolver.empty()))
 			.isInstanceOf(ParseException.class)
 			.hasMessage("Empty expression");
 	}
@@ -119,21 +119,21 @@ class ShuntingYardExceptionsTest extends BaseParserTest {
 
 	@Test
 	void testFunctionNotEnoughParameters() {
-		assertThatThrownBy(() -> ExpressionFactory.defaults().parse("round()").evaluate(VariableResolver.empty()))
+		assertThatThrownBy(() -> Defaults.expressionFactory().parse("round()").evaluate(VariableResolver.empty()))
 			.isInstanceOf(ParseException.class)
 			.hasMessage("could not find evaluatable 'round' with 0 arguments");
 	}
 
 	@Test
 	void testFunctionNotEnoughParametersForVarArgs() {
-		assertThatThrownBy(() -> ExpressionFactory.defaults().parse("min()").evaluate(VariableResolver.empty()))
+		assertThatThrownBy(() -> Defaults.expressionFactory().parse("min()").evaluate(VariableResolver.empty()))
 			.isInstanceOf(ParseException.class)
 			.hasMessage("could not find evaluatable 'min' with 0 arguments");
 	}
 
 	@Test
 	void testFunctionTooManyParameters() {
-		assertThatThrownBy(() -> ExpressionFactory.defaults().parse("round(1,2,3,4)").evaluate(VariableResolver.empty()))
+		assertThatThrownBy(() -> Defaults.expressionFactory().parse("round(1,2,3,4)").evaluate(VariableResolver.empty()))
 			.isInstanceOf(ParseException.class)
 			.hasMessage("could not find evaluatable 'round' with 4 arguments");
 	}
@@ -153,7 +153,7 @@ class ShuntingYardExceptionsTest extends BaseParserTest {
 			"E.1"
 		})
 	void testTooManyOperands(String expressionString) {
-		assertThatThrownBy(() -> ExpressionFactory.defaults().parse(expressionString).evaluate(VariableResolver.empty()))
+		assertThatThrownBy(() -> Defaults.expressionFactory().parse(expressionString).evaluate(VariableResolver.empty()))
 			.isInstanceOf(ParseException.class)
 			.hasMessage("Too many operands");
 	}
@@ -163,7 +163,7 @@ class ShuntingYardExceptionsTest extends BaseParserTest {
 		delimiter = ':',
 		value = { "(x+y)*(a-) : 9", "a** : 2", "5+, : 2" })
 	void testInvalidTokenAfterInfixOperator(String expressionString, int position) {
-		assertThatThrownBy(() -> ExpressionFactory.defaults().parse(expressionString).evaluate(VariableResolver.empty()))
+		assertThatThrownBy(() -> Defaults.expressionFactory().parse(expressionString).evaluate(VariableResolver.empty()))
 			.isInstanceOf(ParseException.class)
 			.hasMessage("Unexpected token after infix operator")
 			.extracting("startPosition")

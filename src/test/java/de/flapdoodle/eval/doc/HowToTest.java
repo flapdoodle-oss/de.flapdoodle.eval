@@ -8,7 +8,8 @@ import de.flapdoodle.eval.core.evaluables.*;
 import de.flapdoodle.eval.core.exceptions.EvaluationException;
 import de.flapdoodle.eval.core.parser.ParseException;
 import de.flapdoodle.eval.core.tree.EvalFailedWithException;
-import de.flapdoodle.eval.values.Value;
+import de.flapdoodle.eval.example.Defaults;
+import de.flapdoodle.eval.example.Value;
 import de.flapdoodle.testdoc.Recorder;
 import de.flapdoodle.testdoc.Recording;
 import de.flapdoodle.testdoc.TabSize;
@@ -28,7 +29,7 @@ public class HowToTest {
 	@Test
 	public void example() throws ParseException, EvaluationException {
 		recording.begin();
-		ExpressionFactory expressionFactory = ExpressionFactory.defaults();
+		ExpressionFactory expressionFactory = Defaults.expressionFactory();
 		Expression expression = expressionFactory.parse("a*2");
 		Object result = expression.evaluate(VariableResolver.empty()
 			.with("a", Value.of(2)));
@@ -40,7 +41,7 @@ public class HowToTest {
 	@Test
 	public void usedVariables() throws ParseException, EvaluationException {
 		recording.begin();
-		ExpressionFactory expressionFactory = ExpressionFactory.defaults();
+		ExpressionFactory expressionFactory = Defaults.expressionFactory();
 		Expression expression = expressionFactory.parse("a*2");
 		assertThat(expression.usedVariables())
 			.containsExactly("a");

@@ -1,12 +1,12 @@
 package de.flapdoodle.eval.evaluables.booleans;
 
 import de.flapdoodle.eval.core.Expression;
-import de.flapdoodle.eval.core.ExpressionFactory;
 import de.flapdoodle.eval.core.MapBasedVariableResolver;
 import de.flapdoodle.eval.core.VariableResolver;
 import de.flapdoodle.eval.core.exceptions.EvaluationException;
 import de.flapdoodle.eval.core.parser.ParseException;
-import de.flapdoodle.eval.values.Value;
+import de.flapdoodle.eval.example.Defaults;
+import de.flapdoodle.eval.example.Value;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -17,7 +17,7 @@ class SameTest {
 
 	@Test
 	void testInfixEqualsVariables() throws EvaluationException, ParseException {
-		Expression expression = ExpressionFactory.defaults()
+		Expression expression = Defaults.expressionFactory()
 				.parse("a===b");
 
 		BigDecimal value = new BigDecimal("1.4");

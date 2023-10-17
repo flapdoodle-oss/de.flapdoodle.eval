@@ -20,7 +20,7 @@ import de.flapdoodle.eval.core.MapBasedVariableResolver;
 import de.flapdoodle.eval.core.VariableResolver;
 import de.flapdoodle.eval.core.exceptions.EvaluationException;
 import de.flapdoodle.eval.core.parser.ParseException;
-import de.flapdoodle.eval.values.Value;
+import de.flapdoodle.eval.example.Value;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -118,7 +118,7 @@ class ExpressionEvaluatorArrayTest extends BaseExpressionEvaluatorTest {
 			evaluate("a[0]", mapBasedVariableResolver);
 		})
 			.isInstanceOf(EvaluationException.class)
-			.hasMessage("wrong type: class de.flapdoodle.eval.values.Value$ArrayValue != class de.flapdoodle.eval.values.ImmutableNumberValue (123.0)");
+			.hasMessage("wrong type: class de.flapdoodle.eval.example.Value$ArrayValue != class de.flapdoodle.eval.example.ImmutableNumberValue (123.0)");
 	}
 
 	@Test
@@ -130,6 +130,6 @@ class ExpressionEvaluatorArrayTest extends BaseExpressionEvaluatorTest {
 				evaluate("a[b]", mapBasedVariableResolver);
 			})
 			.isInstanceOf(EvaluationException.class)
-			.hasMessage("wrong type: class de.flapdoodle.eval.values.Value$NumberValue != class de.flapdoodle.eval.values.ImmutableStringValue (anotherString)");
+			.hasMessage("wrong type: class de.flapdoodle.eval.example.Value$NumberValue != class de.flapdoodle.eval.example.ImmutableStringValue (anotherString)");
 	}
 }

@@ -16,11 +16,11 @@
  */
 package de.flapdoodle.eval;
 
-import de.flapdoodle.eval.config.Defaults;
+import de.flapdoodle.eval.example.Defaults;
 import de.flapdoodle.eval.core.ExpressionFactory;
 import de.flapdoodle.eval.core.MapBasedVariableResolver;
 import de.flapdoodle.eval.core.VariableResolver;
-import de.flapdoodle.eval.values.Value;
+import de.flapdoodle.eval.example.Value;
 import org.junit.jupiter.api.Test;
 
 import java.math.MathContext;
@@ -33,7 +33,7 @@ class ExpressionFactoryTest {
 
 	@Test
 	void testDefaultSetup() {
-		ExpressionFactory factory = ExpressionFactory.defaults();
+		ExpressionFactory factory = Defaults.expressionFactory();
 
 		assertThat(factory.operatorMap())
 			.isSameAs(Defaults.operatorMap());
@@ -46,7 +46,7 @@ class ExpressionFactoryTest {
 	@Test
 	void testCustomMathContext() {
 		ExpressionFactory factory =
-			ExpressionFactory.defaults().withMathContext(MathContext.DECIMAL32);
+			Defaults.expressionFactory().withMathContext(MathContext.DECIMAL32);
 
 		assertThat(factory.mathContext()).isEqualTo(MathContext.DECIMAL32);
 	}
@@ -63,7 +63,7 @@ class ExpressionFactoryTest {
 		MapBasedVariableResolver valueResolver = VariableResolver.empty()
 			.withValues(constants);
 		ExpressionFactory factory =
-			ExpressionFactory.defaults().withConstants(valueResolver);
+			Defaults.expressionFactory().withConstants(valueResolver);
 
 		assertThat(factory.constants().get("A")).isEqualTo(Value.of("a"));
 	}

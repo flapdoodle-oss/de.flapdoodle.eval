@@ -16,9 +16,8 @@
  */
 package de.flapdoodle.eval;
 
-import de.flapdoodle.eval.config.Defaults;
+import de.flapdoodle.eval.example.Defaults;
 import de.flapdoodle.eval.core.Expression;
-import de.flapdoodle.eval.core.ExpressionFactory;
 import de.flapdoodle.eval.core.VariableResolver;
 import de.flapdoodle.eval.core.evaluables.OperatorMap;
 import de.flapdoodle.eval.core.evaluables.OperatorMapping;
@@ -37,7 +36,7 @@ class ExpressionEvaluatorPowerOfTest extends BaseExpressionEvaluatorTest {
 
 	@Test
 	void testPrecedenceHigher() throws ParseException, EvaluationException {
-		Expression expression = ExpressionFactory.defaults()
+		Expression expression = Defaults.expressionFactory()
 				.withOperatorMap(OperatorMap.builder()
 					.putInfix("^", OperatorMapping.of(100,false,"power"))
 					.build()

@@ -1,11 +1,8 @@
 package de.flapdoodle.eval.core.evaluables;
 
-import de.flapdoodle.eval.core.evaluables.Parameter;
-import de.flapdoodle.eval.core.evaluables.TypedEvaluable;
-import de.flapdoodle.eval.core.evaluables.TypedEvaluables;
 import de.flapdoodle.eval.core.exceptions.EvaluableException;
-import de.flapdoodle.eval.evaluables.validation.ParameterValidator;
-import de.flapdoodle.eval.values.Value;
+import de.flapdoodle.eval.example.evaluables.validation.ParameterValidator;
+import de.flapdoodle.eval.example.Value;
 import org.assertj.core.api.InstanceOfAssertFactories;
 import org.junit.jupiter.api.Test;
 

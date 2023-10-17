@@ -1,7 +1,7 @@
 ## HowTo
 
 ```java
-ExpressionFactory expressionFactory = ExpressionFactory.defaults();
+ExpressionFactory expressionFactory = Defaults.expressionFactory();
 Expression expression = expressionFactory.parse("a*2");
 Object result = expression.evaluate(VariableResolver.empty()
   .with("a", Value.of(2)));
@@ -10,7 +10,7 @@ assertThat(result).isEqualTo(Value.of(4.0));
 ```
 
 ```java
-ExpressionFactory expressionFactory = ExpressionFactory.defaults();
+ExpressionFactory expressionFactory = Defaults.expressionFactory();
 Expression expression = expressionFactory.parse("a*2");
 assertThat(expression.usedVariables())
   .containsExactly("a");
