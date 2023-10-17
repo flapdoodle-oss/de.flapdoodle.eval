@@ -11,7 +11,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Optional;
 
-import static de.flapdoodle.eval.AssertEither.assertThat;
+import static de.flapdoodle.eval.example.AssertEither.assertThat;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class TypedEvaluablesTest {
