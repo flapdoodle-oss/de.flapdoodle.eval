@@ -16,12 +16,13 @@
  */
 package de.flapdoodle.eval.example;
 
-import de.flapdoodle.eval.core.*;
+import de.flapdoodle.eval.core.Expression;
+import de.flapdoodle.eval.core.ImmutableExpressionFactory;
+import de.flapdoodle.eval.core.MapBasedVariableResolver;
+import de.flapdoodle.eval.core.VariableResolver;
 import de.flapdoodle.eval.core.exceptions.EvaluationException;
-import de.flapdoodle.eval.core.parser.ParseException;
+import de.flapdoodle.eval.core.exceptions.ParseException;
 import de.flapdoodle.eval.core.tree.Node;
-import de.flapdoodle.eval.example.Defaults;
-import de.flapdoodle.eval.example.Value;
 import org.assertj.core.data.Percentage;
 import org.junit.jupiter.api.Test;
 

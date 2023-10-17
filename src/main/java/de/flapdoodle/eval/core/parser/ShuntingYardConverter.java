@@ -20,6 +20,7 @@ import de.flapdoodle.eval.core.evaluables.OperatorMap;
 import de.flapdoodle.eval.core.evaluables.OperatorMapping;
 import de.flapdoodle.eval.core.evaluables.TypedEvaluableByArguments;
 import de.flapdoodle.eval.core.evaluables.TypedEvaluableByName;
+import de.flapdoodle.eval.core.exceptions.ParseException;
 
 import java.util.*;
 

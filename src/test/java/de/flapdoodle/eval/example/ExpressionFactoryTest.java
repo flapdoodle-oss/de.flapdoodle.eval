@@ -16,11 +16,9 @@
  */
 package de.flapdoodle.eval.example;
 
-import de.flapdoodle.eval.example.Defaults;
 import de.flapdoodle.eval.core.ExpressionFactory;
 import de.flapdoodle.eval.core.MapBasedVariableResolver;
 import de.flapdoodle.eval.core.VariableResolver;
-import de.flapdoodle.eval.example.Value;
 import org.junit.jupiter.api.Test;
 
 import java.math.MathContext;

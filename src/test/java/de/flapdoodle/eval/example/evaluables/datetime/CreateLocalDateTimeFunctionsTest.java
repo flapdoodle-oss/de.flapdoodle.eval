@@ -16,11 +16,11 @@
  */
 package de.flapdoodle.eval.example.evaluables.datetime;
 
-import de.flapdoodle.eval.example.BaseEvaluationTest;
-import de.flapdoodle.eval.example.TestConfigurationProvider;
 import de.flapdoodle.eval.core.ExpressionFactory;
 import de.flapdoodle.eval.core.exceptions.EvaluationException;
-import de.flapdoodle.eval.core.parser.ParseException;
+import de.flapdoodle.eval.core.exceptions.ParseException;
+import de.flapdoodle.eval.example.BaseEvaluationTest;
+import de.flapdoodle.eval.example.TestConfigurationProvider;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 

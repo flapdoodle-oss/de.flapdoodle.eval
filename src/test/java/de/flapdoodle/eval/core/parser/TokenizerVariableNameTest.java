@@ -16,6 +16,7 @@
  */
 package de.flapdoodle.eval.core.parser;
 
+import de.flapdoodle.eval.core.exceptions.ParseException;
 import org.junit.jupiter.api.Test;
 
 class TokenizerVariableNameTest extends BaseParserTest {

@@ -19,6 +19,7 @@ package de.flapdoodle.eval.core.parser;
 import de.flapdoodle.eval.core.evaluables.OperatorMap;
 import de.flapdoodle.eval.core.evaluables.OperatorMapping;
 import de.flapdoodle.eval.core.evaluables.Precedence;
+import de.flapdoodle.eval.core.exceptions.ParseException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

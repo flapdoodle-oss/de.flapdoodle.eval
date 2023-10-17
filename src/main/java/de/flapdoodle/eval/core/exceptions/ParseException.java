@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.flapdoodle.eval.core.parser;
+package de.flapdoodle.eval.core.exceptions;
 
-import de.flapdoodle.eval.core.exceptions.BaseException;
+import de.flapdoodle.eval.core.parser.Token;
 
 /**
  * Exception while parsing the expression.

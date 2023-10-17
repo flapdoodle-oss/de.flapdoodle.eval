@@ -18,6 +18,7 @@ package de.flapdoodle.eval.core.parser;
 
 import de.flapdoodle.eval.core.MapBasedVariableResolver;
 import de.flapdoodle.eval.core.VariableResolver;
+import de.flapdoodle.eval.core.exceptions.ParseException;
 import de.flapdoodle.eval.example.Defaults;
 import org.junit.jupiter.api.Test;
 

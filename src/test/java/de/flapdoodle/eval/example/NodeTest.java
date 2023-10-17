@@ -1,6 +1,5 @@
 package de.flapdoodle.eval.example;
 
-import de.flapdoodle.eval.example.Defaults;
 import de.flapdoodle.eval.core.evaluables.TypedEvaluableByArguments;
 import de.flapdoodle.eval.core.parser.Token;
 import de.flapdoodle.eval.core.parser.TokenType;
@@ -8,7 +7,6 @@ import de.flapdoodle.eval.core.tree.EvaluatableNode;
 import de.flapdoodle.eval.core.tree.LookupNode;
 import de.flapdoodle.eval.core.tree.Node;
 import de.flapdoodle.eval.core.tree.ValueNode;
-import de.flapdoodle.eval.example.Value;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;

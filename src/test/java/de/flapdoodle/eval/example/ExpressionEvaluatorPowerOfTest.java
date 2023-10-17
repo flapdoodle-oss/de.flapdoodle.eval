@@ -21,7 +21,7 @@ import de.flapdoodle.eval.core.VariableResolver;
 import de.flapdoodle.eval.core.evaluables.OperatorMap;
 import de.flapdoodle.eval.core.evaluables.OperatorMapping;
 import de.flapdoodle.eval.core.exceptions.EvaluationException;
-import de.flapdoodle.eval.core.parser.ParseException;
+import de.flapdoodle.eval.core.exceptions.ParseException;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

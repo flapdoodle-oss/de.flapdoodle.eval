@@ -18,8 +18,6 @@ package de.flapdoodle.eval.example;
 
 import de.flapdoodle.eval.core.ImmutableExpressionFactory;
 import de.flapdoodle.eval.core.evaluables.*;
-import de.flapdoodle.eval.example.Defaults;
-import de.flapdoodle.eval.example.Value;
 
 import java.math.BigDecimal;
 

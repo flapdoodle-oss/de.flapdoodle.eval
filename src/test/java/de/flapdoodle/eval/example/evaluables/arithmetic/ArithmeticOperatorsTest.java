@@ -16,10 +16,10 @@
  */
 package de.flapdoodle.eval.example.evaluables.arithmetic;
 
+import de.flapdoodle.eval.core.exceptions.EvaluationException;
+import de.flapdoodle.eval.core.exceptions.ParseException;
 import de.flapdoodle.eval.example.BaseEvaluationTest;
 import de.flapdoodle.eval.example.TestConfigurationProvider;
-import de.flapdoodle.eval.core.exceptions.EvaluationException;
-import de.flapdoodle.eval.core.parser.ParseException;
 import de.flapdoodle.eval.example.Value;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

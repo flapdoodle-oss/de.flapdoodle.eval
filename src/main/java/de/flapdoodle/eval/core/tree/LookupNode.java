@@ -2,8 +2,8 @@ package de.flapdoodle.eval.core.tree;
 
 import de.flapdoodle.eval.core.EvaluationContext;
 import de.flapdoodle.eval.core.VariableResolver;
-import de.flapdoodle.eval.core.parser.Token;
 import de.flapdoodle.eval.core.exceptions.EvaluationException;
+import de.flapdoodle.eval.core.parser.Token;
 
 @org.immutables.value.Value.Immutable
 public abstract class LookupNode extends Node {

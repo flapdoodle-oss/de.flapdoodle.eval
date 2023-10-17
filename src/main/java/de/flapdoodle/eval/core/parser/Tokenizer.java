@@ -18,6 +18,7 @@ package de.flapdoodle.eval.core.parser;
 
 import de.flapdoodle.eval.core.evaluables.HasOperator;
 import de.flapdoodle.eval.core.evaluables.OperatorType;
+import de.flapdoodle.eval.core.exceptions.ParseException;
 
 import java.util.ArrayList;
 import java.util.List;

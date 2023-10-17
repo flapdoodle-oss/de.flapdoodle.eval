@@ -16,13 +16,11 @@
  */
 package de.flapdoodle.eval.core.parser;
 
-import de.flapdoodle.eval.example.TestConfigurationProvider;
 import de.flapdoodle.eval.core.ImmutableExpressionFactory;
 import de.flapdoodle.eval.core.evaluables.OperatorMap;
 import de.flapdoodle.eval.core.evaluables.TypedEvaluableByName;
-import de.flapdoodle.eval.core.parser.ASTNode;
-import de.flapdoodle.eval.core.parser.ParseException;
-import de.flapdoodle.eval.core.parser.Token;
+import de.flapdoodle.eval.core.exceptions.ParseException;
+import de.flapdoodle.eval.example.TestConfigurationProvider;
 import org.assertj.core.api.Assertions;
 
 import java.util.List;

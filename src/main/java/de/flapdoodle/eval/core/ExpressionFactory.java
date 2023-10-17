@@ -2,7 +2,11 @@ package de.flapdoodle.eval.core;
 
 import de.flapdoodle.eval.core.evaluables.*;
 import de.flapdoodle.eval.core.exceptions.EvaluationException;
-import de.flapdoodle.eval.core.parser.*;
+import de.flapdoodle.eval.core.exceptions.ParseException;
+import de.flapdoodle.eval.core.parser.ASTNode;
+import de.flapdoodle.eval.core.parser.ShuntingYardConverter;
+import de.flapdoodle.eval.core.parser.Token;
+import de.flapdoodle.eval.core.parser.Tokenizer;
 import de.flapdoodle.eval.core.tree.*;
 
 import java.math.MathContext;
