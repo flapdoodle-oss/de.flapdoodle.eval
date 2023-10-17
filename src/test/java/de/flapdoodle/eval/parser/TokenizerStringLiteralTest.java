@@ -16,9 +16,13 @@
  */
 package de.flapdoodle.eval.parser;
 
-import de.flapdoodle.eval.ExpressionFactory;
-import de.flapdoodle.eval.MapBasedVariableResolver;
-import de.flapdoodle.eval.VariableResolver;
+import de.flapdoodle.eval.core.ExpressionFactory;
+import de.flapdoodle.eval.core.MapBasedVariableResolver;
+import de.flapdoodle.eval.core.VariableResolver;
+import de.flapdoodle.eval.core.parser.ParseException;
+import de.flapdoodle.eval.core.parser.Token;
+import de.flapdoodle.eval.core.parser.TokenType;
+import de.flapdoodle.eval.core.parser.Tokenizer;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;

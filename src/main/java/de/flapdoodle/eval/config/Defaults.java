@@ -1,14 +1,14 @@
 package de.flapdoodle.eval.config;
 
-import de.flapdoodle.eval.VariableResolver;
+import de.flapdoodle.eval.core.VariableResolver;
+import de.flapdoodle.eval.core.tree.EvaluableExceptionMapper;
 import de.flapdoodle.eval.evaluables.*;
 import de.flapdoodle.eval.evaluables.arithmetic.Trigonometric;
 import de.flapdoodle.eval.evaluables.basic.IndexedAccess;
 import de.flapdoodle.eval.evaluables.basic.PropertyAccess;
 import de.flapdoodle.eval.evaluables.datetime.Legacy;
 import de.flapdoodle.eval.evaluables.string.Contains;
-import de.flapdoodle.eval.exceptions.EvaluationException;
-import de.flapdoodle.eval.tree.EvaluableExceptionMapper;
+import de.flapdoodle.eval.core.exceptions.EvaluationException;
 import de.flapdoodle.eval.values.Value;
 
 import java.math.BigDecimal;

@@ -1,4 +1,4 @@
-package de.flapdoodle.eval;
+package de.flapdoodle.eval.core;
 
 import java.math.MathContext;
 import java.time.ZoneId;

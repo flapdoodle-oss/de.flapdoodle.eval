@@ -1,8 +1,8 @@
-package de.flapdoodle.eval;
+package de.flapdoodle.eval.core;
 
-import de.flapdoodle.eval.exceptions.EvaluationException;
-import de.flapdoodle.eval.parser.ParseException;
-import de.flapdoodle.eval.tree.Node;
+import de.flapdoodle.eval.core.exceptions.EvaluationException;
+import de.flapdoodle.eval.core.parser.ParseException;
+import de.flapdoodle.eval.core.tree.Node;
 
 import java.math.MathContext;
 import java.time.ZoneId;

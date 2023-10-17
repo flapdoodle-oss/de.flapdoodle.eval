@@ -16,6 +16,10 @@
  */
 package de.flapdoodle.eval.parser;
 
+import de.flapdoodle.eval.core.parser.ParseException;
+import de.flapdoodle.eval.core.parser.Token;
+import de.flapdoodle.eval.core.parser.TokenType;
+import de.flapdoodle.eval.core.parser.Tokenizer;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;

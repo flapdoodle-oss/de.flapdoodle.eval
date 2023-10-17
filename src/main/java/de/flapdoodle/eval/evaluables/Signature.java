@@ -1,6 +1,6 @@
 package de.flapdoodle.eval.evaluables;
 
-import de.flapdoodle.eval.exceptions.EvaluableException;
+import de.flapdoodle.eval.core.exceptions.EvaluableException;
 import org.immutables.builder.Builder;
 
 import java.util.List;

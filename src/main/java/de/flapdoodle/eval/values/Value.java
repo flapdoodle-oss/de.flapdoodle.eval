@@ -17,7 +17,7 @@
 package de.flapdoodle.eval.values;
 
 import de.flapdoodle.eval.Nullable;
-import de.flapdoodle.eval.exceptions.EvaluationException;
+import de.flapdoodle.eval.core.exceptions.EvaluationException;
 
 import java.math.BigDecimal;
 import java.time.Duration;

@@ -1,9 +1,9 @@
-package de.flapdoodle.eval.tree;
+package de.flapdoodle.eval.core.tree;
 
-import de.flapdoodle.eval.EvaluationContext;
-import de.flapdoodle.eval.VariableResolver;
-import de.flapdoodle.eval.exceptions.EvaluationException;
-import de.flapdoodle.eval.parser.Token;
+import de.flapdoodle.eval.core.EvaluationContext;
+import de.flapdoodle.eval.core.VariableResolver;
+import de.flapdoodle.eval.core.parser.Token;
+import de.flapdoodle.eval.core.exceptions.EvaluationException;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,7 +31,7 @@ public abstract class Node {
     }
 
     // VisibleForTests
-    static Set<String> usedVariables(List<Node> nodes) {
+    public static Set<String> usedVariables(List<Node> nodes) {
         return nodes.stream()
           .filter(it -> it instanceof LookupNode)
           .map(it -> it.token().value())

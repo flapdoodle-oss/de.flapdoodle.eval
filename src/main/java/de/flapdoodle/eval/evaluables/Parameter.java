@@ -16,11 +16,11 @@
  */
 package de.flapdoodle.eval.evaluables;
 
+import de.flapdoodle.eval.core.parser.ASTNode;
+import de.flapdoodle.eval.core.parser.Token;
 import de.flapdoodle.eval.evaluables.validation.ParameterValidator;
-import de.flapdoodle.eval.exceptions.EvaluableException;
-import de.flapdoodle.eval.exceptions.EvaluationException;
-import de.flapdoodle.eval.parser.ASTNode;
-import de.flapdoodle.eval.parser.Token;
+import de.flapdoodle.eval.core.exceptions.EvaluableException;
+import de.flapdoodle.eval.core.exceptions.EvaluationException;
 import org.immutables.value.Value;
 
 import java.util.List;

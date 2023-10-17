@@ -1,12 +1,12 @@
-package de.flapdoodle.eval.tree;
+package de.flapdoodle.eval.core.tree;
 
-import de.flapdoodle.eval.EvaluationContext;
-import de.flapdoodle.eval.VariableResolver;
+import de.flapdoodle.eval.core.EvaluationContext;
+import de.flapdoodle.eval.core.VariableResolver;
+import de.flapdoodle.eval.core.parser.Token;
 import de.flapdoodle.eval.evaluables.TypedEvaluable;
 import de.flapdoodle.eval.evaluables.TypedEvaluableByArguments;
-import de.flapdoodle.eval.exceptions.EvaluableException;
-import de.flapdoodle.eval.exceptions.EvaluationException;
-import de.flapdoodle.eval.parser.Token;
+import de.flapdoodle.eval.core.exceptions.EvaluableException;
+import de.flapdoodle.eval.core.exceptions.EvaluationException;
 import de.flapdoodle.types.Either;
 
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package de.flapdoodle.eval;
+package de.flapdoodle.eval.core;
 
 import org.immutables.value.Value.Auxiliary;
 import org.immutables.value.Value.Immutable;

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.flapdoodle.eval.parser;
+package de.flapdoodle.eval.core.parser;
 
 import de.flapdoodle.eval.evaluables.OperatorMap;
 import de.flapdoodle.eval.evaluables.OperatorMapping;

@@ -16,6 +16,7 @@
  */
 package de.flapdoodle.eval.parser;
 
+import de.flapdoodle.eval.core.parser.ParseException;
 import org.junit.jupiter.api.Test;
 
 class ShuntingYardArrayTest extends BaseParserTest {

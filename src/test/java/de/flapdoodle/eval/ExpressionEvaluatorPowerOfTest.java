@@ -16,10 +16,14 @@
  */
 package de.flapdoodle.eval;
 
+import de.flapdoodle.eval.config.Defaults;
+import de.flapdoodle.eval.core.Expression;
+import de.flapdoodle.eval.core.ExpressionFactory;
+import de.flapdoodle.eval.core.VariableResolver;
+import de.flapdoodle.eval.core.exceptions.EvaluationException;
+import de.flapdoodle.eval.core.parser.ParseException;
 import de.flapdoodle.eval.evaluables.OperatorMap;
 import de.flapdoodle.eval.evaluables.OperatorMapping;
-import de.flapdoodle.eval.exceptions.EvaluationException;
-import de.flapdoodle.eval.parser.ParseException;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -37,7 +41,7 @@ class ExpressionEvaluatorPowerOfTest extends BaseExpressionEvaluatorTest {
 				.withOperatorMap(OperatorMap.builder()
 					.putInfix("^", OperatorMapping.of(100,false,"power"))
 					.build()
-						.andThen(ExpressionFactory.defaults().operatorMap()))
+						.andThen(Defaults.operatorMap()))
 				.parse("-2^2");
 
 		assertThat(expression.evaluate(VariableResolver.empty()).toString()).isEqualTo("-4.0");

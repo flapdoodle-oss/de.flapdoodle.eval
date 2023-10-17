@@ -16,8 +16,11 @@
  */
 package de.flapdoodle.eval.parser;
 
-import de.flapdoodle.eval.ExpressionFactory;
-import de.flapdoodle.eval.VariableResolver;
+import de.flapdoodle.eval.core.ExpressionFactory;
+import de.flapdoodle.eval.core.VariableResolver;
+import de.flapdoodle.eval.core.parser.ParseException;
+import de.flapdoodle.eval.core.parser.ShuntingYardConverter;
+import de.flapdoodle.eval.core.parser.Token;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -27,7 +30,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import java.util.Arrays;
 import java.util.List;
 
-import static de.flapdoodle.eval.parser.TokenType.*;
+import static de.flapdoodle.eval.core.parser.TokenType.*;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class ShuntingYardExceptionsTest extends BaseParserTest {

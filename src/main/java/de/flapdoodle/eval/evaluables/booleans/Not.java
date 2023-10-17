@@ -1,12 +1,12 @@
 package de.flapdoodle.eval.evaluables.booleans;
 
-import de.flapdoodle.eval.EvaluationContext;
-import de.flapdoodle.eval.VariableResolver;
+import de.flapdoodle.eval.core.EvaluationContext;
+import de.flapdoodle.eval.core.VariableResolver;
+import de.flapdoodle.eval.core.parser.Token;
 import de.flapdoodle.eval.evaluables.Parameter;
 import de.flapdoodle.eval.evaluables.TypedEvaluable;
 import de.flapdoodle.eval.evaluables.TypedEvaluables;
-import de.flapdoodle.eval.exceptions.EvaluationException;
-import de.flapdoodle.eval.parser.Token;
+import de.flapdoodle.eval.core.exceptions.EvaluationException;
 import de.flapdoodle.eval.values.Value;
 
 public class Not extends TypedEvaluables.Wrapper {

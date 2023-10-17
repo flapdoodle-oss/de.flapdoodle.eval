@@ -16,6 +16,9 @@
  */
 package de.flapdoodle.eval.parser;
 
+import de.flapdoodle.eval.core.parser.ParseException;
+import de.flapdoodle.eval.core.parser.Token;
+import de.flapdoodle.eval.core.parser.TokenType;
 import de.flapdoodle.eval.evaluables.OperatorMap;
 import de.flapdoodle.eval.evaluables.OperatorMapping;
 import de.flapdoodle.eval.evaluables.Precedence;

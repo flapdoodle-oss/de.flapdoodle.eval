@@ -16,8 +16,8 @@
  */
 package de.flapdoodle.eval.config;
 
-import de.flapdoodle.eval.ExpressionFactory;
-import de.flapdoodle.eval.ImmutableExpressionFactory;
+import de.flapdoodle.eval.core.ExpressionFactory;
+import de.flapdoodle.eval.core.ImmutableExpressionFactory;
 import de.flapdoodle.eval.evaluables.*;
 import de.flapdoodle.eval.values.Value;
 

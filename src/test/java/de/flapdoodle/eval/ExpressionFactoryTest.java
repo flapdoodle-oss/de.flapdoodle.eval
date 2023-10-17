@@ -17,6 +17,9 @@
 package de.flapdoodle.eval;
 
 import de.flapdoodle.eval.config.Defaults;
+import de.flapdoodle.eval.core.ExpressionFactory;
+import de.flapdoodle.eval.core.MapBasedVariableResolver;
+import de.flapdoodle.eval.core.VariableResolver;
 import de.flapdoodle.eval.values.Value;
 import org.junit.jupiter.api.Test;
 

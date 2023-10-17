@@ -16,7 +16,8 @@
  */
 package de.flapdoodle.eval.parser;
 
-import de.flapdoodle.eval.ExpressionFactory;
+import de.flapdoodle.eval.core.ExpressionFactory;
+import de.flapdoodle.eval.core.parser.ParseException;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;

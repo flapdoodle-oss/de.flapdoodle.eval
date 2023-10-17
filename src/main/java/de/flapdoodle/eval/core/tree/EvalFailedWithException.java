@@ -1,6 +1,6 @@
-package de.flapdoodle.eval.tree;
+package de.flapdoodle.eval.core.tree;
 
-import de.flapdoodle.eval.exceptions.EvaluationException;
+import de.flapdoodle.eval.core.exceptions.EvaluationException;
 import org.immutables.value.Value;
 
 import java.util.Optional;

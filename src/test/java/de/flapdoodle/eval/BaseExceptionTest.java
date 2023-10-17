@@ -16,7 +16,7 @@
  */
 package de.flapdoodle.eval;
 
-import de.flapdoodle.eval.exceptions.BaseException;
+import de.flapdoodle.eval.core.exceptions.BaseException;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

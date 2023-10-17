@@ -16,6 +16,8 @@
  */
 package de.flapdoodle.eval.parser;
 
+import de.flapdoodle.eval.core.parser.Token;
+import de.flapdoodle.eval.core.parser.TokenType;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

@@ -16,9 +16,13 @@
  */
 package de.flapdoodle.eval.evaluables.booleans;
 
-import de.flapdoodle.eval.*;
-import de.flapdoodle.eval.exceptions.EvaluationException;
-import de.flapdoodle.eval.parser.ParseException;
+import de.flapdoodle.eval.BaseEvaluationTest;
+import de.flapdoodle.eval.core.Expression;
+import de.flapdoodle.eval.core.ExpressionFactory;
+import de.flapdoodle.eval.core.MapBasedVariableResolver;
+import de.flapdoodle.eval.core.VariableResolver;
+import de.flapdoodle.eval.core.exceptions.EvaluationException;
+import de.flapdoodle.eval.core.parser.ParseException;
 import de.flapdoodle.eval.values.Value;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

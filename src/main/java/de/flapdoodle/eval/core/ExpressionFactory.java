@@ -1,10 +1,10 @@
-package de.flapdoodle.eval;
+package de.flapdoodle.eval.core;
 
 import de.flapdoodle.eval.config.Defaults;
+import de.flapdoodle.eval.core.exceptions.EvaluationException;
+import de.flapdoodle.eval.core.parser.*;
+import de.flapdoodle.eval.core.tree.*;
 import de.flapdoodle.eval.evaluables.*;
-import de.flapdoodle.eval.exceptions.EvaluationException;
-import de.flapdoodle.eval.parser.*;
-import de.flapdoodle.eval.tree.*;
 
 import java.math.MathContext;
 import java.time.ZoneId;
@@ -18,7 +18,7 @@ import java.util.function.Function;
 @org.immutables.value.Value.Immutable
 public abstract class ExpressionFactory {
 	@org.immutables.value.Value.Default
-	protected MathContext mathContext() {
+	public  MathContext mathContext() {
 		return MathContext.DECIMAL128;
 	}
 
@@ -27,15 +27,15 @@ public abstract class ExpressionFactory {
 		return ZoneId.systemDefault();
 	}
 
-	protected abstract VariableResolver constants();
-	protected abstract TypedEvaluableByName evaluatables();
+	public  abstract VariableResolver constants();
+	public  abstract TypedEvaluableByName evaluatables();
 	protected abstract TypedEvaluableByNumberOfArguments arrayAccess();
 	protected abstract TypedEvaluableByNumberOfArguments propertyAccess();
 	protected abstract BiFunction<String, MathContext, Object> parseNumber();
 	protected abstract Function<String, Object> stringAsValue();
 	protected abstract EvaluableExceptionMapper exceptionMapper();
 
-	protected abstract OperatorMap operatorMap();
+	public abstract OperatorMap operatorMap();
 
 	@org.immutables.value.Value.Auxiliary
 	public final ImmutableExpressionFactory withConstant(String name, Object value) {

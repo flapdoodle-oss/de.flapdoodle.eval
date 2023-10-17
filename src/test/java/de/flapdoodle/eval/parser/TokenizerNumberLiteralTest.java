@@ -16,11 +16,14 @@
  */
 package de.flapdoodle.eval.parser;
 
+import de.flapdoodle.eval.core.parser.ParseException;
+import de.flapdoodle.eval.core.parser.Token;
+import de.flapdoodle.eval.core.parser.Tokenizer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import static de.flapdoodle.eval.parser.TokenType.NUMBER_LITERAL;
+import static de.flapdoodle.eval.core.parser.TokenType.NUMBER_LITERAL;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class TokenizerNumberLiteralTest extends BaseParserTest {

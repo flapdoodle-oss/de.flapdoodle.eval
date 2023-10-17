@@ -1,4 +1,4 @@
-package de.flapdoodle.eval.parser;
+package de.flapdoodle.eval.core.parser;
 
 import org.immutables.value.Value;
 

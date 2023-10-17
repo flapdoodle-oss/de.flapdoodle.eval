@@ -14,24 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.flapdoodle.eval;
+package de.flapdoodle.eval.core.exceptions;
 
-public interface VariableResolver {
-	Object get(String variable);
+public class EvaluableException extends Exception {
 
-	default VariableResolver andThen(VariableResolver fallback) {
-		VariableResolver that = this;
-		return variable -> {
-			Object ret = that.get(variable);
-			return ret != null ? ret : fallback.get(variable);
-		};
+	public EvaluableException(String message) {
+		super(message);
 	}
 
-	default boolean has(String name) {
-		return get(name) != null;
+	public static EvaluableException ofUnsupportedDataTypeInOperation() {
+		return new EvaluableException("Unsupported data types in operation");
 	}
 
-	static ImmutableMapBasedVariableResolver empty() {
-		return MapBasedVariableResolver.empty();
+	public static EvaluableException of(String message, Object ... args) {
+		return new EvaluableException(String.format(message, (args)));
 	}
 }

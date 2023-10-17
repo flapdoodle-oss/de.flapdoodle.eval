@@ -16,6 +16,9 @@
  */
 package de.flapdoodle.eval.parser;
 
+import de.flapdoodle.eval.core.parser.ParseException;
+import de.flapdoodle.eval.core.parser.Token;
+import de.flapdoodle.eval.core.parser.TokenType;
 import org.junit.jupiter.api.Test;
 
 class TokenizerImplicitMultiplicationTest extends BaseParserTest {

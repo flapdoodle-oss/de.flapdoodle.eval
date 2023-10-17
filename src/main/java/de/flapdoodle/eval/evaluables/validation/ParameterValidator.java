@@ -16,7 +16,7 @@
  */
 package de.flapdoodle.eval.evaluables.validation;
 
-import de.flapdoodle.eval.exceptions.EvaluableException;
+import de.flapdoodle.eval.core.exceptions.EvaluableException;
 
 import java.util.Optional;
 
