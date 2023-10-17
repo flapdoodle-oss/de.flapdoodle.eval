@@ -10,8 +10,8 @@ import de.flapdoodle.eval.values.ValueResolver;
 public abstract class ValueLookup extends Node {
 
 	@Override
-	public Value<?> evaluate(ValueResolver variableResolver, EvaluationContext context) throws EvaluationException {
-		Value<?> result = variableResolver.get(token().value());
+	public Object evaluate(ValueResolver variableResolver, EvaluationContext context) throws EvaluationException {
+		Object result = variableResolver.get(token().value());
 		if (result == null) {
 			throw new EvaluationException(
 				token(), String.format("Variable or constant value for '%s' not found", token().value()));

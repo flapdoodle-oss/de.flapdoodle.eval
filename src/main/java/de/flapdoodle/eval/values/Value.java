@@ -57,32 +57,49 @@ public abstract class Value<T> {
 		}
 	}
 
-	public static abstract class ComparableValue<T extends Comparable<T>> extends Value<T> implements Comparable<Value<T>> {
+	@org.immutables.value.Value.Immutable
+	public static abstract class StringValue extends Value<String> implements Comparable<StringValue> {
 		@org.immutables.value.Value.Auxiliary
 		@Override
-		public int compareTo(Value<T> other) {
+		public int compareTo(StringValue other) {
 			return wrapped().compareTo(other.wrapped());
 		}
 	}
 
 	@org.immutables.value.Value.Immutable
-	public static abstract class StringValue extends ComparableValue<String> {
+	public static abstract class NumberValue extends Value<BigDecimal> implements Comparable<NumberValue> {
+		@org.immutables.value.Value.Auxiliary
+		@Override
+		public int compareTo(NumberValue other) {
+			return wrapped().compareTo(other.wrapped());
+		}
 	}
 
 	@org.immutables.value.Value.Immutable
-	public static abstract class NumberValue extends ComparableValue<BigDecimal> {
+	public static abstract class BooleanValue extends Value<Boolean> implements Comparable<BooleanValue> {
+		@org.immutables.value.Value.Auxiliary
+		@Override
+		public int compareTo(BooleanValue other) {
+			return wrapped().compareTo(other.wrapped());
+		}
 	}
 
 	@org.immutables.value.Value.Immutable
-	public static abstract class BooleanValue extends ComparableValue<Boolean> {
+	public static abstract class DateTimeValue extends Value<Instant> implements Comparable<DateTimeValue> {
+		@org.immutables.value.Value.Auxiliary
+		@Override
+		public int compareTo(DateTimeValue other) {
+			return wrapped().compareTo(other.wrapped());
+		}
 	}
 
 	@org.immutables.value.Value.Immutable
-	public static abstract class DateTimeValue extends ComparableValue<Instant> {
-	}
-
-	@org.immutables.value.Value.Immutable
-	public static abstract class DurationValue extends ComparableValue<Duration> {
+	public static abstract class DurationValue extends Value<Duration>  implements Comparable<DurationValue> {
+		@org.immutables.value.Value.Auxiliary
+		@Override
+		public int compareTo(DurationValue other) {
+			return wrapped().compareTo(other.wrapped());
+		}
 	}
 
 	@org.immutables.value.Value.Immutable

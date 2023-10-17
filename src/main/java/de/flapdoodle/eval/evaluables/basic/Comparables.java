@@ -16,7 +16,7 @@ public class Comparables extends TypedEvaluables.Wrapper {
         super(delegate);
     }
 
-    private static class Compare<T extends Comparable<T>, V extends Value.ComparableValue<T>> implements TypedEvaluable.Arg2<V, V, Value.BooleanValue> {
+    private static class Compare<T extends Comparable<T>> implements TypedEvaluable.Arg2<T, T, Value.BooleanValue> {
 
         private final Predicate<Integer> check;
 
@@ -25,33 +25,33 @@ public class Comparables extends TypedEvaluables.Wrapper {
         }
 
         @Override
-        public Value.BooleanValue evaluate(ValueResolver valueResolver, EvaluationContext evaluationContext, Token token, V first, V second) throws EvaluationException {
+        public Value.BooleanValue evaluate(ValueResolver valueResolver, EvaluationContext evaluationContext, Token token, T first, T second) throws EvaluationException {
             return Value.of(check.test(first.compareTo(second)));
         }
     }
 
-    public static class Greater<T extends Comparable<T>, V extends Value.ComparableValue<T>> extends Compare<T, V> {
+    public static class Greater<T extends Comparable<T>> extends Compare<T> {
 
         public Greater() {
             super(it -> it > 0);
         }
     }
 
-    public static class GreaterOrEqual<T extends Comparable<T>, V extends Value.ComparableValue<T>> extends Compare<T, V> {
+    public static class GreaterOrEqual<T extends Comparable<T>> extends Compare<T> {
 
         public GreaterOrEqual() {
             super(it -> it >= 0);
         }
     }
 
-    public static class Less<T extends Comparable<T>, V extends Value.ComparableValue<T>> extends Compare<T, V> {
+    public static class Less<T extends Comparable<T>> extends Compare<T> {
 
         public Less() {
             super(it -> it < 0);
         }
     }
 
-    public static class LessOrEqual<T extends Comparable<T>, V extends Value.ComparableValue<T>> extends Compare<T, V> {
+    public static class LessOrEqual<T extends Comparable<T>> extends Compare<T> {
 
         public LessOrEqual() {
             super(it -> it <= 0);

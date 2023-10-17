@@ -17,12 +17,12 @@
 package de.flapdoodle.eval.values;
 
 public interface ValueResolver {
-	Value<?> get(String variable);
+	Object get(String variable);
 
 	default ValueResolver andThen(ValueResolver fallback) {
 		ValueResolver that = this;
 		return variable -> {
-			Value<?> ret = that.get(variable);
+			Object ret = that.get(variable);
 			return ret != null ? ret : fallback.get(variable);
 		};
 	}

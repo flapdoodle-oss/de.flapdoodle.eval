@@ -146,7 +146,7 @@ public abstract class ExpressionFactory {
 	}
 
 	private Node getVariableOrConstant(Token token) {
-		Value<?> result = constants().get(token.value());
+		Object result = constants().get(token.value());
 		if (result!=null) {
 			return AnyTypeValueNode.of(token, result);
 		}

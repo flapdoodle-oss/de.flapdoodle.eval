@@ -8,14 +8,14 @@ import de.flapdoodle.eval.values.ValueResolver;
 @org.immutables.value.Value.Immutable
 public abstract class AnyTypeValueNode<T> extends ValueNode<T> {
 	@org.immutables.value.Value.Parameter
-	protected abstract Value<T> value();
+	protected abstract T value();
 
 	@Override
-	public Value<T> evaluate(ValueResolver variableResolver, EvaluationContext context) {
+	public T evaluate(ValueResolver variableResolver, EvaluationContext context) {
 		return value();
 	}
 
-	public static <T> AnyTypeValueNode<T> of(Token token, Value<T> value) {
+	public static <T> AnyTypeValueNode<T> of(Token token, T value) {
 		return ImmutableAnyTypeValueNode.<T>builder()
 			.token(token)
 			.value(value)
