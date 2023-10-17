@@ -1,6 +1,7 @@
 package de.flapdoodle.eval.example.evaluables.validation;
 
 import de.flapdoodle.eval.core.exceptions.EvaluableException;
+import de.flapdoodle.eval.core.validation.ParameterValidator;
 import de.flapdoodle.eval.example.Value;
 
 import java.math.BigDecimal;

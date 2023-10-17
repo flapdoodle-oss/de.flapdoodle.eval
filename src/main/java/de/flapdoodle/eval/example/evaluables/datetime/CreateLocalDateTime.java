@@ -7,7 +7,7 @@ import de.flapdoodle.eval.core.evaluables.Parameter;
 import de.flapdoodle.eval.core.evaluables.TypedEvaluable;
 import de.flapdoodle.eval.core.evaluables.TypedEvaluables;
 import de.flapdoodle.eval.example.evaluables.validation.NumberValidator;
-import de.flapdoodle.eval.example.evaluables.validation.ParameterValidator;
+import de.flapdoodle.eval.core.validation.ParameterValidator;
 import de.flapdoodle.eval.core.exceptions.EvaluationException;
 import de.flapdoodle.eval.example.Value;
 
