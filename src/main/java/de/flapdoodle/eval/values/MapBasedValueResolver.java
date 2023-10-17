@@ -21,14 +21,14 @@ public abstract class MapBasedValueResolver implements ValueResolver {
 	}
 
 	@Auxiliary
-	public ImmutableMapBasedValueResolver with(String variable, Value<?> value) {
+	public ImmutableMapBasedValueResolver with(String variable, Object value) {
 		return builder().from(this)
 			.putVariables(variable, value)
 			.build();
 	}
 
 	@Auxiliary
-	public ImmutableMapBasedValueResolver and(String variable, Value<?> value) {
+	public ImmutableMapBasedValueResolver and(String variable, Object value) {
 		return with(variable, value);
 	}
 
