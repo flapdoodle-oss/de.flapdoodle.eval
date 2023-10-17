@@ -21,6 +21,6 @@ import de.flapdoodle.eval.values.Value;
 
 import java.util.Optional;
 
-public interface ParameterValidator<T extends Value<?>> {
+public interface ParameterValidator<T> {
 	Optional<EvaluableException> validate(T parameterValue);
 }

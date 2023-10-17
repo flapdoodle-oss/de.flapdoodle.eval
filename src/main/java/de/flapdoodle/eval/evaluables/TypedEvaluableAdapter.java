@@ -10,7 +10,7 @@ import de.flapdoodle.eval.VariableResolver;
 import java.util.List;
 import java.util.Optional;
 
-class TypedEvaluableAdapter<T extends Value<?>> implements TypedEvaluable<T> {
+class TypedEvaluableAdapter<T> implements TypedEvaluable<T> {
 	private final Signature<T> signature;
 	private final Evaluable<T> delegate;
 

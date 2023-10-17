@@ -33,7 +33,7 @@ public abstract class Node {
     // VisibleForTests
     static Set<String> usedVariables(List<Node> nodes) {
         return nodes.stream()
-          .filter(it -> it instanceof ValueLookup)
+          .filter(it -> it instanceof LookupNode)
           .map(it -> it.token().value())
           .collect(Collectors.toSet());
     }

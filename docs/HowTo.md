@@ -18,7 +18,7 @@ assertThat(expression.usedVariables())
 
 ```java
 ExpressionFactory expressionFactory = ExpressionFactory.builder()
-  .constants(VariableResolver.empty().with("pi", Value.of(3.1415)))
+  .constants(VariableResolver.empty().with("pi",BigDecimal.valueOf(3.1415)))
   .evaluatables(TypedEvaluableMap.builder()
     .putMap("add", TypedEvaluables.builder()
       .addList(TypedEvaluable.of(Value.NumberValue.class, Value.NumberValue.class, Value.NumberValue.class,
@@ -39,7 +39,7 @@ ExpressionFactory expressionFactory = ExpressionFactory.builder()
   .build();
 
 assertThat(expressionFactory.parse("pi").evaluate(VariableResolver.empty()))
-  .isEqualTo(Value.of(3.1415));
+  .isEqualTo(BigDecimal.valueOf(3.1415));
 assertThat(expressionFactory.parse("add(2,3)").evaluate(VariableResolver.empty()))
   .isEqualTo(Value.of(BigDecimal.valueOf(5L)));
 assertThat(expressionFactory.parse("2+3").evaluate(VariableResolver.empty()))

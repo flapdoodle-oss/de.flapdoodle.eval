@@ -6,7 +6,7 @@ import de.flapdoodle.eval.parser.Token;
 import de.flapdoodle.eval.VariableResolver;
 
 @org.immutables.value.Value.Immutable
-public abstract class ValueLookup extends Node {
+public abstract class LookupNode extends Node {
 
 	@Override
 	public Object evaluate(VariableResolver variableResolver, EvaluationContext context) throws EvaluationException {
@@ -18,8 +18,8 @@ public abstract class ValueLookup extends Node {
 		return result;
 	}
 
-	public static ValueLookup of(Token token) {
-		return ImmutableValueLookup.builder()
+	public static LookupNode of(Token token) {
+		return ImmutableLookupNode.builder()
 			.token(token)
 			.build();
 	}

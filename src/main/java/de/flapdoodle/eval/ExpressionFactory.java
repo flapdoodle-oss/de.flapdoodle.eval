@@ -147,7 +147,7 @@ public abstract class ExpressionFactory {
 		if (result!=null) {
 			return AnyTypeValueNode.of(token, result);
 		}
-		return ValueLookup.of(token);
+		return LookupNode.of(token);
 	}
 
 	private Node evaluateFunction(ASTNode startNode, Token token) throws EvaluationException {

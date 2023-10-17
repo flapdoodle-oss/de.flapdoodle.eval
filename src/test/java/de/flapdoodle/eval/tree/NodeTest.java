@@ -51,7 +51,7 @@ class NodeTest {
 	public void usedVars() {
 		Set<String> variables = Node.usedVariables(Arrays.asList(
 			valueNode("a"),
-			ValueLookup.of(token("var", TokenType.STRING_LITERAL))));
+			LookupNode.of(token("var", TokenType.STRING_LITERAL))));
 
 		assertThat(variables)
 			.containsExactly("var");

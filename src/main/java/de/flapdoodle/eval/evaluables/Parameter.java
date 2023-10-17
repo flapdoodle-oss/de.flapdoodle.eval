@@ -28,7 +28,7 @@ import java.util.Optional;
 
 /** Definition of a function parameter. */
 @Value.Immutable
-public interface Parameter<T extends de.flapdoodle.eval.values.Value<?>> {
+public interface Parameter<T> {
 
 	@Value.Parameter
 	Class<T> type();
@@ -46,22 +46,17 @@ public interface Parameter<T extends de.flapdoodle.eval.values.Value<?>> {
 
 	List<ParameterValidator<T>> validators();
 
-	static <T extends de.flapdoodle.eval.values.Value<?>> ImmutableParameter<T> of(Class<T> type) {
+	static <T> ImmutableParameter<T> of(Class<T> type) {
 		return ImmutableParameter.of(type);
 	}
 
-	static <T extends de.flapdoodle.eval.values.Value<?>> ImmutableParameter<T> lazyWith(Class<T> type) {
+	static <T> ImmutableParameter<T> lazyWith(Class<T> type) {
 		return ImmutableParameter.of(type).withIsLazy(true);
-	}
-
-	static ImmutableParameter<de.flapdoodle.eval.values.Value<?>> anyLazy() {
-		return ImmutableParameter.of((Class) de.flapdoodle.eval.values.Value.class)
-			.withIsLazy(true);
 	}
 
 	@Value.Auxiliary
 	@Deprecated
-	default void validate(Token token, de.flapdoodle.eval.values.Value<?> parameterValue) throws EvaluationException {
+	default void validate(Token token, Object parameterValue) throws EvaluationException {
 		Optional<EvaluableException> error = validationError(parameterValue);
 		if (error.isPresent()) {
 			throw new EvaluationException(token, error.get());

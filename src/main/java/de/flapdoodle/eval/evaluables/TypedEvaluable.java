@@ -48,29 +48,29 @@ public interface TypedEvaluable<T> extends Evaluable<T> {
         T evaluate(VariableResolver variableResolver, EvaluationContext evaluationContext, Token token, A first, B second, C third, D fourth, E fifth, F sixth, G seventh) throws EvaluationException;
     }
 
-    static <T extends Value<?>> TypedEvaluable<T> of(Class<T> returnType, TypedEvaluable.Arg0<T> function) {
+    static <T> TypedEvaluable<T> of(Class<T> returnType, TypedEvaluable.Arg0<T> function) {
         Evaluable<T> evaluable = (valueResolver, evaluationContext, token, arguments) -> function.evaluate(valueResolver, evaluationContext, token);
         return new TypedEvaluableAdapter<>(Signature.of(returnType), evaluable.named(function.toString()));
     }
 
-    static <T extends Value<?>, A extends Value<?>> TypedEvaluable<T> of(Class<T> returnType, Parameter<A> a, TypedEvaluable.Arg1<A, T> function) {
+    static <T, A> TypedEvaluable<T> of(Class<T> returnType, Parameter<A> a, TypedEvaluable.Arg1<A, T> function) {
         Evaluable<T> evaluable = (valueResolver, evaluationContext, token, arguments) -> function.evaluate(valueResolver, evaluationContext, token,
                 a.type().cast(arguments.get(0)));
         return new TypedEvaluableAdapter<>(Signature.of(returnType, a), evaluable.named(function.toString()));
     }
 
-    static <T extends Value<?>, A extends Value<?>> TypedEvaluable<T> of(Class<T> returnType, Class<A> a, TypedEvaluable.Arg1<A, T> function) {
+    static <T, A> TypedEvaluable<T> of(Class<T> returnType, Class<A> a, TypedEvaluable.Arg1<A, T> function) {
         return of(returnType, Parameter.of(a), function);
     }
 
-    static <T extends Value<?>, A extends Value<?>> TypedEvaluable<T> ofVarArg(Class<T> returnType, Class<A> a, TypedEvaluable.VarArg1<A, T> function) {
+    static <T, A> TypedEvaluable<T> ofVarArg(Class<T> returnType, Class<A> a, TypedEvaluable.VarArg1<A, T> function) {
         Evaluable<T> evaluable = (valueResolver, evaluationContext, token, arguments) -> function.evaluate(valueResolver, evaluationContext, token,
                 arguments.stream()
                         .map(a::cast).collect(Collectors.toList()));
         return new TypedEvaluableAdapter<>(Signature.ofVarArg(returnType, Parameter.of(a)), evaluable.named(function.toString()));
     }
 
-    static <T extends Value<?>, A extends Value<?>, B extends Value<?>> TypedEvaluable<T> of(Class<T> returnType, Parameter<A> a, Parameter<B> b,
+    static <T, A, B> TypedEvaluable<T> of(Class<T> returnType, Parameter<A> a, Parameter<B> b,
                                                                                                TypedEvaluable.Arg2<A, B, T> function) {
         Evaluable<T> evaluable = (valueResolver, evaluationContext, token, arguments) -> function.evaluate(valueResolver, evaluationContext, token,
                 a.type().cast(arguments.get(0)),
@@ -78,17 +78,17 @@ public interface TypedEvaluable<T> extends Evaluable<T> {
         return new TypedEvaluableAdapter<>(Signature.of(returnType, a, b), evaluable.named(function.toString()));
     }
 
-    static <T extends Value<?>, A extends Value<?>, B extends Value<?>> TypedEvaluable<T> of(Class<T> returnType, Class<A> a, Class<B> b,
+    static <T, A, B> TypedEvaluable<T> of(Class<T> returnType, Class<A> a, Class<B> b,
                                                                                                TypedEvaluable.Arg2<A, B, T> function) {
         return of(returnType, Parameter.of(a), Parameter.of(b), function);
     }
 
-    static <T extends Value<?>, A extends Value<?>, B extends Value<?>, C extends Value<?>> TypedEvaluable<T> of(Class<T> returnType, Class<A> a, Class<B> b, Class<C> c,
+    static <T, A, B, C> TypedEvaluable<T> of(Class<T> returnType, Class<A> a, Class<B> b, Class<C> c,
                                                                                                                    TypedEvaluable.Arg3<A, B, C, T> function) {
         return of(returnType, Parameter.of(a), Parameter.of(b), Parameter.of(c), function);
     }
 
-    static <T extends Value<?>, A extends Value<?>, B extends Value<?>, C extends Value<?>> TypedEvaluable<T> of(Class<T> returnType, Parameter<A> a, Parameter<B> b, Parameter<C> c,
+    static <T, A, B, C> TypedEvaluable<T> of(Class<T> returnType, Parameter<A> a, Parameter<B> b, Parameter<C> c,
                                                                                                                    TypedEvaluable.Arg3<A, B, C, T> function) {
         Evaluable<T> evaluable = (valueResolver, evaluationContext, token, arguments) -> function.evaluate(valueResolver, evaluationContext, token,
                 a.type().cast(arguments.get(0)),
@@ -97,7 +97,7 @@ public interface TypedEvaluable<T> extends Evaluable<T> {
         return new TypedEvaluableAdapter<>(Signature.of(returnType, a, b, c), evaluable.named(function.toString()));
     }
 
-    static <T extends Value<?>, A extends Value<?>, B extends Value<?>, C extends Value<?>, D extends Value<?>> TypedEvaluable<T> of(Class<T> returnType, Parameter<A> a, Parameter<B> b, Parameter<C> c, Parameter<D> d,
+    static <T, A, B, C, D> TypedEvaluable<T> of(Class<T> returnType, Parameter<A> a, Parameter<B> b, Parameter<C> c, Parameter<D> d,
                                                                                                                                        TypedEvaluable.Arg4<A, B, C, D, T> function) {
         Evaluable<T> evaluable = (valueResolver, evaluationContext, token, arguments) -> function.evaluate(valueResolver, evaluationContext, token,
                 a.type().cast(arguments.get(0)),
@@ -107,7 +107,7 @@ public interface TypedEvaluable<T> extends Evaluable<T> {
         return new TypedEvaluableAdapter<>(Signature.of(returnType, a, b, c, d), evaluable.named(function.toString()));
     }
 
-    static <T extends Value<?>, A extends Value<?>, B extends Value<?>, C extends Value<?>, D extends Value<?>, E extends Value<?>> TypedEvaluable<T> of(Class<T> returnType, Parameter<A> a, Parameter<B> b, Parameter<C> c, Parameter<D> d, Parameter<E> e,
+    static <T, A, B, C, D, E> TypedEvaluable<T> of(Class<T> returnType, Parameter<A> a, Parameter<B> b, Parameter<C> c, Parameter<D> d, Parameter<E> e,
                                                                                                                                        TypedEvaluable.Arg5<A, B, C, D, E, T> function) {
         Evaluable<T> evaluable = (valueResolver, evaluationContext, token, arguments) -> function.evaluate(valueResolver, evaluationContext, token,
                 a.type().cast(arguments.get(0)),
@@ -118,7 +118,7 @@ public interface TypedEvaluable<T> extends Evaluable<T> {
         return new TypedEvaluableAdapter<>(Signature.of(returnType, a, b, c, d, e), evaluable.named(function.toString()));
     }
 
-    static <T extends Value<?>, A extends Value<?>, B extends Value<?>, C extends Value<?>, D extends Value<?>, E extends Value<?>, F extends Value<?>> TypedEvaluable<T> of(Class<T> returnType, Parameter<A> a, Parameter<B> b, Parameter<C> c, Parameter<D> d, Parameter<E> e, Parameter<F> f,
+    static <T, A, B, C, D, E, F> TypedEvaluable<T> of(Class<T> returnType, Parameter<A> a, Parameter<B> b, Parameter<C> c, Parameter<D> d, Parameter<E> e, Parameter<F> f,
                                                                                                                                                            TypedEvaluable.Arg6<A, B, C, D, E, F, T> function) {
         Evaluable<T> evaluable = (valueResolver, evaluationContext, token, arguments) -> function.evaluate(valueResolver, evaluationContext, token,
                 a.type().cast(arguments.get(0)),
@@ -130,7 +130,7 @@ public interface TypedEvaluable<T> extends Evaluable<T> {
         return new TypedEvaluableAdapter<>(Signature.of(returnType, a, b, c, d, e, f), evaluable.named(function.toString()));
     }
 
-    static <T extends Value<?>, A extends Value<?>, B extends Value<?>, C extends Value<?>, D extends Value<?>, E extends Value<?>, F extends Value<?>, G extends Value<?>> TypedEvaluable<T> of(Class<T> returnType, Parameter<A> a, Parameter<B> b, Parameter<C> c, Parameter<D> d, Parameter<E> e, Parameter<F> f, Parameter<G> g,
+    static <T, A, B, C, D, E, F, G> TypedEvaluable<T> of(Class<T> returnType, Parameter<A> a, Parameter<B> b, Parameter<C> c, Parameter<D> d, Parameter<E> e, Parameter<F> f, Parameter<G> g,
                                                                                                                                                                                TypedEvaluable.Arg7<A, B, C, D, E, F, G, T> function) {
         Evaluable<T> evaluable = (valueResolver, evaluationContext, token, arguments) -> function.evaluate(valueResolver, evaluationContext, token,
                 a.type().cast(arguments.get(0)),

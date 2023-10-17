@@ -67,19 +67,19 @@ public abstract class Signature<T> {
 		return Optional.empty();
 	}
 
-	public static <T extends Value<?>> Signature<T> of(Class<T> returnType, List<? extends Parameter<?>> parameters) {
+	public static <T> Signature<T> of(Class<T> returnType, List<? extends Parameter<?>> parameters) {
 		return ImmutableSignature.builder(returnType)
 			.addAllParameters(parameters)
 			.build();
 	}
 
-	public static <T extends Value<?>> Signature<T> of(Class<T> returnType, Parameter<?>... parameters) {
+	public static <T> Signature<T> of(Class<T> returnType, Parameter<?>... parameters) {
 		return ImmutableSignature.builder(returnType)
 			.addParameters(parameters)
 			.build();
 	}
 
-	public static <T extends Value<?>> Signature<T> ofVarArg(Class<T> returnType, Parameter<?>... parameters) {
+	public static <T> Signature<T> ofVarArg(Class<T> returnType, Parameter<?>... parameters) {
 		return ImmutableSignature.builder(returnType)
 			.addParameters(parameters)
 			.isVarArg(true)
