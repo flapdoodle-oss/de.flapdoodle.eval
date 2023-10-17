@@ -1,11 +1,10 @@
 package de.flapdoodle.eval.evaluables;
 
-import de.flapdoodle.eval.exceptions.EvaluableException;
 import de.flapdoodle.eval.EvaluationContext;
+import de.flapdoodle.eval.VariableResolver;
+import de.flapdoodle.eval.exceptions.EvaluableException;
 import de.flapdoodle.eval.exceptions.EvaluationException;
 import de.flapdoodle.eval.parser.Token;
-import de.flapdoodle.eval.values.Value;
-import de.flapdoodle.eval.VariableResolver;
 
 import java.util.List;
 import java.util.Optional;

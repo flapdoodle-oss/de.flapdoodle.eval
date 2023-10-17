@@ -18,39 +18,40 @@ assertThat(expression.usedVariables())
 
 ```java
 ExpressionFactory expressionFactory = ExpressionFactory.builder()
-  .constants(VariableResolver.empty().with("pi",BigDecimal.valueOf(3.1415)))
+  .constants(VariableResolver.empty().with("pi", BigDecimal.valueOf(3.1415)))
   .evaluatables(TypedEvaluableMap.builder()
     .putMap("add", TypedEvaluables.builder()
-      .addList(TypedEvaluable.of(Value.NumberValue.class, Value.NumberValue.class, Value.NumberValue.class,
-        (valueResolver, evaluationContext, token, first, second) -> Value.of(first.wrapped().add(second.wrapped()))))
+      .addList(TypedEvaluable.of(BigDecimal.class, BigDecimal.class, BigDecimal.class,
+        (valueResolver, evaluationContext, token, first, second) -> first.add(second)))
       .build())
     .build())
   .operatorMap(OperatorMap.builder()
     .putInfix("+", OperatorMapping.of(Precedence.OPERATOR_PRECEDENCE_UNARY, "add"))
     .build())
   .arrayAccess(TypedEvaluables.builder()
-    .addList(TypedEvaluable.of(Value.StringValue.class, Value.StringValue.class, Value.NumberValue.class,
-      (valueResolver, evaluationContext, token, first, second) -> Value.of("" + first.wrapped().charAt(second.wrapped().intValue()))))
+    .addList(TypedEvaluable.of(String.class, String.class, BigDecimal.class,
+      (valueResolver, evaluationContext, token, first, second) -> "" + first.charAt(second.intValue())))
     .build())
   .propertyAccess(TypedEvaluables.builder()
-    .addList(TypedEvaluable.of(Value.StringValue.class, Value.MapValue.class, Value.StringValue.class,
-      (valueResolver, evaluationContext, token, first, second) -> Value.of("" + first.wrapped().get(second.wrapped()).wrapped())))
+    .addList(TypedEvaluable.of(String.class, Map.class, String.class,
+      (valueResolver, evaluationContext, token, first, second) -> "" + first.get(second)))
     .build())
+  .parseNumber((s, m) -> new BigDecimal(s))
+  .stringAsValue(s -> s)
   .build();
 
 assertThat(expressionFactory.parse("pi").evaluate(VariableResolver.empty()))
   .isEqualTo(BigDecimal.valueOf(3.1415));
 assertThat(expressionFactory.parse("add(2,3)").evaluate(VariableResolver.empty()))
-  .isEqualTo(Value.of(BigDecimal.valueOf(5L)));
+  .isEqualTo(BigDecimal.valueOf(5L));
 assertThat(expressionFactory.parse("2+3").evaluate(VariableResolver.empty()))
-  .isEqualTo(Value.of(BigDecimal.valueOf(5L)));
+  .isEqualTo(BigDecimal.valueOf(5L));
 assertThat(expressionFactory.parse("\"fun\"[1]").evaluate(VariableResolver.empty()))
-  .isEqualTo(Value.of("u"));
-    MapBasedVariableResolver mapBasedValueResolver = VariableResolver.empty();
-    ValueMap value = ValueMap.builder()
-        .putValues("key", Value.of("stuff"))
-        .build();
-    assertThat(expressionFactory.parse("map.key")
-  .evaluate(mapBasedValueResolver.with("map", Value.of(value))))
-  .isEqualTo(Value.of("stuff"));
+  .isEqualTo("u");
+MapBasedVariableResolver mapBasedValueResolver = VariableResolver.empty();
+Map<Object, Object> value = new LinkedHashMap<>();
+value.put("key", "stuff");
+assertThat(expressionFactory.parse("map.key")
+  .evaluate(mapBasedValueResolver.with("map", value)))
+  .isEqualTo("stuff");
 ```

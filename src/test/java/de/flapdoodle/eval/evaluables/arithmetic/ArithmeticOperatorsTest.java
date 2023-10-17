@@ -17,8 +17,8 @@
 package de.flapdoodle.eval.evaluables.arithmetic;
 
 import de.flapdoodle.eval.BaseEvaluationTest;
-import de.flapdoodle.eval.exceptions.EvaluationException;
 import de.flapdoodle.eval.config.TestConfigurationProvider;
+import de.flapdoodle.eval.exceptions.EvaluationException;
 import de.flapdoodle.eval.parser.ParseException;
 import de.flapdoodle.eval.values.Value;
 import org.junit.jupiter.api.Test;

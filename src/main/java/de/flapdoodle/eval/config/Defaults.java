@@ -10,9 +10,12 @@ import de.flapdoodle.eval.evaluables.string.Contains;
 import de.flapdoodle.eval.values.Value;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.math.MathContext;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.function.BiFunction;
 
 public abstract class Defaults {
     private Defaults() {
@@ -176,5 +179,18 @@ public abstract class Defaults {
                 .putMap("and", de.flapdoodle.eval.evaluables.booleans.Combine.and())
                 .putMap("or", de.flapdoodle.eval.evaluables.booleans.Combine.or())
                 .build();
+    }
+
+    public static Value.NumberValue numberFromString(String value, MathContext mathContext) {
+        if (value.startsWith("0x") || value.startsWith("0X")) {
+            BigInteger hexToInteger = new BigInteger(value.substring(2), 16);
+            return Value.of(new BigDecimal(hexToInteger, mathContext));
+        } else {
+            return Value.of(new BigDecimal(value, mathContext));
+        }
+    }
+
+    public static Value.StringValue valueFromString(String s) {
+        return Value.of(s);
     }
 }

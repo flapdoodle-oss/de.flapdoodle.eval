@@ -4,7 +4,10 @@ import de.flapdoodle.eval.config.Defaults;
 import de.flapdoodle.eval.evaluables.*;
 import de.flapdoodle.eval.exceptions.EvaluationException;
 import de.flapdoodle.eval.parser.*;
-import de.flapdoodle.eval.tree.*;
+import de.flapdoodle.eval.tree.ValueNode;
+import de.flapdoodle.eval.tree.EvaluatableNode;
+import de.flapdoodle.eval.tree.LookupNode;
+import de.flapdoodle.eval.tree.Node;
 import de.flapdoodle.eval.values.Value;
 
 import java.math.BigDecimal;
@@ -15,6 +18,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
 @org.immutables.value.Value.Immutable
 public abstract class ExpressionFactory {
@@ -32,11 +37,13 @@ public abstract class ExpressionFactory {
 	protected abstract TypedEvaluableByName evaluatables();
 	protected abstract TypedEvaluableByNumberOfArguments arrayAccess();
 	protected abstract TypedEvaluableByNumberOfArguments propertyAccess();
+	protected abstract BiFunction<String, MathContext, Object> parseNumber();
+	protected abstract Function<String, Object> stringAsValue();
 
 	protected abstract OperatorMap operatorMap();
 
 	@org.immutables.value.Value.Auxiliary
-	public final ImmutableExpressionFactory withConstant(String name, Value<?> value) {
+	public final ImmutableExpressionFactory withConstant(String name, Object value) {
 		return ImmutableExpressionFactory.copyOf(this)
 				.withConstants(MapBasedVariableResolver.empty()
 						.with(name, value)
@@ -72,10 +79,10 @@ public abstract class ExpressionFactory {
 		Token token = startNode.getToken();
 		switch (token.type()) {
 			case NUMBER_LITERAL:
-				result = ComparableValueNode.of(token, numberOfString(token.value(), mathContext()));
+				result = ValueNode.of(token, parseNumber().apply(token.value(), mathContext()));
 				break;
 			case STRING_LITERAL:
-				result = ComparableValueNode.of(token, Value.of(token.value()));
+				result = ValueNode.of(token, stringAsValue().apply(token.value()));
 				break;
 			case VARIABLE_OR_CONSTANT:
 				result = getVariableOrConstant(token);
@@ -145,7 +152,7 @@ public abstract class ExpressionFactory {
 	private Node getVariableOrConstant(Token token) {
 		Object result = constants().get(token.value());
 		if (result!=null) {
-			return AnyTypeValueNode.of(token, result);
+			return ValueNode.of(token, result);
 		}
 		return LookupNode.of(token);
 	}
@@ -177,22 +184,13 @@ public abstract class ExpressionFactory {
 	private Node evaluateStructureSeparator(ASTNode startNode) throws EvaluationException {
 		Node structure = map(startNode.getParameters().get(0));
 		Token nameToken = startNode.getParameters().get(1).getToken();
-		Node name = AnyTypeValueNode.of(nameToken, Value.of(nameToken.value()));
+		Node name = ValueNode.of(nameToken, stringAsValue().apply(nameToken.value()));
 
 		Optional<? extends TypedEvaluableByArguments> propertyAccess = propertyAccess().filterByNumberOfArguments(2);
 
 		if (!propertyAccess.isPresent()) throw new EvaluationException(startNode.getToken(), "could not find property access");
 
 		return EvaluatableNode.of(startNode.getToken(), propertyAccess.get(), Arrays.asList(structure, name));
-	}
-
-	private static Value.NumberValue numberOfString(String value, MathContext mathContext) {
-		if (value.startsWith("0x") || value.startsWith("0X")) {
-			BigInteger hexToInteger = new BigInteger(value.substring(2), 16);
-			return Value.of(new BigDecimal(hexToInteger, mathContext));
-		} else {
-			return Value.of(new BigDecimal(value, mathContext));
-		}
 	}
 
 	public static ImmutableExpressionFactory.Builder builder() {
@@ -205,6 +203,8 @@ public abstract class ExpressionFactory {
 			.evaluatables(Defaults.evaluatables())
 			.arrayAccess(Defaults.arrayAccess())
 			.propertyAccess(Defaults.propertyAccess())
+			.parseNumber(Defaults::numberFromString)
+			.stringAsValue(Defaults::valueFromString)
 			.operatorMap(Defaults.operatorMap())
 			.build();
 	}

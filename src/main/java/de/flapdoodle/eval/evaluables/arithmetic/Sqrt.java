@@ -2,11 +2,11 @@ package de.flapdoodle.eval.evaluables.arithmetic;
 
 import de.flapdoodle.eval.EvaluationContext;
 import de.flapdoodle.eval.VariableResolver;
-import de.flapdoodle.eval.exceptions.EvaluationException;
 import de.flapdoodle.eval.evaluables.Parameter;
 import de.flapdoodle.eval.evaluables.TypedEvaluable;
 import de.flapdoodle.eval.evaluables.TypedEvaluables;
 import de.flapdoodle.eval.evaluables.validation.NumberValidator;
+import de.flapdoodle.eval.exceptions.EvaluationException;
 import de.flapdoodle.eval.parser.Token;
 import de.flapdoodle.eval.values.Value;
 

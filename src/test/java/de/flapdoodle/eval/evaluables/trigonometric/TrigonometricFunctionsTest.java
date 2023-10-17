@@ -16,13 +16,9 @@
  */
 package de.flapdoodle.eval.evaluables.trigonometric;
 
-import de.flapdoodle.eval.BaseEvaluationTest;
-import de.flapdoodle.eval.VariableResolver;
+import de.flapdoodle.eval.*;
 import de.flapdoodle.eval.exceptions.EvaluationException;
-import de.flapdoodle.eval.Expression;
-import de.flapdoodle.eval.ExpressionFactory;
 import de.flapdoodle.eval.parser.ParseException;
-import de.flapdoodle.eval.MapBasedVariableResolver;
 import de.flapdoodle.eval.values.Value;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

@@ -18,7 +18,10 @@ package de.flapdoodle.eval;
 
 import de.flapdoodle.eval.exceptions.EvaluationException;
 import de.flapdoodle.eval.parser.ParseException;
-import de.flapdoodle.eval.values.*;
+import de.flapdoodle.eval.values.ImmutableValueMap;
+import de.flapdoodle.eval.values.Value;
+import de.flapdoodle.eval.values.ValueMap;
+import de.flapdoodle.eval.values.Values;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
