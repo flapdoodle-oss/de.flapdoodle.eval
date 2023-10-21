@@ -22,7 +22,7 @@ public abstract class Engine {
 	protected abstract List<Flow<?>> flows();
 	protected abstract List<Transaction> transactions();
 
-	protected void calculate(LocalDate start, LocalDate end) {
+	public FlowStates calculate(LocalDate start, LocalDate end) {
 		Preconditions.checkArgument(start.isBefore(end),"%s >= %s", start, end);
 
 		Map<FlowId<?>, Flow<?>> flowMap = flows().stream()
@@ -35,8 +35,6 @@ public abstract class Engine {
 		LocalDate current=start;
 
 		do {
-			System.out.println("--> "+current);
-
 			List<FlowChangeEntry<?>> changes=new ArrayList<>();
 
 			for (Transaction transaction : transactions()) {
@@ -57,6 +55,8 @@ public abstract class Engine {
 
 			current=current.plusDays(1);
 		} while (!current.isAfter(end));
+
+		return states;
 	}
 
 	private FlowStateMap getStartStates() {

@@ -3,13 +3,13 @@ package de.flapdoodle.eval.explore.engine;
 import de.flapdoodle.eval.explore.calculation.Calculation;
 import de.flapdoodle.eval.explore.calculation.FlowChange;
 import de.flapdoodle.eval.explore.calculation.Transaction;
-import de.flapdoodle.eval.explore.types.DateRange;
-import de.flapdoodle.eval.explore.types.Flow;
-import de.flapdoodle.eval.explore.types.FlowId;
-import de.flapdoodle.eval.explore.types.FlowType;
+import de.flapdoodle.eval.explore.types.*;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 class EngineTest {
 
@@ -29,6 +29,10 @@ class EngineTest {
 				.build())
 			.build();
 
-		engine.calculate(now, now.plusDays(10));
+		FlowStates result = engine.calculate(now, now.plusDays(10));
+
+		assertThat(result.get(now.plusDays(10)).get(dummy))
+			.isPresent()
+			.contains(FlowState.of(100.0, 110.0));
 	}
 }
