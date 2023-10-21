@@ -9,8 +9,15 @@ import java.util.function.Function;
 @Value.Immutable
 public interface DateRange {
 	LocalDate start();
+
 	Optional<LocalDate> end();
+
 	Function<LocalDate, LocalDate> next();
+
+	@Value.Auxiliary
+	default boolean isActive(LocalDate current) {
+		return isBeforeOrEqual(start(), current) && (!end().isPresent() || isAfterOrEqual(end().get(), current));
+	}
 
 	static DateRange of(LocalDate start, Function<LocalDate, LocalDate> next) {
 		return ImmutableDateRange.builder()
@@ -25,5 +32,13 @@ public interface DateRange {
 			.next(next)
 			.end(end)
 			.build();
+	}
+
+	static boolean isBeforeOrEqual(LocalDate a, LocalDate b) {
+		return !a.isAfter(b);
+	}
+
+	static boolean isAfterOrEqual(LocalDate a, LocalDate b) {
+		return !a.isBefore(b);
 	}
 }

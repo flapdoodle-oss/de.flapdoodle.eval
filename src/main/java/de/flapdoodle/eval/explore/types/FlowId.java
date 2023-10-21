@@ -7,9 +7,9 @@ import java.util.UUID;
 @Value.Immutable
 public interface FlowId<T> {
 	UUID id();
-	Class<T> type();
+	FlowType<T> type();
 
-	static <T> FlowId<T> of(Class<T> type) {
+	static <T> FlowId<T> of(FlowType<T> type) {
 		return ImmutableFlowId.<T>builder()
 			.id(UUID.randomUUID())
 			.type(type)

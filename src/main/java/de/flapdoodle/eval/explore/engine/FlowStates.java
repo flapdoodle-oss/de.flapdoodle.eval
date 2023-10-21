@@ -14,18 +14,30 @@ import java.util.Optional;
 public abstract class FlowStates {
 	protected abstract Map<LocalDate, FlowStateMap> values();
 
+	protected <T> FlowState<T> aggregate(FlowId<T> id,LocalDate start, LocalDate end) {
+		FlowStateMap startStateMap = get(start);
+		FlowState<T> startState = Preconditions.checkPresent(startStateMap.get(id),"could not find state for %s", id).get();
+		T s = startState.before();
+
+		FlowStateMap endStateMap = get(end);
+		FlowState<T> endState = Preconditions.checkPresent(endStateMap.get(id),"could not find state for %s", id).get();
+		T e = endState.after();
+
+		return FlowState.of(s,e);
+	}
+
 	@Value.Auxiliary
-	public FlowStateLookup of(LocalDate lastDate, LocalDate date) {
+	public FlowStateLookup stateLookupOf(LocalDate lastDate, LocalDate current) {
 		return new FlowStateLookup() {
 			@Override
 			public <T> FlowState<T> stateOf(FlowId<T> id) {
-				FlowStateMap current = Preconditions.checkNotNull(values().get(date), "could not get state for %s", date);
-				FlowStateMap last = values().get(lastDate);
-				Optional<T> currentValue = current.get(id);
-				Preconditions.checkArgument(currentValue.isPresent(), "could not find state for %s", id);
-				return FlowState.of(last.get(id).orElse(currentValue.get()), currentValue.get());
+				return aggregate(id, lastDate, current);
 			}
 		};
+	}
+
+	public FlowStateMap get(LocalDate localDate) {
+		return Preconditions.checkNotNull(values().get(localDate),"could not get entry for %s", localDate);
 	}
 
 	public FlowStates with(LocalDate date, FlowStateMap states) {

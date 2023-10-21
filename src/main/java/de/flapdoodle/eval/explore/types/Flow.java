@@ -10,13 +10,10 @@ public interface Flow<T> {
 
 	T start();
 
-	BiFunction<T, T, T> reducer();
-
-	static <T> Flow<T> of(FlowId<T> id, T start, BiFunction<T, T, T> reducer) {
+	static <T> Flow<T> of(FlowId<T> id, T start) {
 		return ImmutableFlow.<T>builder()
 			.id(id)
 			.start(start)
-			.reducer(reducer)
 			.build();
 	}
 }

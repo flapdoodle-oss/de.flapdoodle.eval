@@ -4,13 +4,13 @@ import org.immutables.value.Value;
 
 @Value.Immutable
 public interface FlowState<T> {
-	T current();
-	T last();
+	T before();
+	T after();
 
-	static <T> FlowState<T> of(T last, T current) {
+	static <T> FlowState<T> of(T before, T after) {
 		return ImmutableFlowState.<T>builder()
-			.last(last)
-			.current(current)
+			.before(before)
+			.after(after)
 			.build();
 	}
 }
