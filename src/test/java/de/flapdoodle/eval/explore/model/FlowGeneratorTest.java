@@ -1,9 +1,10 @@
 package de.flapdoodle.eval.explore.model;
 
 import de.flapdoodle.eval.explore.data.Change;
+import de.flapdoodle.eval.explore.types.DateRange;
+import de.flapdoodle.eval.explore.types.FlowId;
 import org.junit.jupiter.api.Test;
 
-import java.time.Duration;
 import java.time.LocalDate;
 
 class FlowGeneratorTest {

@@ -1,5 +1,7 @@
 package de.flapdoodle.eval.explore.model;
 
+import de.flapdoodle.eval.explore.types.DateRange;
+import de.flapdoodle.eval.explore.types.FlowId;
 import org.immutables.value.Value;
 
 @Value.Immutable

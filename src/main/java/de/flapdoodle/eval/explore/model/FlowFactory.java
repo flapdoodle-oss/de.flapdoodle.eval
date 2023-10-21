@@ -2,6 +2,7 @@ package de.flapdoodle.eval.explore.model;
 
 import de.flapdoodle.eval.explore.data.Change;
 import de.flapdoodle.eval.explore.data.ChangeList;
+import de.flapdoodle.eval.explore.types.FlowId;
 import org.immutables.value.Value;
 
 import java.util.function.BiFunction;

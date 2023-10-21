@@ -1,4 +1,4 @@
-package de.flapdoodle.eval.explore.model;
+package de.flapdoodle.eval.explore.types;
 
 import org.immutables.value.Value;
 

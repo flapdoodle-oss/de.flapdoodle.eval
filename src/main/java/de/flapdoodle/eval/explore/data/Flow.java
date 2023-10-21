@@ -1,6 +1,6 @@
 package de.flapdoodle.eval.explore.data;
 
-import de.flapdoodle.eval.explore.model.FlowId;
+import de.flapdoodle.eval.explore.types.FlowId;
 
 import java.util.List;
 
