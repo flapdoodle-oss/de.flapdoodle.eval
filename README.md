@@ -8,7 +8,7 @@ expression evaluator for java
 
 ### Maven
 
-Stable (Maven Central Repository, Released: 21.07.2023 - wait 24hrs for [maven central](http://repo1.maven.org/maven2/de/flapdoodle/java8/de.flapdoodle.java8/maven-metadata.xml))
+Stable (Maven Central Repository, Released: 21.02.2024 - wait 24hrs for [maven central](http://repo1.maven.org/maven2/de/flapdoodle/java8/de.flapdoodle.java8/maven-metadata.xml))
 
 	<dependency>
 		<groupId>de.flapdoodle.eval</groupId>
