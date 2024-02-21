@@ -45,8 +45,7 @@ public class ZonedDateTimeParser extends TypedEvaluables.Wrapper {
             DateTimeFormatter formatter =
                     (format == null
                             ? DateTimeFormatter.ISO_ZONED_DATE_TIME
-                            : DateTimeFormatter.ofPattern(format))
-                            .withZone(zoneId);
+                            : DateTimeFormatter.ofPattern(format).withZone(zoneId));
             ZonedDateTime zonedDateTime = ZonedDateTime.parse(value, formatter);
             return Optional.of(zonedDateTime.toInstant());
         }
