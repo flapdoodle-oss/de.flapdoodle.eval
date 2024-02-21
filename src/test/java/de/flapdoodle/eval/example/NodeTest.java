@@ -24,6 +24,7 @@ import de.flapdoodle.eval.core.exceptions.ParseException;
 import de.flapdoodle.eval.core.parser.Token;
 import de.flapdoodle.eval.core.parser.TokenType;
 import de.flapdoodle.eval.core.tree.*;
+import org.assertj.core.data.MapEntry;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -85,8 +86,12 @@ class NodeTest {
 		VariableNames variables = Node.hashedUsedVariables(expression.source(), expression.root());
 		assertThat(variables.names())
 			.containsExactly("a", "x", "c");
-		assertThat(variables.hashOf("a")).isEqualTo(0);
-		assertThat(variables.hashOf("x")).isEqualTo(41952);
+		assertThat(variables.nameHashMap())
+			.containsExactly(
+				MapEntry.entry("a",1546),
+				MapEntry.entry("x",47022359),
+				MapEntry.entry("c",556969190)
+			);
 
 		Expression secondExpression = factory.parse("b*2(KY-1000)+abc");
 		VariableNames secondVariables = Node.hashedUsedVariables(secondExpression.source(), secondExpression.root());

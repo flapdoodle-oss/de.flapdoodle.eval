@@ -25,8 +25,8 @@ If you change only the name of a variable, then the hash may not change.
 ```java
 assertThat(expressionFactory.parse("a*2+b").usedVariablesWithHash())
   .containsExactly(
-    MapEntry.entry("a",0),
-    MapEntry.entry("b",41955)
+    MapEntry.entry("a",1546),
+    MapEntry.entry("b",47022362)
   );
 ```
 
@@ -35,8 +35,8 @@ Same expression as above, different variable names:
 ```java
 assertThat(expressionFactory.parse("X*2+z").usedVariablesWithHash())
   .containsExactly(
-    MapEntry.entry("X",0),
-    MapEntry.entry("z",41955)
+    MapEntry.entry("X",1546),
+    MapEntry.entry("z",47022362)
   );
 ```
 
