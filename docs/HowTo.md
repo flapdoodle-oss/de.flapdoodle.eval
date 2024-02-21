@@ -30,6 +30,8 @@ assertThat(expressionFactory.parse("a*2+b").usedVariablesWithHash())
   );
 ```
 
+Same expression as above, different variable names:                                                    
+
 ```java
 assertThat(expressionFactory.parse("X*2+z").usedVariablesWithHash())
   .containsExactly(
