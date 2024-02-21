@@ -13,7 +13,7 @@ Stable (Maven Central Repository, Released: 21.02.2024 - wait 24hrs for [maven c
 	<dependency>
 		<groupId>de.flapdoodle.eval</groupId>
 		<artifactId>de.flapdoodle.eval</artifactId>
-		<version>1.0.0</version>
+		<version>1.0.2</version>
 	</dependency>
 
 ### [Documentation](docs/HowTo.md)
