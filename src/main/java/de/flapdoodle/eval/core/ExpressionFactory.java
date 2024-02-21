@@ -69,6 +69,7 @@ public abstract class ExpressionFactory {
 			.mathContext(mathContext())
 			.zoneId(zoneId())
 			.root(node)
+			.source(expression)
 			.build();
 	}
 

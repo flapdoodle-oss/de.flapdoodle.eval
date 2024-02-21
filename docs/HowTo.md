@@ -9,12 +9,36 @@ Object result = expression.evaluate(VariableResolver.empty()
 assertThat(result).isEqualTo(Value.of(4.0));
 ```
 
+### Used Variable Names
+
 ```java
 ExpressionFactory expressionFactory = Defaults.expressionFactory();
 Expression expression = expressionFactory.parse("a*2");
 assertThat(expression.usedVariables())
   .containsExactly("a");
 ```
+
+### Used Variable Names and Hash
+
+If you change only the name of a variable, then the hash may not change.
+
+```java
+assertThat(expressionFactory.parse("a*2+b").usedVariablesWithHash())
+  .containsExactly(
+    MapEntry.entry("a",0),
+    MapEntry.entry("b",41955)
+  );
+```
+
+```java
+assertThat(expressionFactory.parse("X*2+z").usedVariablesWithHash())
+  .containsExactly(
+    MapEntry.entry("X",0),
+    MapEntry.entry("z",41955)
+  );
+```
+
+### Custom Setup
 
 ```java
 ImmutableTypedEvaluables add = TypedEvaluables.builder()

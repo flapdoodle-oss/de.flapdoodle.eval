@@ -16,13 +16,14 @@
  */
 package de.flapdoodle.eval.example;
 
+import de.flapdoodle.eval.core.Expression;
+import de.flapdoodle.eval.core.ImmutableExpressionFactory;
 import de.flapdoodle.eval.core.evaluables.TypedEvaluableByArguments;
+import de.flapdoodle.eval.core.exceptions.EvaluationException;
+import de.flapdoodle.eval.core.exceptions.ParseException;
 import de.flapdoodle.eval.core.parser.Token;
 import de.flapdoodle.eval.core.parser.TokenType;
-import de.flapdoodle.eval.core.tree.EvaluatableNode;
-import de.flapdoodle.eval.core.tree.LookupNode;
-import de.flapdoodle.eval.core.tree.Node;
-import de.flapdoodle.eval.core.tree.ValueNode;
+import de.flapdoodle.eval.core.tree.*;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -74,6 +75,25 @@ class NodeTest {
 
 		assertThat(variables)
 			.containsExactly("var");
+	}
+
+	@Test
+	public void hashedUsedVars() throws ParseException, EvaluationException {
+		ImmutableExpressionFactory factory = Defaults.expressionFactory();
+
+		Expression expression = factory.parse("a*2(x-1000)+c");
+		VariableNames variables = Node.hashedUsedVariables(expression.source(), expression.root());
+		assertThat(variables.names())
+			.containsExactly("a", "x", "c");
+		assertThat(variables.hashOf("a")).isEqualTo(0);
+		assertThat(variables.hashOf("x")).isEqualTo(41952);
+
+		Expression secondExpression = factory.parse("b*2(KY-1000)+abc");
+		VariableNames secondVariables = Node.hashedUsedVariables(secondExpression.source(), secondExpression.root());
+		assertThat(secondVariables.names())
+			.containsExactly("b", "KY", "abc");
+		assertThat(secondVariables.hashOf("b")).isEqualTo(variables.hashOf("a"));
+		assertThat(secondVariables.hashOf("KY")).isEqualTo(variables.hashOf("x"));
 	}
 
 	protected static TypedEvaluableByArguments failOnEverythingEvaluatable() {

@@ -21,6 +21,8 @@ import de.flapdoodle.eval.core.exceptions.EvaluationException;
 import de.flapdoodle.eval.core.exceptions.ParseException;
 import de.flapdoodle.eval.example.BaseEvaluationTest;
 import de.flapdoodle.eval.example.TestConfigurationProvider;
+import org.junit.jupiter.api.condition.DisabledOnJre;
+import org.junit.jupiter.api.condition.JRE;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
@@ -65,13 +67,23 @@ class CreateLocalDateTimeFunctionsTest extends BaseEvaluationTest {
 			"parseZonedDateTime(\"2022-10-30T11:50:20Z\") | 2022-10-30T11:50:20Z",
 			"parseZonedDateTime(\"2011-12-03T10:15:30+01:00[Europe/Paris]\") | 2011-12-03T09:15:30Z",
 			"parseZonedDateTime(\"2011-12-03T10:15:30+01:00\") | 2011-12-03T09:15:30Z",
-			// needs jdk>8
-//			"parseZonedDateTime(\"03/12/2011 10:15:30 Europe/Paris\", \"dd/MM/yyyy HH:mm:ss v\") |"
-//				+ " 2011-12-03T09:15:30Z",
-//			"parseZonedDateTime(\"03/08/2019T16:20:17:717+05:30\",\"dd/MM/uuuu'T'HH:mm:ss:SSSXXXXX\") |"
-//				+ " 2019-08-03T10:50:17.717Z",
 		})
 	void testZonedDateTimeParse(String expression, String expectedResult)
+		throws EvaluationException, ParseException {
+		assertExpressionHasExpectedResult(expression, expectedResult, DateTimeTestConfiguration);
+	}
+
+	@ParameterizedTest
+	@CsvSource(
+		delimiter = '|',
+		value = {
+			"parseZonedDateTime(\"03/12/2011 10:15:30 Europe/Paris\", \"dd/MM/yyyy HH:mm:ss v\") |"
+				+ " 2011-12-03T09:15:30Z",
+			"parseZonedDateTime(\"03/08/2019T16:20:17:717+05:30\",\"dd/MM/uuuu'T'HH:mm:ss:SSSXXXXX\") |"
+				+ " 2019-08-03T10:50:17.717Z",
+		})
+	@DisabledOnJre({JRE.JAVA_8})
+	void testZonedDateTimeParseJdk11(String expression, String expectedResult)
 		throws EvaluationException, ParseException {
 		assertExpressionHasExpectedResult(expression, expectedResult, DateTimeTestConfiguration);
 	}

@@ -29,6 +29,8 @@ import de.flapdoodle.eval.example.Value;
 import de.flapdoodle.testdoc.Recorder;
 import de.flapdoodle.testdoc.Recording;
 import de.flapdoodle.testdoc.TabSize;
+import org.assertj.core.api.MapAssert;
+import org.assertj.core.data.MapEntry;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
@@ -61,6 +63,29 @@ public class HowToTest {
 		Expression expression = expressionFactory.parse("a*2");
 		assertThat(expression.usedVariables())
 			.containsExactly("a");
+		recording.end();
+	}
+
+	@Test
+	public void usedVariablesWithHash() throws ParseException, EvaluationException {
+		recording.begin("setup");
+		ExpressionFactory expressionFactory = Defaults.expressionFactory();
+		recording.end();
+
+		recording.begin("first-expression");
+		assertThat(expressionFactory.parse("a*2+b").usedVariablesWithHash())
+			.containsExactly(
+				MapEntry.entry("a",0),
+				MapEntry.entry("b",41955)
+			);
+		recording.end();
+
+		recording.begin("second-expression");
+		assertThat(expressionFactory.parse("X*2+z").usedVariablesWithHash())
+			.containsExactly(
+				MapEntry.entry("X",0),
+				MapEntry.entry("z",41955)
+			);
 		recording.end();
 	}
 

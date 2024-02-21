@@ -19,10 +19,13 @@ package de.flapdoodle.eval.core;
 import de.flapdoodle.eval.core.exceptions.EvaluationException;
 import de.flapdoodle.eval.core.exceptions.ParseException;
 import de.flapdoodle.eval.core.tree.Node;
+import de.flapdoodle.eval.core.tree.VariableNames;
+import org.immutables.value.Value;
 
 import java.math.MathContext;
 import java.time.ZoneId;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -30,7 +33,8 @@ import java.util.stream.Collectors;
 public abstract class Expression {
 	protected abstract MathContext mathContext();
 	protected abstract ZoneId zoneId();
-	protected abstract Node root();
+	public abstract String source();
+	public abstract Node root();
 
 	@org.immutables.value.Value.Auxiliary
 	public Object evaluate(VariableResolver variableResolver) throws EvaluationException, ParseException {
@@ -40,9 +44,19 @@ public abstract class Expression {
 			.build());
 	}
 
+	@Value.Derived
+	protected VariableNames variableNames() {
+		return Node.hashedUsedVariables(source(), root());
+	}
+
+	@Value.Lazy
+	public Map<String, Integer> usedVariablesWithHash() {
+		return variableNames().nameHashMap();
+	}
+
 	@org.immutables.value.Value.Derived
 	public Set<String> usedVariables() {
-		return Node.usedVariables(root());
+		return variableNames().names();
 	}
 
 	@org.immutables.value.Value.Auxiliary

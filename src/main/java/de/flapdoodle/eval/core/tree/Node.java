@@ -20,11 +20,9 @@ import de.flapdoodle.eval.core.EvaluationContext;
 import de.flapdoodle.eval.core.VariableResolver;
 import de.flapdoodle.eval.core.exceptions.EvaluationException;
 import de.flapdoodle.eval.core.parser.Token;
+import de.flapdoodle.types.Pair;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public abstract class Node {
@@ -47,14 +45,39 @@ public abstract class Node {
     }
 
     // VisibleForTests
+    @Deprecated
     public static Set<String> usedVariables(List<Node> nodes) {
         return nodes.stream()
           .filter(it -> it instanceof LookupNode)
           .map(it -> it.token().value())
-          .collect(Collectors.toSet());
+          .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
+    @Deprecated
     public static Set<String> usedVariables(Node node) {
         return usedVariables(allNodes(node));
+    }
+
+    // VisibleForTests
+    public static VariableNames hashedUsedVariables(String expression, Node root) {
+        ImmutableVariableNames.Builder builder = VariableNames.builder();
+        hashedUsedVariables(builder, 0, expression, root);
+        return builder.build();
+    }
+
+    private static int hashedUsedVariables(ImmutableVariableNames.Builder builder, int lastTokenEnd, String expression, Node root) {
+        if (root instanceof LookupNode) {
+            Token token = root.token();
+            String expressionBetweenTokens = expression.substring(lastTokenEnd, token.start());
+            builder.addMap(Pair.of(expressionBetweenTokens.hashCode(), token.value()));
+            lastTokenEnd = token.start()+token.value().length();
+        } else if (root instanceof EvaluatableNode) {
+					for (Node it : ((EvaluatableNode) root).parameters()) {
+              lastTokenEnd = hashedUsedVariables(builder, lastTokenEnd, expression, it);
+					}
+				} else {
+            // ignore
+        }
+        return lastTokenEnd;
     }
 }
