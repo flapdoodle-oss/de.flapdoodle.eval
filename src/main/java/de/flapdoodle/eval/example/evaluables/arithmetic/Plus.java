@@ -71,7 +71,7 @@ public class Plus extends TypedEvaluables.Wrapper {
 		@Override
 		public Value.StringValue evaluate(VariableResolver variableResolver, EvaluationContext evaluationContext, Token token, A first,
 										  B second) throws EvaluationException {
-			return Value.of(first.wrapped().toString() + second.wrapped());
+			return Value.of(""+first.wrapped() + second.wrapped());
 		}
 	}
 
