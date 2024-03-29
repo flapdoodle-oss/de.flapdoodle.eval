@@ -21,6 +21,7 @@ import de.flapdoodle.eval.core.exceptions.EvaluationException;
 import de.flapdoodle.eval.core.parser.ASTNode;
 import de.flapdoodle.eval.core.parser.Token;
 import de.flapdoodle.eval.core.validation.ParameterValidator;
+import de.flapdoodle.reflection.TypeInfo;
 import org.immutables.value.Value;
 
 import java.util.List;
@@ -31,7 +32,7 @@ import java.util.Optional;
 public interface Parameter<T> {
 
 	@Value.Parameter
-	Class<T> type();
+	TypeInfo<T> type();
 
 	/**
 	 * Set to true, the parameter will not be evaluated in advance, but the corresponding {@link
@@ -45,10 +46,18 @@ public interface Parameter<T> {
 	List<ParameterValidator<T>> validators();
 
 	static <T> ImmutableParameter<T> of(Class<T> type) {
+		return ImmutableParameter.of(TypeInfo.of(type));
+	}
+
+	static <T> ImmutableParameter<T> of(TypeInfo<T> type) {
 		return ImmutableParameter.of(type);
 	}
 
 	static <T> ImmutableParameter<T> lazyWith(Class<T> type) {
+		return ImmutableParameter.of(TypeInfo.of(type)).withIsLazy(true);
+	}
+
+	static <T> ImmutableParameter<T> lazyWith(TypeInfo<T> type) {
 		return ImmutableParameter.of(type).withIsLazy(true);
 	}
 

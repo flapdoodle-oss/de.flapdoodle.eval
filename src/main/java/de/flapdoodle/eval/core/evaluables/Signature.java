@@ -17,6 +17,7 @@
 package de.flapdoodle.eval.core.evaluables;
 
 import de.flapdoodle.eval.core.exceptions.EvaluableException;
+import de.flapdoodle.reflection.TypeInfo;
 import org.immutables.builder.Builder;
 import org.immutables.value.Value;
 
@@ -70,7 +71,7 @@ public abstract class Signature<T> {
 		for (int i = 0; i < minNumberOfArguments(); i++) {
 			Object value = arguments.get(i);
 			Parameter<?> parameter = get(i);
-			Class<?> type = parameter.type();
+			TypeInfo<?> type = parameter.type();
 
 			if (!type.isInstance(value)) return Optional.of(EvaluableException.of("wrong type: %s != %s (%s)", type, value.getClass(), value));
 			Optional<EvaluableException> error = parameter.validationError(value);
@@ -78,7 +79,7 @@ public abstract class Signature<T> {
 		}
 		if (isVarArg()) {
 			Parameter<?> parameter = get(minNumberOfArguments() - 1);
-			Class<?> type = parameter.type();
+			TypeInfo<?> type = parameter.type();
 			for (int i = minNumberOfArguments() + 1; i < arguments.size(); i++) {
 				Object value = arguments.get(i);
 				if (!type.isInstance(value)) return Optional.of(EvaluableException.of("wrong type: %s != %s (%s)", type, value.getClass(), value));
