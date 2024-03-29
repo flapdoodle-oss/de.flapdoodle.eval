@@ -56,7 +56,7 @@ class Log10Test {
 		Optional<? extends TypedEvaluableByArguments> byNumberOfArguments = testee.filterByNumberOfArguments(values.size());
 		assertThat(byNumberOfArguments).isPresent();
 
-		Either<TypedEvaluable<?>, List<EvaluableException>> byArguments = byNumberOfArguments.get().find(values);
+		Either<TypedEvaluable<?>, EvaluableException> byArguments = byNumberOfArguments.get().find(values);
 		assertThat(byArguments).isLeft();
 
 		Object result = byArguments.left()
@@ -72,11 +72,10 @@ class Log10Test {
 
 		assertThat(byNumberOfArguments.get().find(Arrays.asList(Value.of(-1.0))))
 			.isRight()
-			.rightSatisfies(errors -> assertThat(errors)
-				.singleElement(InstanceOfAssertFactories.throwable(EvaluableException.class))
+			.rightSatisfies(right -> assertThat(right).isInstanceOf(EvaluableException.class)
 				.hasMessageContaining("value is not > 0: -1.0"));
 
-		Either<TypedEvaluable<?>, List<EvaluableException>> byArguments = byNumberOfArguments.get().find(Arrays.asList(Value.of(1.0)));
+		Either<TypedEvaluable<?>, EvaluableException> byArguments = byNumberOfArguments.get().find(Arrays.asList(Value.of(1.0)));
 		assertThat(byArguments).isLeft();
 
 		assertThatThrownBy(() -> byArguments.left()
@@ -92,11 +91,10 @@ class Log10Test {
 
 		assertThat(byNumberOfArguments.get().find(Arrays.asList(Value.of(0.0))))
 			.isRight()
-			.rightSatisfies(errors -> assertThat(errors)
-				.singleElement(InstanceOfAssertFactories.throwable(EvaluableException.class))
+			.rightSatisfies(right -> assertThat(right).isInstanceOf(EvaluableException.class)
 				.hasMessageContaining("value is not > 0: 0.0"));
 
-		Either<TypedEvaluable<?>, List<EvaluableException>> byArguments = byNumberOfArguments.get().find(Arrays.asList(Value.of(1.0)));
+		Either<TypedEvaluable<?>, EvaluableException> byArguments = byNumberOfArguments.get().find(Arrays.asList(Value.of(1.0)));
 		assertThat(byArguments).isLeft();
 
 		assertThatThrownBy(() -> byArguments.left()

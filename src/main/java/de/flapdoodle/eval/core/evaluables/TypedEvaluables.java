@@ -42,7 +42,7 @@ public abstract class TypedEvaluables implements TypedEvaluableByArguments, Type
 
 	@Override
 	@Value.Auxiliary
-	public Either<TypedEvaluable<?>, List<EvaluableException>> find(List<?> values) {
+	public Either<TypedEvaluable<?>, EvaluableException> find(List<?> values) {
 		List<EvaluableException> errors = new ArrayList<>();
 		for (TypedEvaluable<?> evaluatable : list()) {
 			Optional<EvaluableException> error = evaluatable.signature().validateArguments(values);
@@ -50,9 +50,19 @@ public abstract class TypedEvaluables implements TypedEvaluableByArguments, Type
 			else return Either.left(evaluatable);
 		}
 
-		return Either.right(errors);
+		return Either.right(signatureNotFound(values, errors));
 	}
 
+	@Value.Auxiliary
+	private EvaluableException signatureNotFound(List<?> values, List<EvaluableException> errors) {
+		if (errors.size()==1 && errors.get(0).isValidationError()) {
+			return errors.get(0);
+		}
+
+		String valuesAsString = values.stream().map(it -> it.toString()+"("+it.getClass()+")").collect(Collectors.joining(", "));
+		String signatures = list().stream().map(it -> it.signature().asHumanReadable()).collect(Collectors.joining("\n","\n","n"));
+		return EvaluableException.of("no matching signature found for %s in %s", valuesAsString, signatures);
+	}
 
 	public static ImmutableTypedEvaluables.Builder builder() {
 		return ImmutableTypedEvaluables.builder();

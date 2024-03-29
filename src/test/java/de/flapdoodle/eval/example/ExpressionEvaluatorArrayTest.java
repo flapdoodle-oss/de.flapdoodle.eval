@@ -117,7 +117,7 @@ class ExpressionEvaluatorArrayTest extends BaseExpressionEvaluatorTest {
 			evaluate("a[0]", mapBasedVariableResolver);
 		})
 			.isInstanceOf(EvaluationException.class)
-			.hasMessage("wrong type: class de.flapdoodle.eval.example.Value$ArrayValue != class de.flapdoodle.eval.example.ImmutableNumberValue (123.0)");
+			.hasMessageContaining("no matching signature found");
 	}
 
 	@Test
@@ -129,6 +129,6 @@ class ExpressionEvaluatorArrayTest extends BaseExpressionEvaluatorTest {
 				evaluate("a[b]", mapBasedVariableResolver);
 			})
 			.isInstanceOf(EvaluationException.class)
-			.hasMessage("wrong type: class de.flapdoodle.eval.example.Value$NumberValue != class de.flapdoodle.eval.example.ImmutableStringValue (anotherString)");
+			.hasMessageContaining("no matching signature found");
 	}
 }

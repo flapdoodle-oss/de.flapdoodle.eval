@@ -73,7 +73,7 @@ class PlusTest {
 		Optional<? extends TypedEvaluableByArguments> byNumberOfArguments = testee.filterByNumberOfArguments(values.size());
 		assertThat(byNumberOfArguments).isPresent();
 
-		Either<TypedEvaluable<?>, List<EvaluableException>> byArguments = byNumberOfArguments.get().find(values);
+		Either<TypedEvaluable<?>, EvaluableException> byArguments = byNumberOfArguments.get().find(values);
 		assertThat(byArguments).isLeft();
 
 		Object result = byArguments.left()
@@ -89,7 +89,7 @@ class PlusTest {
 		Optional<? extends TypedEvaluableByArguments> byNumberOfArguments = testee.filterByNumberOfArguments(values.size());
 		assertThat(byNumberOfArguments).isPresent();
 
-		Either<TypedEvaluable<?>, List<EvaluableException>> byArguments = byNumberOfArguments.get().find(values);
+		Either<TypedEvaluable<?>, EvaluableException> byArguments = byNumberOfArguments.get().find(values);
 		assertThat(byArguments).isLeft();
 
 		Object result = byArguments.left()
@@ -105,7 +105,7 @@ class PlusTest {
 		Optional<? extends TypedEvaluableByArguments> byNumberOfArguments = testee.filterByNumberOfArguments(values.size());
 		assertThat(byNumberOfArguments).isPresent();
 
-		Either<TypedEvaluable<?>, List<EvaluableException>> byArguments = byNumberOfArguments.get().find(values);
+		Either<TypedEvaluable<?>, EvaluableException> byArguments = byNumberOfArguments.get().find(values);
 		assertThat(byArguments).isLeft();
 
 		Object result = byArguments.left()

@@ -91,7 +91,7 @@ class ExpressionEvaluatorNullTest extends BaseExpressionEvaluatorTest {
 			evaluate("if(a == null, a * 5, 1)", mapBasedValueResolver.with("a", Value.ofNull()));
 		})
 			.isInstanceOf(EvaluationException.class)
-			.hasMessageContaining("wrong type");
+			.hasMessageContaining("no matching signature found");
 
 		Expression expression2 =
 			createExpression("if(a != null, \"Unknown name\", \"The name is \" + a)");
@@ -118,7 +118,7 @@ class ExpressionEvaluatorNullTest extends BaseExpressionEvaluatorTest {
 			evaluate("a * 5", mapBasedVariableResolver);
 		})
 			.isInstanceOf(EvaluationException.class)
-			.hasMessageContaining("wrong type");
+			.hasMessageContaining("no matching signature found");
 
 		assertThatThrownBy(() -> {
 			MapBasedVariableResolver mapBasedValueResolver = VariableResolver.empty();

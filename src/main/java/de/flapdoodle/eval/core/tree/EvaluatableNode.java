@@ -49,7 +49,7 @@ public abstract class EvaluatableNode extends Node {
 				parameterResults.add(exceptionMapper().map(ex));
 			}
 		}
-		Either<TypedEvaluable<?>, List<EvaluableException>> evaluatable = evaluatable().find(parameterResults);
+		Either<TypedEvaluable<?>, EvaluableException> evaluatable = evaluatable().find(parameterResults);
 		if (evaluatable.isLeft()) {
 			try {
 				Object evaluated = evaluatable.left().evaluate(variableResolver, context, token(), parameterResults);
@@ -62,7 +62,7 @@ public abstract class EvaluatableNode extends Node {
 				throw wrapping.wrapped();
 			}
 		} else {
-			throw new EvaluationException(token(), evaluatable.right().get(0));
+			throw new EvaluationException(token(), evaluatable.right());
 		}
 	}
 	

@@ -18,8 +18,19 @@ package de.flapdoodle.eval.core.exceptions;
 
 public class EvaluableException extends Exception {
 
-	public EvaluableException(String message) {
+	private final boolean isValidationError;
+
+	private  EvaluableException(String message, boolean isValidationError) {
 		super(message);
+		this.isValidationError = isValidationError;
+	}
+
+	private  EvaluableException(String message) {
+		this(message, false);
+	}
+
+	public boolean isValidationError() {
+		return isValidationError;
 	}
 
 	public static EvaluableException ofUnsupportedDataTypeInOperation() {
@@ -28,5 +39,9 @@ public class EvaluableException extends Exception {
 
 	public static EvaluableException of(String message, Object ... args) {
 		return new EvaluableException(String.format(message, (args)));
+	}
+
+	public static EvaluableException validationError(String message) {
+		return new EvaluableException(message, true);
 	}
 }

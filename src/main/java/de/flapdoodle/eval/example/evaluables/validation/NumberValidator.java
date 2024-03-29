@@ -37,7 +37,7 @@ public class NumberValidator implements ParameterValidator<Value.NumberValue> {
     @Override
     public Optional<EvaluableException> validate(Value.NumberValue parameterValue) {
         if (!test.test(parameterValue.wrapped())) {
-            return Optional.of(new EvaluableException(errorMessageTemplate.replace("%s", parameterValue.wrapped().toString())));
+            return Optional.of(EvaluableException.validationError(errorMessageTemplate.replace("%s", parameterValue.wrapped().toString())));
         }
         return Optional.empty();
     }

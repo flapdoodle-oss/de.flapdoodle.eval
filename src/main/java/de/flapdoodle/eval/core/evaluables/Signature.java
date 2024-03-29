@@ -18,9 +18,11 @@ package de.flapdoodle.eval.core.evaluables;
 
 import de.flapdoodle.eval.core.exceptions.EvaluableException;
 import org.immutables.builder.Builder;
+import org.immutables.value.Value;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @org.immutables.value.Value.Immutable
 public abstract class Signature<T> {
@@ -45,6 +47,11 @@ public abstract class Signature<T> {
 		return isVarArg()
 			? Integer.MAX_VALUE
 			: parameters().size();
+	}
+
+	@Value.Auxiliary
+	public String asHumanReadable() {
+		return "" +returnType()+"(" + (isVarArg() ? "vararg " : "") + parameters().stream().map(it -> it.type().toString()).collect(Collectors.joining(", "))+")";
 	}
 
 	@org.immutables.value.Value.Auxiliary

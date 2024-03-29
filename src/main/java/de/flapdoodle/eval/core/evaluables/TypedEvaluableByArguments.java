@@ -22,5 +22,5 @@ import de.flapdoodle.types.Either;
 import java.util.List;
 
 public interface TypedEvaluableByArguments {
-    Either<TypedEvaluable<?>, List<EvaluableException>> find(List<?> values);
+    Either<TypedEvaluable<?>, EvaluableException> find(List<?> values);
 }
