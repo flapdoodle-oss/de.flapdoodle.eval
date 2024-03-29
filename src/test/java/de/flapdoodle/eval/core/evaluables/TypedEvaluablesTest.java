@@ -19,13 +19,16 @@ package de.flapdoodle.eval.core.evaluables;
 import de.flapdoodle.eval.core.exceptions.EvaluableException;
 import de.flapdoodle.eval.core.validation.ParameterValidator;
 import de.flapdoodle.eval.example.Value;
+import de.flapdoodle.types.Either;
 import org.assertj.core.api.InstanceOfAssertFactories;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static de.flapdoodle.eval.example.AssertEither.assertThat;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -80,5 +83,31 @@ class TypedEvaluablesTest {
 		assertThat(testee.find(Collections.singletonList(Value.of(-1.23))))
 			.isLeft()
 			.containsLeft(negAddOne);
+	}
+
+	@Test
+	void varArgMustFailOnSecondParameter() {
+		TypedEvaluables testee = TypedEvaluables.builder()
+			.addList(TypedEvaluable.ofVarArg(Integer.class, Integer.class,
+				(variableResolver, evaluationContext, token, arguments) -> arguments.stream().reduce(0, Integer::sum)))
+			.addList(TypedEvaluable.ofVarArg(String.class, Boolean.class, String.class,
+				(variableResolver, evaluationContext, token, first, last) -> first + ":" + last.stream().collect(Collectors.joining("|"))))
+			.build();
+
+		assertThat(testee.find(Arrays.asList(1, 2)))
+			.isLeft();
+
+		assertThat(testee.find(Arrays.asList(1, BigInteger.ONE)))
+			.isRight()
+			.rightSatisfies(it -> assertThat(it)
+				.hasMessageContaining("no matching signature found"));
+
+		assertThat(testee.find(Arrays.asList(false, "1", "2")))
+			.isLeft();
+
+		assertThat(testee.find(Arrays.asList(false, BigInteger.ONE)))
+			.isRight()
+			.rightSatisfies(it -> assertThat(it)
+				.hasMessageContaining("no matching signature found"));
 	}
 }

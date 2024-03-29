@@ -80,7 +80,7 @@ public abstract class Signature<T> {
 		if (isVarArg()) {
 			Parameter<?> parameter = get(minNumberOfArguments() - 1);
 			TypeInfo<?> type = parameter.type();
-			for (int i = minNumberOfArguments() + 1; i < arguments.size(); i++) {
+			for (int i = minNumberOfArguments(); i < arguments.size(); i++) {
 				Object value = arguments.get(i);
 				if (!type.isInstance(value)) return Optional.of(EvaluableException.of("wrong type: %s != %s (%s)", type, value.getClass(), value));
 				Optional<EvaluableException> error = parameter.validationError(value);

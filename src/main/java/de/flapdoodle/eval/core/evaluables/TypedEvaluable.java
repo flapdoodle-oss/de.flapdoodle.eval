@@ -43,6 +43,10 @@ public interface TypedEvaluable<T> extends Evaluable<T> {
         T evaluate(VariableResolver variableResolver, EvaluationContext evaluationContext, Token token, A first, B second) throws EvaluationException;
     }
 
+    interface VarArg2<A, B, T> {
+        T evaluate(VariableResolver variableResolver, EvaluationContext evaluationContext, Token token, A first, List<B> last) throws EvaluationException;
+    }
+
     interface Arg3<A, B, C, T> {
         T evaluate(VariableResolver variableResolver, EvaluationContext evaluationContext, Token token, A first, B second, C third) throws EvaluationException;
     }
@@ -91,6 +95,14 @@ public interface TypedEvaluable<T> extends Evaluable<T> {
                 a.type().cast(arguments.get(0)),
                 b.type().cast(arguments.get(1)));
         return new TypedEvaluableAdapter<>(Signature.of(returnType, a, b), evaluable.named(function.toString()));
+    }
+
+    static <T, A, B> TypedEvaluable<T> ofVarArg(Class<T> returnType, Class<A> a, Class<B> b, TypedEvaluable.VarArg2<A, B, T> function) {
+        Evaluable<T> evaluable = (valueResolver, evaluationContext, token, arguments) -> function.evaluate(valueResolver, evaluationContext, token,
+          a.cast(arguments.get(0)),
+          arguments.subList(1, arguments.size()).stream()
+            .map(b::cast).collect(Collectors.toList()));
+        return new TypedEvaluableAdapter<>(Signature.ofVarArg(returnType, Parameter.of(a), Parameter.of(b)), evaluable.named(function.toString()));
     }
 
     static <T, A, B> TypedEvaluable<T> of(Class<T> returnType, Class<A> a, Class<B> b,
