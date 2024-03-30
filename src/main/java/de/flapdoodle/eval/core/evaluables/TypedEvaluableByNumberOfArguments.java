@@ -23,12 +23,14 @@ import java.util.stream.Collectors;
 public interface TypedEvaluableByNumberOfArguments {
     Optional<? extends TypedEvaluableByArguments> filterByNumberOfArguments(int numberOfArguments);
 
-    static Optional<? extends TypedEvaluableByArguments> filterByNumberOfArguments(List<TypedEvaluable<?>> list, int numberOfArguments) {
+    static List<TypedEvaluable<?>> filterByNumberOfArguments(List<TypedEvaluable<?>> list, int numberOfArguments) {
         List<TypedEvaluable<?>> filtered = list.stream()
           .filter(entry -> entry.signature().minNumberOfArguments() <= numberOfArguments && entry.signature().maxNumberOfArguments() >= numberOfArguments)
           .collect(Collectors.toList());
-        return !filtered.isEmpty()
-          ? Optional.of(TypedEvaluables.builder().list(filtered).build())
-          : Optional.empty();
+        
+        return filtered;
+//        return !filtered.isEmpty()
+//          ? Optional.of(TypedEvaluables.builder().list(filtered).build())
+//          : Optional.empty();
     }
 }

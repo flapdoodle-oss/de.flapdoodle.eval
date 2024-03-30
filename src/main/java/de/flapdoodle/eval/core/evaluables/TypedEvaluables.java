@@ -32,7 +32,11 @@ public abstract class TypedEvaluables implements TypedEvaluableByArguments, Type
 	@Override
 	@Value.Auxiliary
 	public Optional<? extends TypedEvaluableByArguments> filterByNumberOfArguments(int numberOfArguments) {
-		return TypedEvaluableByNumberOfArguments.filterByNumberOfArguments(list(), numberOfArguments);
+		List<TypedEvaluable<?>> filtered = TypedEvaluableByNumberOfArguments.filterByNumberOfArguments(list(), numberOfArguments);
+
+		return !filtered.isEmpty()
+			? Optional.of(builder().list(filtered).build())
+			: Optional.empty();
 	}
 
 	@Override
