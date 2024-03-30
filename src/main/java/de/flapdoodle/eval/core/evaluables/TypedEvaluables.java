@@ -32,36 +32,13 @@ public abstract class TypedEvaluables implements TypedEvaluableByArguments, Type
 	@Override
 	@Value.Auxiliary
 	public Optional<? extends TypedEvaluableByArguments> filterByNumberOfArguments(int numberOfArguments) {
-		List<TypedEvaluable<?>> filtered = list().stream()
-			.filter(entry -> entry.signature().minNumberOfArguments() <= numberOfArguments && entry.signature().maxNumberOfArguments() >= numberOfArguments)
-			.collect(Collectors.toList());
-		return !filtered.isEmpty()
-			? Optional.of(builder().list(filtered).build())
-			: Optional.empty();
+		return TypedEvaluableByNumberOfArguments.filterByNumberOfArguments(list(), numberOfArguments);
 	}
 
 	@Override
 	@Value.Auxiliary
 	public Either<TypedEvaluable<?>, EvaluableException> find(List<?> values) {
-		List<EvaluableException> errors = new ArrayList<>();
-		for (TypedEvaluable<?> evaluatable : list()) {
-			Optional<EvaluableException> error = evaluatable.signature().validateArguments(values);
-			if (error.isPresent()) errors.add(error.get());
-			else return Either.left(evaluatable);
-		}
-
-		return Either.right(signatureNotFound(values, errors));
-	}
-
-	@Value.Auxiliary
-	private EvaluableException signatureNotFound(List<?> values, List<EvaluableException> errors) {
-		if (errors.size()==1 && errors.get(0).isValidationError()) {
-			return errors.get(0);
-		}
-
-		String valuesAsString = values.stream().map(it -> it.toString()+"("+it.getClass()+")").collect(Collectors.joining(", "));
-		String signatures = list().stream().map(it -> it.signature().asHumanReadable()).collect(Collectors.joining("\n","\n","n"));
-		return EvaluableException.of("no matching signature found for %s in %s", valuesAsString, signatures);
+		return TypedEvaluableByArguments.find(list(), values);
 	}
 
 	public static ImmutableTypedEvaluables.Builder builder() {

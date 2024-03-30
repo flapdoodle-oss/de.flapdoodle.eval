@@ -58,7 +58,7 @@ class PlusTest {
 
 		return Stream.of(
 			Arguments.of(Value.of(1.2), Value.of(3.8), Value.of(5.0)),
-			Arguments.of(Value.of(now.toInstant()), Value.of(Duration.ofDays(1)), Value.of(now.plusDays(1).toInstant())),
+			Arguments.of(Value.of(now.toInstant()), Value.of(Duration.ofDays(1)), Value.of(now.plus(Duration.ofDays(1)).toInstant())),
 			Arguments.of(Value.of(Duration.ofDays(2)), Value.of(Duration.ofDays(2)), Value.of(Duration.ofDays(4))),
 			Arguments.of(Value.of(now.toInstant()), Value.of(1000), Value.of(now.plusSeconds(1).toInstant())),
 			Arguments.of(Value.of(1.2), Value.of(false), Value.of("1.2false"))

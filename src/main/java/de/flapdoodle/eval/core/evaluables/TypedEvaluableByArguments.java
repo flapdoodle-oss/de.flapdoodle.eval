@@ -19,8 +19,41 @@ package de.flapdoodle.eval.core.evaluables;
 import de.flapdoodle.eval.core.exceptions.EvaluableException;
 import de.flapdoodle.types.Either;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 public interface TypedEvaluableByArguments {
     Either<TypedEvaluable<?>, EvaluableException> find(List<?> values);
+
+    static Either<TypedEvaluable<?>, EvaluableException> find(List<TypedEvaluable<?>> list, List<?> values) {
+        List<EvaluableException> errors = new ArrayList<>();
+        for (TypedEvaluable<?> evaluable : list) {
+            Optional<EvaluableException> error = evaluable.signature().validateArguments(values);
+            if (error.isPresent()) errors.add(error.get());
+            else return Either.left(evaluable);
+        }
+
+        EvaluableException exception;
+        if (errors.size()==1 && errors.get(0).isValidationError()) {
+            exception = errors.get(0);
+        } else {
+            String valuesAsString = values.stream().map(it -> it.toString() + "(" + it.getClass() + ")").collect(Collectors.joining(", "));
+            String signatures = list.stream().map(it -> it.signature().asHumanReadable()).collect(Collectors.joining("\n", "\n", "n"));
+            exception = EvaluableException.of("no matching signature found for %s in %s", valuesAsString, signatures);
+        }
+
+        return Either.right(exception);
+    }
+
+    static EvaluableException signatureNotFound(List<TypedEvaluable<?>> list, List<?> values, List<EvaluableException> errors) {
+        if (errors.size()==1 && errors.get(0).isValidationError()) {
+            return errors.get(0);
+        }
+
+        String valuesAsString = values.stream().map(it -> it.toString()+"("+it.getClass()+")").collect(Collectors.joining(", "));
+        String signatures = list.stream().map(it -> it.signature().asHumanReadable()).collect(Collectors.joining("\n","\n","n"));
+        return EvaluableException.of("no matching signature found for %s in %s", valuesAsString, signatures);
+    }
 }
