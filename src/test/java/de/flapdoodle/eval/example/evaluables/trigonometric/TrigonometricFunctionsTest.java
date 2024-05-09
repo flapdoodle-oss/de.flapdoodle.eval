@@ -19,6 +19,7 @@ package de.flapdoodle.eval.example.evaluables.trigonometric;
 import de.flapdoodle.eval.core.Expression;
 import de.flapdoodle.eval.core.MapBasedVariableResolver;
 import de.flapdoodle.eval.core.VariableResolver;
+import de.flapdoodle.eval.core.evaluables.Evaluated;
 import de.flapdoodle.eval.core.exceptions.EvaluationException;
 import de.flapdoodle.eval.core.exceptions.ParseException;
 import de.flapdoodle.eval.example.BaseEvaluationTest;
@@ -64,7 +65,8 @@ class TrigonometricFunctionsTest extends BaseEvaluationTest {
 	void testAcosHThrowsException(double d) {
 		assertThatThrownBy(() -> {
             MapBasedVariableResolver mapBasedValueResolver = VariableResolver.empty();
-            MapBasedVariableResolver mapBasedVariableResolver = mapBasedValueResolver.with("x", Value.of(d));
+			Value<?> value = Value.of(d);
+			MapBasedVariableResolver mapBasedVariableResolver = mapBasedValueResolver.with("x", Evaluated.value(value));
 			Defaults.expressionFactory().parse("acosH(x)")
 							.evaluate(mapBasedVariableResolver);
 		})
@@ -269,7 +271,8 @@ class TrigonometricFunctionsTest extends BaseEvaluationTest {
 		assertThatThrownBy(() -> {
 			Expression expression = Defaults.expressionFactory().parse("atanH(x)");
             MapBasedVariableResolver mapBasedValueResolver = VariableResolver.empty();
-            MapBasedVariableResolver mapBasedVariableResolver = mapBasedValueResolver.with("x", Value.of(d));
+			Value<?> value = Value.of(d);
+			MapBasedVariableResolver mapBasedVariableResolver = mapBasedValueResolver.with("x", Evaluated.value(value));
 			expression.evaluate(mapBasedVariableResolver);
 		})
 			.isInstanceOf(EvaluationException.class)

@@ -18,6 +18,7 @@ package de.flapdoodle.eval.example;
 
 import de.flapdoodle.eval.core.MapBasedVariableResolver;
 import de.flapdoodle.eval.core.VariableResolver;
+import de.flapdoodle.eval.core.evaluables.Evaluated;
 import de.flapdoodle.eval.core.exceptions.EvaluationException;
 import de.flapdoodle.eval.core.exceptions.ParseException;
 import org.junit.jupiter.api.Test;
@@ -39,8 +40,9 @@ class ExpressionEvaluatorDecimalPlacesTest extends BaseExpressionEvaluatorTest {
 
 	@Test
 	void testDefaultNoRoundingVariable() throws ParseException, EvaluationException {
-		MapBasedVariableResolver mapBasedVariableResolver = VariableResolver.empty()
-			.with("a", Value.of(new BigDecimal("2.12345")));
+		MapBasedVariableResolver mapBasedVariableResolver1 = VariableResolver.empty();
+		Value<?> value = Value.of(new BigDecimal("2.12345"));
+		MapBasedVariableResolver mapBasedVariableResolver = mapBasedVariableResolver1.with("a", Evaluated.value(value));
 		VariableResolver variableResolver = mapBasedVariableResolver;
 		assertThat(evaluate("a", variableResolver)).isEqualTo("2.12345");
 	}
@@ -64,7 +66,8 @@ class ExpressionEvaluatorDecimalPlacesTest extends BaseExpressionEvaluatorTest {
 	void testDefaultNoRoundingArray() throws ParseException, EvaluationException {
 		List<BigDecimal> array = Arrays.asList(new BigDecimal("1.12345"));
         MapBasedVariableResolver mapBasedValueResolver = VariableResolver.empty();
-        MapBasedVariableResolver mapBasedVariableResolver = mapBasedValueResolver.with("a", Value.of(Value::of, array));
+		Value<?> value = Value.of(Value::of, array);
+		MapBasedVariableResolver mapBasedVariableResolver = mapBasedValueResolver.with("a", Evaluated.value(value));
 		VariableResolver variableResolver = mapBasedVariableResolver;
 		assertThat(evaluate("a[0]", variableResolver)).isEqualTo("1.12345");
 	}
@@ -79,7 +82,8 @@ class ExpressionEvaluatorDecimalPlacesTest extends BaseExpressionEvaluatorTest {
 			};
 
 		MapBasedVariableResolver mapBasedValueResolver = VariableResolver.empty();
-		MapBasedVariableResolver mapBasedVariableResolver = mapBasedValueResolver.with("a", Value.of(Value::of, structure));
+		Value<?> value = Value.of(Value::of, structure);
+		MapBasedVariableResolver mapBasedVariableResolver = mapBasedValueResolver.with("a", Evaluated.value(value));
 		VariableResolver variableResolver = mapBasedVariableResolver;
 		assertThat(evaluate("a.b", variableResolver)).isEqualTo("1.12345");
 	}

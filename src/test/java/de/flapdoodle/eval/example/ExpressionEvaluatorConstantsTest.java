@@ -16,10 +16,7 @@
  */
 package de.flapdoodle.eval.example;
 
-import de.flapdoodle.eval.core.Expression;
-import de.flapdoodle.eval.core.ExpressionFactory;
-import de.flapdoodle.eval.core.MapBasedVariableResolver;
-import de.flapdoodle.eval.core.VariableResolver;
+import de.flapdoodle.eval.core.*;
 import de.flapdoodle.eval.core.evaluables.Evaluated;
 import de.flapdoodle.eval.core.exceptions.EvaluationException;
 import de.flapdoodle.eval.core.exceptions.ParseException;
@@ -78,7 +75,9 @@ class ExpressionEvaluatorConstantsTest extends BaseExpressionEvaluatorTest {
 
 	@Test
 	void testOverwriteConstantsWithValues() throws EvaluationException, ParseException {
-		MapBasedVariableResolver mapBasedVariableResolver = VariableResolver.empty().with("e", Value.of(3));
+		MapBasedVariableResolver mapBasedVariableResolver1 = VariableResolver.empty();
+		Value<?> value = Value.of(3);
+		MapBasedVariableResolver mapBasedVariableResolver = mapBasedVariableResolver1.with("e", Evaluated.value(value));
 		assertThat(factory.withConstant("e", Evaluated.value(Value.of(6)))
 				.parse("e")
 				.evaluate(mapBasedVariableResolver).toString()).isEqualTo("6.0");

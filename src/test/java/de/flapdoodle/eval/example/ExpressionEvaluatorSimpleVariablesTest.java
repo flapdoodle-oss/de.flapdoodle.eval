@@ -18,6 +18,7 @@ package de.flapdoodle.eval.example;
 
 import de.flapdoodle.eval.core.MapBasedVariableResolver;
 import de.flapdoodle.eval.core.VariableResolver;
+import de.flapdoodle.eval.core.evaluables.Evaluated;
 import de.flapdoodle.eval.core.exceptions.EvaluationException;
 import de.flapdoodle.eval.core.exceptions.ParseException;
 import org.junit.jupiter.api.Test;
@@ -32,7 +33,8 @@ class ExpressionEvaluatorSimpleVariablesTest extends BaseExpressionEvaluatorTest
 	@Test
 	void testSingleStringVariable() throws ParseException, EvaluationException {
         MapBasedVariableResolver mapBasedValueResolver = VariableResolver.empty();
-        VariableResolver variableResolver = mapBasedValueResolver.with("a", Value.of("hello"));
+		Value<?> value = Value.of("hello");
+		VariableResolver variableResolver = mapBasedValueResolver.with("a", Evaluated.value(value));
 		Object result = createExpression("a").evaluate(variableResolver);
 		assertThat(result).isEqualTo(Value.of("hello"));
 	}
@@ -40,7 +42,8 @@ class ExpressionEvaluatorSimpleVariablesTest extends BaseExpressionEvaluatorTest
 	@Test
 	void testSingleNumberVariable() throws ParseException, EvaluationException {
 		MapBasedVariableResolver mapBasedValueResolver = VariableResolver.empty();
-		VariableResolver variableResolver = mapBasedValueResolver.with("a", Value.of(BigDecimal.valueOf(9)));
+		Value<?> value = Value.of(BigDecimal.valueOf(9));
+		VariableResolver variableResolver = mapBasedValueResolver.with("a", Evaluated.value(value));
 		Object result = createExpression("a").evaluate(variableResolver);
 		assertThat(result).isEqualTo(Value.of(BigDecimal.valueOf(9)));
 	}
@@ -48,8 +51,10 @@ class ExpressionEvaluatorSimpleVariablesTest extends BaseExpressionEvaluatorTest
 	@Test
 	void testNumbers() throws ParseException, EvaluationException {
 		MapBasedVariableResolver mapBasedValueResolver = VariableResolver.empty();
-		MapBasedVariableResolver mapBasedValueResolver1 = mapBasedValueResolver.with("a", Value.of(BigDecimal.valueOf(9)));
-		VariableResolver variableResolver = mapBasedValueResolver1.with("b", Value.of(BigDecimal.valueOf(5)));
+		Value<?> value1 = Value.of(BigDecimal.valueOf(9));
+		MapBasedVariableResolver mapBasedValueResolver1 = mapBasedValueResolver.with("a", Evaluated.value(value1));
+		Value<?> value = Value.of(BigDecimal.valueOf(5));
+		VariableResolver variableResolver = mapBasedValueResolver1.with("b", Evaluated.value(value));
 		Object result = createExpression("(a+b)*(a-b)").evaluate(variableResolver);
 		assertThat(result).isEqualTo(Value.of(BigDecimal.valueOf(56)));
 	}
@@ -57,9 +62,12 @@ class ExpressionEvaluatorSimpleVariablesTest extends BaseExpressionEvaluatorTest
 	@Test
 	void testStrings() throws ParseException, EvaluationException {
         MapBasedVariableResolver mapBasedValueResolver = VariableResolver.empty();
-        MapBasedVariableResolver mapBasedValueResolver1 = mapBasedValueResolver.with("prefix", Value.of("Hello"));
-        MapBasedVariableResolver mapBasedValueResolver2 = mapBasedValueResolver1.with("infix", Value.of(" "));
-        VariableResolver variableResolver = mapBasedValueResolver2.with("postfix", Value.of("world"));
+		Value<?> value2 = Value.of("Hello");
+		MapBasedVariableResolver mapBasedValueResolver1 = mapBasedValueResolver.with("prefix", Evaluated.value(value2));
+		Value<?> value1 = Value.of(" ");
+		MapBasedVariableResolver mapBasedValueResolver2 = mapBasedValueResolver1.with("infix", Evaluated.value(value1));
+		Value<?> value = Value.of("world");
+		VariableResolver variableResolver = mapBasedValueResolver2.with("postfix", Evaluated.value(value));
 		Object result = createExpression("prefix+infix+postfix").evaluate(variableResolver);
 		assertThat(result).isEqualTo(Value.of("Hello world"));
 	}
@@ -67,9 +75,12 @@ class ExpressionEvaluatorSimpleVariablesTest extends BaseExpressionEvaluatorTest
 	@Test
 	void testStringNumberCombined() throws ParseException, EvaluationException {
         MapBasedVariableResolver mapBasedValueResolver = VariableResolver.empty();
-		MapBasedVariableResolver mapBasedValueResolver2 = mapBasedValueResolver.with("prefix", Value.of("Hello"));
-		MapBasedVariableResolver mapBasedValueResolver1 = mapBasedValueResolver2.with("infix", Value.of(BigDecimal.valueOf(2)));
-        VariableResolver variableResolver = mapBasedValueResolver1.with("postfix", Value.of("world"));
+		Value<?> value2 = Value.of("Hello");
+		MapBasedVariableResolver mapBasedValueResolver2 = mapBasedValueResolver.with("prefix", Evaluated.value(value2));
+		Value<?> value1 = Value.of(BigDecimal.valueOf(2));
+		MapBasedVariableResolver mapBasedValueResolver1 = mapBasedValueResolver2.with("infix", Evaluated.value(value1));
+		Value<?> value = Value.of("world");
+		VariableResolver variableResolver = mapBasedValueResolver1.with("postfix", Evaluated.value(value));
 		Object result = createExpression("prefix+infix+postfix").evaluate(variableResolver);
 		assertThat(result).isEqualTo(Value.of("Hello2world"));
 	}

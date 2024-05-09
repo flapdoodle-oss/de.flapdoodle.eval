@@ -19,6 +19,7 @@ package de.flapdoodle.eval.example.evaluables.booleans;
 import de.flapdoodle.eval.core.Expression;
 import de.flapdoodle.eval.core.MapBasedVariableResolver;
 import de.flapdoodle.eval.core.VariableResolver;
+import de.flapdoodle.eval.core.evaluables.Evaluated;
 import de.flapdoodle.eval.core.exceptions.EvaluationException;
 import de.flapdoodle.eval.core.exceptions.ParseException;
 import de.flapdoodle.eval.example.BaseEvaluationTest;
@@ -65,32 +66,42 @@ class NotEqualsTest extends BaseEvaluationTest {
 		Expression expression = Defaults.expressionFactory().parse("a!=b");
 
 		MapBasedVariableResolver mapBasedValueResolver8 = VariableResolver.empty();
-		MapBasedVariableResolver mapBasedValueResolver9 = mapBasedValueResolver8.with("a", Value.of(new BigDecimal("1.4")));
-		MapBasedVariableResolver mapBasedVariableResolver4 = mapBasedValueResolver9.with("b", Value.of(new BigDecimal("1.4")));
+		Value<?> value9 = Value.of(new BigDecimal("1.4"));
+		MapBasedVariableResolver mapBasedValueResolver9 = mapBasedValueResolver8.with("a", Evaluated.value(value9));
+		Value<?> value8 = Value.of(new BigDecimal("1.4"));
+		MapBasedVariableResolver mapBasedVariableResolver4 = mapBasedValueResolver9.with("b", Evaluated.value(value8));
 		assertThat(
 			expression.evaluate(mapBasedVariableResolver4))
 			.isEqualTo(Value.FALSE);
 
 		MapBasedVariableResolver mapBasedValueResolver6 = VariableResolver.empty();
-		MapBasedVariableResolver mapBasedValueResolver7 = mapBasedValueResolver6.with("a", Value.of("Hello"));
-		MapBasedVariableResolver mapBasedVariableResolver3 = mapBasedValueResolver7.with("b", Value.of("Hello"));
+		Value<?> value7 = Value.of("Hello");
+		MapBasedVariableResolver mapBasedValueResolver7 = mapBasedValueResolver6.with("a", Evaluated.value(value7));
+		Value<?> value6 = Value.of("Hello");
+		MapBasedVariableResolver mapBasedVariableResolver3 = mapBasedValueResolver7.with("b", Evaluated.value(value6));
 		assertThat(expression.evaluate(mapBasedVariableResolver3))
 			.isEqualTo(Value.FALSE);
 
 		MapBasedVariableResolver mapBasedValueResolver4 = VariableResolver.empty();
-		MapBasedVariableResolver mapBasedValueResolver5 = mapBasedValueResolver4.with("a", Value.of("Hello"));
-		MapBasedVariableResolver mapBasedVariableResolver2 = mapBasedValueResolver5.with("b", Value.of("Goodbye"));
+		Value<?> value5 = Value.of("Hello");
+		MapBasedVariableResolver mapBasedValueResolver5 = mapBasedValueResolver4.with("a", Evaluated.value(value5));
+		Value<?> value4 = Value.of("Goodbye");
+		MapBasedVariableResolver mapBasedVariableResolver2 = mapBasedValueResolver5.with("b", Evaluated.value(value4));
 		assertThat(expression.evaluate(mapBasedVariableResolver2))
 			.isEqualTo(Value.TRUE);
 
         MapBasedVariableResolver mapBasedValueResolver2 = VariableResolver.empty();
-        MapBasedVariableResolver mapBasedValueResolver3 = mapBasedValueResolver2.with("a", Value.of(true));
-        MapBasedVariableResolver mapBasedVariableResolver1 = mapBasedValueResolver3.with("b", Value.of(true));
+		Value<?> value3 = Value.of(true);
+		MapBasedVariableResolver mapBasedValueResolver3 = mapBasedValueResolver2.with("a", Evaluated.value(value3));
+		Value<?> value2 = Value.of(true);
+		MapBasedVariableResolver mapBasedVariableResolver1 = mapBasedValueResolver3.with("b", Evaluated.value(value2));
 		assertThat(expression.evaluate(mapBasedVariableResolver1)).isEqualTo(Value.FALSE);
 
         MapBasedVariableResolver mapBasedValueResolver = VariableResolver.empty();
-        MapBasedVariableResolver mapBasedValueResolver1 = mapBasedValueResolver.with("a", Value.of(false));
-        MapBasedVariableResolver mapBasedVariableResolver = mapBasedValueResolver1.with("b", Value.of(true));
+		Value<?> value1 = Value.of(false);
+		MapBasedVariableResolver mapBasedValueResolver1 = mapBasedValueResolver.with("a", Evaluated.value(value1));
+		Value<?> value = Value.of(true);
+		MapBasedVariableResolver mapBasedVariableResolver = mapBasedValueResolver1.with("b", Evaluated.value(value));
 		assertThat(expression.evaluate(mapBasedVariableResolver)).isEqualTo(Value.TRUE);
 	}
 
@@ -99,14 +110,18 @@ class NotEqualsTest extends BaseEvaluationTest {
 		Expression expression = Defaults.expressionFactory().parse("a!=b");
 
 		MapBasedVariableResolver mapBasedValueResolver2 = VariableResolver.empty();
-		MapBasedVariableResolver mapBasedValueResolver3 = mapBasedValueResolver2.with("a", Value.of(Value::of, Arrays.asList("a", "b", "c")));
-		assertThat(expression.evaluate(mapBasedValueResolver3.with("b", Value.of(Value::of, Arrays.asList("a", "b", "c")))))
+		Value<?> value3 = Value.of(Value::of, Arrays.asList("a", "b", "c"));
+		MapBasedVariableResolver mapBasedValueResolver3 = mapBasedValueResolver2.with("a", Evaluated.value(value3));
+		Value<?> value2 = Value.of(Value::of, Arrays.asList("a", "b", "c"));
+		assertThat(expression.evaluate(mapBasedValueResolver3.with("b", Evaluated.value(value2))))
 			.isEqualTo(Value.FALSE);
 
 		MapBasedVariableResolver mapBasedValueResolver = VariableResolver.empty();
-		MapBasedVariableResolver mapBasedValueResolver1 = mapBasedValueResolver.with("a", Value.of(Value::of, Arrays.asList("a", "b", "c")));
+		Value<?> value1 = Value.of(Value::of, Arrays.asList("a", "b", "c"));
+		MapBasedVariableResolver mapBasedValueResolver1 = mapBasedValueResolver.with("a", Evaluated.value(value1));
+		Value<?> value = Value.of(Value::of, Arrays.asList("c", "b", "a"));
 		assertThat(
-			expression.evaluate(mapBasedValueResolver1.with("b", Value.of(Value::of, Arrays.asList("c", "b", "a")))))
+			expression.evaluate(mapBasedValueResolver1.with("b", Evaluated.value(value))))
 			.isEqualTo(Value.TRUE);
 	}
 
@@ -139,13 +154,17 @@ class NotEqualsTest extends BaseEvaluationTest {
 			};
 
 		MapBasedVariableResolver mapBasedValueResolver2 = VariableResolver.empty();
-		MapBasedVariableResolver mapBasedValueResolver3 = mapBasedValueResolver2.with("a", Value.of(Value::of, structure1));
-		assertThat(expression.evaluate(mapBasedValueResolver3.with("b", Value.of(Value::of, structure2))))
+		Value<?> value3 = Value.of(Value::of, structure1);
+		MapBasedVariableResolver mapBasedValueResolver3 = mapBasedValueResolver2.with("a", Evaluated.value(value3));
+		Value<?> value2 = Value.of(Value::of, structure2);
+		assertThat(expression.evaluate(mapBasedValueResolver3.with("b", Evaluated.value(value2))))
 			.isEqualTo(Value.FALSE);
 
 		MapBasedVariableResolver mapBasedValueResolver = VariableResolver.empty();
-		MapBasedVariableResolver mapBasedValueResolver1 = mapBasedValueResolver.with("a", Value.of(Value::of, structure1));
-		assertThat(expression.evaluate(mapBasedValueResolver1.with("b", Value.of(Value::of, structure3))))
+		Value<?> value1 = Value.of(Value::of, structure1);
+		MapBasedVariableResolver mapBasedValueResolver1 = mapBasedValueResolver.with("a", Evaluated.value(value1));
+		Value<?> value = Value.of(Value::of, structure3);
+		assertThat(expression.evaluate(mapBasedValueResolver1.with("b", Evaluated.value(value))))
 			.isEqualTo(Value.TRUE);
 	}
 }

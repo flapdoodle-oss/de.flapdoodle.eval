@@ -16,10 +16,7 @@
  */
 package de.flapdoodle.eval.example;
 
-import de.flapdoodle.eval.core.Expression;
-import de.flapdoodle.eval.core.ImmutableExpressionFactory;
-import de.flapdoodle.eval.core.MapBasedVariableResolver;
-import de.flapdoodle.eval.core.VariableResolver;
+import de.flapdoodle.eval.core.*;
 import de.flapdoodle.eval.core.evaluables.Evaluated;
 import de.flapdoodle.eval.core.exceptions.EvaluationException;
 import de.flapdoodle.eval.core.exceptions.ParseException;
@@ -162,8 +159,9 @@ class ExpressionTest {
 	@Test
 	void testGetUndefinedVariables() throws ParseException, EvaluationException {
 		Expression expression = Defaults.expressionFactory().parse("a+A+b+B+c+C+E+e+PI+x");
-		VariableResolver variableResolver = VariableResolver.empty()
-			.with("x", Value.of(1));
+		MapBasedVariableResolver mapBasedVariableResolver = VariableResolver.empty();
+		Value<?> value = Value.of(1);
+		VariableResolver variableResolver = mapBasedVariableResolver.with("x", Evaluated.value(value));
 		assertThat(expression.undefinedVariables(variableResolver)).containsExactlyInAnyOrder("A", "a", "B", "b", "C", "c", "e");
 	}
 }

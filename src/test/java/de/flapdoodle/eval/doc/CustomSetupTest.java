@@ -59,8 +59,19 @@ public class CustomSetupTest {
 		assertThat(expressionFactory.parse("-2").evaluate(VariableResolver.empty()))
 			.isEqualTo(-2);
 
-		assertThat(expressionFactory.parse("add(a,3)").evaluate(VariableResolver.empty()
-			.with("a", Evaluated.value(1))))
-			.isEqualTo(4);
+		assertThat(expressionFactory.parse("add(a,b)").evaluate(VariableResolver.empty()
+			.with("a", Evaluated.ofNull(Integer.class))
+			.and("b", Evaluated.ofNull(Integer.class))))
+			.isNull();
+
+		assertThat(expressionFactory.parse("add(a,b)").evaluate(VariableResolver.empty()
+			.with("a", Evaluated.ofNullable(Integer.class, 1))
+			.and("b", Evaluated.ofNull(Integer.class))))
+			.isEqualTo(1);
+
+		assertThat(expressionFactory.parse("add(a,b)").evaluate(VariableResolver.empty()
+			.with("a", Evaluated.ofNull(Integer.class))
+			.and("b", Evaluated.ofNullable(Integer.class, 2))))
+			.isEqualTo(2);
 	}
 }

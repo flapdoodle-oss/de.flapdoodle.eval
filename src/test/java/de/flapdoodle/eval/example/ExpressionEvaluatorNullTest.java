@@ -51,10 +51,11 @@ class ExpressionEvaluatorNullTest extends BaseExpressionEvaluatorTest {
 	void testNullEquals() throws ParseException, EvaluationException {
 		Expression expression = createExpression("a == null");
 		MapBasedVariableResolver mapBasedValueResolver1 = VariableResolver.empty();
-		MapBasedVariableResolver mapBasedVariableResolver1 = mapBasedValueResolver1.with("a", Value.ofNull());
+		MapBasedVariableResolver mapBasedVariableResolver1 = mapBasedValueResolver1.with("a", Evaluated.value((Value<?>) Value.ofNull()));
 		assertExpressionHasExpectedResult(expression, mapBasedVariableResolver1, "true");
         MapBasedVariableResolver mapBasedValueResolver = VariableResolver.empty();
-        MapBasedVariableResolver mapBasedVariableResolver = mapBasedValueResolver.with("a", Value.of(99));
+		Value<?> value = Value.of(99);
+		MapBasedVariableResolver mapBasedVariableResolver = mapBasedValueResolver.with("a", Evaluated.value(value));
 		assertExpressionHasExpectedResult(expression, mapBasedVariableResolver, "false");
 	}
 
@@ -62,10 +63,11 @@ class ExpressionEvaluatorNullTest extends BaseExpressionEvaluatorTest {
 	void testNullNotEquals() throws ParseException, EvaluationException {
 		Expression expression = createExpression("a != null");
 		MapBasedVariableResolver mapBasedValueResolver1 = VariableResolver.empty();
-		MapBasedVariableResolver mapBasedVariableResolver1 = mapBasedValueResolver1.with("a", Value.ofNull());
+		MapBasedVariableResolver mapBasedVariableResolver1 = mapBasedValueResolver1.with("a", Evaluated.value((Value<?>) Value.ofNull()));
 		assertExpressionHasExpectedResult(expression, mapBasedVariableResolver1, "false");
         MapBasedVariableResolver mapBasedValueResolver = VariableResolver.empty();
-        MapBasedVariableResolver mapBasedVariableResolver = mapBasedValueResolver.with("a", Value.of(99));
+		Value<?> value = Value.of(99);
+		MapBasedVariableResolver mapBasedVariableResolver = mapBasedValueResolver.with("a", Evaluated.value(value));
 		assertExpressionHasExpectedResult(expression, mapBasedVariableResolver, "true");
 	}
 
@@ -73,23 +75,25 @@ class ExpressionEvaluatorNullTest extends BaseExpressionEvaluatorTest {
 	void testHandleWithIf() throws EvaluationException, ParseException {
 		Expression expression1 = createExpression("if(a != null, a * 5, 1)");
 		MapBasedVariableResolver mapBasedValueResolver3 = VariableResolver.empty();
-		assertExpressionHasExpectedResult(expression1, mapBasedValueResolver3.with("a", Value.ofNull()), "1");
+		assertExpressionHasExpectedResult(expression1, mapBasedValueResolver3.with("a", Evaluated.value((Value<?>) Value.ofNull())), "1");
         MapBasedVariableResolver mapBasedValueResolver = VariableResolver.empty();
-        assertExpressionHasExpectedResult(expression1, mapBasedValueResolver.with("a", Value.of(3)), "15.0");
+		Value<?> value1 = Value.of(3);
+		assertExpressionHasExpectedResult(expression1, mapBasedValueResolver.with("a", Evaluated.value(value1)), "15.0");
 
 		Expression expression2 =
 			createExpression("if(a == null, \"Unknown name\", \"The name is \" + a)");
 		MapBasedVariableResolver mapBasedValueResolver2 = VariableResolver.empty();
-		assertExpressionHasExpectedResult(expression2, mapBasedValueResolver2.with("a", Value.ofNull()), "Unknown name");
+		assertExpressionHasExpectedResult(expression2, mapBasedValueResolver2.with("a", Evaluated.value((Value<?>) Value.ofNull())), "Unknown name");
 		MapBasedVariableResolver mapBasedValueResolver1 = VariableResolver.empty();
-		assertExpressionHasExpectedResult(expression2, mapBasedValueResolver1.with("a", Value.of("Max")), "The name is Max");
+		Value<?> value = Value.of("Max");
+		assertExpressionHasExpectedResult(expression2, mapBasedValueResolver1.with("a", Evaluated.value(value)), "The name is Max");
 	}
 
 	@Test
 	void testHandleWithIfFailCase() throws EvaluationException, ParseException {
 		assertThatThrownBy(() -> {
 			MapBasedVariableResolver mapBasedValueResolver = VariableResolver.empty();
-			evaluate("if(a == null, a * 5, 1)", mapBasedValueResolver.with("a", Value.ofNull()));
+			evaluate("if(a == null, a * 5, 1)", mapBasedValueResolver.with("a", Evaluated.value((Value<?>) Value.ofNull())));
 		})
 			.isInstanceOf(EvaluationException.class)
 			.hasMessageContaining("no matching signature found");
@@ -97,7 +101,7 @@ class ExpressionEvaluatorNullTest extends BaseExpressionEvaluatorTest {
 		Expression expression2 =
 			createExpression("if(a != null, \"Unknown name\", \"The name is \" + a)");
 		MapBasedVariableResolver mapBasedValueResolver = VariableResolver.empty();
-		assertExpressionHasExpectedResult(expression2, mapBasedValueResolver.with("a", Value.ofNull()), "The name is null");
+		assertExpressionHasExpectedResult(expression2, mapBasedValueResolver.with("a", Evaluated.value((Value<?>) Value.ofNull())), "The name is null");
 	}
 
 	@Test
@@ -115,7 +119,7 @@ class ExpressionEvaluatorNullTest extends BaseExpressionEvaluatorTest {
 	void testFailWithNoHandling() {
 		assertThatThrownBy(() -> {
 			MapBasedVariableResolver mapBasedValueResolver = VariableResolver.empty();
-			MapBasedVariableResolver mapBasedVariableResolver = mapBasedValueResolver.with("a", Value.ofNull());
+			MapBasedVariableResolver mapBasedVariableResolver = mapBasedValueResolver.with("a", Evaluated.value((Value<?>) Value.ofNull()));
 			evaluate("a * 5", mapBasedVariableResolver);
 		})
 			.isInstanceOf(EvaluationException.class)
@@ -123,13 +127,13 @@ class ExpressionEvaluatorNullTest extends BaseExpressionEvaluatorTest {
 
 		assertThatThrownBy(() -> {
 			MapBasedVariableResolver mapBasedValueResolver = VariableResolver.empty();
-			MapBasedVariableResolver mapBasedVariableResolver = mapBasedValueResolver.with("a", Value.ofNull());
+			MapBasedVariableResolver mapBasedVariableResolver = mapBasedValueResolver.with("a", Evaluated.value((Value<?>) Value.ofNull()));
 			evaluate("floor(a)", mapBasedVariableResolver);
 		}).isInstanceOf(EvaluationException.class);
 
 		assertThatThrownBy(() -> {
 			MapBasedVariableResolver mapBasedValueResolver = VariableResolver.empty();
-			MapBasedVariableResolver mapBasedVariableResolver = mapBasedValueResolver.with("a", Value.ofNull());
+			MapBasedVariableResolver mapBasedVariableResolver = mapBasedValueResolver.with("a", Evaluated.value((Value<?>) Value.ofNull()));
 			evaluate("a > 5", mapBasedVariableResolver);
 		}).isInstanceOf(EvaluationException.class);
 	}

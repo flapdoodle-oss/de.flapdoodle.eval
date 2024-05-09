@@ -19,6 +19,7 @@ package de.flapdoodle.eval.example;
 import de.flapdoodle.eval.core.Expression;
 import de.flapdoodle.eval.core.MapBasedVariableResolver;
 import de.flapdoodle.eval.core.VariableResolver;
+import de.flapdoodle.eval.core.evaluables.Evaluated;
 import de.flapdoodle.eval.core.exceptions.EvaluationException;
 import de.flapdoodle.eval.core.exceptions.ParseException;
 import org.junit.jupiter.api.Test;
@@ -42,7 +43,8 @@ class ExpressionEvaluatorStructureTest extends BaseExpressionEvaluatorTest {
 			};
 
 		MapBasedVariableResolver mapBasedValueResolver = VariableResolver.empty();
-		MapBasedVariableResolver mapBasedVariableResolver = mapBasedValueResolver.with("order", Value.of(Value::of, structure));
+		Value<?> value = Value.of(Value::of, structure);
+		MapBasedVariableResolver mapBasedVariableResolver = mapBasedValueResolver.with("order", Evaluated.value(value));
 		VariableResolver variableResolver = mapBasedVariableResolver;
 		assertThat(evaluate("order.environment_id", variableResolver)).isEqualTo("12345");
 	}
@@ -59,7 +61,8 @@ class ExpressionEvaluatorStructureTest extends BaseExpressionEvaluatorTest {
 			.build();
 
 		MapBasedVariableResolver mapBasedValueResolver = VariableResolver.empty();
-		MapBasedVariableResolver mapBasedVariableResolver = mapBasedValueResolver.with("order", Value.of(structure1));
+		Value<?> value = Value.of(structure1);
+		MapBasedVariableResolver mapBasedVariableResolver = mapBasedValueResolver.with("order", Evaluated.value(value));
 		VariableResolver variableResolver = mapBasedVariableResolver;
 		assertThat(evaluate("order.e_id_e.var_x.e", variableResolver)).isEqualTo("765");
 	}
@@ -74,7 +77,8 @@ class ExpressionEvaluatorStructureTest extends BaseExpressionEvaluatorTest {
 			};
 
 		MapBasedVariableResolver mapBasedValueResolver = VariableResolver.empty();
-		MapBasedVariableResolver mapBasedVariableResolver = mapBasedValueResolver.with("a", Value.of(Value::of, structure));
+		Value<?> value = Value.of(Value::of, structure);
+		MapBasedVariableResolver mapBasedVariableResolver = mapBasedValueResolver.with("a", Evaluated.value(value));
 		VariableResolver variableResolver = mapBasedVariableResolver;
 		assertThat(evaluate("a.b", variableResolver)).isEqualTo("99");
 	}
@@ -89,7 +93,8 @@ class ExpressionEvaluatorStructureTest extends BaseExpressionEvaluatorTest {
 			};
 
 		MapBasedVariableResolver mapBasedValueResolver = VariableResolver.empty();
-		MapBasedVariableResolver mapBasedVariableResolver = mapBasedValueResolver.with("a", Value.of(Value::of, structure));
+		Value<?> value = Value.of(Value::of, structure);
+		MapBasedVariableResolver mapBasedVariableResolver = mapBasedValueResolver.with("a", Evaluated.value(value));
 		VariableResolver variableResolver = mapBasedVariableResolver;
 		assertThat(evaluate("a[\"b\"]", variableResolver)).isEqualTo("99");
 	}
@@ -103,7 +108,8 @@ class ExpressionEvaluatorStructureTest extends BaseExpressionEvaluatorTest {
 			.build();
 
 		MapBasedVariableResolver mapBasedValueResolver = VariableResolver.empty();
-		MapBasedVariableResolver mapBasedVariableResolver = mapBasedValueResolver.with("a", Value.of(structure));
+		Value<?> value = Value.of(structure);
+		MapBasedVariableResolver mapBasedVariableResolver = mapBasedValueResolver.with("a", Evaluated.value(value));
 		VariableResolver variableResolver = mapBasedVariableResolver;
 		assertThat(evaluate("a.b.c", variableResolver)).isEqualTo("95");
 	}
@@ -112,7 +118,8 @@ class ExpressionEvaluatorStructureTest extends BaseExpressionEvaluatorTest {
 	void testThrowsUnsupportedDataTypeForStructure() {
 		assertThatThrownBy(() -> {
             MapBasedVariableResolver mapBasedValueResolver = VariableResolver.empty();
-            MapBasedVariableResolver mapBasedVariableResolver = mapBasedValueResolver.with("a", Value.of("aString"));
+			Value<?> value = Value.of("aString");
+			MapBasedVariableResolver mapBasedVariableResolver = mapBasedValueResolver.with("a", Evaluated.value(value));
 			VariableResolver variableResolver = mapBasedVariableResolver;
 			Expression expression = createExpression("a.b");
 			expression.evaluate(variableResolver);
@@ -129,7 +136,8 @@ class ExpressionEvaluatorStructureTest extends BaseExpressionEvaluatorTest {
 		assertThatThrownBy(
 			() -> {
 				MapBasedVariableResolver mapBasedValueResolver = VariableResolver.empty();
-				MapBasedVariableResolver mapBasedVariableResolver = mapBasedValueResolver.with("a", Value.of(Value::of, testStructure));
+				Value<?> value = Value.of(Value::of, testStructure);
+				MapBasedVariableResolver mapBasedVariableResolver = mapBasedValueResolver.with("a", Evaluated.value(value));
 				VariableResolver variableResolver = mapBasedVariableResolver;
 				Expression expression = createExpression("a.field1 + a.field2");
 				expression.evaluate(variableResolver);
@@ -146,7 +154,8 @@ class ExpressionEvaluatorStructureTest extends BaseExpressionEvaluatorTest {
 		testStructure.put("field 1", new BigDecimal(88));
 
 		MapBasedVariableResolver mapBasedValueResolver = VariableResolver.empty();
-		MapBasedVariableResolver mapBasedVariableResolver = mapBasedValueResolver.with("a", Value.of(Value::of, testStructure));
+		Value<?> value = Value.of(Value::of, testStructure);
+		MapBasedVariableResolver mapBasedVariableResolver = mapBasedValueResolver.with("a", Evaluated.value(value));
 		VariableResolver variableResolver = mapBasedVariableResolver;
 		assertThat(evaluate("a.\"field 1\"", variableResolver)).isEqualTo("88");
 	}
@@ -162,7 +171,8 @@ class ExpressionEvaluatorStructureTest extends BaseExpressionEvaluatorTest {
 			.build();
 
 		MapBasedVariableResolver mapBasedValueResolver = VariableResolver.empty();
-		MapBasedVariableResolver mapBasedVariableResolver = mapBasedValueResolver.with("a", Value.of(structure));
+		Value<?> value = Value.of(structure);
+		MapBasedVariableResolver mapBasedVariableResolver = mapBasedValueResolver.with("a", Evaluated.value(value));
 		VariableResolver variableResolver = mapBasedVariableResolver;
 		assertThat(evaluate("a.\"prop b\"[0].\"prop c\"", variableResolver)).isEqualTo("99.0");
 	}
@@ -176,7 +186,8 @@ class ExpressionEvaluatorStructureTest extends BaseExpressionEvaluatorTest {
 			.build();
 
 		MapBasedVariableResolver mapBasedValueResolver = VariableResolver.empty();
-		MapBasedVariableResolver mapBasedVariableResolver = mapBasedValueResolver.with("a", Value.of(structure));
+		Value<?> value = Value.of(structure);
+		MapBasedVariableResolver mapBasedVariableResolver = mapBasedValueResolver.with("a", Evaluated.value(value));
 		VariableResolver variableResolver = mapBasedVariableResolver;
 		assertThat(evaluate("a.\"b prop\"[1]", variableResolver)).isEqualTo("2.0");
 	}

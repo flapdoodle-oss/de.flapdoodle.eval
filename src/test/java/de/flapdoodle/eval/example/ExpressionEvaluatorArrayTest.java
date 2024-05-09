@@ -18,6 +18,7 @@ package de.flapdoodle.eval.example;
 
 import de.flapdoodle.eval.core.MapBasedVariableResolver;
 import de.flapdoodle.eval.core.VariableResolver;
+import de.flapdoodle.eval.core.evaluables.Evaluated;
 import de.flapdoodle.eval.core.exceptions.EvaluationException;
 import de.flapdoodle.eval.core.exceptions.ParseException;
 import org.junit.jupiter.api.Test;
@@ -33,30 +34,38 @@ class ExpressionEvaluatorArrayTest extends BaseExpressionEvaluatorTest {
 	@Test
 	void testSimpleArray() throws ParseException, EvaluationException {
 		Value.ArrayValue array = Value.of(Value::of, Arrays.asList(new BigDecimal(99)));
-		MapBasedVariableResolver mapBasedVariableResolver = VariableResolver.empty().with("a", array);
+		MapBasedVariableResolver mapBasedVariableResolver1 = VariableResolver.empty();
+		MapBasedVariableResolver mapBasedVariableResolver = mapBasedVariableResolver1.with("a", Evaluated.value((Value<?>) array));
 		assertThat(evaluate("a[0]", mapBasedVariableResolver)).isEqualTo("99");
 	}
 
 	@Test
 	void testMultipleEntriesArray() throws ParseException, EvaluationException {
 		Value.ArrayValue array = Value.of(Value::of, new BigDecimal(2), new BigDecimal(4), new BigDecimal(6));
-		MapBasedVariableResolver mapBasedVariableResolver = VariableResolver.empty().with("a", array);
+		MapBasedVariableResolver mapBasedVariableResolver1 = VariableResolver.empty();
+		MapBasedVariableResolver mapBasedVariableResolver = mapBasedVariableResolver1.with("a", Evaluated.value((Value<?>) array));
 		assertThat(evaluate("a[0]+a[1]+a[2]", mapBasedVariableResolver)).isEqualTo("12");
 	}
 
 	@Test
 	void testExpressionArray() throws ParseException, EvaluationException {
 		Value.ArrayValue array = Value.of(Value::of, new BigDecimal(3));
-		MapBasedVariableResolver mapBasedVariableResolver = VariableResolver.empty().with("a", array).and("x", Value.of(new BigDecimal(4)));
+		MapBasedVariableResolver mapBasedVariableResolver1 = VariableResolver.empty();
+		MapBasedVariableResolver mapBasedVariableResolver2 = mapBasedVariableResolver1.with("a", Evaluated.value((Value<?>) array));
+		Value<?> value = Value.of(new BigDecimal(4));
+		MapBasedVariableResolver mapBasedVariableResolver = mapBasedVariableResolver2.and("x", Evaluated.value(value));
 		assertThat(evaluate("a[4-x]", mapBasedVariableResolver)).isEqualTo("3");
 	}
 
 	@Test
 	void testNestedArray() throws ParseException, EvaluationException {
-		MapBasedVariableResolver mapBasedVariableResolver = VariableResolver.empty()
-			.with("a", Value.of(Value::of, Arrays.asList(new BigDecimal(3))))
-			.and("b", Value.of(Value::of, new BigDecimal(2), new BigDecimal(4), new BigDecimal(6)))
-			.and("x", Value.of(new BigDecimal(6)));
+		MapBasedVariableResolver mapBasedVariableResolver1 = VariableResolver.empty();
+		Value<?> value = Value.of(Value::of, Arrays.asList(new BigDecimal(3)));
+		MapBasedVariableResolver mapBasedVariableResolver2 = mapBasedVariableResolver1.with("a", Evaluated.value(value));
+		Value<?> value1 = Value.of(Value::of, new BigDecimal(2), new BigDecimal(4), new BigDecimal(6));
+		MapBasedVariableResolver mapBasedVariableResolver3 = mapBasedVariableResolver2.and("b", Evaluated.value(value1));
+		Value<?> value2 = Value.of(new BigDecimal(6));
+		MapBasedVariableResolver mapBasedVariableResolver = mapBasedVariableResolver3.and("x", Evaluated.value(value2));
 		VariableResolver variableResolver = mapBasedVariableResolver;
 		assertThat(evaluate("a[b[6-4]-x]", variableResolver)).isEqualTo("3");
 	}
@@ -64,14 +73,16 @@ class ExpressionEvaluatorArrayTest extends BaseExpressionEvaluatorTest {
 	@Test
 	void testStringArray() throws ParseException, EvaluationException {
 		Value.ArrayValue array = Value.of(Value::of, "Hello", "beautiful", "world");
-		MapBasedVariableResolver mapBasedVariableResolver = VariableResolver.empty().with("a", array);
+		MapBasedVariableResolver mapBasedVariableResolver1 = VariableResolver.empty();
+		MapBasedVariableResolver mapBasedVariableResolver = mapBasedVariableResolver1.with("a", Evaluated.value((Value<?>) array));
 		assertThat(evaluate("a[0] + \" \" + a[1] + \" \" + a[2]", mapBasedVariableResolver)).isEqualTo("Hello beautiful world");
 	}
 
 	@Test
 	void testBooleanArray() throws ParseException, EvaluationException {
 		Value.ArrayValue array = Value.of(Value::of, true, true, false);
-		MapBasedVariableResolver mapBasedVariableResolver = VariableResolver.empty().with("a", array);
+		MapBasedVariableResolver mapBasedVariableResolver1 = VariableResolver.empty();
+		MapBasedVariableResolver mapBasedVariableResolver = mapBasedVariableResolver1.with("a", Evaluated.value((Value<?>) array));
 		assertThat(evaluate("a[0] + \" \" + a[1] + \" \" + a[2]", mapBasedVariableResolver)).isEqualTo("true true false");
 	}
 
@@ -82,13 +93,17 @@ class ExpressionEvaluatorArrayTest extends BaseExpressionEvaluatorTest {
 			Value.of(Value::of, new BigDecimal(4), new BigDecimal(8))
 		);
 
-		MapBasedVariableResolver mapBasedVariableResolver3 = VariableResolver.empty().with("a", array);
+		MapBasedVariableResolver mapBasedVariableResolver7 = VariableResolver.empty();
+		MapBasedVariableResolver mapBasedVariableResolver3 = mapBasedVariableResolver7.with("a", Evaluated.value((Value<?>) array));
 		assertThat(evaluate("a[0][0]", mapBasedVariableResolver3)).isEqualTo("1");
-		MapBasedVariableResolver mapBasedVariableResolver2 = VariableResolver.empty().with("a", array);
+		MapBasedVariableResolver mapBasedVariableResolver6 = VariableResolver.empty();
+		MapBasedVariableResolver mapBasedVariableResolver2 = mapBasedVariableResolver6.with("a", Evaluated.value((Value<?>) array));
 		assertThat(evaluate("a[0][1]", mapBasedVariableResolver2)).isEqualTo("2");
-		MapBasedVariableResolver mapBasedVariableResolver1 = VariableResolver.empty().with("a", array);
+		MapBasedVariableResolver mapBasedVariableResolver5 = VariableResolver.empty();
+		MapBasedVariableResolver mapBasedVariableResolver1 = mapBasedVariableResolver5.with("a", Evaluated.value((Value<?>) array));
 		assertThat(evaluate("a[1][0]", mapBasedVariableResolver1)).isEqualTo("4");
-		MapBasedVariableResolver mapBasedVariableResolver = VariableResolver.empty().with("a", array);
+		MapBasedVariableResolver mapBasedVariableResolver4 = VariableResolver.empty();
+		MapBasedVariableResolver mapBasedVariableResolver = mapBasedVariableResolver4.with("a", Evaluated.value((Value<?>) array));
 		assertThat(evaluate("a[1][1]", mapBasedVariableResolver)).isEqualTo("8");
 	}
 
@@ -96,24 +111,31 @@ class ExpressionEvaluatorArrayTest extends BaseExpressionEvaluatorTest {
 	void testMixedArray() throws ParseException, EvaluationException {
 		Value.ArrayValue array = Value.of(Value.of("Hello"), Value.of(new BigDecimal(4)), Value.of(true));
 
-		MapBasedVariableResolver mapBasedVariableResolver2 = VariableResolver.empty().with("a", array);
+		MapBasedVariableResolver mapBasedVariableResolver5 = VariableResolver.empty();
+		MapBasedVariableResolver mapBasedVariableResolver2 = mapBasedVariableResolver5.with("a", Evaluated.value((Value<?>) array));
 		assertThat(evaluate("a[0]", mapBasedVariableResolver2)).isEqualTo("Hello");
-		MapBasedVariableResolver mapBasedVariableResolver1 = VariableResolver.empty().with("a", array);
+		MapBasedVariableResolver mapBasedVariableResolver4 = VariableResolver.empty();
+		MapBasedVariableResolver mapBasedVariableResolver1 = mapBasedVariableResolver4.with("a", Evaluated.value((Value<?>) array));
 		assertThat(evaluate("a[1]", mapBasedVariableResolver1)).isEqualTo("4");
-		MapBasedVariableResolver mapBasedVariableResolver = VariableResolver.empty().with("a", array);
+		MapBasedVariableResolver mapBasedVariableResolver3 = VariableResolver.empty();
+		MapBasedVariableResolver mapBasedVariableResolver = mapBasedVariableResolver3.with("a", Evaluated.value((Value<?>) array));
 		assertThat(evaluate("a[2]", mapBasedVariableResolver)).isEqualTo("true");
 	}
 
 	@Test
 	void stringDataTypeForArray() throws ParseException, EvaluationException {
-		MapBasedVariableResolver mapBasedVariableResolver = VariableResolver.empty().with("a", Value.of("aString"));
+		MapBasedVariableResolver mapBasedVariableResolver1 = VariableResolver.empty();
+		Value<?> value = Value.of("aString");
+		MapBasedVariableResolver mapBasedVariableResolver = mapBasedVariableResolver1.with("a", Evaluated.value(value));
 		assertThat(evaluate("a[1]", mapBasedVariableResolver)).isEqualTo("S");
 	}
 
 	@Test
 	void testThrowsUnsupportedDataTypeForArray() {
 		assertThatThrownBy(() -> {
-			MapBasedVariableResolver mapBasedVariableResolver = VariableResolver.empty().with("a", Value.of(123));
+			MapBasedVariableResolver mapBasedVariableResolver1 = VariableResolver.empty();
+			Value<?> value = Value.of(123);
+			MapBasedVariableResolver mapBasedVariableResolver = mapBasedVariableResolver1.with("a", Evaluated.value(value));
 			evaluate("a[0]", mapBasedVariableResolver);
 		})
 			.isInstanceOf(EvaluationException.class)
@@ -125,7 +147,10 @@ class ExpressionEvaluatorArrayTest extends BaseExpressionEvaluatorTest {
 		assertThatThrownBy(
 			() -> {
 				Value.ArrayValue array = Value.of(Value::of, "Hello");
-				MapBasedVariableResolver mapBasedVariableResolver = VariableResolver.empty().with("a", array).and("b", Value.of("anotherString"));
+				MapBasedVariableResolver mapBasedVariableResolver1 = VariableResolver.empty();
+				MapBasedVariableResolver mapBasedVariableResolver2 = mapBasedVariableResolver1.with("a", Evaluated.value((Value<?>) array));
+				Value<?> value = Value.of("anotherString");
+				MapBasedVariableResolver mapBasedVariableResolver = mapBasedVariableResolver2.and("b", Evaluated.value(value));
 				evaluate("a[b]", mapBasedVariableResolver);
 			})
 			.isInstanceOf(EvaluationException.class)

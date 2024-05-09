@@ -45,6 +45,14 @@ public abstract class Evaluated<T> {
 		return ofNullable(TypeInfo.of(type), value);
 	}
 
+	public static <T> Evaluated<T> ofNull(Class<T> type) {
+		return ofNullable(TypeInfo.of(type), null);
+	}
+
+	public static <T> Evaluated<T> ofNull(TypeInfo<T> type) {
+		return ofNullable(type, null);
+	}
+
 	public static <T> Evaluated<T> ofNullable(TypeInfo<T> type, @Nullable T value) {
 		return ImmutableEvaluated.of(type, value);
 	}

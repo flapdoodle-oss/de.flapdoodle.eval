@@ -17,7 +17,6 @@
 package de.flapdoodle.eval.core;
 
 import de.flapdoodle.eval.core.evaluables.Evaluated;
-import de.flapdoodle.eval.example.Value;
 import org.immutables.value.Value.Auxiliary;
 import org.immutables.value.Value.Immutable;
 
@@ -46,22 +45,8 @@ public abstract class MapBasedVariableResolver implements VariableResolver {
 	}
 
 	@Auxiliary
-	@Deprecated
-	// TODO inline
-	public ImmutableMapBasedVariableResolver with(String variable, Value<?> value) {
-		return with(variable, Evaluated.value(value));
-	}
-
-	@Auxiliary
 	public ImmutableMapBasedVariableResolver and(String variable, Evaluated<?> value) {
 		return with(variable, value);
-	}
-
-	@Auxiliary
-	@Deprecated
-	// TODO inline
-	public ImmutableMapBasedVariableResolver and(String variable, Value<?> value) {
-		return and(variable, Evaluated.value(value));
 	}
 
 	@Auxiliary
