@@ -16,6 +16,7 @@
  */
 package de.flapdoodle.eval.doc;
 
+import de.flapdoodle.eval.core.Expression;
 import de.flapdoodle.eval.core.ExpressionFactory;
 import de.flapdoodle.eval.core.VariableResolver;
 import de.flapdoodle.eval.core.evaluables.*;
@@ -50,28 +51,42 @@ public class CustomSetupTest {
 			.exceptionMapper(EvalFailedWithException.mapper())
 			.build();
 
-		assertThat(expressionFactory.parse("add(2,3)").evaluate(VariableResolver.empty()))
+		Expression expression6 = expressionFactory.parse("add(2,3)");
+		VariableResolver variableResolver6 = VariableResolver.empty();
+		assertThat(expression6.evaluate(variableResolver6).wrapped())
 			.isEqualTo(5);
-		assertThat(expressionFactory.parse("2+3").evaluate(VariableResolver.empty()))
+		Expression expression5 = expressionFactory.parse("2+3");
+		VariableResolver variableResolver5 = VariableResolver.empty();
+		assertThat(expression5.evaluate(variableResolver5).wrapped())
 			.isEqualTo(5);
-		assertThat(expressionFactory.parse("2-3").evaluate(VariableResolver.empty()))
+		Expression expression4 = expressionFactory.parse("2-3");
+		VariableResolver variableResolver4 = VariableResolver.empty();
+		assertThat(expression4.evaluate(variableResolver4).wrapped())
 			.isEqualTo(-1);
-		assertThat(expressionFactory.parse("-2").evaluate(VariableResolver.empty()))
+		Expression expression3 = expressionFactory.parse("-2");
+		VariableResolver variableResolver3 = VariableResolver.empty();
+		assertThat(expression3.evaluate(variableResolver3).wrapped())
 			.isEqualTo(-2);
 
-		assertThat(expressionFactory.parse("add(a,b)").evaluate(VariableResolver.empty()
+		Expression expression2 = expressionFactory.parse("add(a,b)");
+		VariableResolver variableResolver2 = VariableResolver.empty()
 			.with("a", Evaluated.ofNull(Integer.class))
-			.and("b", Evaluated.ofNull(Integer.class))))
+			.and("b", Evaluated.ofNull(Integer.class));
+		assertThat(expression2.evaluate(variableResolver2).wrapped())
 			.isNull();
 
-		assertThat(expressionFactory.parse("add(a,b)").evaluate(VariableResolver.empty()
+		Expression expression1 = expressionFactory.parse("add(a,b)");
+		VariableResolver variableResolver1 = VariableResolver.empty()
 			.with("a", Evaluated.ofNullable(Integer.class, 1))
-			.and("b", Evaluated.ofNull(Integer.class))))
+			.and("b", Evaluated.ofNull(Integer.class));
+		assertThat(expression1.evaluate(variableResolver1).wrapped())
 			.isEqualTo(1);
 
-		assertThat(expressionFactory.parse("add(a,b)").evaluate(VariableResolver.empty()
+		Expression expression = expressionFactory.parse("add(a,b)");
+		VariableResolver variableResolver = VariableResolver.empty()
 			.with("a", Evaluated.ofNull(Integer.class))
-			.and("b", Evaluated.ofNullable(Integer.class, 2))))
+			.and("b", Evaluated.ofNullable(Integer.class, 2));
+		assertThat(expression.evaluate(variableResolver).wrapped())
 			.isEqualTo(2);
 	}
 }

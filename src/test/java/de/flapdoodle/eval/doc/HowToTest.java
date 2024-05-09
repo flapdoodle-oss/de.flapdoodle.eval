@@ -29,7 +29,6 @@ import de.flapdoodle.eval.example.Value;
 import de.flapdoodle.testdoc.Recorder;
 import de.flapdoodle.testdoc.Recording;
 import de.flapdoodle.testdoc.TabSize;
-import org.assertj.core.api.MapAssert;
 import org.assertj.core.data.MapEntry;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
@@ -49,8 +48,9 @@ public class HowToTest {
 		recording.begin();
 		ExpressionFactory expressionFactory = Defaults.expressionFactory();
 		Expression expression = expressionFactory.parse("a*2");
-		Object result = expression.evaluate(VariableResolver.empty()
-			.with("a", Evaluated.value(Value.of(2))));
+		VariableResolver variableResolver = VariableResolver.empty()
+			.with("a", Evaluated.value(Value.of(2)));
+		Object result = expression.evaluate(variableResolver).wrapped();
 
 		assertThat(result).isEqualTo(Value.of(4.0));
 		recording.end();
@@ -118,19 +118,28 @@ public class HowToTest {
 			.exceptionMapper(EvalFailedWithException.mapper())
 			.build();
 
-		assertThat(expressionFactory.parse("pi").evaluate(VariableResolver.empty()))
+		Expression expression4 = expressionFactory.parse("pi");
+		VariableResolver variableResolver4 = VariableResolver.empty();
+		assertThat(expression4.evaluate(variableResolver4).wrapped())
 			.isEqualTo(BigDecimal.valueOf(3.1415));
-		assertThat(expressionFactory.parse("add(2,3)").evaluate(VariableResolver.empty()))
+		Expression expression3 = expressionFactory.parse("add(2,3)");
+		VariableResolver variableResolver3 = VariableResolver.empty();
+		assertThat(expression3.evaluate(variableResolver3).wrapped())
 			.isEqualTo(BigDecimal.valueOf(5L));
-		assertThat(expressionFactory.parse("2+3").evaluate(VariableResolver.empty()))
+		Expression expression2 = expressionFactory.parse("2+3");
+		VariableResolver variableResolver2 = VariableResolver.empty();
+		assertThat(expression2.evaluate(variableResolver2).wrapped())
 			.isEqualTo(BigDecimal.valueOf(5L));
-		assertThat(expressionFactory.parse("\"fun\"[1]").evaluate(VariableResolver.empty()))
+		Expression expression1 = expressionFactory.parse("\"fun\"[1]");
+		VariableResolver variableResolver1 = VariableResolver.empty();
+		assertThat(expression1.evaluate(variableResolver1).wrapped())
 			.isEqualTo("u");
 		MapBasedVariableResolver mapBasedValueResolver = VariableResolver.empty();
 		Map<Object, Object> value = new LinkedHashMap<>();
 		value.put("key", "stuff");
-		assertThat(expressionFactory.parse("map.key")
-			.evaluate(mapBasedValueResolver.with("map", Evaluated.value(value))))
+		Expression expression = expressionFactory.parse("map.key");
+		VariableResolver variableResolver = mapBasedValueResolver.with("map", Evaluated.value(value));
+		assertThat(expression.evaluate(variableResolver).wrapped())
 			.isEqualTo("stuff");
 		recording.end();
 	}

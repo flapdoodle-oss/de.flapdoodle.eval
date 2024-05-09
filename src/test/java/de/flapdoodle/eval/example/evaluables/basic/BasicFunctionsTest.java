@@ -193,7 +193,10 @@ class BasicFunctionsTest extends BaseEvaluationTest {
 
 	@Test
 	void testSqrtNegative() {
-		assertThatThrownBy(() -> Defaults.expressionFactory().parse("sqrt(-1)").evaluate(VariableResolver.empty()))
+		assertThatThrownBy(() -> {
+			Expression expression = Defaults.expressionFactory().parse("sqrt(-1)");
+			expression.evaluate(VariableResolver.empty()).wrapped();
+		})
 			.isInstanceOf(EvaluationException.class)
 			.hasMessage("value is not >= 0: -1");
 	}
@@ -219,9 +222,11 @@ class BasicFunctionsTest extends BaseEvaluationTest {
 	@Test
 	void testRandom() throws EvaluationException, ParseException {
 		Expression expression1 = Defaults.expressionFactory().parse("random()");
-		Object r1 = expression1.evaluate(VariableResolver.empty());
+		VariableResolver variableResolver1 = VariableResolver.empty();
+		Object r1 = expression1.evaluate(variableResolver1).wrapped();
 		Expression expression = Defaults.expressionFactory().parse("random()");
-		Object r2 = expression.evaluate(VariableResolver.empty());
+		VariableResolver variableResolver = VariableResolver.empty();
+		Object r2 = expression.evaluate(variableResolver).wrapped();
 
 		assertThat(r1).isNotEqualTo(r2);
 	}
@@ -229,7 +234,8 @@ class BasicFunctionsTest extends BaseEvaluationTest {
 	@Test
 	void testRandomInRange() throws EvaluationException, ParseException {
 		Expression expression1 = Defaults.expressionFactory().parse("random(1.0, 2.0)");
-		Value.NumberValue r1 = (Value.NumberValue) expression1.evaluate(VariableResolver.empty());
+		VariableResolver variableResolver = VariableResolver.empty();
+		Value.NumberValue r1 = (Value.NumberValue) expression1.evaluate(variableResolver).wrapped();
 
 		assertThat(r1).isGreaterThanOrEqualTo(Value.of(BigDecimal.ONE));
 		assertThat(r1).isLessThanOrEqualTo(Value.of(BigDecimal.valueOf(2.0)));
@@ -304,14 +310,20 @@ class BasicFunctionsTest extends BaseEvaluationTest {
 
 	@Test
 	void testLogNegative() {
-		assertThatThrownBy(() -> Defaults.expressionFactory().parse("log(-1)").evaluate(VariableResolver.empty()))
+		assertThatThrownBy(() -> {
+			Expression expression = Defaults.expressionFactory().parse("log(-1)");
+			expression.evaluate(VariableResolver.empty()).wrapped();
+		})
 			.isInstanceOf(EvaluationException.class)
 			.hasMessage("value is not > 0: -1");
 	}
 
 	@Test
 	void testLogZero() {
-		assertThatThrownBy(() -> Defaults.expressionFactory().parse("log(0)").evaluate(VariableResolver.empty()))
+		assertThatThrownBy(() -> {
+			Expression expression = Defaults.expressionFactory().parse("log(0)");
+			expression.evaluate(VariableResolver.empty()).wrapped();
+		})
 			.isInstanceOf(EvaluationException.class)
 			.hasMessage("value is not > 0: 0");
 	}
@@ -332,14 +344,20 @@ class BasicFunctionsTest extends BaseEvaluationTest {
 
 	@Test
 	void testLog10Negative() {
-		assertThatThrownBy(() -> Defaults.expressionFactory().parse("log10(-1)").evaluate(VariableResolver.empty()))
+		assertThatThrownBy(() -> {
+			Expression expression = Defaults.expressionFactory().parse("log10(-1)");
+			expression.evaluate(VariableResolver.empty()).wrapped();
+		})
 			.isInstanceOf(EvaluationException.class)
 			.hasMessage("value is not > 0: -1");
 	}
 
 	@Test
 	void testLog10Zero() {
-		assertThatThrownBy(() -> Defaults.expressionFactory().parse("log10(0)").evaluate(VariableResolver.empty()))
+		assertThatThrownBy(() -> {
+			Expression expression = Defaults.expressionFactory().parse("log10(0)");
+			expression.evaluate(VariableResolver.empty()).wrapped();
+		})
 			.isInstanceOf(EvaluationException.class)
 			.hasMessage("value is not > 0: 0");
 	}

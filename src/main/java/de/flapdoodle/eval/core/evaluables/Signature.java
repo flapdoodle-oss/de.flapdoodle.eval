@@ -52,7 +52,7 @@ public abstract class Signature<T> {
 
 	@Value.Auxiliary
 	public String asHumanReadable() {
-		return "" +returnType()+"(" + (isVarArg() ? "vararg " : "") + parameters().stream().map(it -> it.type().toString()).collect(Collectors.joining(", "))+")";
+		return "" +returnType()+"(" + (isVarArg() ? "vararg " : "") + parameters().stream().map(it -> it.type().toString()+((it.isNullable()) ? "?" : "")).collect(Collectors.joining(", "))+")";
 	}
 
 	@org.immutables.value.Value.Auxiliary

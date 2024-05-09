@@ -69,7 +69,7 @@ class ExpressionTest {
 
 		MapBasedVariableResolver mapBasedVariableResolver = VariableResolver.empty()
 			.withValues(values);
-		Value.NumberValue result = (Value.NumberValue) expression.evaluate(mapBasedVariableResolver);
+		Value.NumberValue result = (Value.NumberValue) expression.evaluate(mapBasedVariableResolver).wrapped();
 
 		assertThat(result.wrapped()).isCloseTo(Value.of(6).wrapped(), Percentage.withPercentage(0.9999));
 	}
@@ -84,7 +84,7 @@ class ExpressionTest {
 
 		MapBasedVariableResolver variableResolver = VariableResolver.empty()
 			.withValues(values);
-		Object result = expression.evaluate(variableResolver);
+		Object result = expression.evaluate(variableResolver).wrapped();
 
 		assertThat(result).isEqualTo(Value.of(7));
 	}
@@ -100,7 +100,7 @@ class ExpressionTest {
 
 		MapBasedVariableResolver mapBasedVariableResolver = VariableResolver.empty()
 			.withValues(values);
-		Object result = expression.evaluate(mapBasedVariableResolver);
+		Object result = expression.evaluate(mapBasedVariableResolver).wrapped();
 
 		assertThat(result).isEqualTo(Value.of("Hello world"));
 	}
@@ -116,7 +116,7 @@ class ExpressionTest {
 
 		VariableResolver variableResolver = VariableResolver.empty()
 			.withValues(values);
-		Object result = expression.evaluate(variableResolver);
+		Object result = expression.evaluate(variableResolver).wrapped();
 
 		assertThat(result.toString()).isEqualTo("true 24.7");
 	}

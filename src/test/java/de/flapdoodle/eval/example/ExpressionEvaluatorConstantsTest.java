@@ -63,14 +63,16 @@ class ExpressionEvaluatorConstantsTest extends BaseExpressionEvaluatorTest {
 
 		Expression expression = factory.parse("a+B");
 
-		assertThat(expression.evaluate(VariableResolver.empty()).toString()).isEqualTo("6.4");
+		VariableResolver variableResolver = VariableResolver.empty();
+		assertThat(expression.evaluate(variableResolver).wrapped().toString()).isEqualTo("6.4");
 	}
 
 	@Test
 	void testOverwriteConstantsWith() throws EvaluationException, ParseException {
-		assertThat(factory.withConstant("e", Evaluated.value(Value.of(9)))
-				.parse("e")
-				.evaluate(VariableResolver.empty()).toString()).isEqualTo("9.0");
+		Expression expression = factory.withConstant("e", Evaluated.value(Value.of(9)))
+				.parse("e");
+		VariableResolver variableResolver = VariableResolver.empty();
+		assertThat(expression.evaluate(variableResolver).wrapped().toString()).isEqualTo("9.0");
 	}
 
 	@Test
@@ -78,8 +80,8 @@ class ExpressionEvaluatorConstantsTest extends BaseExpressionEvaluatorTest {
 		MapBasedVariableResolver mapBasedVariableResolver1 = VariableResolver.empty();
 		Value<?> value = Value.of(3);
 		MapBasedVariableResolver mapBasedVariableResolver = mapBasedVariableResolver1.with("e", Evaluated.value(value));
-		assertThat(factory.withConstant("e", Evaluated.value(Value.of(6)))
-				.parse("e")
-				.evaluate(mapBasedVariableResolver).toString()).isEqualTo("6.0");
+		Expression expression = factory.withConstant("e", Evaluated.value(Value.of(6)))
+				.parse("e");
+		assertThat(expression.evaluate(mapBasedVariableResolver).wrapped().toString()).isEqualTo("6.0");
 	}
 }

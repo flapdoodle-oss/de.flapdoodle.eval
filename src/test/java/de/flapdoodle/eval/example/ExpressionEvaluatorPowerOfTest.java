@@ -42,6 +42,7 @@ class ExpressionEvaluatorPowerOfTest extends BaseExpressionEvaluatorTest {
 						.andThen(Defaults.operatorMap()))
 				.parse("-2^2");
 
-		assertThat(expression.evaluate(VariableResolver.empty()).toString()).isEqualTo("-4.0");
+		VariableResolver variableResolver = VariableResolver.empty();
+		assertThat(expression.evaluate(variableResolver).wrapped().toString()).isEqualTo("-4.0");
 	}
 }

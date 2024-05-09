@@ -43,7 +43,8 @@ class SameTest {
 		Value<?> value10 = Value.of(value);
 		MapBasedVariableResolver mapBasedValueResolver9 = mapBasedValueResolver8.with("a", Evaluated.value(value10));
 		Value<?> value9 = Value.of(value);
-		assertThat(expression.evaluate(mapBasedValueResolver9.with("b", Evaluated.value(value9)))
+		VariableResolver variableResolver4 = mapBasedValueResolver9.with("b", Evaluated.value(value9));
+		assertThat(expression.evaluate(variableResolver4).wrapped()
 			)
 			.isEqualTo(Value.TRUE);
 
@@ -51,7 +52,8 @@ class SameTest {
 		Value<?> value8 = Value.of("Hello");
 		MapBasedVariableResolver mapBasedValueResolver7 = mapBasedValueResolver6.with("a", Evaluated.value(value8));
 		Value<?> value7 = Value.of("Hello");
-		assertThat(expression.evaluate(mapBasedValueResolver7.with("b", Evaluated.value(value7)))
+		VariableResolver variableResolver3 = mapBasedValueResolver7.with("b", Evaluated.value(value7));
+		assertThat(expression.evaluate(variableResolver3).wrapped()
 			)
 			.isEqualTo(Value.TRUE);
 
@@ -59,7 +61,8 @@ class SameTest {
 		Value<?> value6 = Value.of("Hello");
 		MapBasedVariableResolver mapBasedValueResolver5 = mapBasedValueResolver4.with("a", Evaluated.value(value6));
 		Value<?> value5 = Value.of("Goodbye");
-		assertThat(expression.evaluate(mapBasedValueResolver5.with("b", Evaluated.value(value5)))
+		VariableResolver variableResolver2 = mapBasedValueResolver5.with("b", Evaluated.value(value5));
+		assertThat(expression.evaluate(variableResolver2).wrapped()
 			)
 			.isEqualTo(Value.FALSE);
 
@@ -67,7 +70,8 @@ class SameTest {
 		Value<?> value4 = Value.of(true);
 		MapBasedVariableResolver mapBasedValueResolver3 = mapBasedValueResolver2.with("a", Evaluated.value(value4));
 		Value<?> value3 = Value.of(true);
-		assertThat(expression.evaluate(mapBasedValueResolver3.with("b", Evaluated.value(value3)))
+		VariableResolver variableResolver1 = mapBasedValueResolver3.with("b", Evaluated.value(value3));
+		assertThat(expression.evaluate(variableResolver1).wrapped()
 			)
 			.isEqualTo(Value.TRUE);
 
@@ -75,7 +79,8 @@ class SameTest {
 		Value<?> value2 = Value.of(false);
 		MapBasedVariableResolver mapBasedValueResolver1 = mapBasedValueResolver.with("a", Evaluated.value(value2));
 		Value<?> value1 = Value.of(true);
-		assertThat(expression.evaluate(mapBasedValueResolver1.with("b", Evaluated.value(value1)))
+		VariableResolver variableResolver = mapBasedValueResolver1.with("b", Evaluated.value(value1));
+		assertThat(expression.evaluate(variableResolver).wrapped()
 			)
 			.isEqualTo(Value.FALSE);
 	}

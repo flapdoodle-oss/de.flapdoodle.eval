@@ -16,6 +16,7 @@
  */
 package de.flapdoodle.eval.core;
 
+import de.flapdoodle.eval.core.evaluables.Evaluated;
 import de.flapdoodle.eval.core.exceptions.EvaluationException;
 import de.flapdoodle.eval.core.exceptions.ParseException;
 import de.flapdoodle.eval.core.tree.Node;
@@ -37,13 +38,11 @@ public abstract class Expression {
 	public abstract Node root();
 
 	@org.immutables.value.Value.Auxiliary
-	public Object evaluate(VariableResolver variableResolver) throws EvaluationException, ParseException {
+	public Evaluated<?> evaluate(VariableResolver variableResolver) throws EvaluationException, ParseException {
 		return root().evaluate(variableResolver, EvaluationContext.builder()
 			.mathContext(mathContext())
 			.zoneId(zoneId())
-			.build())
-			// TODO das muss weg
-			.wrapped();
+			.build());
 	}
 
 	@Value.Derived

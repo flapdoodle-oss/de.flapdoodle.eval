@@ -122,7 +122,7 @@ class ExpressionEvaluatorStructureTest extends BaseExpressionEvaluatorTest {
 			MapBasedVariableResolver mapBasedVariableResolver = mapBasedValueResolver.with("a", Evaluated.value(value));
 			VariableResolver variableResolver = mapBasedVariableResolver;
 			Expression expression = createExpression("a.b");
-			expression.evaluate(variableResolver);
+			expression.evaluate(variableResolver).wrapped();
 		})
 			.isInstanceOf(EvaluationException.class)
 			.hasMessageContaining("no matching signature found");
@@ -140,7 +140,7 @@ class ExpressionEvaluatorStructureTest extends BaseExpressionEvaluatorTest {
 				MapBasedVariableResolver mapBasedVariableResolver = mapBasedValueResolver.with("a", Evaluated.value(value));
 				VariableResolver variableResolver = mapBasedVariableResolver;
 				Expression expression = createExpression("a.field1 + a.field2");
-				expression.evaluate(variableResolver);
+				expression.evaluate(variableResolver).wrapped();
 			})
 			.isInstanceOf(EvaluationException.class)
 			.hasMessage("Field 'field2' not found in structure")

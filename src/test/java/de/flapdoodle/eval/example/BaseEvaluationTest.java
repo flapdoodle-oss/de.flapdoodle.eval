@@ -54,17 +54,19 @@ public abstract class BaseEvaluationTest {
 	
 	protected void assertExpressionHasExpectedResult(String expression, Value<?> expectedResult)
 		throws EvaluationException, ParseException {
+		Expression expression1 = TestConfigurationProvider.StandardFactoryWithAdditionalTestOperators.parse(expression);
+		VariableResolver variableResolver = VariableResolver.empty();
 		assertThat(
-			TestConfigurationProvider.StandardFactoryWithAdditionalTestOperators.parse(expression)
-				.evaluate(VariableResolver.empty())
+			expression1.evaluate(variableResolver).wrapped()
 		).isEqualTo(expectedResult);
 	}
 
 	protected void assertExpressionHasExpectedResult(String expression, Value.NumberValue expectedResult)
 		throws EvaluationException, ParseException {
+		Expression expression1 = TestConfigurationProvider.StandardFactoryWithAdditionalTestOperators.parse(expression);
+		VariableResolver variableResolver = VariableResolver.empty();
 		assertThat(
-			TestConfigurationProvider.StandardFactoryWithAdditionalTestOperators.parse(expression)
-				.evaluate(VariableResolver.empty()))
+			expression1.evaluate(variableResolver).wrapped())
 			.isInstanceOf(Value.NumberValue.class)
 			.asInstanceOf(InstanceOfAssertFactories.type(Value.NumberValue.class))
 			.extracting(Value::wrapped, InstanceOfAssertFactories.BIG_DECIMAL)
@@ -87,7 +89,7 @@ public abstract class BaseEvaluationTest {
 		throws EvaluationException, ParseException {
 		Expression expression = factory.parse(expressionString);
 
-		return expression.evaluate(VariableResolver.empty());
+		return expression.evaluate(VariableResolver.empty()).wrapped();
 	}
 
 	protected static Value.NumberValue numberValueOf(String doubleAsString) {

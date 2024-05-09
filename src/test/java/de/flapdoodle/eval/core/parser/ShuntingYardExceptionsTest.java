@@ -16,6 +16,7 @@
  */
 package de.flapdoodle.eval.core.parser;
 
+import de.flapdoodle.eval.core.Expression;
 import de.flapdoodle.eval.core.VariableResolver;
 import de.flapdoodle.eval.core.exceptions.ParseException;
 import de.flapdoodle.eval.example.Defaults;
@@ -66,21 +67,30 @@ class ShuntingYardExceptionsTest extends BaseParserTest {
 
 	@Test
 	void testEmptyExpression() {
-		assertThatThrownBy(() -> Defaults.expressionFactory().parse("").evaluate(VariableResolver.empty()))
+		assertThatThrownBy(() -> {
+			Expression expression = Defaults.expressionFactory().parse("");
+			expression.evaluate(VariableResolver.empty()).wrapped();
+		})
 			.isInstanceOf(ParseException.class)
 			.hasMessage("Empty expression");
 	}
 
 	@Test
 	void testEmptyExpressionBraces() {
-		assertThatThrownBy(() -> Defaults.expressionFactory().parse("()").evaluate(VariableResolver.empty()))
+		assertThatThrownBy(() -> {
+			Expression expression = Defaults.expressionFactory().parse("()");
+			expression.evaluate(VariableResolver.empty()).wrapped();
+		})
 			.isInstanceOf(ParseException.class)
 			.hasMessage("Empty expression");
 	}
 
 	@Test
 	void testComma() {
-		assertThatThrownBy(() -> Defaults.expressionFactory().parse(",").evaluate(VariableResolver.empty()))
+		assertThatThrownBy(() -> {
+			Expression expression = Defaults.expressionFactory().parse(",");
+			expression.evaluate(VariableResolver.empty()).wrapped();
+		})
 			.isInstanceOf(ParseException.class)
 			.hasMessage("Empty expression");
 	}
@@ -117,21 +127,30 @@ class ShuntingYardExceptionsTest extends BaseParserTest {
 
 	@Test
 	void testFunctionNotEnoughParameters() {
-		assertThatThrownBy(() -> Defaults.expressionFactory().parse("round()").evaluate(VariableResolver.empty()))
+		assertThatThrownBy(() -> {
+			Expression expression = Defaults.expressionFactory().parse("round()");
+			expression.evaluate(VariableResolver.empty()).wrapped();
+		})
 			.isInstanceOf(ParseException.class)
 			.hasMessage("could not find evaluatable 'round' with 0 arguments");
 	}
 
 	@Test
 	void testFunctionNotEnoughParametersForVarArgs() {
-		assertThatThrownBy(() -> Defaults.expressionFactory().parse("min()").evaluate(VariableResolver.empty()))
+		assertThatThrownBy(() -> {
+			Expression expression = Defaults.expressionFactory().parse("min()");
+			expression.evaluate(VariableResolver.empty()).wrapped();
+		})
 			.isInstanceOf(ParseException.class)
 			.hasMessage("could not find evaluatable 'min' with 0 arguments");
 	}
 
 	@Test
 	void testFunctionTooManyParameters() {
-		assertThatThrownBy(() -> Defaults.expressionFactory().parse("round(1,2,3,4)").evaluate(VariableResolver.empty()))
+		assertThatThrownBy(() -> {
+			Expression expression = Defaults.expressionFactory().parse("round(1,2,3,4)");
+			expression.evaluate(VariableResolver.empty()).wrapped();
+		})
 			.isInstanceOf(ParseException.class)
 			.hasMessage("could not find evaluatable 'round' with 4 arguments");
 	}
@@ -151,7 +170,10 @@ class ShuntingYardExceptionsTest extends BaseParserTest {
 			"E.1"
 		})
 	void testTooManyOperands(String expressionString) {
-		assertThatThrownBy(() -> Defaults.expressionFactory().parse(expressionString).evaluate(VariableResolver.empty()))
+		assertThatThrownBy(() -> {
+			Expression expression = Defaults.expressionFactory().parse(expressionString);
+			expression.evaluate(VariableResolver.empty()).wrapped();
+		})
 			.isInstanceOf(ParseException.class)
 			.hasMessage("Too many operands");
 	}
@@ -161,7 +183,10 @@ class ShuntingYardExceptionsTest extends BaseParserTest {
 		delimiter = ':',
 		value = { "(x+y)*(a-) : 9", "a** : 2", "5+, : 2" })
 	void testInvalidTokenAfterInfixOperator(String expressionString, int position) {
-		assertThatThrownBy(() -> Defaults.expressionFactory().parse(expressionString).evaluate(VariableResolver.empty()))
+		assertThatThrownBy(() -> {
+			Expression expression = Defaults.expressionFactory().parse(expressionString);
+			expression.evaluate(VariableResolver.empty()).wrapped();
+		})
 			.isInstanceOf(ParseException.class)
 			.hasMessage("Unexpected token after infix operator")
 			.extracting("startPosition")

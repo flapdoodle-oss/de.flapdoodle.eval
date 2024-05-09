@@ -16,6 +16,7 @@
  */
 package de.flapdoodle.eval.example;
 
+import de.flapdoodle.eval.core.Expression;
 import de.flapdoodle.eval.core.VariableResolver;
 import de.flapdoodle.eval.core.exceptions.EvaluationException;
 import de.flapdoodle.eval.core.exceptions.ParseException;
@@ -52,7 +53,9 @@ class ExpressionEvaluatorScientificTest extends BaseExpressionEvaluatorTest {
 		})
 	void testScientificLiteralsEvaluation(String expression, String expectedResult)
 		throws ParseException, EvaluationException {
-		assertThat(createExpression(expression).evaluate(VariableResolver.empty()))
+		Expression expression1 = createExpression(expression);
+		VariableResolver variableResolver = VariableResolver.empty();
+		assertThat(expression1.evaluate(variableResolver).wrapped())
 			.asInstanceOf(InstanceOfAssertFactories.type(Value.class))
 			.extracting(Value::wrapped)
 			.asInstanceOf(InstanceOfAssertFactories.BIG_DECIMAL)

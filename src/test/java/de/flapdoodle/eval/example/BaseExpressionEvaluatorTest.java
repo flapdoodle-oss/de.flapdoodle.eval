@@ -31,12 +31,13 @@ public abstract class BaseExpressionEvaluatorTest {
 
 	protected String evaluate(String expressionString) throws ParseException, EvaluationException {
 		Expression expression = createExpression(expressionString);
-		return expression.evaluate(VariableResolver.empty()).toString();
+		VariableResolver variableResolver = VariableResolver.empty();
+		return expression.evaluate(variableResolver).wrapped().toString();
 	}
 
 	protected String evaluate(String expressionString, VariableResolver variableResolver) throws ParseException, EvaluationException {
 		Expression expression = createExpression(expressionString);
-		return expression.evaluate(variableResolver).toString();
+		return expression.evaluate(variableResolver).wrapped().toString();
 	}
 
 	Expression createExpression(String expressionString) throws ParseException, EvaluationException {
