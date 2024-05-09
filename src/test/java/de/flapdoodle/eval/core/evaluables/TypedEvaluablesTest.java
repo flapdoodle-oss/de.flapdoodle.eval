@@ -72,15 +72,15 @@ class TypedEvaluablesTest {
 
 	@Test
 	void filterByArguments() {
-		assertThat(testee.find(Collections.singletonList(Value.of(1.23))))
+		assertThat(testee.find(Evaluated.asList(Value.of(1.23))))
 			.isLeft()
 			.containsLeft(addOne);
 
-		assertThat(testee.find(Arrays.asList(Value.of(1.23), Value.of(3.45))))
+		assertThat(testee.find(Evaluated.asList(Value.of(1.23), Value.of(3.45))))
 			.isLeft()
 			.containsLeft(sum2);
 
-		assertThat(testee.find(Collections.singletonList(Value.of(-1.23))))
+		assertThat(testee.find(Evaluated.asList(Value.of(-1.23))))
 			.isLeft()
 			.containsLeft(negAddOne);
 	}
@@ -94,18 +94,18 @@ class TypedEvaluablesTest {
 				(variableResolver, evaluationContext, token, first, last) -> first + ":" + last.stream().collect(Collectors.joining("|"))))
 			.build();
 
-		assertThat(testee.find(Arrays.asList(1, 2)))
+		assertThat(testee.find(Evaluated.asList(1, 2)))
 			.isLeft();
 
-		assertThat(testee.find(Arrays.asList(1, BigInteger.ONE)))
+		assertThat(testee.find(Evaluated.asList(1, BigInteger.ONE)))
 			.isRight()
 			.rightSatisfies(it -> assertThat(it)
 				.hasMessageContaining("no matching signature found"));
 
-		assertThat(testee.find(Arrays.asList(false, "1", "2")))
+		assertThat(testee.find(Evaluated.asList(false, "1", "2")))
 			.isLeft();
 
-		assertThat(testee.find(Arrays.asList(false, BigInteger.ONE)))
+		assertThat(testee.find(Evaluated.asList(false, BigInteger.ONE)))
 			.isRight()
 			.rightSatisfies(it -> assertThat(it)
 				.hasMessageContaining("no matching signature found"));

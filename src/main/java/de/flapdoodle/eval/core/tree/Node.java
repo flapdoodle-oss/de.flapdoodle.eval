@@ -18,6 +18,8 @@ package de.flapdoodle.eval.core.tree;
 
 import de.flapdoodle.eval.core.EvaluationContext;
 import de.flapdoodle.eval.core.VariableResolver;
+import de.flapdoodle.eval.core.evaluables.Evaluable;
+import de.flapdoodle.eval.core.evaluables.Evaluated;
 import de.flapdoodle.eval.core.exceptions.EvaluationException;
 import de.flapdoodle.eval.core.parser.Token;
 import de.flapdoodle.types.Pair;
@@ -30,7 +32,7 @@ public abstract class Node {
     public abstract Token token();
 
     @org.immutables.value.Value.Auxiliary
-    public abstract Object evaluate(VariableResolver variableResolver, EvaluationContext context) throws EvaluationException;
+    public abstract Evaluated<?> evaluate(VariableResolver variableResolver, EvaluationContext context) throws EvaluationException;
 
     public static List<Node> allNodes(Node node) {
         ArrayList<Node> ret = new ArrayList<>();

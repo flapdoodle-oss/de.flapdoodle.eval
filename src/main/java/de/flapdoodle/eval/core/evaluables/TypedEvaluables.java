@@ -20,10 +20,8 @@ import de.flapdoodle.eval.core.exceptions.EvaluableException;
 import de.flapdoodle.types.Either;
 import org.immutables.value.Value;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Value.Immutable
 public abstract class TypedEvaluables implements TypedEvaluableByArguments, TypedEvaluableByNumberOfArguments {
@@ -41,7 +39,7 @@ public abstract class TypedEvaluables implements TypedEvaluableByArguments, Type
 
 	@Override
 	@Value.Auxiliary
-	public Either<TypedEvaluable<?>, EvaluableException> find(List<?> values) {
+	public Either<TypedEvaluable<?>, EvaluableException> find(List<? extends Evaluated<?>> values) {
 		return TypedEvaluableByArguments.find(list(), values);
 	}
 

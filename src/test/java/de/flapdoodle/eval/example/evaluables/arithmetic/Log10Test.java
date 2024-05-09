@@ -18,6 +18,7 @@ package de.flapdoodle.eval.example.evaluables.arithmetic;
 
 import de.flapdoodle.eval.core.EvaluationContext;
 import de.flapdoodle.eval.core.VariableResolver;
+import de.flapdoodle.eval.core.evaluables.Evaluated;
 import de.flapdoodle.eval.core.evaluables.TypedEvaluable;
 import de.flapdoodle.eval.core.evaluables.TypedEvaluableByArguments;
 import de.flapdoodle.eval.core.exceptions.EvaluableException;
@@ -51,7 +52,7 @@ class Log10Test {
 
 	@Test
 	void sample() throws EvaluationException {
-		List<Value<? extends Object>> values = Arrays.asList(Value.of(3.0));
+		List<? extends Evaluated<?>> values = Evaluated.wrap(Arrays.asList(Value.of(3.0)));
 
 		Optional<? extends TypedEvaluableByArguments> byNumberOfArguments = testee.filterByNumberOfArguments(values.size());
 		assertThat(byNumberOfArguments).isPresent();
@@ -59,10 +60,10 @@ class Log10Test {
 		Either<TypedEvaluable<?>, EvaluableException> byArguments = byNumberOfArguments.get().find(values);
 		assertThat(byArguments).isLeft();
 
-		Object result = byArguments.left()
+		Evaluated<?> result = byArguments.left()
 			.evaluate(VariableResolver.empty(), evaluationContext, token, values);
 
-		assertThat(result).isEqualTo(Value.of(0.47712125471966244));
+		assertThat(result.wrapped()).isEqualTo(Value.of(0.47712125471966244));
 	}
 
 	@Test
@@ -70,16 +71,16 @@ class Log10Test {
 		Optional<? extends TypedEvaluableByArguments> byNumberOfArguments = testee.filterByNumberOfArguments(1);
 		assertThat(byNumberOfArguments).isPresent();
 
-		assertThat(byNumberOfArguments.get().find(Arrays.asList(Value.of(-1.0))))
+		assertThat(byNumberOfArguments.get().find(Evaluated.wrap(Arrays.asList(Value.of(-1.0)))))
 			.isRight()
 			.rightSatisfies(right -> assertThat(right).isInstanceOf(EvaluableException.class)
 				.hasMessageContaining("value is not > 0: -1.0"));
 
-		Either<TypedEvaluable<?>, EvaluableException> byArguments = byNumberOfArguments.get().find(Arrays.asList(Value.of(1.0)));
+		Either<TypedEvaluable<?>, EvaluableException> byArguments = byNumberOfArguments.get().find(Evaluated.wrap(Arrays.asList(Value.of(1.0))));
 		assertThat(byArguments).isLeft();
 
 		assertThatThrownBy(() -> byArguments.left()
-			.evaluate(VariableResolver.empty(), evaluationContext, token, Arrays.asList(Value.of(-1.0))))
+			.evaluate(VariableResolver.empty(), evaluationContext, token, Evaluated.wrap(Arrays.asList(Value.of(-1.0)))))
 			.isInstanceOf(EvaluationException.class)
 			.hasMessage("value is not > 0: -1.0");
 	}
@@ -89,16 +90,16 @@ class Log10Test {
 		Optional<? extends TypedEvaluableByArguments> byNumberOfArguments = testee.filterByNumberOfArguments(1);
 		assertThat(byNumberOfArguments).isPresent();
 
-		assertThat(byNumberOfArguments.get().find(Arrays.asList(Value.of(0.0))))
+		assertThat(byNumberOfArguments.get().find(Evaluated.wrap(Arrays.asList(Value.of(0.0)))))
 			.isRight()
 			.rightSatisfies(right -> assertThat(right).isInstanceOf(EvaluableException.class)
 				.hasMessageContaining("value is not > 0: 0.0"));
 
-		Either<TypedEvaluable<?>, EvaluableException> byArguments = byNumberOfArguments.get().find(Arrays.asList(Value.of(1.0)));
+		Either<TypedEvaluable<?>, EvaluableException> byArguments = byNumberOfArguments.get().find(Evaluated.wrap(Arrays.asList(Value.of(1.0))));
 		assertThat(byArguments).isLeft();
 
 		assertThatThrownBy(() -> byArguments.left()
-			.evaluate(VariableResolver.empty(), evaluationContext, token, Arrays.asList(Value.of(0.0))))
+			.evaluate(VariableResolver.empty(), evaluationContext, token, Evaluated.wrap(Arrays.asList(Value.of(0.0)))))
 			.isInstanceOf(EvaluationException.class)
 			.hasMessage("value is not > 0: 0.0");
 	}

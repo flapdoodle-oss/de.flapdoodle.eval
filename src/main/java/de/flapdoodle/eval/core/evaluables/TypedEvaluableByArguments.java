@@ -25,9 +25,9 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public interface TypedEvaluableByArguments {
-    Either<TypedEvaluable<?>, EvaluableException> find(List<?> values);
+    Either<TypedEvaluable<?>, EvaluableException> find(List<? extends Evaluated<?>> values);
 
-    static Either<TypedEvaluable<?>, EvaluableException> find(List<TypedEvaluable<?>> list, List<?> values) {
+    static Either<TypedEvaluable<?>, EvaluableException> find(List<TypedEvaluable<?>> list, List<? extends Evaluated<?>> values) {
         List<EvaluableException> errors = new ArrayList<>();
         for (TypedEvaluable<?> evaluable : list) {
             Optional<EvaluableException> error = evaluable.signature().validateArguments(values);

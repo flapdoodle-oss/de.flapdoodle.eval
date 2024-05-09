@@ -39,13 +39,13 @@ class TypedEvaluableAdapter<T> implements TypedEvaluable<T> {
 	}
 
 	@Override
-	public T evaluate(VariableResolver variableResolver, EvaluationContext evaluationContext, Token token, List<?> arguments)
+	public Evaluated<T> evaluate(VariableResolver variableResolver, EvaluationContext evaluationContext, Token token, List<? extends Evaluated<?>> arguments)
 		throws EvaluationException {
 		checkArguments(token, arguments);
-		return delegate.evaluate(variableResolver, evaluationContext, token, arguments);
+		return Evaluated.ofNullable(signature.returnType(), delegate.evaluate(variableResolver, evaluationContext, token, Evaluated.unwrap(arguments)));
 	}
 
-	protected void checkArguments(Token token, List<?> arguments) throws EvaluationException {
+	protected void checkArguments(Token token, List<? extends Evaluated<?>> arguments) throws EvaluationException {
 		Optional<EvaluableException> error = signature().validateArguments(arguments);
 		if (error.isPresent()) {
 			throw new EvaluationException(token, error.get());

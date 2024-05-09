@@ -18,6 +18,8 @@ package de.flapdoodle.eval.core.tree;
 
 import de.flapdoodle.eval.core.EvaluationContext;
 import de.flapdoodle.eval.core.VariableResolver;
+import de.flapdoodle.eval.core.evaluables.Evaluable;
+import de.flapdoodle.eval.core.evaluables.Evaluated;
 import de.flapdoodle.eval.core.evaluables.TypedEvaluable;
 import de.flapdoodle.eval.core.evaluables.TypedEvaluableByArguments;
 import de.flapdoodle.eval.core.exceptions.EvaluableException;
@@ -39,20 +41,20 @@ public abstract class EvaluatableNode extends Node {
 	protected abstract EvaluableExceptionMapper exceptionMapper();
 
 	@Override
-	public Object evaluate(VariableResolver variableResolver, EvaluationContext context) throws EvaluationException {
-		List<Object> parameterResults = new ArrayList<>();
+	public Evaluated<?> evaluate(VariableResolver variableResolver, EvaluationContext context) throws EvaluationException {
+		List<Evaluated<?>> parameterResults = new ArrayList<>();
 		for (int i = 0; i < parameters().size(); i++) {
 			Node parameter = parameters().get(i);
 			try {
 				parameterResults.add(parameter.evaluate(variableResolver, context));
 			} catch (EvaluationException ex) {
-				parameterResults.add(exceptionMapper().map(ex));
+				parameterResults.add(Evaluated.value(exceptionMapper().map(ex)));
 			}
 		}
 		Either<TypedEvaluable<?>, EvaluableException> evaluatable = evaluatable().find(parameterResults);
 		if (evaluatable.isLeft()) {
 			try {
-				Object evaluated = evaluatable.left().evaluate(variableResolver, context, token(), parameterResults);
+				Evaluated<?> evaluated = evaluatable.left().evaluate(variableResolver, context, token(), parameterResults);
 				Optional<EvaluationException> matchedException = exceptionMapper().match(evaluated);
 				if (matchedException.isPresent()) {
 					throw matchedException.get();

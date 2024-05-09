@@ -18,6 +18,8 @@ package de.flapdoodle.eval.core.tree;
 
 import de.flapdoodle.eval.core.EvaluationContext;
 import de.flapdoodle.eval.core.VariableResolver;
+import de.flapdoodle.eval.core.evaluables.Evaluable;
+import de.flapdoodle.eval.core.evaluables.Evaluated;
 import de.flapdoodle.eval.core.parser.Token;
 
 @org.immutables.value.Value.Immutable
@@ -26,8 +28,8 @@ public abstract class ValueNode<T> extends Node {
 	protected abstract T value();
 
 	@Override
-	public T evaluate(VariableResolver variableResolver, EvaluationContext context) {
-		return value();
+	public Evaluated<?> evaluate(VariableResolver variableResolver, EvaluationContext context) {
+		return Evaluated.value(value());
 	}
 
 	public static <T> ValueNode<T> of(Token token, T value) {

@@ -18,6 +18,7 @@ package de.flapdoodle.eval.example.evaluables.arithmetic;
 
 import de.flapdoodle.eval.core.EvaluationContext;
 import de.flapdoodle.eval.core.VariableResolver;
+import de.flapdoodle.eval.core.evaluables.Evaluated;
 import de.flapdoodle.eval.core.evaluables.TypedEvaluable;
 import de.flapdoodle.eval.core.evaluables.TypedEvaluableByArguments;
 import de.flapdoodle.eval.core.exceptions.EvaluableException;
@@ -68,7 +69,7 @@ class PlusTest {
 	@ParameterizedTest
 	@MethodSource("validSamples")
 	void add(Value<?> first, Value<?> second, Value<?> expected) throws EvaluationException {
-		List<Value<? extends Object>> values = Arrays.asList(first, second);
+		List<? extends Evaluated<Value<? extends Object>>> values = Evaluated.asList(first, second);
 
 		Optional<? extends TypedEvaluableByArguments> byNumberOfArguments = testee.filterByNumberOfArguments(values.size());
 		assertThat(byNumberOfArguments).isPresent();
@@ -76,15 +77,15 @@ class PlusTest {
 		Either<TypedEvaluable<?>, EvaluableException> byArguments = byNumberOfArguments.get().find(values);
 		assertThat(byArguments).isLeft();
 
-		Object result = byArguments.left()
+		Evaluated<?> result = byArguments.left()
 			.evaluate(VariableResolver.empty(), evaluationContext, token, values);
 
-		assertThat(result).isEqualTo(expected);
+		assertThat(result.wrapped()).isEqualTo(expected);
 	}
 
 	@Test
 	void prefixPlus() throws EvaluationException {
-		List<Value<? extends Object>> values = Arrays.asList(Value.of(-123.0));
+		List<? extends Evaluated<Value.NumberValue>> values = Evaluated.asList(Value.of(-123.0));
 
 		Optional<? extends TypedEvaluableByArguments> byNumberOfArguments = testee.filterByNumberOfArguments(values.size());
 		assertThat(byNumberOfArguments).isPresent();
@@ -92,15 +93,15 @@ class PlusTest {
 		Either<TypedEvaluable<?>, EvaluableException> byArguments = byNumberOfArguments.get().find(values);
 		assertThat(byArguments).isLeft();
 
-		Object result = byArguments.left()
+		Evaluated<?> result = byArguments.left()
 			.evaluate(VariableResolver.empty(), evaluationContext, token, values);
 
-		assertThat(result).isEqualTo(Value.of(-123.0));
+		assertThat(result.wrapped()).isEqualTo(Value.of(-123.0));
 	}
 
 	@Test
 	void sum() throws EvaluationException {
-		List<Value<? extends Object>> values = Arrays.asList(Value.of(1.0), Value.of(2.0), Value.of(3.0));
+		List<? extends Evaluated<Value.NumberValue>> values = Evaluated.asList(Value.of(1.0), Value.of(2.0), Value.of(3.0));
 
 		Optional<? extends TypedEvaluableByArguments> byNumberOfArguments = testee.filterByNumberOfArguments(values.size());
 		assertThat(byNumberOfArguments).isPresent();
@@ -108,9 +109,9 @@ class PlusTest {
 		Either<TypedEvaluable<?>, EvaluableException> byArguments = byNumberOfArguments.get().find(values);
 		assertThat(byArguments).isLeft();
 
-		Object result = byArguments.left()
+		Evaluated<?> result = byArguments.left()
 			.evaluate(VariableResolver.empty(), evaluationContext, token, values);
 
-		assertThat(result).isEqualTo(Value.of(6.0));
+		assertThat(result.wrapped()).isEqualTo(Value.of(6.0));
 	}
 }

@@ -24,8 +24,9 @@ import de.flapdoodle.eval.core.parser.Token;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public interface TypedEvaluable<T> extends Evaluable<T> {
+public interface TypedEvaluable<T> {
     Signature<T> signature();
+    Evaluated<T> evaluate(VariableResolver variableResolver, EvaluationContext evaluationContext, Token token, List<? extends Evaluated<?>> arguments) throws EvaluationException;
 
     interface Arg0<T> {
         T evaluate(VariableResolver variableResolver, EvaluationContext evaluationContext, Token token) throws EvaluationException;

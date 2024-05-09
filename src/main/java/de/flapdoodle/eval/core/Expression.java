@@ -41,7 +41,9 @@ public abstract class Expression {
 		return root().evaluate(variableResolver, EvaluationContext.builder()
 			.mathContext(mathContext())
 			.zoneId(zoneId())
-			.build());
+			.build())
+			// TODO das muss weg
+			.wrapped();
 	}
 
 	@Value.Derived

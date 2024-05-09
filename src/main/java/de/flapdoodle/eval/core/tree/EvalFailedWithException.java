@@ -16,6 +16,7 @@
  */
 package de.flapdoodle.eval.core.tree;
 
+import de.flapdoodle.eval.core.evaluables.Evaluated;
 import de.flapdoodle.eval.core.exceptions.EvaluationException;
 import org.immutables.value.Value;
 
@@ -38,9 +39,9 @@ public abstract class EvalFailedWithException {
 				return EvalFailedWithException.of(ex);
 			}
 			@Override
-			public Optional<EvaluationException> match(Object value) {
-				return value instanceof EvalFailedWithException
-					? Optional.of(((EvalFailedWithException) value).exception())
+			public Optional<EvaluationException> match(Evaluated<?> value) {
+				return value.wrapped() instanceof EvalFailedWithException
+					? Optional.of(((EvalFailedWithException) value.wrapped()).exception())
 					: Optional.empty();
 			}
 		};

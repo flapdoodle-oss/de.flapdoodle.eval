@@ -64,16 +64,16 @@ public abstract class Signature<T> {
 	}
 
 	@org.immutables.value.Value.Auxiliary
-	public Optional<EvaluableException> validateArguments(List<?> arguments) {
+	public Optional<EvaluableException> validateArguments(List<? extends Evaluated<?>> arguments) {
 		if (minNumberOfArguments() > arguments.size()) return Optional.of(EvaluableException.of("not enough(<%s) arguments: %s", minNumberOfArguments(), arguments.size()));
 		if (arguments.size() > maxNumberOfArguments()) return Optional.of(EvaluableException.of("to many(>%s) arguments: ", maxNumberOfArguments(), arguments.size()));
 
 		for (int i = 0; i < minNumberOfArguments(); i++) {
-			Object value = arguments.get(i);
+			Evaluated<?> value = arguments.get(i);
 			Parameter<?> parameter = get(i);
 			TypeInfo<?> type = parameter.type();
 
-			if (!type.isInstance(value)) return Optional.of(EvaluableException.of("wrong type: %s != %s (%s)", type, value.getClass(), value));
+			if (!type.isInstance(value.wrapped())) return Optional.of(EvaluableException.of("wrong type: %s != %s (%s)", type, value.type(), value.wrapped()));
 			Optional<EvaluableException> error = parameter.validationError(value);
 			if (error.isPresent()) return error;
 		}
@@ -81,8 +81,8 @@ public abstract class Signature<T> {
 			Parameter<?> parameter = get(minNumberOfArguments() - 1);
 			TypeInfo<?> type = parameter.type();
 			for (int i = minNumberOfArguments(); i < arguments.size(); i++) {
-				Object value = arguments.get(i);
-				if (!type.isInstance(value)) return Optional.of(EvaluableException.of("wrong type: %s != %s (%s)", type, value.getClass(), value));
+				Evaluated<?> value = arguments.get(i);
+				if (!type.isInstance(value.wrapped())) return Optional.of(EvaluableException.of("wrong type: %s != %s (%s)", type, value.getClass(), value));
 				Optional<EvaluableException> error = parameter.validationError(value);
 				if (error.isPresent()) return error;
 			}

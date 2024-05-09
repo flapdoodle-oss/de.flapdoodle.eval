@@ -34,6 +34,8 @@ public interface Parameter<T> {
 	@Value.Parameter
 	TypeInfo<T> type();
 
+	@Value.Default
+	default boolean isNullable() { return false; }
 	/**
 	 * Set to true, the parameter will not be evaluated in advance, but the corresponding {@link
 	 * ASTNode} will be passed as a parameter value.
@@ -63,7 +65,7 @@ public interface Parameter<T> {
 
 	@Value.Auxiliary
 	@Deprecated
-	default void validate(Token token, Object parameterValue) throws EvaluationException {
+	default void validate(Token token, Evaluated<?> parameterValue) throws EvaluationException {
 		Optional<EvaluableException> error = validationError(parameterValue);
 		if (error.isPresent()) {
 			throw new EvaluationException(token, error.get());
@@ -71,9 +73,9 @@ public interface Parameter<T> {
 	}
 
 	@Value.Auxiliary
-	default Optional<EvaluableException> validationError(Object parameterValue) {
-		if (type().isInstance(parameterValue)) {
-			T value = type().cast(parameterValue);
+	default Optional<EvaluableException> validationError(Evaluated<?> parameterValue) {
+		if (type().isInstance(parameterValue.wrapped())) {
+			T value = type().cast(parameterValue.wrapped());
 			for (ParameterValidator<T> validator : validators()) {
 				Optional<EvaluableException> error = validator.validate(value);
 				if (error.isPresent()) {

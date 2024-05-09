@@ -223,9 +223,9 @@ public abstract class Defaults {
 				return Value.failedWith(ex);
 			}
 			@Override
-			public Optional<EvaluationException> match(Object value) {
-				return value instanceof Value.FailedWithException
-					? Optional.of(((Value.FailedWithException<?>) value).exception())
+			public Optional<EvaluationException> match(Evaluated<?> value) {
+				return value.wrapped() instanceof Value.FailedWithException
+					? Optional.of(((Value.FailedWithException<?>) value.wrapped()).exception())
 					: Optional.empty();
 			}
 		};
