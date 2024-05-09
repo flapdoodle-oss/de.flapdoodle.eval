@@ -19,6 +19,7 @@ package de.flapdoodle.eval.example;
 import de.flapdoodle.eval.core.ExpressionFactory;
 import de.flapdoodle.eval.core.MapBasedVariableResolver;
 import de.flapdoodle.eval.core.VariableResolver;
+import de.flapdoodle.eval.core.evaluables.Evaluated;
 import org.junit.jupiter.api.Test;
 
 import java.math.MathContext;
@@ -51,11 +52,11 @@ class ExpressionFactoryTest {
 
 	@Test
 	void testCustomConstants() {
-		Map<String, Value<?>> constants =
-			new HashMap<String, Value<?>>() {
+		Map<String, Evaluated<?>> constants =
+			new HashMap<String, Evaluated<?>>() {
 				{
-					put("A", Value.of("a"));
-					put("B", Value.of("b"));
+					put("A", Evaluated.value(Value.of("a")));
+					put("B", Evaluated.value(Value.of("b")));
 				}
 			};
 		MapBasedVariableResolver valueResolver = VariableResolver.empty()
@@ -63,6 +64,6 @@ class ExpressionFactoryTest {
 		ExpressionFactory factory =
 			Defaults.expressionFactory().withConstants(valueResolver);
 
-		assertThat(factory.constants().get("A")).isEqualTo(Value.of("a"));
+		assertThat(factory.constants().get("A").wrapped()).isEqualTo(Value.of("a"));
 	}
 }

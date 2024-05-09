@@ -25,14 +25,14 @@ import de.flapdoodle.eval.core.parser.Token;
 @org.immutables.value.Value.Immutable
 public abstract class ValueNode<T> extends Node {
 	@org.immutables.value.Value.Parameter
-	protected abstract T value();
+	protected abstract Evaluated<T> value();
 
 	@Override
 	public Evaluated<?> evaluate(VariableResolver variableResolver, EvaluationContext context) {
-		return Evaluated.value(value());
+		return value();
 	}
 
-	public static <T> ValueNode<T> of(Token token, T value) {
+	public static <T> ValueNode<T> of(Token token, Evaluated<T> value) {
 		return ImmutableValueNode.<T>builder()
 			.token(token)
 			.value(value)

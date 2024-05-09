@@ -20,6 +20,7 @@ import de.flapdoodle.eval.core.Expression;
 import de.flapdoodle.eval.core.ImmutableExpressionFactory;
 import de.flapdoodle.eval.core.MapBasedVariableResolver;
 import de.flapdoodle.eval.core.VariableResolver;
+import de.flapdoodle.eval.core.evaluables.Evaluated;
 import de.flapdoodle.eval.core.exceptions.EvaluationException;
 import de.flapdoodle.eval.core.exceptions.ParseException;
 import de.flapdoodle.eval.core.tree.Node;
@@ -65,9 +66,9 @@ class ExpressionTest {
 	void testWithValues() throws ParseException, EvaluationException {
 		Expression expression = Defaults.expressionFactory().parse("(a + b) * (a - b)");
 
-		Map<String, Value<?>> values = new HashMap<>();
-		values.put("a", Value.of(3.5));
-		values.put("b", Value.of(2.5));
+		Map<String, Evaluated<?>> values = new HashMap<>();
+		values.put("a", Evaluated.value(Value.of(3.5)));
+		values.put("b", Evaluated.value(Value.of(2.5)));
 
 		MapBasedVariableResolver mapBasedVariableResolver = VariableResolver.empty()
 			.withValues(values);
@@ -80,9 +81,9 @@ class ExpressionTest {
 	void testWithValuesDoubleMap() throws ParseException, EvaluationException {
 		Expression expression = Defaults.expressionFactory().parse("a+b");
 
-		Map<String, Value.NumberValue> values = new HashMap<>();
-		values.put("a", Value.of(3.9));
-		values.put("b", Value.of(3.1));
+		Map<String, Evaluated<Value.NumberValue>> values = new HashMap<>();
+		values.put("a", Evaluated.value(Value.of(3.9)));
+		values.put("b", Evaluated.value(Value.of(3.1)));
 
 		MapBasedVariableResolver variableResolver = VariableResolver.empty()
 			.withValues(values);
@@ -95,10 +96,10 @@ class ExpressionTest {
 	void testWithValuesStringMap() throws ParseException, EvaluationException {
 		Expression expression = Defaults.expressionFactory().parse("a+b+c");
 
-		Map<String, Value.StringValue> values = new HashMap<>();
-		values.put("a", Value.of("Hello"));
-		values.put("b", Value.of(" "));
-		values.put("c", Value.of("world"));
+		Map<String, Evaluated<Value.StringValue>> values = new HashMap<>();
+		values.put("a", Evaluated.value(Value.of("Hello")));
+		values.put("b", Evaluated.value(Value.of(" ")));
+		values.put("c", Evaluated.value(Value.of("world")));
 
 		MapBasedVariableResolver mapBasedVariableResolver = VariableResolver.empty()
 			.withValues(values);
@@ -111,10 +112,10 @@ class ExpressionTest {
 	void testWithValuesMixedMap() throws ParseException, EvaluationException {
 		Expression expression = Defaults.expressionFactory().parse("a+b+c");
 
-		Map<String, Value<?>> values = new HashMap<>();
-		values.put("a", Value.of(true));
-		values.put("b", Value.of(" "));
-		values.put("c", Value.of(24.7));
+		Map<String, Evaluated<Value<?>>> values = new HashMap<>();
+		values.put("a", Evaluated.value(Value.of(true)));
+		values.put("b", Evaluated.value(Value.of(" ")));
+		values.put("c", Evaluated.value(Value.of(24.7)));
 
 		VariableResolver variableResolver = VariableResolver.empty()
 			.withValues(values);

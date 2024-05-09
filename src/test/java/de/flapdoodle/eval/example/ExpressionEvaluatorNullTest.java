@@ -34,6 +34,7 @@ package de.flapdoodle.eval.example;
 import de.flapdoodle.eval.core.Expression;
 import de.flapdoodle.eval.core.MapBasedVariableResolver;
 import de.flapdoodle.eval.core.VariableResolver;
+import de.flapdoodle.eval.core.evaluables.Evaluated;
 import de.flapdoodle.eval.core.exceptions.EvaluationException;
 import de.flapdoodle.eval.core.exceptions.ParseException;
 import org.junit.jupiter.api.Test;
@@ -102,9 +103,9 @@ class ExpressionEvaluatorNullTest extends BaseExpressionEvaluatorTest {
 	@Test
 	void testHandleWithMaps() throws EvaluationException, ParseException {
 		Expression expression = createExpression("a == null && b == null");
-		Map<String, Value<?>> values = new HashMap<>();
-		values.put("a", Value.ofNull());
-		values.put("b", Value.ofNull());
+		Map<String, Evaluated<?>> values = new HashMap<>();
+		values.put("a", Evaluated.value(Value.ofNull()));
+		values.put("b", Evaluated.value(Value.ofNull()));
 
 		MapBasedVariableResolver mapBasedVariableResolver = VariableResolver.empty().withValues(values);
 		assertExpressionHasExpectedResult(expression, mapBasedVariableResolver, "true");

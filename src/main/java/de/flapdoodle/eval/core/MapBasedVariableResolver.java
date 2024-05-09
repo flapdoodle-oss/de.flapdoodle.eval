@@ -16,6 +16,8 @@
  */
 package de.flapdoodle.eval.core;
 
+import de.flapdoodle.eval.core.evaluables.Evaluated;
+import de.flapdoodle.eval.example.Value;
 import org.immutables.value.Value.Auxiliary;
 import org.immutables.value.Value.Immutable;
 
@@ -23,7 +25,7 @@ import java.util.Map;
 
 @Immutable
 public abstract class MapBasedVariableResolver implements VariableResolver {
-	protected abstract Map<String, Object> variables();
+	protected abstract Map<String, Evaluated<?>> variables();
 
 //	@Lazy
 //	protected Map<String, String> lowerCaseToKey() {
@@ -32,26 +34,40 @@ public abstract class MapBasedVariableResolver implements VariableResolver {
 
 	@Auxiliary
 	@Override
-	public Object get(String variable) {
+	public Evaluated<?> get(String variable) {
 		return variables().get(variable);
 	}
 
 	@Auxiliary
-	public ImmutableMapBasedVariableResolver with(String variable, Object value) {
+	public ImmutableMapBasedVariableResolver with(String variable, Evaluated<?> value) {
 		return builder().from(this)
 			.putVariables(variable, value)
 			.build();
 	}
 
 	@Auxiliary
-	public ImmutableMapBasedVariableResolver and(String variable, Object value) {
+	@Deprecated
+	// TODO inline
+	public ImmutableMapBasedVariableResolver with(String variable, Value<?> value) {
+		return with(variable, Evaluated.value(value));
+	}
+
+	@Auxiliary
+	public ImmutableMapBasedVariableResolver and(String variable, Evaluated<?> value) {
 		return with(variable, value);
 	}
 
 	@Auxiliary
-	public ImmutableMapBasedVariableResolver withValues(Map<String, ?> values) {
+	@Deprecated
+	// TODO inline
+	public ImmutableMapBasedVariableResolver and(String variable, Value<?> value) {
+		return and(variable, Evaluated.value(value));
+	}
+
+	@Auxiliary
+	public ImmutableMapBasedVariableResolver withValues(Map<String, ? extends Evaluated<?>> values) {
 		ImmutableMapBasedVariableResolver.Builder builder = builder().from(this);
-		for (Map.Entry<String, ?> entry : values.entrySet()) {
+		for (Map.Entry<String, ? extends Evaluated<?>> entry : values.entrySet()) {
 			builder.putVariables(entry.getKey(), entry.getValue());
 		}
 		return builder.build();

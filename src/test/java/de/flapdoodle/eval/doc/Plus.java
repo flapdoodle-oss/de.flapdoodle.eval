@@ -17,7 +17,9 @@
 package de.flapdoodle.eval.doc;
 
 import de.flapdoodle.eval.core.EvaluationContext;
+import de.flapdoodle.eval.core.Nullable;
 import de.flapdoodle.eval.core.VariableResolver;
+import de.flapdoodle.eval.core.evaluables.Parameter;
 import de.flapdoodle.eval.core.evaluables.TypedEvaluable;
 import de.flapdoodle.eval.core.evaluables.TypedEvaluables;
 import de.flapdoodle.eval.core.exceptions.EvaluationException;
@@ -35,6 +37,16 @@ public class Plus extends TypedEvaluables.Wrapper {
 		public Integer evaluate(VariableResolver variableResolver, EvaluationContext evaluationContext, Token token, Integer first,
 			Integer second) throws EvaluationException {
 			return first + second;
+		}
+	}
+
+	public static class IntNullable implements TypedEvaluable.Arg2<Integer, Integer, Integer> {
+
+		@Override
+		public Integer evaluate(VariableResolver variableResolver, EvaluationContext evaluationContext, Token token, @Nullable Integer first,
+			@Nullable Integer second) throws EvaluationException {
+			if (first != null && second != null) return first + second;
+			return first != null ? first : second;
 		}
 	}
 
@@ -63,6 +75,7 @@ public class Plus extends TypedEvaluables.Wrapper {
 	public Plus() {
 		super(TypedEvaluables.builder()
 			.addList(TypedEvaluable.of(Integer.class, Integer.class, Integer.class, new Int()))
+			.addList(TypedEvaluable.of(Integer.class, Parameter.nullableWith(Integer.class), Parameter.nullableWith(Integer.class), new IntNullable()))
 			.addList(TypedEvaluable.ofVarArg(Integer.class, Integer.class, new Sum()))
 			.addList(TypedEvaluable.of(String.class, Object.class, Object.class, new ToString<>()))
 			.build());

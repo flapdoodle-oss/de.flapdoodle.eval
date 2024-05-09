@@ -28,12 +28,12 @@ public abstract class LookupNode extends Node {
 
 	@Override
 	public Evaluated<?> evaluate(VariableResolver variableResolver, EvaluationContext context) throws EvaluationException {
-		Object result = variableResolver.get(token().value());
+		Evaluated<?> result = variableResolver.get(token().value());
 		if (result == null) {
 			throw new EvaluationException(
 				token(), String.format("Variable or constant value for '%s' not found", token().value()));
 		}
-		return Evaluated.value(result);
+		return result;
 	}
 
 	public static LookupNode of(Token token) {

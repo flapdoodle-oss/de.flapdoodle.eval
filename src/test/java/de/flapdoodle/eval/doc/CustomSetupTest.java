@@ -18,10 +18,7 @@ package de.flapdoodle.eval.doc;
 
 import de.flapdoodle.eval.core.ExpressionFactory;
 import de.flapdoodle.eval.core.VariableResolver;
-import de.flapdoodle.eval.core.evaluables.OperatorMap;
-import de.flapdoodle.eval.core.evaluables.OperatorMapping;
-import de.flapdoodle.eval.core.evaluables.Precedence;
-import de.flapdoodle.eval.core.evaluables.TypedEvaluableMap;
+import de.flapdoodle.eval.core.evaluables.*;
 import de.flapdoodle.eval.core.exceptions.EvaluationException;
 import de.flapdoodle.eval.core.exceptions.ParseException;
 import de.flapdoodle.eval.core.tree.EvalFailedWithException;
@@ -61,5 +58,9 @@ public class CustomSetupTest {
 			.isEqualTo(-1);
 		assertThat(expressionFactory.parse("-2").evaluate(VariableResolver.empty()))
 			.isEqualTo(-2);
+
+		assertThat(expressionFactory.parse("add(a,3)").evaluate(VariableResolver.empty()
+			.with("a", Evaluated.value(1))))
+			.isEqualTo(4);
 	}
 }

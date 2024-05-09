@@ -20,6 +20,7 @@ import de.flapdoodle.eval.core.Expression;
 import de.flapdoodle.eval.core.ExpressionFactory;
 import de.flapdoodle.eval.core.MapBasedVariableResolver;
 import de.flapdoodle.eval.core.VariableResolver;
+import de.flapdoodle.eval.core.evaluables.Evaluated;
 import de.flapdoodle.eval.core.exceptions.EvaluationException;
 import de.flapdoodle.eval.core.exceptions.ParseException;
 import org.junit.jupiter.api.Test;
@@ -51,11 +52,11 @@ class ExpressionEvaluatorConstantsTest extends BaseExpressionEvaluatorTest {
 
 	@Test
 	void testCustomConstantsMixedCase() throws EvaluationException, ParseException {
-		Map<String, Value<?>> constants =
-			new HashMap<String, Value<?>>() {
+		Map<String, Evaluated<Value<?>>> constants =
+			new HashMap<String, Evaluated<Value<?>>>() {
 				{
-					put("a", Value.of(new BigDecimal("2.5")));
-					put("B", Value.of(new BigDecimal("3.9")));
+					put("a", Evaluated.value(Value.of(new BigDecimal("2.5"))));
+					put("B", Evaluated.value(Value.of(new BigDecimal("3.9"))));
 				}
 			};
 
@@ -70,7 +71,7 @@ class ExpressionEvaluatorConstantsTest extends BaseExpressionEvaluatorTest {
 
 	@Test
 	void testOverwriteConstantsWith() throws EvaluationException, ParseException {
-		assertThat(factory.withConstant("e", Value.of(9))
+		assertThat(factory.withConstant("e", Evaluated.value(Value.of(9)))
 				.parse("e")
 				.evaluate(VariableResolver.empty()).toString()).isEqualTo("9.0");
 	}
@@ -78,7 +79,7 @@ class ExpressionEvaluatorConstantsTest extends BaseExpressionEvaluatorTest {
 	@Test
 	void testOverwriteConstantsWithValues() throws EvaluationException, ParseException {
 		MapBasedVariableResolver mapBasedVariableResolver = VariableResolver.empty().with("e", Value.of(3));
-		assertThat(factory.withConstant("e", Value.of(6))
+		assertThat(factory.withConstant("e", Evaluated.value(Value.of(6)))
 				.parse("e")
 				.evaluate(mapBasedVariableResolver).toString()).isEqualTo("6.0");
 	}

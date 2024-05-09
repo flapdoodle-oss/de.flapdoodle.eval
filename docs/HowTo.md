@@ -4,7 +4,7 @@
 ExpressionFactory expressionFactory = Defaults.expressionFactory();
 Expression expression = expressionFactory.parse("a*2");
 Object result = expression.evaluate(VariableResolver.empty()
-  .with("a", Value.of(2)));
+  .with("a", Evaluated.value(Value.of(2))));
 
 assertThat(result).isEqualTo(Value.of(4.0));
 ```
@@ -49,7 +49,7 @@ ImmutableTypedEvaluables add = TypedEvaluables.builder()
   .build();
 
 ExpressionFactory expressionFactory = ExpressionFactory.builder()
-  .constants(VariableResolver.empty().with("pi", BigDecimal.valueOf(3.1415)))
+  .constants(VariableResolver.empty().with("pi", Evaluated.value(BigDecimal.valueOf(3.1415))))
   .evaluatables(TypedEvaluableMap.builder()
     .putMap("add", add)
     .build())
@@ -81,6 +81,6 @@ MapBasedVariableResolver mapBasedValueResolver = VariableResolver.empty();
 Map<Object, Object> value = new LinkedHashMap<>();
 value.put("key", "stuff");
 assertThat(expressionFactory.parse("map.key")
-  .evaluate(mapBasedValueResolver.with("map", value)))
+  .evaluate(mapBasedValueResolver.with("map", Evaluated.value(value))))
   .isEqualTo("stuff");
 ```

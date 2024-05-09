@@ -16,13 +16,15 @@
  */
 package de.flapdoodle.eval.core;
 
+import de.flapdoodle.eval.core.evaluables.Evaluated;
+
 public interface VariableResolver {
-	Object get(String variable);
+	Evaluated<?> get(String variable);
 
 	default VariableResolver andThen(VariableResolver fallback) {
 		VariableResolver that = this;
 		return variable -> {
-			Object ret = that.get(variable);
+			Evaluated<?> ret = that.get(variable);
 			return ret != null ? ret : fallback.get(variable);
 		};
 	}

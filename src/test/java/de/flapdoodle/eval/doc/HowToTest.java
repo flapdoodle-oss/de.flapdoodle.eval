@@ -50,7 +50,7 @@ public class HowToTest {
 		ExpressionFactory expressionFactory = Defaults.expressionFactory();
 		Expression expression = expressionFactory.parse("a*2");
 		Object result = expression.evaluate(VariableResolver.empty()
-			.with("a", Value.of(2)));
+			.with("a", Evaluated.value(Value.of(2))));
 
 		assertThat(result).isEqualTo(Value.of(4.0));
 		recording.end();
@@ -98,7 +98,7 @@ public class HowToTest {
 			.build();
 
 		ExpressionFactory expressionFactory = ExpressionFactory.builder()
-			.constants(VariableResolver.empty().with("pi", BigDecimal.valueOf(3.1415)))
+			.constants(VariableResolver.empty().with("pi", Evaluated.value(BigDecimal.valueOf(3.1415))))
 			.evaluatables(TypedEvaluableMap.builder()
 				.putMap("add", add)
 				.build())
@@ -130,7 +130,7 @@ public class HowToTest {
 		Map<Object, Object> value = new LinkedHashMap<>();
 		value.put("key", "stuff");
 		assertThat(expressionFactory.parse("map.key")
-			.evaluate(mapBasedValueResolver.with("map", value)))
+			.evaluate(mapBasedValueResolver.with("map", Evaluated.value(value))))
 			.isEqualTo("stuff");
 		recording.end();
 	}

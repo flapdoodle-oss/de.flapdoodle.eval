@@ -73,7 +73,11 @@ public abstract class Signature<T> {
 			Parameter<?> parameter = get(i);
 			TypeInfo<?> type = parameter.type();
 
-			if (!type.isInstance(value.wrapped())) return Optional.of(EvaluableException.of("wrong type: %s != %s (%s)", type, value.type(), value.wrapped()));
+			if (parameter.isNullable() && value.isNull()) {
+				if (!type.equals(value.type())) return Optional.of(EvaluableException.of("wrong nullable type: %s != %s", type, value.type()));
+			} else {
+				if (!type.isInstance(value.wrapped())) return Optional.of(EvaluableException.of("wrong type: %s != %s (%s)", type, value.type(), value.wrapped()));
+			}
 			Optional<EvaluableException> error = parameter.validationError(value);
 			if (error.isPresent()) return error;
 		}
@@ -82,7 +86,11 @@ public abstract class Signature<T> {
 			TypeInfo<?> type = parameter.type();
 			for (int i = minNumberOfArguments(); i < arguments.size(); i++) {
 				Evaluated<?> value = arguments.get(i);
-				if (!type.isInstance(value.wrapped())) return Optional.of(EvaluableException.of("wrong type: %s != %s (%s)", type, value.getClass(), value));
+				if (parameter.isNullable() && value.isNull()) {
+					if (!type.equals(value.type())) return Optional.of(EvaluableException.of("wrong nullable type: %s != %s", type, value.type()));
+				} else {
+					if (!type.isInstance(value.wrapped())) return Optional.of(EvaluableException.of("wrong type: %s != %s (%s)", type, value.getClass(), value));
+				}
 				Optional<EvaluableException> error = parameter.validationError(value);
 				if (error.isPresent()) return error;
 			}

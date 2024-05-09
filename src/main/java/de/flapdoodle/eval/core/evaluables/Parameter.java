@@ -56,11 +56,19 @@ public interface Parameter<T> {
 	}
 
 	static <T> ImmutableParameter<T> lazyWith(Class<T> type) {
-		return ImmutableParameter.of(TypeInfo.of(type)).withIsLazy(true);
+		return lazyWith(TypeInfo.of(type));
 	}
 
 	static <T> ImmutableParameter<T> lazyWith(TypeInfo<T> type) {
 		return ImmutableParameter.of(type).withIsLazy(true);
+	}
+
+	static <T> ImmutableParameter<T> nullableWith(Class<T> type) {
+		return Parameter.nullableWith(TypeInfo.of(type));
+	}
+
+	static <T> ImmutableParameter<T> nullableWith(TypeInfo<T> type) {
+		return ImmutableParameter.of(type).withIsNullable(true);
 	}
 
 	@Value.Auxiliary
@@ -74,6 +82,10 @@ public interface Parameter<T> {
 
 	@Value.Auxiliary
 	default Optional<EvaluableException> validationError(Evaluated<?> parameterValue) {
+		if (isNullable() && parameterValue.isNull()) {
+			return Optional.empty();
+		}
+		
 		if (type().isInstance(parameterValue.wrapped())) {
 			T value = type().cast(parameterValue.wrapped());
 			for (ParameterValidator<T> validator : validators()) {

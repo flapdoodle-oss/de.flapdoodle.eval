@@ -18,6 +18,7 @@ package de.flapdoodle.eval.example;
 
 import de.flapdoodle.eval.core.Expression;
 import de.flapdoodle.eval.core.ImmutableExpressionFactory;
+import de.flapdoodle.eval.core.evaluables.Evaluated;
 import de.flapdoodle.eval.core.evaluables.TypedEvaluableByArguments;
 import de.flapdoodle.eval.core.exceptions.EvaluationException;
 import de.flapdoodle.eval.core.exceptions.ParseException;
@@ -108,15 +109,15 @@ class NodeTest {
 	}
 
 	protected static <T> ValueNode<T> anyValueNode(String tokenValue, T value) {
-		return ValueNode.of(token(tokenValue, TokenType.VARIABLE_OR_CONSTANT), value);
+		return ValueNode.of(token(tokenValue, TokenType.VARIABLE_OR_CONSTANT), Evaluated.value(value));
 	}
 
 	protected static ValueNode<Value.NumberValue> valueNode(BigDecimal value) {
-		return ValueNode.of(token(value.toString(), TokenType.NUMBER_LITERAL), Value.of(value));
+		return ValueNode.of(token(value.toString(), TokenType.NUMBER_LITERAL), Evaluated.value(Value.of(value)));
 	}
 
 	protected static ValueNode<Value.StringValue> valueNode(String value) {
-		return ValueNode.of(token(value, TokenType.NUMBER_LITERAL), Value.of(value));
+		return ValueNode.of(token(value, TokenType.NUMBER_LITERAL), Evaluated.value(Value.of(value)));
 	}
 
 	protected static EvaluatableNode evaluatableNode(String value, TypedEvaluableByArguments function, Node... parameters) {

@@ -32,6 +32,11 @@ public abstract class Evaluated<T> {
 	@Value.Parameter
 	public abstract T wrapped();
 
+	@Value.Derived
+	public boolean isNull() {
+		return wrapped() == null;
+	}
+
 	public static <T> Evaluated<T> value(T value) {
 		return ofNullable(TypeInfo.of((Class<T>) value.getClass()), value);
 	}

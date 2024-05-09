@@ -44,22 +44,22 @@ public abstract class Defaults {
 		// no instance
 	}
 
-	static Map<String, Value<?>> standardConstants() {
-		Map<String, Value<?>> constants = new LinkedHashMap<>();
+	static Map<String, Evaluated<Value<?>>> standardConstants() {
+		Map<String, Evaluated<Value<?>>> constants = new LinkedHashMap<>();
 
-		constants.put("true", Value.of(true));
-		constants.put("false", Value.of(false));
+		constants.put("true", Evaluated.value(Value.of(true)));
+		constants.put("false", Evaluated.value(Value.of(false)));
 		constants.put(
 			"PI",
-			Value.of(
+			Evaluated.value(Value.of(
 				new BigDecimal(
-					"3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679")));
+					"3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679"))));
 		constants.put(
 			"E",
-			Value.of(
+			Evaluated.value(Value.of(
 				new BigDecimal(
-					"2.71828182845904523536028747135266249775724709369995957496696762772407663")));
-		constants.put("null", Value.ofNull());
+					"2.71828182845904523536028747135266249775724709369995957496696762772407663"))));
+		constants.put("null", Evaluated.value(Value.ofNull()));
 		return Collections.unmodifiableMap(constants);
 	}
 

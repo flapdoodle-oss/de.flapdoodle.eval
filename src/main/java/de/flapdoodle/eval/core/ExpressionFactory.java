@@ -55,7 +55,7 @@ public abstract class ExpressionFactory {
 	public abstract OperatorMap operatorMap();
 
 	@org.immutables.value.Value.Auxiliary
-	public final ImmutableExpressionFactory withConstant(String name, Object value) {
+	public final ImmutableExpressionFactory withConstant(String name, Evaluated<?> value) {
 		return ImmutableExpressionFactory.copyOf(this)
 				.withConstants(MapBasedVariableResolver.empty()
 						.with(name, value)
@@ -92,10 +92,10 @@ public abstract class ExpressionFactory {
 		Token token = startNode.getToken();
 		switch (token.type()) {
 			case NUMBER_LITERAL:
-				result = ValueNode.of(token, numberAsValue().parse(token.value(), mathContext()));
+				result = ValueNode.of(token, Evaluated.value(numberAsValue().parse(token.value(), mathContext())));
 				break;
 			case STRING_LITERAL:
-				result = ValueNode.of(token, stringAsValue().parse(token.value()));
+				result = ValueNode.of(token, Evaluated.value(stringAsValue().parse(token.value())));
 				break;
 			case VARIABLE_OR_CONSTANT:
 				result = getVariableOrConstant(token);
@@ -163,7 +163,7 @@ public abstract class ExpressionFactory {
 	}
 
 	private Node getVariableOrConstant(Token token) {
-		Object result = constants().get(token.value());
+		Evaluated<?> result = constants().get(token.value());
 		if (result!=null) {
 			return ValueNode.of(token, result);
 		}
@@ -197,7 +197,7 @@ public abstract class ExpressionFactory {
 	private Node evaluateStructureSeparator(ASTNode startNode) throws EvaluationException {
 		Node structure = map(startNode.getParameters().get(0));
 		Token nameToken = startNode.getParameters().get(1).getToken();
-		Node name = ValueNode.of(nameToken, stringAsValue().parse(nameToken.value()));
+		Node name = ValueNode.of(nameToken, Evaluated.value(stringAsValue().parse(nameToken.value())));
 
 		Optional<? extends TypedEvaluableByArguments> propertyAccess = propertyAccess().filterByNumberOfArguments(2);
 
