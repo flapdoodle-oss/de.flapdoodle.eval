@@ -36,7 +36,7 @@ public abstract class Signature<T> {
 	}
 
 	@Builder.Parameter
-	public abstract Class<T> returnType();
+	public abstract TypeInfo<T> returnType();
 
 	@org.immutables.value.Value.Derived
 	public int minNumberOfArguments() {
@@ -74,7 +74,7 @@ public abstract class Signature<T> {
 			TypeInfo<?> type = parameter.type();
 
 			if (parameter.isNullable() && value.isNull()) {
-				if (!type.equals(value.type())) return Optional.of(EvaluableException.of("wrong nullable type: %s != %s", type, value.type()));
+				if (!type.isAssignable(value.type())) return Optional.of(EvaluableException.of("wrong nullable type: %s != %s", type, value.type()));
 			} else {
 				if (!type.isInstance(value.wrapped())) return Optional.of(EvaluableException.of("wrong type: %s != %s (%s)", type, value.type(), value.wrapped()));
 			}
@@ -87,7 +87,7 @@ public abstract class Signature<T> {
 			for (int i = minNumberOfArguments(); i < arguments.size(); i++) {
 				Evaluated<?> value = arguments.get(i);
 				if (parameter.isNullable() && value.isNull()) {
-					if (!type.equals(value.type())) return Optional.of(EvaluableException.of("wrong nullable type: %s != %s", type, value.type()));
+					if (!type.isAssignable(value.type())) return Optional.of(EvaluableException.of("wrong nullable type: %s != %s", type, value.type()));
 				} else {
 					if (!type.isInstance(value.wrapped())) return Optional.of(EvaluableException.of("wrong type: %s != %s (%s)", type, value.getClass(), value));
 				}
@@ -99,18 +99,30 @@ public abstract class Signature<T> {
 	}
 
 	public static <T> Signature<T> of(Class<T> returnType, List<? extends Parameter<?>> parameters) {
+		return of(TypeInfo.of(returnType), parameters);
+	}
+
+	public static <T> Signature<T> of(TypeInfo<T> returnType, List<? extends Parameter<?>> parameters) {
 		return ImmutableSignature.builder(returnType)
 			.addAllParameters(parameters)
 			.build();
 	}
 
 	public static <T> Signature<T> of(Class<T> returnType, Parameter<?>... parameters) {
+		return of(TypeInfo.of(returnType), parameters);
+	}
+
+	public static <T> Signature<T> of(TypeInfo<T> returnType, Parameter<?>... parameters) {
 		return ImmutableSignature.builder(returnType)
 			.addParameters(parameters)
 			.build();
 	}
 
 	public static <T> Signature<T> ofVarArg(Class<T> returnType, Parameter<?>... parameters) {
+		return ofVarArg(TypeInfo.of(returnType), parameters);
+	}
+
+	public static <T> Signature<T> ofVarArg(TypeInfo<T> returnType, Parameter<?>... parameters) {
 		return ImmutableSignature.builder(returnType)
 			.addParameters(parameters)
 			.isVarArg(true)
