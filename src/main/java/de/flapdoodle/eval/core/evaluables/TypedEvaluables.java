@@ -17,6 +17,7 @@
 package de.flapdoodle.eval.core.evaluables;
 
 import de.flapdoodle.eval.core.exceptions.EvaluableException;
+import de.flapdoodle.reflection.TypeInfo;
 import de.flapdoodle.types.Either;
 import org.immutables.value.Value;
 
@@ -41,6 +42,12 @@ public abstract class TypedEvaluables implements TypedEvaluableByArguments, Type
 	@Value.Auxiliary
 	public Either<TypedEvaluable<?>, EvaluableException> find(List<? extends Evaluated<?>> values) {
 		return TypedEvaluableByArguments.find(list(), values);
+	}
+
+	@Override
+	@Value.Auxiliary
+	public Either<TypedEvaluable<?>, EvaluableException> findType(List<? extends TypeInfo<?>> valueTypes) {
+		return TypedEvaluableByArguments.findType(list(), valueTypes);
 	}
 
 	public static ImmutableTypedEvaluables.Builder builder() {

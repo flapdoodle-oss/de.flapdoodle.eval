@@ -17,47 +17,48 @@
 package de.flapdoodle.eval.core;
 
 import de.flapdoodle.eval.core.evaluables.Evaluated;
+import de.flapdoodle.reflection.TypeInfo;
 import org.immutables.value.Value.Auxiliary;
 import org.immutables.value.Value.Immutable;
 
 import java.util.Map;
 
 @Immutable
-public abstract class MapBasedVariableResolver implements VariableResolver {
-	protected abstract Map<String, Evaluated<?>> variables();
+public abstract class MapBasedVariableTypeResolver implements VariableTypeResolver {
+	protected abstract Map<String, TypeInfo<?>> variables();
 
 	@Auxiliary
 	@Override
-	public Evaluated<?> get(String variable) {
+	public TypeInfo<?> get(String variable) {
 		return variables().get(variable);
 	}
 
 	@Auxiliary
-	public ImmutableMapBasedVariableResolver with(String variable, Evaluated<?> value) {
+	public ImmutableMapBasedVariableTypeResolver with(String variable, TypeInfo<?> value) {
 		return builder().from(this)
 			.putVariables(variable, value)
 			.build();
 	}
 
 	@Auxiliary
-	public ImmutableMapBasedVariableResolver and(String variable, Evaluated<?> value) {
+	public ImmutableMapBasedVariableTypeResolver and(String variable, TypeInfo<?> value) {
 		return with(variable, value);
 	}
 
 	@Auxiliary
-	public ImmutableMapBasedVariableResolver withValues(Map<String, ? extends Evaluated<?>> values) {
-		ImmutableMapBasedVariableResolver.Builder builder = builder().from(this);
-		for (Map.Entry<String, ? extends Evaluated<?>> entry : values.entrySet()) {
+	public ImmutableMapBasedVariableTypeResolver withValues(Map<String, ? extends TypeInfo<?>> values) {
+		ImmutableMapBasedVariableTypeResolver.Builder builder = builder().from(this);
+		for (Map.Entry<String, ? extends TypeInfo<?>> entry : values.entrySet()) {
 			builder.putVariables(entry.getKey(), entry.getValue());
 		}
 		return builder.build();
 	}
 
-	public static ImmutableMapBasedVariableResolver.Builder builder() {
-		return ImmutableMapBasedVariableResolver.builder();
+	public static ImmutableMapBasedVariableTypeResolver.Builder builder() {
+		return ImmutableMapBasedVariableTypeResolver.builder();
 	}
 
-	public static ImmutableMapBasedVariableResolver empty() {
+	public static ImmutableMapBasedVariableTypeResolver empty() {
 		return builder().build();
 	}
 }

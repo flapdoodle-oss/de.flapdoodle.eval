@@ -21,6 +21,7 @@ import de.flapdoodle.eval.core.exceptions.EvaluationException;
 import de.flapdoodle.eval.core.exceptions.ParseException;
 import de.flapdoodle.eval.core.tree.Node;
 import de.flapdoodle.eval.core.tree.VariableNames;
+import de.flapdoodle.reflection.TypeInfo;
 import org.immutables.value.Value;
 
 import java.math.MathContext;
@@ -43,6 +44,11 @@ public abstract class Expression {
 			.mathContext(mathContext())
 			.zoneId(zoneId())
 			.build());
+	}
+
+	@org.immutables.value.Value.Auxiliary
+	public TypeInfo<?> evaluateType(VariableTypeResolver variableResolver) throws EvaluationException {
+		return root().evaluateType(variableResolver);
 	}
 
 	@Value.Derived

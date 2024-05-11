@@ -18,9 +18,12 @@ package de.flapdoodle.eval.core.tree;
 
 import de.flapdoodle.eval.core.EvaluationContext;
 import de.flapdoodle.eval.core.VariableResolver;
+import de.flapdoodle.eval.core.VariableTypeResolver;
 import de.flapdoodle.eval.core.evaluables.Evaluable;
 import de.flapdoodle.eval.core.evaluables.Evaluated;
+import de.flapdoodle.eval.core.exceptions.EvaluationException;
 import de.flapdoodle.eval.core.parser.Token;
+import de.flapdoodle.reflection.TypeInfo;
 
 @org.immutables.value.Value.Immutable
 public abstract class ValueNode<T> extends Node {
@@ -30,6 +33,11 @@ public abstract class ValueNode<T> extends Node {
 	@Override
 	public Evaluated<?> evaluate(VariableResolver variableResolver, EvaluationContext context) {
 		return value();
+	}
+
+	@Override
+	public TypeInfo<?> evaluateType(VariableTypeResolver variableResolver) {
+		return value().type();
 	}
 
 	public static <T> ValueNode<T> of(Token token, Evaluated<T> value) {

@@ -53,4 +53,33 @@ class SignatureTest {
 			Arrays.asList(Evaluated.ofNull(String.class))).get()
 		).hasMessageContaining("wrong nullable type: ClassTypeInfo{type=class java.lang.Number} != ClassTypeInfo{type=class java.lang.String}");
 	}
+
+	@Test
+	public void checkSignatureTypes() {
+		Signature<BigDecimal> testee = Signature.of(BigDecimal.class, Parameter.nullableWith(Number.class));
+
+		assertThat(testee.validateArgumentTypes(
+			Arrays.asList(Evaluated.value(1.9).type()))
+		).isEmpty();
+
+		assertThat(testee.validateArgumentTypes(
+			Arrays.asList(Evaluated.ofNull(Double.class).type()))
+		).isEmpty();
+
+		assertThat(testee.validateArgumentTypes(
+			Arrays.asList(Evaluated.value(BigDecimal.ONE).type()))
+		).isEmpty();
+
+		assertThat(testee.validateArgumentTypes(
+			Arrays.asList(Evaluated.ofNull(BigDecimal.class).type()))
+		).isEmpty();
+
+		assertThat(testee.validateArgumentTypes(
+			Arrays.asList(Evaluated.value("").type())).get()
+		).hasMessageContaining("wrong type: ClassTypeInfo{type=class java.lang.Number} != ClassTypeInfo{type=class java.lang.String}");
+
+		assertThat(testee.validateArgumentTypes(
+			Arrays.asList(Evaluated.ofNull(String.class).type())).get()
+		).hasMessageContaining("wrong type: ClassTypeInfo{type=class java.lang.Number} != ClassTypeInfo{type=class java.lang.String}");
+	}
 }

@@ -17,6 +17,7 @@
 package de.flapdoodle.eval.core.evaluables;
 
 import de.flapdoodle.eval.core.exceptions.EvaluableException;
+import de.flapdoodle.reflection.TypeInfo;
 import de.flapdoodle.types.Either;
 
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ import java.util.stream.Collectors;
 
 public interface TypedEvaluableByArguments {
     Either<TypedEvaluable<?>, EvaluableException> find(List<? extends Evaluated<?>> values);
+    Either<TypedEvaluable<?>, EvaluableException> findType(List<? extends TypeInfo<?>> valueTypes);
 
     static Either<TypedEvaluable<?>, EvaluableException> find(List<TypedEvaluable<?>> list, List<? extends Evaluated<?>> values) {
         List<EvaluableException> errors = new ArrayList<>();
@@ -40,6 +42,26 @@ public interface TypedEvaluableByArguments {
             exception = errors.get(0);
         } else {
             String valuesAsString = values.stream().map(it -> it.toString() + "(" + it.getClass() + ")").collect(Collectors.joining(", "));
+            String signatures = list.stream().map(it -> it.signature().asHumanReadable()).collect(Collectors.joining("\n", "\n", "n"));
+            exception = EvaluableException.of("no matching signature found for %s in %s", valuesAsString, signatures);
+        }
+
+        return Either.right(exception);
+    }
+
+    static Either<TypedEvaluable<?>, EvaluableException> findType(List<TypedEvaluable<?>> list, List<? extends TypeInfo<?>> valueTypes) {
+        List<EvaluableException> errors = new ArrayList<>();
+        for (TypedEvaluable<?> evaluable : list) {
+            Optional<EvaluableException> error = evaluable.signature().validateArgumentTypes(valueTypes);
+            if (error.isPresent()) errors.add(error.get());
+            else return Either.left(evaluable);
+        }
+
+        EvaluableException exception;
+        if (errors.size()==1 && errors.get(0).isValidationError()) {
+            exception = errors.get(0);
+        } else {
+            String valuesAsString = valueTypes.stream().map(Object::toString).collect(Collectors.joining(", "));
             String signatures = list.stream().map(it -> it.signature().asHumanReadable()).collect(Collectors.joining("\n", "\n", "n"));
             exception = EvaluableException.of("no matching signature found for %s in %s", valuesAsString, signatures);
         }

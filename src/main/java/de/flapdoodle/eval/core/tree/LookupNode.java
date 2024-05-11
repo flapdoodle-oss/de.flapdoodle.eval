@@ -18,10 +18,12 @@ package de.flapdoodle.eval.core.tree;
 
 import de.flapdoodle.eval.core.EvaluationContext;
 import de.flapdoodle.eval.core.VariableResolver;
+import de.flapdoodle.eval.core.VariableTypeResolver;
 import de.flapdoodle.eval.core.evaluables.Evaluable;
 import de.flapdoodle.eval.core.evaluables.Evaluated;
 import de.flapdoodle.eval.core.exceptions.EvaluationException;
 import de.flapdoodle.eval.core.parser.Token;
+import de.flapdoodle.reflection.TypeInfo;
 
 @org.immutables.value.Value.Immutable
 public abstract class LookupNode extends Node {
@@ -36,6 +38,16 @@ public abstract class LookupNode extends Node {
 		return result;
 	}
 
+	@Override
+	public TypeInfo<?> evaluateType(VariableTypeResolver variableResolver) throws EvaluationException {
+		TypeInfo<?> result = variableResolver.get(token().value());
+		if (result == null) {
+			throw new EvaluationException(
+				token(), String.format("Variable or constant value for '%s' not found", token().value()));
+		}
+		return result;
+	}
+	
 	public static LookupNode of(Token token) {
 		return ImmutableLookupNode.builder()
 			.token(token)

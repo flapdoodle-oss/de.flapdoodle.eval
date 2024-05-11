@@ -18,6 +18,7 @@ package de.flapdoodle.eval.core.tree;
 
 import de.flapdoodle.eval.core.EvaluationContext;
 import de.flapdoodle.eval.core.VariableResolver;
+import de.flapdoodle.eval.core.VariableTypeResolver;
 import de.flapdoodle.eval.core.evaluables.Evaluable;
 import de.flapdoodle.eval.core.evaluables.Evaluated;
 import de.flapdoodle.eval.core.evaluables.TypedEvaluable;
@@ -25,6 +26,7 @@ import de.flapdoodle.eval.core.evaluables.TypedEvaluableByArguments;
 import de.flapdoodle.eval.core.exceptions.EvaluableException;
 import de.flapdoodle.eval.core.exceptions.EvaluationException;
 import de.flapdoodle.eval.core.parser.Token;
+import de.flapdoodle.reflection.TypeInfo;
 import de.flapdoodle.types.Either;
 
 import java.util.ArrayList;
@@ -48,6 +50,7 @@ public abstract class EvaluatableNode extends Node {
 			try {
 				parameterResults.add(parameter.evaluate(variableResolver, context));
 			} catch (EvaluationException ex) {
+				// used in condition where one branch might not return
 				parameterResults.add(Evaluated.value(exceptionMapper().map(ex)));
 			}
 		}
@@ -67,7 +70,32 @@ public abstract class EvaluatableNode extends Node {
 			throw new EvaluationException(token(), evaluatable.right());
 		}
 	}
-	
+
+	@Override
+	public TypeInfo<?> evaluateType(VariableTypeResolver variableResolver) throws EvaluationException {
+		List<TypeInfo<?>> parameterResults = new ArrayList<>();
+		for (int i = 0; i < parameters().size(); i++) {
+			Node parameter = parameters().get(i);
+			try {
+				parameterResults.add(parameter.evaluateType(variableResolver));
+			} catch (EvaluationException ex) {
+				// used in condition where one branch might not return
+				parameterResults.add(Evaluated.value(exceptionMapper().map(ex)).type());
+			}
+		}
+		Either<TypedEvaluable<?>, EvaluableException> evaluatable = evaluatable().findType(parameterResults);
+		if (evaluatable.isLeft()) {
+			try {
+				TypeInfo<?> evaluatedType = evaluatable.left().signature().returnType();
+				return evaluatedType;
+			} catch (EvaluationException.AsRuntimeException wrapping) {
+				throw wrapping.wrapped();
+			}
+		} else {
+			throw new EvaluationException(token(), evaluatable.right());
+		}
+	}
+
 	public static EvaluatableNode of(
 		Token token,
 		TypedEvaluableByArguments function,

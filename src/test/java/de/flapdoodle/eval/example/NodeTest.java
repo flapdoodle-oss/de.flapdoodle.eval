@@ -19,12 +19,16 @@ package de.flapdoodle.eval.example;
 import de.flapdoodle.eval.core.Expression;
 import de.flapdoodle.eval.core.ImmutableExpressionFactory;
 import de.flapdoodle.eval.core.evaluables.Evaluated;
+import de.flapdoodle.eval.core.evaluables.TypedEvaluable;
 import de.flapdoodle.eval.core.evaluables.TypedEvaluableByArguments;
+import de.flapdoodle.eval.core.exceptions.EvaluableException;
 import de.flapdoodle.eval.core.exceptions.EvaluationException;
 import de.flapdoodle.eval.core.exceptions.ParseException;
 import de.flapdoodle.eval.core.parser.Token;
 import de.flapdoodle.eval.core.parser.TokenType;
 import de.flapdoodle.eval.core.tree.*;
+import de.flapdoodle.reflection.TypeInfo;
+import de.flapdoodle.types.Either;
 import org.assertj.core.data.MapEntry;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Tag;
@@ -32,6 +36,7 @@ import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -103,8 +108,15 @@ class NodeTest {
 	}
 
 	protected static TypedEvaluableByArguments failOnEverythingEvaluatable() {
-		return values -> {
-			throw new RuntimeException("fail");
+		return new TypedEvaluableByArguments() {
+			@Override
+			public Either<TypedEvaluable<?>, EvaluableException> find(List<? extends Evaluated<?>> values) {
+				throw new RuntimeException("fail");
+			}
+			@Override
+			public Either<TypedEvaluable<?>, EvaluableException> findType(List<? extends TypeInfo<?>> valueTypes) {
+				throw new RuntimeException("fail");
+			}
 		};
 	}
 

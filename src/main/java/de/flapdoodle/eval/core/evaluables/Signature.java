@@ -98,6 +98,29 @@ public abstract class Signature<T> {
 		return Optional.empty();
 	}
 
+	@org.immutables.value.Value.Auxiliary
+	public Optional<EvaluableException> validateArgumentTypes(List<? extends TypeInfo<?>> arguments) {
+		if (minNumberOfArguments() > arguments.size()) return Optional.of(EvaluableException.of("not enough(<%s) arguments: %s", minNumberOfArguments(), arguments.size()));
+		if (arguments.size() > maxNumberOfArguments()) return Optional.of(EvaluableException.of("to many(>%s) arguments: ", maxNumberOfArguments(), arguments.size()));
+
+		for (int i = 0; i < minNumberOfArguments(); i++) {
+			TypeInfo<?> valueType = arguments.get(i);
+			Parameter<?> parameter = get(i);
+			TypeInfo<?> type = parameter.type();
+
+			if (!type.isAssignable(valueType)) return Optional.of(EvaluableException.of("wrong type: %s != %s", type, valueType));
+		}
+		if (isVarArg()) {
+			Parameter<?> parameter = get(minNumberOfArguments() - 1);
+			TypeInfo<?> type = parameter.type();
+			for (int i = minNumberOfArguments(); i < arguments.size(); i++) {
+				TypeInfo<?> valueType = arguments.get(i);
+				if (!type.isAssignable(valueType)) return Optional.of(EvaluableException.of("wrong type: %s != %s", type, valueType));
+			}
+		}
+		return Optional.empty();
+	}
+
 	public static <T> Signature<T> of(Class<T> returnType, List<? extends Parameter<?>> parameters) {
 		return of(TypeInfo.of(returnType), parameters);
 	}

@@ -18,10 +18,12 @@ package de.flapdoodle.eval.core.tree;
 
 import de.flapdoodle.eval.core.EvaluationContext;
 import de.flapdoodle.eval.core.VariableResolver;
+import de.flapdoodle.eval.core.VariableTypeResolver;
 import de.flapdoodle.eval.core.evaluables.Evaluable;
 import de.flapdoodle.eval.core.evaluables.Evaluated;
 import de.flapdoodle.eval.core.exceptions.EvaluationException;
 import de.flapdoodle.eval.core.parser.Token;
+import de.flapdoodle.reflection.TypeInfo;
 import de.flapdoodle.types.Pair;
 
 import java.util.*;
@@ -33,6 +35,9 @@ public abstract class Node {
 
     @org.immutables.value.Value.Auxiliary
     public abstract Evaluated<?> evaluate(VariableResolver variableResolver, EvaluationContext context) throws EvaluationException;
+
+    @org.immutables.value.Value.Auxiliary
+    public abstract TypeInfo<?> evaluateType(VariableTypeResolver variableResolver) throws EvaluationException;
 
     public static List<Node> allNodes(Node node) {
         ArrayList<Node> ret = new ArrayList<>();
