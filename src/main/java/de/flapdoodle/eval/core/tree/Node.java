@@ -66,19 +66,19 @@ public abstract class Node {
     }
 
     // VisibleForTests
-    public static VariableNames hashedUsedVariables(String expression, Node root) {
-        List<Pair<Integer, String>> entries=new ArrayList<>();
+    public static Variables hashedUsedVariables(String expression, Node root) {
+        List<Variable> entries=new ArrayList<>();
         hashedUsedVariables(entries, 0, expression, root);
-        ImmutableVariableNames.Builder builder = VariableNames.builder();
-        builder.addAllMap(entries);
+        ImmutableVariables.Builder builder = Variables.builder();
+        builder.addAllList(entries);
         return builder.build();
     }
 
-    private static int hashedUsedVariables(List<Pair<Integer, String>> entries, int lastTokenEnd, String expression, Node root) {
+    private static int hashedUsedVariables(List<Variable> entries, int lastTokenEnd, String expression, Node root) {
         if (root instanceof LookupNode) {
             Token token = root.token();
             String expressionBetweenTokens = expression.substring(lastTokenEnd, token.start());
-            entries.add(Pair.of((entries.size()+":"+expressionBetweenTokens).hashCode(), token.value()));
+            entries.add(Variable.of(token.value(), (entries.size()+":"+expressionBetweenTokens).hashCode(), token.start()));
             lastTokenEnd = token.start()+token.value().length();
         } else if (root instanceof EvaluatableNode) {
 					for (Node it : ((EvaluatableNode) root).parameters()) {

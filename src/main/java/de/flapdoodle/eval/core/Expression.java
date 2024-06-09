@@ -20,7 +20,7 @@ import de.flapdoodle.eval.core.evaluables.Evaluated;
 import de.flapdoodle.eval.core.exceptions.EvaluationException;
 import de.flapdoodle.eval.core.exceptions.ParseException;
 import de.flapdoodle.eval.core.tree.Node;
-import de.flapdoodle.eval.core.tree.VariableNames;
+import de.flapdoodle.eval.core.tree.Variables;
 import de.flapdoodle.reflection.TypeInfo;
 import org.immutables.value.Value;
 
@@ -52,7 +52,7 @@ public abstract class Expression {
 	}
 
 	@Value.Derived
-	protected VariableNames variableNames() {
+	protected Variables variableNames() {
 		return Node.hashedUsedVariables(source(), root());
 	}
 

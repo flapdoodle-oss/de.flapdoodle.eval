@@ -89,7 +89,7 @@ class NodeTest {
 		ImmutableExpressionFactory factory = Defaults.expressionFactory();
 
 		Expression expression = factory.parse("a*2(x-1000)+c");
-		VariableNames variables = Node.hashedUsedVariables(expression.source(), expression.root());
+		Variables variables = Node.hashedUsedVariables(expression.source(), expression.root());
 		assertThat(variables.names())
 			.containsExactly("a", "x", "c");
 		assertThat(variables.nameHashMap())
@@ -100,11 +100,11 @@ class NodeTest {
 			);
 
 		Expression secondExpression = factory.parse("b*2(KY-1000)+abc");
-		VariableNames secondVariables = Node.hashedUsedVariables(secondExpression.source(), secondExpression.root());
+		Variables secondVariables = Node.hashedUsedVariables(secondExpression.source(), secondExpression.root());
 		assertThat(secondVariables.names())
 			.containsExactly("b", "KY", "abc");
-		assertThat(secondVariables.hashOf("b")).isEqualTo(variables.hashOf("a"));
-		assertThat(secondVariables.hashOf("KY")).isEqualTo(variables.hashOf("x"));
+		assertThat(secondVariables.firstHashOf("b")).isEqualTo(variables.firstHashOf("a"));
+		assertThat(secondVariables.firstHashOf("KY")).isEqualTo(variables.firstHashOf("x"));
 	}
 
 	protected static TypedEvaluableByArguments failOnEverythingEvaluatable() {
