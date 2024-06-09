@@ -59,6 +59,7 @@ public abstract class Variables {
 		return list().stream()
 			.filter(it -> it.name().equals(name))
 			.map(Variable::position)
+			.sorted()
 			.collect(Collectors.toList());
 	}
 
