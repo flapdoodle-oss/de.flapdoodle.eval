@@ -52,18 +52,18 @@ public abstract class Expression {
 	}
 
 	@Value.Derived
-	protected Variables variableNames() {
+	public Variables variables() {
 		return Node.hashedUsedVariables(source(), root());
 	}
 
 	@Value.Lazy
 	public Map<String, Integer> usedVariablesWithHash() {
-		return variableNames().nameHashMap();
+		return variables().nameHashMap();
 	}
 
 	@org.immutables.value.Value.Derived
 	public Set<String> usedVariables() {
-		return variableNames().names();
+		return variables().names();
 	}
 
 	@org.immutables.value.Value.Auxiliary
