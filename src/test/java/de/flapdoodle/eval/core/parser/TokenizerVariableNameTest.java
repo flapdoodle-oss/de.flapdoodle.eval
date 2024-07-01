@@ -44,6 +44,21 @@ class TokenizerVariableNameTest extends BaseParserTest {
 	}
 
 	@Test
+	void testHashtagAtStart() throws ParseException {
+		assertAllTokensParsedCorrectly(
+			"#fooBar", Token.of(0, "#fooBar", TokenType.VARIABLE_OR_CONSTANT));
+	}
+
+	@Test
+	void noHashtagInBetweenAllowed() throws ParseException {
+		assertAllTokensParsedCorrectly(
+			"foo#Bar",
+			Token.of(0, "foo", TokenType.VARIABLE_OR_CONSTANT),
+			Token.of(3, "#Bar", TokenType.VARIABLE_OR_CONSTANT)
+		);
+	}
+
+	@Test
 	void testUmlaut() throws ParseException {
 		assertAllTokensParsedCorrectly("Grün", Token.of(0, "Grün", TokenType.VARIABLE_OR_CONSTANT));
 		assertAllTokensParsedCorrectly(

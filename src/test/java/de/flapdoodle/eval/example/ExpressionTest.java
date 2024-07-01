@@ -54,9 +54,9 @@ class ExpressionTest {
 
 	@Test
 	void testValidateFail() {
-		assertThatThrownBy(() -> Defaults.expressionFactory().parse("2#3"))
+		assertThatThrownBy(() -> Defaults.expressionFactory().parse("2@3"))
 			.isInstanceOf(ParseException.class)
-			.hasMessage("Undefined operator '#'");
+			.hasMessage("Undefined operator '@'");
 	}
 
 	@Test

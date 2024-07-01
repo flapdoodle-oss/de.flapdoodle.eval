@@ -47,6 +47,7 @@ public abstract class ExpressionFactory {
 	public  abstract VariableResolver constants();
 	public  abstract TypedEvaluableByName evaluatables();
 	protected abstract TypedEvaluableByNumberOfArguments arrayAccess();
+	protected abstract TypedEvaluableByNumberOfArguments associateAccess();
 	protected abstract TypedEvaluableByNumberOfArguments propertyAccess();
 	protected abstract NumberAsValue numberAsValue();
 	protected abstract StringAsValue stringAsValue();
@@ -111,6 +112,9 @@ public abstract class ExpressionFactory {
 				break;
 			case ARRAY_INDEX:
 				result = evaluateArrayIndex(startNode);
+				break;
+			case ASSOCIATE_INDEX:
+				result = evaluateAssociateIndex(startNode);
 				break;
 			case STRUCTURE_SEPARATOR:
 				result = evaluateStructureSeparator(startNode);
@@ -194,6 +198,16 @@ public abstract class ExpressionFactory {
 		return EvaluatableNode.of(startNode.getToken(), arrayAccess.get(), Arrays.asList(objectNode, indexNode), exceptionMapper());
 	}
 
+	private Node evaluateAssociateIndex(ASTNode startNode) throws EvaluationException {
+		Node objectNode = map(startNode.getParameters().get(0));
+		Node indexNode = map(startNode.getParameters().get(1));
+		Optional<? extends TypedEvaluableByArguments> associateAccess = associateAccess().filterByNumberOfArguments(2);
+
+		if (!associateAccess.isPresent()) throw new EvaluationException(startNode.getToken(), "could not find associate access");
+
+		return EvaluatableNode.of(startNode.getToken(), associateAccess.get(), Arrays.asList(objectNode, indexNode), exceptionMapper());
+	}
+	
 	private Node evaluateStructureSeparator(ASTNode startNode) throws EvaluationException {
 		Node structure = map(startNode.getParameters().get(0));
 		Token nameToken = startNode.getParameters().get(1).getToken();

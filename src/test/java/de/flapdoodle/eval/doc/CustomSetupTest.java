@@ -45,6 +45,7 @@ public class CustomSetupTest {
 				.putInfix("-", OperatorMapping.of(Precedence.OPERATOR_PRECEDENCE_ADDITIVE, "minus"))
 				.build())
 			.arrayAccess(new ArrayAccess())
+			.associateAccess(new ArrayAccess())
 			.propertyAccess(new PropertyAccess())
 			.numberAsValue((s, m) -> Integer.parseInt(s))
 			.stringAsValue(s -> s)

@@ -83,6 +83,12 @@ public class ShuntingYardConverter {
 				case ARRAY_CLOSE:
 					processArrayClose();
 					break;
+				case ASSOCIATE_OPEN:
+					processAssociateOpen(currentToken);
+					break;
+				case ASSOCIATE_CLOSE:
+					processAssociateClose();
+					break;
 				case STRUCTURE_SEPARATOR:
 					processStructureSeparator(currentToken);
 					break;
@@ -182,6 +188,28 @@ public class ShuntingYardConverter {
 	}
 
 	/**
+	 * Associate index is treated like a function with two parameters. First parameter is the associate (name
+	 * or evaluation result). Second parameter is the associate index.
+	 *
+	 * @param currentToken The current ASSOCIATE_OPEN ("[") token.
+	 */
+	private void processAssociateOpen(Token currentToken) throws ParseException {
+		Token nextToken = operatorStack.isEmpty() ? null : operatorStack.peek();
+		while (nextToken != null && (nextToken.type() == TokenType.STRUCTURE_SEPARATOR)) {
+			Token token = operatorStack.pop();
+			createOperatorNode(token);
+			nextToken = operatorStack.isEmpty() ? null : operatorStack.peek();
+		}
+		// create ASSOCIATE_INDEX operator (just like a function name) and push it to the operator stack
+		Token associateIndex =
+			Token.of(currentToken.start(), currentToken.value(), TokenType.ASSOCIATE_INDEX);
+		operatorStack.push(associateIndex);
+
+		// push the ASSOCIATE_OPEN to the operators, too (to later match the ASSOCIATE_CLOSE)
+		operatorStack.push(currentToken);
+	}
+
+	/**
 	 * Follows the logic for a function, but with two fixed parameters.
 	 *
 	 * @throws ParseException If there were problems while processing the stacks.
@@ -197,6 +225,29 @@ public class ShuntingYardConverter {
 		operands.add(0, index);
 
 		// first parameter of the "ARRAY_INDEX" function is the array (name or evaluation result)
+		// (second on stack)
+		ASTNode array = operandStack.pop();
+		operands.add(0, array);
+
+		operandStack.push(ASTNode.of(arrayToken, operands.toArray(new ASTNode[0])));
+	}
+
+	/**
+	 * Follows the logic for a function, but with two fixed parameters.
+	 *
+	 * @throws ParseException If there were problems while processing the stacks.
+	 */
+	private void processAssociateClose() throws ParseException {
+		processOperatorsFromStackUntilTokenType(TokenType.ASSOCIATE_OPEN);
+		operatorStack.pop(); // throw away the marker
+		Token arrayToken = operatorStack.pop();
+		ArrayList<ASTNode> operands = new ArrayList<>();
+
+		// second parameter of the "ASSOCIATE_INDEX" function is the index (first on stack)
+		ASTNode index = operandStack.pop();
+		operands.add(0, index);
+
+		// first parameter of the "ASSOCIATE_INDEX" function is the array (name or evaluation result)
 		// (second on stack)
 		ASTNode array = operandStack.pop();
 		operands.add(0, array);

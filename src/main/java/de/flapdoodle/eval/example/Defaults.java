@@ -67,6 +67,7 @@ public abstract class Defaults {
 
 	private static final TypedEvaluableByName EVALUATABLES = defaultEvaluatablesMap();
 	private static final TypedEvaluableByNumberOfArguments ARRAY_ACCESS = new IndexedAccess();
+	private static final TypedEvaluableByNumberOfArguments ASSOCIATE_ACCESS = new IndexedAccess();
 	private static final TypedEvaluableByNumberOfArguments PROPERTY_ACCESS = new PropertyAccess();
 	private static final OperatorMap OPERATOR_MAP = defaultOperatorMap();
 
@@ -113,6 +114,11 @@ public abstract class Defaults {
 	public static final TypedEvaluableByNumberOfArguments arrayAccess() {
 		return ARRAY_ACCESS;
 	}
+
+	public static final TypedEvaluableByNumberOfArguments associateAccess() {
+		return ASSOCIATE_ACCESS;
+	}
+
 	public static final TypedEvaluableByNumberOfArguments propertyAccess() {
 		return PROPERTY_ACCESS;
 	}
@@ -236,6 +242,7 @@ public abstract class Defaults {
 			.constants(constants())
 			.evaluatables(evaluatables())
 			.arrayAccess(arrayAccess())
+			.associateAccess(associateAccess())
 			.propertyAccess(propertyAccess())
 			.numberAsValue(Defaults::numberFromString)
 			.stringAsValue(Defaults::valueFromString)

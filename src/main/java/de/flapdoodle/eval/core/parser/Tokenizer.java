@@ -40,6 +40,7 @@ public class Tokenizer {
 	private int index = 0;
 	private int braceBalance = 0;
 	private int arrayBalance = 0;
+	private int associateBalance = 0;
 
 	public Tokenizer(String expressionString, HasOperator operators) {
 		this.expressionString = expressionString;
@@ -78,6 +79,10 @@ public class Tokenizer {
 
 		if (arrayBalance > 0) {
 			throw new ParseException(expressionString, "Closing array not found");
+		}
+
+		if (associateBalance > 0) {
+			throw new ParseException(expressionString, "Closing associate not found");
 		}
 
 		return tokens;
@@ -133,6 +138,10 @@ public class Tokenizer {
 			return parseArrayOpen();
 		} else if (currentChar == ']') {
 			return parseArrayClose();
+		} else if (currentChar == '{') {
+			return parseAssociateOpen();
+		} else if (currentChar == '}') {
+			return parseAssociateClose();
 		} else if (currentChar == '.' && !isNextCharNumberChar()) {
 			return parseStructureSeparator();
 		} else if (currentChar == ',') {
@@ -154,7 +163,7 @@ public class Tokenizer {
 
 	private Token parseStructureSeparator() throws ParseException {
 		Token token = Token.of(index, ".", TokenType.STRUCTURE_SEPARATOR);
-		if (arrayOpenOrStructureSeparatorNotAllowed()) {
+		if (arrayOrAssociateOpenOrStructureSeparatorNotAllowed()) {
 			throw new ParseException(token, "Structure separator not allowed here");
 		}
 		next();
@@ -163,7 +172,7 @@ public class Tokenizer {
 
 	private Token parseArrayClose() throws ParseException {
 		Token token = Token.of(index, "]", TokenType.ARRAY_CLOSE);
-		if (!arrayCloseAllowed()) {
+		if (!arrayOrAssociateCloseAllowed()) {
 			throw new ParseException(token, "Array close not allowed here");
 		}
 		next();
@@ -176,11 +185,34 @@ public class Tokenizer {
 
 	private Token parseArrayOpen() throws ParseException {
 		Token token = Token.of(index, "[", TokenType.ARRAY_OPEN);
-		if (arrayOpenOrStructureSeparatorNotAllowed()) {
+		if (arrayOrAssociateOpenOrStructureSeparatorNotAllowed()) {
 			throw new ParseException(token, "Array open not allowed here");
 		}
 		next();
 		arrayBalance++;
+		return token;
+	}
+
+	private Token parseAssociateClose() throws ParseException {
+		Token token = Token.of(index, "}", TokenType.ASSOCIATE_CLOSE);
+		if (!arrayOrAssociateCloseAllowed()) {
+			throw new ParseException(token, "Associate close not allowed here");
+		}
+		next();
+		if (associateBalance <= 0) {
+			throw new ParseException(token, "Unexpected closing associate");
+		}
+		associateBalance--;
+		return token;
+	}
+
+	private Token parseAssociateOpen() throws ParseException {
+		Token token = Token.of(index, "{", TokenType.ASSOCIATE_OPEN);
+		if (arrayOrAssociateOpenOrStructureSeparatorNotAllowed()) {
+			throw new ParseException(token, "Associate open not allowed here");
+		}
+		next();
+		associateBalance++;
 		return token;
 	}
 
@@ -265,23 +297,25 @@ public class Tokenizer {
 			"Undefined operator '" + tokenString + "'");
 	}
 
-	private boolean arrayOpenOrStructureSeparatorNotAllowed() {
+	private boolean arrayOrAssociateOpenOrStructureSeparatorNotAllowed() {
 		return !isPreviousTokenType(
 			TokenType.BRACE_CLOSE,
 			TokenType.VARIABLE_OR_CONSTANT,
 			TokenType.ARRAY_CLOSE,
+			TokenType.ASSOCIATE_CLOSE,
 			TokenType.STRING_LITERAL
 		);
 	}
 
-	private boolean arrayCloseAllowed() {
+	private boolean arrayOrAssociateCloseAllowed() {
 		return dontMatchPreviousTokenType(
 			TokenType.BRACE_OPEN,
 			TokenType.INFIX_OPERATOR,
 			TokenType.PREFIX_OPERATOR,
 			TokenType.FUNCTION,
 			TokenType.COMMA,
-			TokenType.ARRAY_OPEN
+			TokenType.ARRAY_OPEN,
+			TokenType.ASSOCIATE_OPEN
 		).orElse(false);
 	}
 
@@ -373,7 +407,9 @@ public class Tokenizer {
 		int tokenStartIndex = index;
 		StringBuilder tokenValue = new StringBuilder();
 		char currentChar;
-		while ((currentChar = get()) != 0 && isIdentifierChar(currentChar)) {
+		boolean firstChar = true;
+		while ((currentChar = get()) != 0 && (isIdentifierChar(currentChar) || firstChar && isIdentifierStart(currentChar))) {
+			firstChar=false;
 			tokenValue.append(currentChar);
 			next();
 		}
@@ -515,7 +551,7 @@ public class Tokenizer {
 	}
 
 	private static boolean isIdentifierStart(char currentChar) {
-		return Character.isLetter(currentChar) || currentChar == '_';
+		return Character.isLetter(currentChar) || currentChar == '_' || currentChar == '#';
 	}
 
 	private static boolean isIdentifierChar(char currentChar) {
